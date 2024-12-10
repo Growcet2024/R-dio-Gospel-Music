@@ -57,7 +57,7 @@
             position: relative;
             background-color: transparent; /* Fundo transparente */
             height: 20px; /* Altura definida para o contêiner */
-            margin-top: 20px; /* Adicionei um espaçamento superior */
+            margin-top: 40px; /* Espaçamento superior */
         }
 
         .scrolling-text span {
@@ -76,14 +76,32 @@
             }
         }
 
+        /* ============================ Estilo do botão de download ============================ */
+        .download-button {
+            background-color: #e0e4ec; /* Cor de fundo do botão */
+            color: #000000; /* Cor do texto */
+            font-size: 14px; /* Tamanho da fonte */
+            padding: 10px 20px; /* Espaçamento interno do botão */
+            border: none; /* Remove bordas */
+            border-radius: 20px; /* Bordas arredondadas */
+            cursor: pointer; /* Mostra o ícone de clique */
+            text-decoration: none; /* Remove sublinhado */
+            display: inline-block; /* Configura como bloco em linha */
+            transition: background-color 0.3s ease; /* Efeito de transição suave */
+        }
+
+        .download-button:hover {
+            background-color: #4eb7ec; /* Cor ao passar o mouse */
+        }
+
         /* ============================ Estilo do rodapé ============================ */
         footer {
             text-align: center; /* Alinha o conteúdo do rodapé ao centro */
             padding: 20px;
             margin-top: 20px;
-            font-size: 10px; /* Tamanho da fonte do rodapé */
+            font-size: 14px; /* Tamanho da fonte do rodapé */
             background-color: #ffffff; /* Cor de fundo do rodapé */
-            border-top: 2px solid #f2eeee; /* Linha superior azul */
+            border-top: 2px solid #cfd4db; /* Linha superior azul */
             position: relative;
             display: flex;
             justify-content: center;
@@ -103,17 +121,17 @@
             justify-content: center; /* Centraliza o conteúdo horizontalmente */
             align-items: center; /* Centraliza o conteúdo verticalmente */
             margin: 0 auto; /* Centraliza o container na tela */
-            padding: 40px; /* Aumentei o padding (espaçamento interno) */
+            padding: 40px; /* Espaçamento interno */
             background-color: #ffffff; /* Cor de fundo do container */
             border-radius: 8px; /* Bordas arredondadas */
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra suave ao redor do container */
-            max-width: 650px; /* Aumentei a largura máxima do container */
+            max-width: 650px; /* Largura máxima do container */
             margin-top: 20px; /* Espaço superior */
         }
 
         /* ============================ Estilo do player de rádio ============================ */
         .radio-player {
-            background-color: #f5f7f8;
+            background-color: #f4f9fa; /* Cor de fundo do player */
             color: #fff;
             padding: 30px;
             border-radius: 10px;
@@ -129,7 +147,7 @@
         }
 
         .radio-player h1 {
-            font-size: 24px;
+            font-size: 24px; /* Tamanho do título */
             margin-bottom: 20px;
             font-weight: bold;
             text-transform: capitalize;
@@ -137,7 +155,7 @@
         }
 
         .radio-player p {
-            font-size: 14px;
+            font-size: 16px; /* Tamanho do texto */
             margin-bottom: 20px;
             color: #000000;
         }
@@ -149,7 +167,7 @@
 
         /* Estilo do botão de Play */
         .play-button {
-            background-color: #e82727;
+            background-color: #e82727; /* Cor do botão */
             color: white;
             width: 60px;
             height: 60px;
@@ -207,6 +225,11 @@
     <!-- ============================ Frase Animada ============================ -->
     <div class="scrolling-text">
         <span>O caminho de Deus é perfeito; a palavra do Senhor é provada; ele é escudo para todos os que nele se refugiam. Salmo 18:30</span>
+    </div>
+
+    <!-- ============================ Botão de Download ============================ -->
+    <div style="text-align: center; margin-top: 20px;">
+        <a href="https://play.google.com/store/apps/details?id=com.radiogospelmusic.growcet&pli=1" target="_blank" class="download-button">Disponível no Google Play</a>
     </div>
 
     <!-- ============================ Rodapé (Footer) ============================ -->
