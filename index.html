@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rádio Gospel Music</title>
+    <style>
+        /* ============================ Estilo geral ============================ */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f7f8; /* Cor de fundo do corpo */
+        }
+
+        /* ============================ Estilo do cabeçalho ============================ */
+        header {
+            text-align: left; /* Alinha o título à esquerda */
+            background-color: #ffffff; /* Cor de fundo do cabeçalho */
+            padding: 20px;
+            margin-bottom: 0;
+            border-bottom: 2px solid #e0e0e0; /* Linha inferior para separar o cabeçalho */
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center; /* Alinha verticalmente o logo e o texto */
+            gap: 15px; /* Espaçamento entre o logo e o texto */
+        }
+
+        .header-logo {
+            height: 50px; /* Ajuste o tamanho do logo conforme necessário */
+            width: auto;  /* Mantém a proporção do logo */
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 15px; /* Tamanho reduzido */
+            color: #3d6cbf; /* Azul padrão para o título */
+        }
+
+        hr.separator {
+            margin: 0;
+            border: 0;
+            border-top: 3px solid #ffffff; /* Linha separadora */
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+
+        /* ============================ Frase animada acima do rodapé ============================ */
+        .scrolling-text {
+            color: #000000; /* Preto */
+            font-size: 14px; /* Tamanho ajustado */
+            padding: 5px 0; /* Espaçamento interno */
+            line-height: 1.5; /* Altura da linha para evitar corte */
+            overflow: hidden; /* Oculta conteúdo fora da área visível */
+            position: relative;
+            background-color: transparent; /* Fundo transparente */
+            height: 20px; /* Altura definida para o contêiner */
+            margin-top: 20px; /* Adicionei um espaçamento superior */
+        }
+
+        .scrolling-text span {
+            display: inline-block;
+            white-space: nowrap; /* Impede quebra de linha */
+            position: absolute;
+            animation: scrollText 30s linear infinite; /* Tempo aumentado para 30s */
+        }
+
+        @keyframes scrollText {
+            0% {
+                transform: translateX(100%);
+            }
+            100% {
+                transform: translateX(-100%);
+            }
+        }
+
+        /* ============================ Estilo do rodapé ============================ */
+        footer {
+            text-align: center; /* Alinha o conteúdo do rodapé ao centro */
+            padding: 20px;
+            margin-top: 20px;
+            font-size: 14px; /* Tamanho da fonte do rodapé */
+            background-color: #ffffff; /* Cor de fundo do rodapé */
+            border-top: 2px solid #f2eeee; /* Linha superior azul */
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px; /* Espaço entre o logo e o texto */
+        }
+
+        /* ============================ Estilo do logo do rodapé ============================ */
+        .footer-logo {
+            height: 20px; /* Tamanho fixo do logo (altura) */
+            width: auto;  /* Largura proporcional à altura */
+        }
+
+        /* ============================ Container de Conteúdo ============================ */
+        .container {
+            display: flex; /* Define um layout flexível */
+            justify-content: center; /* Centraliza o conteúdo horizontalmente */
+            align-items: center; /* Centraliza o conteúdo verticalmente */
+            margin: 0 auto; /* Centraliza o container na tela */
+            padding: 40px; /* Aumentei o padding (espaçamento interno) */
+            background-color: #ffffff; /* Cor de fundo do container */
+            border-radius: 8px; /* Bordas arredondadas */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra suave ao redor do container */
+            max-width: 650px; /* Aumentei a largura máxima do container */
+            margin-top: 20px; /* Espaço superior */
+        }
+
+        /* ============================ Estilo do player de rádio ============================ */
+        .radio-player {
+            background-color: #f5f7f8;
+            color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center; /* Centraliza o conteúdo dentro do player */
+            width: 100%;
+            max-width: 500px;
+            transition: transform 0.3s ease; /* Habilita a transição suave */
+        }
+
+        .radio-player:hover {
+            transform: scale(1.05); /* Aumenta a escala em 5% ao passar o mouse */
+        }
+
+        .radio-player h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            font-weight: bold;
+            text-transform: capitalize;
+            color: #000000;
+        }
+
+        .radio-player p {
+            font-size: 16px;
+            margin-bottom: 20px;
+            color: #000000;
+        }
+
+        /* Reprodutor de áudio invisível */
+        audio {
+            display: none;
+        }
+
+        /* Estilo do botão de Play */
+        .play-button {
+            background-color: #e82727;
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            font-size: 28px;
+            line-height: 55px;
+            border: none;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            margin-top: 20px;
+        }
+
+        .play-button:hover {
+            background-color: #c0392b;
+            transform: scale(1.1);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .play-button:active {
+            background-color: #e74c3c;
+            transform: scale(1);
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ============================ Cabeçalho (Header) ============================ -->
+    <header>
+        <div class="header-content">
+            <img src="https://imgur.com/HVL2xl2.png" alt="Logo Rádio Gospel Music" class="header-logo">
+            <h1>Rádio Gospel Music</h1>
+        </div>
+    </header>
+
+    <hr class="separator">
+
+    <!-- ============================ Container de Conteúdo ============================ -->
+    <div class="container">
+        <!-- Player de rádio -->
+        <div class="radio-player">
+            <h1>Rádio Gospel Music</h1>
+            <p>Escute nossa programação agora!</p>
+            <button class="play-button" onclick="playRadio()">▶</button>
+            <audio id="audioPlayer">
+                <source src="https://stream.zeno.fm/6y13zy9ua18uv" type="audio/mp3">
+                Seu navegador não suporta o elemento de áudio.
+            </audio>
+        </div>
+    </div>
+
+    <!-- ============================ Frase Animada ============================ -->
+    <div class="scrolling-text">
+        <span>O caminho de Deus é perfeito; a palavra do Senhor é provada; ele é escudo para todos os que nele se refugiam. Salmo 18:30</span>
+    </div>
+
+    <!-- ============================ Rodapé (Footer) ============================ -->
+    <footer>
+        <img src="https://i.imgur.com/HhGiTJA.png" alt="Logo Growcet" class="footer-logo">
+        <p>© 2024 Growcet. Todos os direitos reservados.</p>
+    </footer>
+
+    <script>
+        function playRadio() {
+            var audioPlayer = document.getElementById("audioPlayer");
+            var playButton = document.querySelector(".play-button");
+
+            if (audioPlayer.paused) {
+                audioPlayer.play();
+                playButton.innerHTML = "❚❚";
+            } else {
+                audioPlayer.pause();
+                playButton.innerHTML = "▶";
+            }
+        }
+    </script>
+
+</body>
+</html>
