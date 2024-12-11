@@ -57,14 +57,14 @@
             position: relative;
             background-color: transparent; /* Fundo transparente */
             height: 20px; /* Altura definida para o contêiner */
-            margin-top: 10px; /* Espaçamento superior */
+            margin-top: 15px; /* Espaçamento ajustado entre a frase e o container */
         }
 
         .scrolling-text span {
             display: inline-block;
             white-space: nowrap; /* Impede quebra de linha */
             position: absolute;
-            animation: scrollText 30s linear infinite; /* Tempo aumentado para 30s */
+            animation: scrollText 35s linear infinite; /* Tempo aumentado para 35s */
         }
 
         @keyframes scrollText {
@@ -78,20 +78,20 @@
 
         /* ============================ Estilo do botão de download ============================ */
         .download-button {
-            background-color: #e0e4ec; /* Cor de fundo do botão */
+            display: inline-block;
+            background-color: #edeff2; /* Azul padrão */
             color: #000000; /* Cor do texto */
-            font-size: 14px; /* Tamanho da fonte */
-            padding: 10px 20px; /* Espaçamento interno do botão */
-            border: none; /* Remove bordas */
-            border-radius: 20px; /* Bordas arredondadas */
-            cursor: pointer; /* Mostra o ícone de clique */
-            text-decoration: none; /* Remove sublinhado */
-            display: inline-block; /* Configura como bloco em linha */
-            transition: background-color 0.3s ease; /* Efeito de transição suave */
+            text-decoration: none; /* Remove o sublinhado */
+            padding: 10px 20px; /* Espaçamento interno */
+            border-radius: 5px; /* Bordas arredondadas */
+            font-size: 12px; /* Tamanho da fonte */
+            font-weight: bold;
+            margin-top: 10px; /* Espaçamento superior ajustado */
+            transition: background-color 0.3s ease; /* Transição suave */
         }
 
         .download-button:hover {
-            background-color: #4eb7ec; /* Cor ao passar o mouse */
+            background-color: #7fc6f3; /* Azul mais escuro no hover */
         }
 
         /* ============================ Estilo do rodapé ============================ */
@@ -99,9 +99,9 @@
             text-align: center; /* Alinha o conteúdo do rodapé ao centro */
             padding: 20px;
             margin-top: 20px;
-            font-size: 14px; /* Tamanho da fonte do rodapé */
+            font-size: 12px; /* Tamanho da fonte do rodapé */
             background-color: #ffffff; /* Cor de fundo do rodapé */
-            border-top: 2px solid #cfd4db; /* Linha superior azul */
+            border-top: 2px solid #ced9e8; /* Linha superior azul */
             position: relative;
             display: flex;
             justify-content: center;
@@ -111,7 +111,7 @@
 
         /* ============================ Estilo do logo do rodapé ============================ */
         .footer-logo {
-            height: 20px; /* Tamanho fixo do logo (altura) */
+            height: 15px; /* Tamanho fixo do logo (altura) */
             width: auto;  /* Largura proporcional à altura */
         }
 
@@ -121,17 +121,17 @@
             justify-content: center; /* Centraliza o conteúdo horizontalmente */
             align-items: center; /* Centraliza o conteúdo verticalmente */
             margin: 0 auto; /* Centraliza o container na tela */
-            padding: 40px; /* Espaçamento interno */
+            padding: 40px; /* Aumentei o padding (espaçamento interno) */
             background-color: #ffffff; /* Cor de fundo do container */
             border-radius: 8px; /* Bordas arredondadas */
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra suave ao redor do container */
-            max-width: 650px; /* Largura máxima do container */
+            max-width: 650px; /* Aumentei a largura máxima do container */
             margin-top: 20px; /* Espaço superior */
         }
 
         /* ============================ Estilo do player de rádio ============================ */
         .radio-player {
-            background-color: #f4f9fa; /* Cor de fundo do player */
+            background-color: #f4f9fa;
             color: #fff;
             padding: 30px;
             border-radius: 10px;
@@ -147,7 +147,7 @@
         }
 
         .radio-player h1 {
-            font-size: 24px; /* Tamanho do título */
+            font-size: 24px;
             margin-bottom: 20px;
             font-weight: bold;
             text-transform: capitalize;
@@ -155,7 +155,7 @@
         }
 
         .radio-player p {
-            font-size: 16px; /* Tamanho do texto */
+            font-size: 16px;
             margin-bottom: 20px;
             color: #000000;
         }
@@ -167,7 +167,7 @@
 
         /* Estilo do botão de Play */
         .play-button {
-            background-color: #e82727; /* Cor do botão */
+            background-color: #e82727;
             color: white;
             width: 60px;
             height: 60px;
@@ -228,8 +228,8 @@
     </div>
 
     <!-- ============================ Botão de Download ============================ -->
-    <div style="text-align: center; margin-top: 20px;">
-        <a href="https://play.google.com/store/apps/details?id=com.radiogospelmusic.growcet&pli=1" target="_blank" class="download-button">Disponível no Google Play</a>
+    <div style="text-align: center;">
+        <a href="https://play.google.com/store/apps/details?id=com.radiogospelmusic.growcet&pli=1" class="download-button" target="_blank">Disponível no Google Play</a>
     </div>
 
     <!-- ============================ Rodapé (Footer) ============================ -->
