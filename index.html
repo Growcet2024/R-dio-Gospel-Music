@@ -1,257 +1,89 @@
-<!DOCTYPE html>
-<html lang="pt-br">
+    <!DOCTYPE html>
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rádio Gospel Music</title>
-    <style>
-        /* ============================ Estilo geral ============================ */
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f5f7f8; /* Cor de fundo do corpo */
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Marcador de Presença</title>
+  <style>
+    /* Estilos Globais */
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(to bottom right, #007BFF, #0056b3);
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      text-align: center;
+    }
 
-        /* ============================ Estilo do cabeçalho ============================ */
-        header {
-            text-align: left; /* Alinha o título à esquerda */
-            background-color: #ffffff; /* Cor de fundo do cabeçalho */
-            padding: 20px;
-            margin-bottom: 0;
-            border-bottom: 2px solid #e0e0e0; /* Linha inferior para separar o cabeçalho */
-        }
+    /* Container Principal */
+    .container {
+      max-width: 600px;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    }
 
-        .header-content {
-            display: flex;
-            align-items: center; /* Alinha verticalmente o logo e o texto */
-            gap: 15px; /* Espaçamento entre o logo e o texto */
-        }
+    /* Título Principal */
+    .container h1 {
+      font-size: 36px;
+      margin-bottom: 10px;
+      font-weight: bold;
+      color: #fff;
+    }
 
-        .header-logo {
-            height: 50px; /* Ajuste o tamanho do logo conforme necessário */
-            width: auto;  /* Mantém a proporção do logo */
-        }
+    /* Subtítulo */
+    .container h2 {
+      font-size: 20px;
+      margin-bottom: 20px;
+      color: #e0e0e0;
+      font-weight: 300;
+    }
 
-        header h1 {
-            margin: 0;
-            font-size: 15px; /* Tamanho reduzido */
-            color: #3d6cbf; /* Azul padrão para o título */
-        }
+    /* Frases */
+    .container p {
+      font-size: 16px;
+      margin: 10px 0;
+      color: #f1f1f1;
+      line-height: 1.6;
+    }
 
-        hr.separator {
-            margin: 0;
-            border: 0;
-            border-top: 3px solid #ffffff; /* Linha separadora */
-            margin-top: 0;
-            margin-bottom: 20px;
-        }
+    /* Botão de Acessar */
+    .container .btn-acessar {
+      background: #28a745;
+      color: #fff;
+      padding: 15px 25px;
+      border: none;
+      border-radius: 25px;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 20px;
+      display: inline-block;
+    }
 
-        /* ============================ Frase animada acima do rodapé ============================ */
-        .scrolling-text {
-            color: #000000; /* Preto */
-            font-size: 14px; /* Tamanho ajustado */
-            padding: 5px 0; /* Espaçamento interno */
-            line-height: 1.5; /* Altura da linha para evitar corte */
-            overflow: hidden; /* Oculta conteúdo fora da área visível */
-            position: relative;
-            background-color: transparent; /* Fundo transparente */
-            height: 20px; /* Altura definida para o contêiner */
-            margin-top: 15px; /* Espaçamento ajustado entre a frase e o container */
-        }
-
-        .scrolling-text span {
-            display: inline-block;
-            white-space: nowrap; /* Impede quebra de linha */
-            position: absolute;
-            animation: scrollText 35s linear infinite; /* Tempo aumentado para 35s */
-        }
-
-        @keyframes scrollText {
-            0% {
-                transform: translateX(100%);
-            }
-            100% {
-                transform: translateX(-100%);
-            }
-        }
-
-        /* ============================ Estilo do botão de download ============================ */
-        .download-button {
-            display: inline-block;
-            background-color: #edeff2; /* Azul padrão */
-            color: #000000; /* Cor do texto */
-            text-decoration: none; /* Remove o sublinhado */
-            padding: 10px 20px; /* Espaçamento interno */
-            border-radius: 5px; /* Bordas arredondadas */
-            font-size: 12px; /* Tamanho da fonte */
-            font-weight: bold;
-            margin-top: 10px; /* Espaçamento superior ajustado */
-            transition: background-color 0.3s ease; /* Transição suave */
-        }
-
-        .download-button:hover {
-            background-color: #7fc6f3; /* Azul mais escuro no hover */
-        }
-
-        /* ============================ Estilo do rodapé ============================ */
-        footer {
-            text-align: center; /* Alinha o conteúdo do rodapé ao centro */
-            padding: 20px;
-            margin-top: 20px;
-            font-size: 12px; /* Tamanho da fonte do rodapé */
-            background-color: #ffffff; /* Cor de fundo do rodapé */
-            border-top: 2px solid #ced9e8; /* Linha superior azul */
-            position: relative;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px; /* Espaço entre o logo e o texto */
-        }
-
-        /* ============================ Estilo do logo do rodapé ============================ */
-        .footer-logo {
-            height: 15px; /* Tamanho fixo do logo (altura) */
-            width: auto;  /* Largura proporcional à altura */
-        }
-
-        /* ============================ Container de Conteúdo ============================ */
-        .container {
-            display: flex; /* Define um layout flexível */
-            justify-content: center; /* Centraliza o conteúdo horizontalmente */
-            align-items: center; /* Centraliza o conteúdo verticalmente */
-            margin: 0 auto; /* Centraliza o container na tela */
-            padding: 40px; /* Aumentei o padding (espaçamento interno) */
-            background-color: #ffffff; /* Cor de fundo do container */
-            border-radius: 8px; /* Bordas arredondadas */
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra suave ao redor do container */
-            max-width: 650px; /* Aumentei a largura máxima do container */
-            margin-top: 20px; /* Espaço superior */
-        }
-
-        /* ============================ Estilo do player de rádio ============================ */
-        .radio-player {
-            background-color: #f5f7f8;
-            color: #fff;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            text-align: center; /* Centraliza o conteúdo dentro do player */
-            width: 100%;
-            max-width: 500px;
-            transition: transform 0.3s ease; /* Habilita a transição suave */
-        }
-
-        .radio-player:hover {
-            transform: scale(1.05); /* Aumenta a escala em 5% ao passar o mouse */
-        }
-
-        .radio-player h1 {
-            font-size: 24px;
-            margin-bottom: 20px;
-            font-weight: bold;
-            text-transform: capitalize;
-            color: #000000;
-        }
-
-        .radio-player p {
-            font-size: 18px;
-            margin-bottom: 20px;
-            color: #000000;
-        }
-
-        /* Reprodutor de áudio invisível */
-        audio {
-            display: none;
-        }
-
-        /* Estilo do botão de Play */
-        .play-button {
-            background-color: #e82727;
-            color: white;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            font-size: 28px;
-            line-height: 55px;
-            border: none;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-            margin-top: 5px;
-        }
-
-        .play-button:hover {
-            background-color: #c0392b;
-            transform: scale(1.1);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-        }
-
-        .play-button:active {
-            background-color: #e74c3c;
-            transform: scale(1);
-            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
-        }
-    </style>
+    /* Efeitos do Botão */
+    .container .btn-acessar:hover {
+      background: #218838;
+      transform: scale(1.05);
+    }
+  </style>
 </head>
 <body>
-
-    <!-- ============================ Cabeçalho (Header) ============================ -->
-    <header>
-        <div class="header-content">
-            <img src="https://imgur.com/HVL2xl2.png" alt="Logo Rádio Gospel Music" class="header-logo">
-            <h1>Rádio Gospel Music</h1>
-        </div>
-    </header>
-
-    <hr class="separator">
-
-    <!-- ============================ Container de Conteúdo ============================ -->
-    <div class="container">
-        <!-- Player de rádio -->
-        <div class="radio-player">
-            <h1>Rádio Gospel Music</h1>
-            <p>Louvores inesquecíveis!</p>
-            <button class="play-button" onclick="playRadio()">▶</button>
-            <audio id="audioPlayer">
-                <source src="https://stream.zeno.fm/6y13zy9ua18uv" type="audio/mp3">
-                Seu navegador não suporta o elemento de áudio.
-            </audio>
-        </div>
-    </div>
-
-    <!-- ============================ Frase Animada ============================ -->
-    <div class="scrolling-text">
-        <span>O caminho de Deus é perfeito; a palavra do Senhor é provada; ele é escudo para todos os que nele se refugiam. Salmo 18:30</span>
-    </div>
-
-    <!-- ============================ Botão de Download ============================ -->
-    <div style="text-align: center;">
-        <a href="https://play.google.com/store/apps/details?id=com.radiogospelmusic.growcet&pli=1" class="download-button" target="_blank">Disponível no Google Play</a>
-    </div>
-
-    <!-- ============================ Rodapé (Footer) ============================ -->
-    <footer>
-        <img src="https://i.imgur.com/HhGiTJA.png" alt="Logo Growcet" class="footer-logo">
-        <p>© 2024 Growcet. Todos os direitos reservados.</p>
-    </footer>
-
-    <script>
-        function playRadio() {
-            var audioPlayer = document.getElementById("audioPlayer");
-            var playButton = document.querySelector(".play-button");
-
-            if (audioPlayer.paused) {
-                audioPlayer.play();
-                playButton.innerHTML = "❚❚";
-            } else {
-                audioPlayer.pause();
-                playButton.innerHTML = "▶";
-            }
-        }
-    </script>
-
+  <!-- Conteúdo Principal -->
+  <div class="container">
+    <h1>Marcador de Presença</h1>
+    <h2>Por Coordenadas Geográficas</h2>
+    <p>✔ Você já precisou provar para alguém que esteve ou está em um certo lugar?</p>
+    <p>✔ Prove sua entrada e saída de trabalho, eventos ou reuniões.</p>
+    <p>✔ Comprove a presença em um local específico com data e hora.</p>
+    <p>✔ Compartilhe os detalhes do local pelo WhatsApp ou em PDF.</p>
+    <button class="btn-acessar" onclick="window.location.href='index.html'">Acessar</button>
+  </div>
 </body>
 </html>
