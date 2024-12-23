@@ -1,199 +1,139 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Marcador de Presença</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f9f9f9;
-            color: #333;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Marcador de Presença</title>
+  <style>
+    /* Estilos Globais */
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(to bottom right, #007BFF, #0056b3);
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      text-align: center;
+    }
 
-        header {
-            text-align: center;
-            padding: 20px;
-            background-color: #f9f9f9;
-            color: #000;
-        }
+    /* Container Principal */
+    .container {
+      max-width: 550px;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    }
 
-        header h1 {
-            margin: 0;
-            font-size: 24px;
-        }
+    /* Título Principal */
+    .container h1 {
+      font-size: 36px;
+      margin-bottom: 10px;
+      font-weight: bold;
+      color: #fff;
+    }
 
-        .container {
-            padding: 20px;
-            max-width: 800px;
-            margin: auto;
-            background-color: #fff;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-            margin-bottom: 20px;
-        }
+    /* Subtítulo */
+    .container h2 {
+      font-size: 20px;
+      margin-bottom: 20px;
+      color: #e0e0e0;
+      font-weight: 300;
+    }
 
-        .button {
-            padding: 10px;
-            margin: 10px 0;
-            background-color: #007BFF;
-            color: white;
-            border: none;
-            cursor: pointer;
-            text-align: center;
-            border-radius: 25px;
-            font-size: 16px;
-            width: 100%;
-        }
+    /* Frases */
+    .container p {
+      font-size: 16px;
+      margin: 10px 0;
+      color: #f1f1f1;
+      line-height: 1.6;
+    }
 
-        .button:hover {
-            background-color: #0056b3;
-        }
+    /* Botão de Acessar */
+    .container .btn-acessar {
+      background: #28a745;
+      color: #fff;
+      padding: 15px 25px;
+      border: none;
+      border-radius: 25px;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 20px;
+      display: inline-block;
+    }
 
-        #records-container {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr); /* 2 colunas */
-            gap: 10px; /* Espaço entre os botões */
-        }
+    /* Efeitos do Botão */
+    .container .btn-acessar:hover {
+      background: #218838;
+      transform: scale(1.05);
+    }
 
-        .record-button {
-            padding: 10px;
-            background-color: #f1f1f1;
-            border: 1px solid #ccc;
-            cursor: pointer;
-            text-align: center;
-            border-radius: 8px;
-            font-size: 14px;
-        }
-
-        .record-button:hover, .record-button.selected {
-            background-color: #e7e7e7;
-            border-color: #007BFF;
-            color: #007BFF;
-        }
-
-        #record-detail {
-            margin-top: 20px;
-            padding-top: 20px;
-            border-top: 1px solid #ccc;
-            display: none;
-        }
-
-        .action-buttons {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr); /* 2 colunas */
-            gap: 10px; /* Espaço entre os botões */
-        }
-
-        .action-buttons .button {
-            width: 100%;
-        }
-
-        footer {
-            text-align: center;
-            padding: 10px;
-            background-color: #f9f9f9;
-            color: #000;
-        }
-
-        footer p {
-            font-size: 10px;
-        }
-    </style>
+    /* Estilo para a mensagem de erro */
+    .alert {
+      color: #ff4d4d;
+      font-weight: bold;
+      margin-top: 20px;
+    }
+  </style>
 </head>
 <body>
-    <header>
-        <h1>Histórico Presença</h1>
-    </header>
+  <!-- Conteúdo Principal -->
+  <div class="container">
+    <h1>Marcador de Presença</h1>
+    <h2>Por Coordenadas Geográficas</h2>
+    <p>✔ Você já precisou provar para alguém que esteve ou está em um certo lugar?</p>
+    <p>✔ Prove sua entrada e saída de trabalho, eventos ou reuniões.</p>
+    <p>✔ Comprove a presença em um local específico com data e hora.</p>
+    <p>✔ Compartilhe os detalhes do local pelo WhatsApp ou em PDF.</p>
+    <button class="btn-acessar" onclick="window.location.href='index.html'">Acessar</button>
+    <div id="alert-container" class="alert"></div>
+  </div>
 
-    <div class="container">
-        <button class="button" onclick="window.location.href='index.html'">Voltar à Tela Principal</button>
-        <h2>Registros Salvos</h2>
+  <script>
+    // Função para verificar a conectividade e a localização
+    function checkStatus() {
+      const alertContainer = document.getElementById('alert-container');
 
-        <div id="records-container"></div>
-        
-        <div id="record-detail">
-            <h3>Detalhes do Registro</h3>
-            <p id="user-name"></p>
-            <p id="coordinates"></p>
-            <p id="address"></p>
-            <p id="description"></p>
-            <p id="timestamp"></p>
-            <p id="map-link"></p>
-            
-            <div class="action-buttons">
-                <button class="button" onclick="shareRecord()">Compartilhar no WhatsApp</button>
-                <button class="button" onclick="generatePDF()">Gerar PDF</button>
-                <button class="button" onclick="confirmDeleteRecord()">Excluir Registro</button>
-                <button class="button" onclick="closeDetails()">Voltar à Lista</button>
-            </div>
-        </div>
-    </div>
+      // Verificar se o navegador suporta geolocalização
+      if (!navigator.geolocation) {
+        alertContainer.textContent = "Erro: Geolocalização não suportada pelo dispositivo.";
+        return;
+      }
 
-    <footer>
-        <p>© 2024 Marcador de Presença. Todos os direitos reservados.</p>
-    </footer>
+      // Verificar se a internet está conectada
+      if (!navigator.onLine) {
+        alertContainer.textContent = "Erro: Sem conexão com a internet.";
+        return;
+      }
 
-    <script>
-        function loadRecords() {
-            const records = JSON.parse(localStorage.getItem("presenceRecords")) || [];
-            const recordsContainer = document.getElementById("records-container");
-            records.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-            recordsContainer.innerHTML = '';
-
-            if (records.length === 0) {
-                recordsContainer.innerHTML = "<p>Nenhum registro encontrado.</p>";
-            } else {
-                records.forEach((record, index) => {
-                    const recordButton = document.createElement("button");
-                    recordButton.className = "record-button";
-                    recordButton.innerText = record.timestamp;
-                    recordButton.onclick = () => viewRecord(index);
-                    recordsContainer.appendChild(recordButton);
-                });
-            }
+      // Tentar obter a localização
+      navigator.geolocation.getCurrentPosition(
+        () => {
+          alertContainer.textContent = ""; // Limpa mensagens de erro, caso existam
+        },
+        (error) => {
+          if (error.code === error.PERMISSION_DENIED) {
+            alertContainer.textContent = "Erro: Localização desativada. Ative o GPS.";
+          } else if (error.code === error.POSITION_UNAVAILABLE) {
+            alertContainer.textContent = "Erro: Localização indisponível.";
+          } else if (error.code === error.TIMEOUT) {
+            alertContainer.textContent = "Erro: Tempo esgotado para obter localização.";
+          }
         }
+      );
+    }
 
-        function viewRecord(index) {
-            const records = JSON.parse(localStorage.getItem("presenceRecords")) || [];
-            const record = records[index];
-            document.getElementById("user-name").innerText = `Usuário: ${record.userName}`;
-            document.getElementById("coordinates").innerText = `Coordenadas: ${record.coordinates}`;
-            document.getElementById("address").innerText = `Endereço: ${record.address}`;
-            document.getElementById("description").innerText = `Descrição: ${record.description}`;
-            document.getElementById("timestamp").innerText = `Data/Hora: ${record.timestamp}`;
-            document.getElementById("map-link").innerHTML = `Mapa: <a href="https://maps.google.com/?q=${record.coordinates.split(':')[1].trim()}" target="_blank">Abrir no Google Maps</a>`;
-            document.getElementById("record-detail").style.display = 'block';
+    // Verificar status ao carregar a página
+    window.onload = checkStatus;
 
-            document.querySelectorAll('.record-button').forEach(btn => btn.classList.remove('selected'));
-            document.querySelectorAll('.record-button')[index].classList.add('selected');
-        }
-
-        function confirmDeleteRecord() {
-            if (confirm("Deseja realmente excluir este registro?")) {
-                deleteRecord();
-            }
-        }
-
-        function deleteRecord() {
-            const records = JSON.parse(localStorage.getItem("presenceRecords")) || [];
-            const selectedIndex = [...document.querySelectorAll('.record-button')].findIndex(btn => btn.classList.contains('selected'));
-            if (selectedIndex !== -1) {
-                records.splice(selectedIndex, 1);
-                localStorage.setItem("presenceRecords", JSON.stringify(records));
-                loadRecords();
-                closeDetails();
-            }
-        }
-
-        function closeDetails() {
-            document.getElementById("record-detail").style.display = 'none';
-        }
-
-        window.onload = loadRecords;
-    </script>
+    // Adicionar listener para verificar mudanças de conectividade
+    window.addEventListener('online', checkStatus);
+    window.addEventListener('offline', checkStatus);
+  </script>
 </body>
 </html>
