@@ -51,6 +51,12 @@
       margin: 10px 0;
       color: #fff; /* Garantir que o texto seja branco */
       line-height: 1.6;
+      font-family: 'Arial', sans-serif; /* Garantir que a fonte seja consistente */
+    }
+
+    /* Forçar a cor do símbolo "✔" */
+    .container p span {
+      color: white; /* Garante que o símbolo seja branco */
     }
 
     /* Botão de Acessar */
@@ -87,10 +93,10 @@
   <div class="container">
     <h1>Marcador de Presença</h1>
     <h2>Por Coordenadas Geográficas</h2>
-    <p>✔ Você já precisou comprovar que esteve ou está em um determinado lugar?</p>
-    <p>✔ Comprove sua entrada e saída em locais de trabalho, eventos ou reuniões.</p>
-    <p>✔ Registre sua presença em um local específico com data e hora.</p>
-    <p>✔ Compartilhe os detalhes do local via WhatsApp ou em PDF.</p>
+    <p><span>✔</span> Você já precisou comprovar que esteve ou está em um determinado lugar?</p>
+    <p><span>✔</span> Comprove sua entrada e saída em locais de trabalho, eventos ou reuniões.</p>
+    <p><span>✔</span> Registre sua presença em um local específico com data e hora.</p>
+    <p><span>✔</span> Compartilhe os detalhes do local via WhatsApp ou em PDF.</p>
     <button class="btn-acessar" onclick="window.location.href='index.html'">Acessar</button>
     <div id="alert-container" class="alert"></div>
   </div>
