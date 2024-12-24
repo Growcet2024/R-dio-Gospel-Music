@@ -17,9 +17,10 @@
       align-items: center;
       height: 100vh;
       text-align: center;
+      flex-direction: column;
     }
 
-    /* Container Principal */
+    /* Container Principal da Tela de Apresentação */
     .container {
       max-width: 550px;
       background: rgba(255, 255, 255, 0.1);
@@ -49,28 +50,23 @@
     .container p {
       font-size: 16px;
       margin: 10px 0;
-      color: #fff; /* Garantir que o texto seja branco */
+      color: #fff;
       line-height: 1.6;
-      font-family: 'Arial', sans-serif; /* Garantir que a fonte seja consistente */
     }
 
-    /* Forçar a cor do símbolo "✔" */
-    .container p span {
-      color: white; /* Garante que o símbolo seja branco */
-    }
-
-    /* Botão de Acessar */
+    /* Botão de Acessar - Largura menor com espessura ajustada */
     .container .btn-acessar {
       background: #28a745;
       color: #fff;
-      padding: 15px 25px;
+      padding: 12px 32px; /* Padding ajustado para espessura padrão */
       border: none;
       border-radius: 25px;
-      font-size: 18px;
+      font-size: 14px; /* Tamanho de fonte ajustado */
       font-weight: bold;
       cursor: pointer;
       transition: all 0.3s ease;
       margin-top: 20px;
+      width: 160px; /* Largura ajustada */
       display: inline-block;
     }
 
@@ -80,67 +76,211 @@
       transform: scale(1.05);
     }
 
-    /* Estilo para a mensagem de erro */
-    .alert {
-      color: #fff; /* Texto em branco */
-      font-weight: bold;
+    /* Estilo para a tela de login */
+    .container-login {
+      max-width: 400px;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 24px;
+      margin-bottom: 20px;
+      color: #0056b3;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 14px;
+      box-sizing: border-box;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #218838;
+    }
+
+    .message {
+      font-size: 14px;
+      color: orange;
+      margin-top: 10px;
+    }
+
+    a {
+      text-decoration: none;
+      color: #007BFF;
+      font-size: 14px;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    /* Botão para voltar (preto e discreto) */
+    .btn-back {
+      margin-top: 10px;
+      display: block;
+      background: transparent;
+      color: #000;
+      border: none;
+      font-size: 14px;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .btn-back:hover {
+      color: #333;
+    }
+
+    /* Growcet Desenvolvedor (discretos abaixo do container de login) */
+    .footer-links {
+      font-size: 12px;
+      color: #aaa;
       margin-top: 20px;
+    }
+
+    .footer-links a {
+      color: #aaa;
+    }
+
+    .footer-links a:hover {
+      color: #fff;
+      text-decoration: underline;
+    }
+
+    /* Esconde os links de Saiba mais e Growcet na tela de apresentação */
+    #footer-links-login {
+      display: none;
     }
   </style>
 </head>
 <body>
-  <!-- Conteúdo Principal -->
-  <div class="container">
+
+  <!-- Tela de Apresentação -->
+  <div class="container" id="apresentacao">
     <h1>Marcador de Presença</h1>
     <h2>Por Coordenadas Geográficas</h2>
     <p><span>✔</span> Você já precisou comprovar que esteve ou está em um determinado lugar?</p>
     <p><span>✔</span> Comprove sua entrada e saída em locais de trabalho, eventos ou reuniões.</p>
     <p><span>✔</span> Registre sua presença em um local específico com data e hora.</p>
     <p><span>✔</span> Compartilhe os detalhes do local via WhatsApp ou em PDF.</p>
-    <button class="btn-acessar" onclick="window.location.href='index.html'">Acessar</button>
-    <div id="alert-container" class="alert"></div>
+    <button class="btn-acessar" onclick="mostrarTelaLogin()">Acessar</button>
+  </div>
+
+  <!-- Tela de Login (oculta inicialmente) -->
+  <div class="container-login" id="login" style="display: none;">
+    <h1 id="page-title">Login</h1>
+    <form id="login-form">
+      <div id="login-section">
+        <input type="password" id="login-password" placeholder="Digite sua senha">
+        <button type="button" id="btn-login">Entrar</button>
+        <p class="message" id="login-message" style="display: none;">Insira sua senha.</p>
+      </div>
+      <div id="register-section" style="display: none;">
+        <input type="text" id="name" placeholder="Digite seu nome">
+        <input type="email" id="email" placeholder="Digite seu e-mail">
+        <input type="password" id="register-password" placeholder="Digite sua senha">
+        <button type="button" id="btn-register">Criar Conta</button>
+        <p class="message" id="register-message" style="display: none;">Preencha os campos acima.</p>
+      </div>
+    </form>
+    <p>
+      <a href="#" id="toggle-register">Criar conta</a> |
+      <a href="#" id="forgot-password">Esqueci minha senha</a>
+    </p>
+
+    <!-- Link para voltar -->
+    <a class="btn-back" href="javascript:void(0)" onclick="voltarTelaApresentacao()">Voltar</a>
+  </div>
+
+  <!-- Link "Saiba mais!" e Growcet na tela de login -->
+  <div class="footer-links" id="footer-links-login">
+    <p><a href="#" id="saiba-mais">Saiba mais!</a></p>
+    <p id="growcet-dev">Growcet desenvolvedor</p> <!-- Exibido como texto simples, sem ser clicável -->
   </div>
 
   <script>
-    // Função para verificar a conectividade e a localização
-    function checkStatus() {
-      const alertContainer = document.getElementById('alert-container');
-
-      // Verificar se o navegador suporta geolocalização
-      if (!navigator.geolocation) {
-        alertContainer.textContent = "Erro: Geolocalização não suportada pelo dispositivo.";
-        return;
-      }
-
-      // Verificar se a internet está conectada
-      if (!navigator.onLine) {
-        alertContainer.textContent = "Parece que você está sem internet!";
-        return;
-      }
-
-      // Tentar obter a localização
-      navigator.geolocation.getCurrentPosition(
-        () => {
-          alertContainer.textContent = ""; // Limpa mensagens de erro, caso existam
-        },
-        (error) => {
-          if (error.code === error.PERMISSION_DENIED) {
-            alertContainer.textContent = "Por favor, ative a localização para continuar.";
-          } else if (error.code === error.POSITION_UNAVAILABLE) {
-            alertContainer.textContent = "Erro: Localização indisponível.";
-          } else if (error.code === error.TIMEOUT) {
-            alertContainer.textContent = "Erro: Tempo esgotado para obter localização.";
-          }
-        }
-      );
+    // Função para alternar entre as telas
+    function mostrarTelaLogin() {
+      document.getElementById("apresentacao").style.display = "none";
+      document.getElementById("login").style.display = "block";
+      document.getElementById("footer-links-login").style.display = "block"; // Exibe os links na tela de login
     }
 
-    // Verificar status ao carregar a página
-    window.onload = checkStatus;
+    // Função para voltar para a tela de apresentação
+    function voltarTelaApresentacao() {
+      document.getElementById("apresentacao").style.display = "block";
+      document.getElementById("login").style.display = "none";
+      document.getElementById("footer-links-login").style.display = "none"; // Oculta os links na tela de apresentação
+    }
 
-    // Adicionar listener para verificar mudanças de conectividade
-    window.addEventListener('online', checkStatus);
-    window.addEventListener('offline', checkStatus);
+    document.addEventListener("DOMContentLoaded", function () {
+      const loginSection = document.getElementById("login-section");
+      const registerSection = document.getElementById("register-section");
+      const toggleRegister = document.getElementById("toggle-register");
+      const loginMessage = document.getElementById("login-message");
+      const registerMessage = document.getElementById("register-message");
+      const pageTitle = document.getElementById("page-title");
+
+      // Ação para o botão "Entrar"
+      document.getElementById("btn-login").addEventListener("click", function () {
+        const password = document.getElementById("login-password").value;
+        if (!password) {
+          loginMessage.style.display = "block";
+        } else {
+          loginMessage.style.display = "none";
+          alert("Login realizado com sucesso!"); // Substituir por lógica de autenticação
+        }
+      });
+
+      // Alternar entre login e cadastro
+      toggleRegister.addEventListener("click", function (e) {
+        e.preventDefault();
+        if (registerSection.style.display === "none") {
+          registerSection.style.display = "block";
+          loginSection.style.display = "none";
+          toggleRegister.innerText = "Já tenho conta";
+          pageTitle.textContent = "Cadastrar"; // Atualiza o título
+        } else {
+          registerSection.style.display = "none";
+          loginSection.style.display = "block";
+          toggleRegister.innerText = "Criar conta";
+          pageTitle.textContent = "Login"; // Atualiza o título
+        }
+      });
+
+      // Ação para o botão "Criar Conta"
+      document.getElementById("btn-register").addEventListener("click", function () {
+        const name = document.getElementById("name").value;
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("register-password").value;
+
+        if (!name || !email || !password) {
+          registerMessage.style.display = "block";
+        } else {
+          registerMessage.style.display = "none";
+          alert("Conta criada com sucesso!"); // Substituir por lógica de cadastro
+        }
+      });
+    });
   </script>
+
 </body>
 </html>
