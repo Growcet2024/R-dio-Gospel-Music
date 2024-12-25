@@ -3,21 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Marcador de Presença</title>
+  <title>App Completo</title>
   <style>
-    /* Estilos Globais */
+    /* Estilo Global */
     body {
       margin: 0;
       padding: 0;
       font-family: 'Arial', sans-serif;
       background: linear-gradient(to bottom right, #007BFF, #0056b3);
       color: #fff;
+      height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
-      text-align: center;
-      flex-direction: column;
     }
 
     /* Container Principal da Tela de Apresentação */
@@ -28,259 +26,271 @@
       border-radius: 20px;
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
       margin: 0 15px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
     }
 
-    /* Título Principal */
-    .container h1 {
-      font-size: 26px;
-      margin-bottom: 10px;
-      font-weight: bold;
-      color: #fff;
-    }
-
-    /* Subtítulo */
-    .container h2 {
-      font-size: 20px;
-      margin-bottom: 20px;
-      color: #e0e0e0;
-      font-weight: 300;
-    }
-
-    /* Frases */
-    .container p {
-      font-size: 16px;
-      margin: 10px 0;
-      color: #fff;
-      line-height: 1.6;
-    }
-
-    /* Botão de Acessar - Largura menor com espessura ajustada */
-    .container .btn-acessar {
-      background: #28a745;
-      color: #fff;
-      padding: 12px 32px; /* Padding ajustado para espessura padrão */
-      border: none;
-      border-radius: 25px;
-      font-size: 14px; /* Tamanho de fonte ajustado */
-      font-weight: bold;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      margin-top: 20px;
-      width: 160px; /* Largura ajustada */
-      display: inline-block;
-    }
-
-    /* Efeitos do Botão */
-    .container .btn-acessar:hover {
-      background: #218838;
-      transform: scale(1.05);
-    }
-
-    /* Estilo para a tela de login */
-    .container-login {
-      max-width: 400px;
-      background: white;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-      text-align: center;
-    }
-
-    h1 {
-      font-size: 24px;
-      margin-bottom: 20px;
-      color: #0056b3;
-    }
-
-    input {
+    .screen {
+      display: none;
+      position: absolute;
+      top: 0;
+      left: 0;
       width: 100%;
-      padding: 10px;
-      margin-bottom: 15px;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      font-size: 14px;
-      box-sizing: border-box;
+      height: 100%;
+      background: inherit;
+      color: inherit;
     }
 
+    .active {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* Estilo para os botões */
     button {
-      width: 100%;
-      padding: 10px;
+      margin: 10px 0; /* Ajuste para garantir espaço entre o campo e o botão */
+      padding: 10px 20px; /* Botões com padding adequado */
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    /* Botão Acessar (Tela de Apresentação) */
+    #screen-welcome .btn-green {
+      width: 200px; /* Definir largura do botão Acessar */
+      height: 45px; /* Definir altura proporcional */
+    }
+
+    /* Botões de Login */
+    .btn-green {
       background-color: #28a745;
       color: white;
-      border: none;
-      border-radius: 4px;
-      font-size: 16px;
-      cursor: pointer;
     }
 
-    button:hover {
+    .btn-green:hover {
       background-color: #218838;
     }
 
-    .message {
-      font-size: 14px;
-      color: orange;
-      margin-top: 10px;
+    .btn-blue {
+      background-color: #007bff;
+      color: white;
     }
 
-    a {
-      text-decoration: none;
-      color: #007BFF;
-      font-size: 14px;
+    .btn-blue:hover {
+      background-color: #0056b3;
     }
 
-    a:hover {
-      text-decoration: underline;
-    }
-
-    /* Botão para voltar (preto e discreto) */
-    .btn-back {
-      margin-top: 10px;
-      display: block;
-      background: transparent;
-      color: #000;
-      border: none;
-      font-size: 14px;
-      text-decoration: none;
-      cursor: pointer;
-    }
-
-    .btn-back:hover {
+    .btn-white {
+      background-color: white;
       color: #333;
     }
 
-    /* Growcet Desenvolvedor (discretos abaixo do container de login) */
-    .footer-links {
-      font-size: 12px;
-      color: #aaa;
-      margin-top: 20px;
+    .btn-white:hover {
+      background-color: #ddd;
     }
 
-    .footer-links a {
-      color: #aaa;
+    /* Estilo para diminuir o espaçamento entre as linhas de texto */
+    p {
+      line-height: 1.2; /* Espaçamento entre as linhas */
+      margin-bottom: 5px; /* Menor espaçamento entre os parágrafos */
     }
 
-    .footer-links a:hover {
+    /* Estilo para a tela de Login */
+    #screen-login .container {
+      background-color: #fff; /* Cor de fundo branco */
+      color: #333; /* Cor do texto */
+      position: relative; /* Para posicionar o botão de Voltar */
+      padding-top: 30px; /* Espaço para o botão Voltar no topo */
+      max-width: 400px;
+      width: 100%; /* Tornar a largura do container responsiva */
+    }
+
+    /* Título da tela Login e Esqueci Minha Senha */
+    #screen-login h1, #screen-forgot h1, #screen-register h1 {
+      color: #007bff; /* Cor azul para o título */
+      font-size: 24px; /* Tamanho da fonte reduzido */
+      margin-bottom: 5px; /* Ajuste para reduzir o espaço abaixo do título */
+    }
+
+    /* Ajuste para garantir que o campo de senha e o botão "Entrar" fiquem do mesmo tamanho */
+    #screen-login input[type="password"],
+    #screen-login input[type="email"],
+    #screen-register input[type="text"],
+    #screen-register input[type="email"],
+    #screen-register input[type="password"],
+    #screen-login button[type="button"],
+    #screen-register button[type="button"],
+    #screen-forgot input[type="email"],
+    #screen-forgot button[type="button"] {
+      width: 100%; /* Garantir que ambos ocupem 100% da largura */
+      height: 45px; /* Definir uma altura proporcional para ambos */
+      padding: 0 10px; /* Padding apenas nas laterais */
+      font-size: 16px; /* Garantir que o texto tenha o mesmo tamanho */
+      box-sizing: border-box; /* Incluir o padding no tamanho total do elemento */
+    }
+
+    /* Estilo do botão "Voltar" no topo da tela */
+    #screen-login .btn-back,
+    #screen-forgot .btn-back,
+    #screen-register .btn-back {
+      position: absolute;
+      top: 10px;
+      left: 20px;
+      background: none;
       color: #fff;
-      text-decoration: underline;
+      border: none;
+      font-size: 18px;
+      cursor: pointer;
     }
 
-    /* Esconde os links de Saiba mais e Growcet na tela de apresentação */
-    #footer-links-login {
-      display: none;
+    #screen-login .btn-back:hover,
+    #screen-forgot .btn-back:hover,
+    #screen-register .btn-back:hover {
+      color: #ccc;
     }
+
+    /* Ajustes para a tela de Esqueci Minha Senha */
+    #screen-forgot .container {
+      background-color: #fff; /* Cor de fundo branco */
+      color: #333; /* Cor do texto */
+      position: relative; /* Para posicionar o botão de Voltar */
+      padding-top: 30px; /* Espaço para o botão Voltar no topo */
+      max-width: 400px;
+      width: 100%; /* Tornar a largura do container responsiva */
+    }
+
+    #screen-forgot h1 {
+      color: #007bff; /* Cor azul para o título */
+      font-size: 24px; /* Tamanho da fonte reduzido */
+      margin-bottom: 5px; /* Ajuste para reduzir o espaço abaixo do título */
+    }
+
+    /* Ajustes para a tela de Criar Conta */
+    #screen-register .container {
+      background-color: #fff; /* Cor de fundo branco */
+      color: #333; /* Cor do texto */
+      position: relative; /* Para posicionar o botão de Voltar */
+      padding-top: 30px; /* Espaço para o botão Voltar no topo */
+      max-width: 400px;
+      width: 100%; /* Tornar a largura do container responsiva */
+    }
+
+    #screen-register h1 {
+      color: #007bff; /* Cor azul para o título */
+      font-size: 24px; /* Tamanho da fonte reduzido */
+      margin-bottom: 5px; /* Ajuste para reduzir o espaço abaixo do título */
+    }
+
+    /* Ajuste para reduzir o espaço entre título e subtítulo da tela de apresentação */
+    #screen-welcome h1 {
+      margin-bottom: 10px; /* Menos espaço abaixo do título */
+    }
+
+    #screen-welcome h2 {
+      margin-top: 0; /* Remover o espaço acima do subtítulo */
+      margin-bottom: 20px; /* Ajustar o espaço abaixo do subtítulo */
+    }
+
+    /* Estilo para os textos abaixo do container */
+    #screen-login .extra-info {
+      margin-top: 20px;
+      text-align: center;
+      color: #fff;
+      font-size: 16px;
+    }
+
+    /* Estilo do link "Saiba mais!" */
+    .extra-info a {
+      color: #28a745;
+      text-decoration: underline; /* Deixa o texto sublinhado */
+      font-size: 18px; /* Aumenta o tamanho da fonte */
+    }
+
+    .extra-info a:hover {
+      color: #218838; /* Cor ao passar o mouse */
+    }
+
   </style>
 </head>
 <body>
-
   <!-- Tela de Apresentação -->
-  <div class="container" id="apresentacao">
-    <h1>Marcador de Presença</h1>
-    <h2>Por Coordenadas Geográficas</h2>
-    <p><span>✔</span> Você já precisou comprovar que esteve ou está em um determinado lugar?</p>
-    <p><span>✔</span> Comprove sua entrada e saída em locais de trabalho, eventos ou reuniões.</p>
-    <p><span>✔</span> Registre sua presença em um local específico com data e hora.</p>
-    <p><span>✔</span> Compartilhe os detalhes do local via WhatsApp ou em PDF.</p>
-    <button class="btn-acessar" onclick="mostrarTelaLogin()">Acessar</button>
+  <div id="screen-welcome" class="screen active">
+    <div class="container">
+      <h1>Marcador de Presença</h1>
+      <h2>Por Coordenadas Geográficas</h2>
+      <p><span>✔</span> Você já precisou comprovar que esteve ou está em um determinado lugar?</p>
+      <p><span>✔</span> Comprove sua entrada e saída em locais de trabalho, eventos ou reuniões.</p>
+      <p><span>✔</span> Registre sua presença em um local específico com data e hora.</p>
+      <p><span>✔</span> Compartilhe os detalhes do local via WhatsApp ou em PDF.</p>
+      <button class="btn-green" onclick="navigateTo('screen-login')">Acessar</button>
+    </div>
   </div>
 
-  <!-- Tela de Login (oculta inicialmente) -->
-  <div class="container-login" id="login" style="display: none;">
-    <h1 id="page-title">Login</h1>
-    <form id="login-form">
-      <div id="login-section">
+  <!-- Tela de Login -->
+  <div id="screen-login" class="screen">
+    <!-- Botão Voltar fixo no topo da tela -->
+    <button class="btn-back" onclick="navigateTo('screen-welcome')">Voltar</button>
+    
+    <div class="container">
+      <h1>Login</h1>
+      <form>
         <input type="password" id="login-password" placeholder="Digite sua senha">
-        <button type="button" id="btn-login">Entrar</button>
-        <p class="message" id="login-message" style="display: none;">Insira sua senha.</p>
-      </div>
-      <div id="register-section" style="display: none;">
+        <button class="btn-green" type="button" onclick="alert('Login realizado!')">Entrar</button>
+      </form>
+      <p>
+        <a href="#" onclick="navigateTo('screen-register')">Criar conta</a> |
+        <a href="#" onclick="navigateTo('screen-forgot')">Esqueci minha senha</a>
+      </p>
+    </div>
+
+    <!-- Informações adicionais abaixo do container -->
+    <div class="extra-info">
+      <p><a href="#">Saiba mais!</a></p>
+      <p>Growcet desenvolvedor</p>
+    </div>
+  </div>
+
+  <!-- Tela de Esqueci Minha Senha -->
+  <div id="screen-forgot" class="screen">
+    <button class="btn-back" onclick="navigateTo('screen-login')">Voltar</button>
+    
+    <div class="container">
+      <h1>Esqueci Minha Senha</h1>
+      <form>
+        <input type="email" id="email" placeholder="Digite seu e-mail">
+        <button class="btn-green" type="button" onclick="alert('Instruções enviadas para redefinir sua senha!')">Enviar</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Tela de Criar Conta -->
+  <div id="screen-register" class="screen">
+    <button class="btn-back" onclick="navigateTo('screen-login')">Voltar</button>
+    
+    <div class="container">
+      <h1>Cadastre-se</h1>
+      <form>
         <input type="text" id="name" placeholder="Digite seu nome">
         <input type="email" id="email" placeholder="Digite seu e-mail">
-        <input type="password" id="register-password" placeholder="Digite sua senha">
-        <button type="button" id="btn-register">Criar Conta</button>
-        <p class="message" id="register-message" style="display: none;">Preencha os campos acima.</p>
-      </div>
-    </form>
-    <p>
-      <a href="#" id="toggle-register">Criar conta</a> |
-      <a href="#" id="forgot-password">Esqueci minha senha</a>
-    </p>
-
-    <!-- Link para voltar -->
-    <a class="btn-back" href="javascript:void(0)" onclick="voltarTelaApresentacao()">Voltar</a>
-  </div>
-
-  <!-- Link "Saiba mais!" e Growcet na tela de login -->
-  <div class="footer-links" id="footer-links-login">
-    <p><a href="#" id="saiba-mais">Saiba mais!</a></p>
-    <p id="growcet-dev">Growcet desenvolvedor</p> <!-- Exibido como texto simples, sem ser clicável -->
+        <input type="password" id="password" placeholder="Digite sua senha">
+        <button class="btn-green" type="button" onclick="alert('Conta criada com sucesso!')">Criar Conta</button>
+      </form>
+    </div>
   </div>
 
   <script>
-    // Função para alternar entre as telas
-    function mostrarTelaLogin() {
-      document.getElementById("apresentacao").style.display = "none";
-      document.getElementById("login").style.display = "block";
-      document.getElementById("footer-links-login").style.display = "block"; // Exibe os links na tela de login
+    function navigateTo(screenId) {
+      document.querySelectorAll('.screen').forEach(screen => {
+        screen.classList.remove('active');
+      });
+      document.getElementById(screenId).classList.add('active');
     }
-
-    // Função para voltar para a tela de apresentação
-    function voltarTelaApresentacao() {
-      document.getElementById("apresentacao").style.display = "block";
-      document.getElementById("login").style.display = "none";
-      document.getElementById("footer-links-login").style.display = "none"; // Oculta os links na tela de apresentação
-    }
-
-    document.addEventListener("DOMContentLoaded", function () {
-      const loginSection = document.getElementById("login-section");
-      const registerSection = document.getElementById("register-section");
-      const toggleRegister = document.getElementById("toggle-register");
-      const loginMessage = document.getElementById("login-message");
-      const registerMessage = document.getElementById("register-message");
-      const pageTitle = document.getElementById("page-title");
-
-      // Ação para o botão "Entrar"
-      document.getElementById("btn-login").addEventListener("click", function () {
-        const password = document.getElementById("login-password").value;
-        if (!password) {
-          loginMessage.style.display = "block";
-        } else {
-          loginMessage.style.display = "none";
-          alert("Login realizado com sucesso!"); // Substituir por lógica de autenticação
-        }
-      });
-
-      // Alternar entre login e cadastro
-      toggleRegister.addEventListener("click", function (e) {
-        e.preventDefault();
-        if (registerSection.style.display === "none") {
-          registerSection.style.display = "block";
-          loginSection.style.display = "none";
-          toggleRegister.innerText = "Já tenho conta";
-          pageTitle.textContent = "Cadastrar"; // Atualiza o título
-        } else {
-          registerSection.style.display = "none";
-          loginSection.style.display = "block";
-          toggleRegister.innerText = "Criar conta";
-          pageTitle.textContent = "Login"; // Atualiza o título
-        }
-      });
-
-      // Ação para o botão "Criar Conta"
-      document.getElementById("btn-register").addEventListener("click", function () {
-        const name = document.getElementById("name").value;
-        const email = document.getElementById("email").value;
-        const password = document.getElementById("register-password").value;
-
-        if (!name || !email || !password) {
-          registerMessage.style.display = "block";
-        } else {
-          registerMessage.style.display = "none";
-          alert("Conta criada com sucesso!"); // Substituir por lógica de cadastro
-        }
-      });
-    });
   </script>
-
 </body>
 </html>
+
