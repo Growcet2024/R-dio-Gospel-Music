@@ -123,22 +123,24 @@
       margin-bottom: 20px;
     }
 
+     /* Estilos para outras telas (Login, Cadastro, etc.) */
+    /* Tela de Login */
     #screen-login .container,
 #screen-register .container,
 #screen-forgot .container {
   max-width: 400px;    /* Largura máxima de 400px */
-  width: 100%;         /* Garante que o container ocupe toda a largura disponível dentro do max-width */
-  padding: 30px;       /* Espaçamento interno igual */
-  margin: 0 15px;      /* Adiciona uma margem lateral de 15px */
+  width: 400px;        /* Definindo a largura fixa de 400px */
+  padding: 30px;       /* Espaçamento interno */
+  margin: 0 15px;      /* Espaçamento lateral de 15px */
   background-color: #fff;
   color: #333;
-  border-radius: 15px; /* Bordas arredondadas iguais */
-  box-sizing: border-box; /* Inclui o padding no cálculo da largura total */
+  border-radius: 15px; /* Bordas arredondadas */
+  box-sizing: border-box; /* Garantir que padding e bordas sejam inclusos na largura total */
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); /* Sombra para o container */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); /* Sombra */
 }
 
     #screen-login h1,
