@@ -81,11 +81,12 @@
       transform: translateY(-2px);
     }
 
-    /* Botão Quadrado da Tela de Login */
-    #screen-login .btn-green {
-      border-radius: 0;  /* Tornando o botão quadrado */
-      width: 100%;  /* Tamanho igual ao campo de senha */
-    }
+    /* Botão Arredondado da Tela de Login */
+#screen-login .btn-green {
+  border-radius: 20px;  /* Arredondando o botão */
+  width: 100%;  /* Tamanho igual ao campo de senha */
+}
+
 
     /* Botão Voltar */
     .btn-back {
@@ -256,31 +257,54 @@
     </div>
   </div>
 
-  <!-- Tela de Esqueci Minha Senha -->
-  <div id="screen-forgot" class="screen">
-    <button class="btn-back" onclick="navigateTo('screen-login')"><i class="fas fa-arrow-left"></i> Voltar</button>
-    <div class="container">
-      <h1>Esqueci Minha Senha</h1>
-      <form>
-        <input type="email" id="email" placeholder="Digite seu e-mail">
-        <button class="btn-green" type="button" onclick="alert('Instruções enviadas para redefinir sua senha!')"><i class="fas fa-paper-plane"></i> Enviar</button>
-      </form>
-    </div>
+<!-- Tela de Esqueci minha Senha -->
+<div id="screen-forgot" class="screen">
+  <button class="btn-back" onclick="navigateTo('screen-login')"><i class="fas fa-arrow-left"></i> Voltar</button>
+  <div class="container">
+    <h1>Esqueci minha senha</h1>  <!-- Alterado para "senha" em minúsculo -->
+    <form>
+      <input type="email" id="email" placeholder="Digite seu e-mail">
+      <button class="btn-green" type="button" onclick="alert('Instruções enviadas para redefinir sua senha!')">
+        <i class="fas fa-paper-plane"></i> Enviar
+      </button>
+    </form>
   </div>
+</div>
+<!-- CSS para o botão "Enviar" na tela de Esqueci minha Senha -->
+<style>
+  #screen-forgot .btn-green {
+    width: 100%;         /* Largura igual ao campo de entrada */
+    height: 45px;        /* Altura igual aos campos de texto */
+    padding: 0;          /* Removendo padding extra, caso tenha */
+    box-sizing: border-box;  /* Garantindo que o padding não afete a largura */
+  }
+</style>
+
 
   <!-- Tela de Criar Conta -->
-  <div id="screen-register" class="screen">
-    <button class="btn-back" onclick="navigateTo('screen-login')"><i class="fas fa-arrow-left"></i> Voltar</button>
-    <div class="container">
-      <h1>Cadastre-se</h1>
-      <form>
-        <input type="text" id="name" placeholder="Digite seu nome">
-        <input type="email" id="email" placeholder="Digite seu e-mail">
-        <input type="password" id="password" placeholder="Digite sua senha">
-        <button class="btn-green" type="button" onclick="alert('Conta criada com sucesso!')"><i class="fas fa-user-plus"></i> Criar Conta</button>
-      </form>
-    </div>
+<div id="screen-register" class="screen">
+  <button class="btn-back" onclick="navigateTo('screen-login')"><i class="fas fa-arrow-left"></i> Voltar</button>
+  <div class="container">
+    <h1>Cadastre-se</h1>
+    <form>
+      <input type="text" id="name" placeholder="Digite seu nome">
+      <input type="email" id="email" placeholder="Digite seu e-mail">
+      <input type="password" id="password" placeholder="Digite sua senha">
+      <button class="btn-green" type="button" onclick="alert('Conta criada com sucesso!')">
+        <i class="fas fa-user-plus"></i> Criar Conta
+      </button>
+    </form>
   </div>
+</div>
+
+<!-- CSS para o botão "Criar Conta" -->
+<style>
+  #screen-register .btn-green {
+    width: 100%;   /* Largura igual ao campo de entrada */
+    height: 45px;  /* Altura igual aos campos de texto */
+    border-radius: 20px;  /* Arredondando as bordas do botão */
+  }
+</style>
 
   <script>
     function navigateTo(screenId) {
