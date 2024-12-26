@@ -123,24 +123,23 @@
       margin-bottom: 20px;
     }
 
- /* Estilos Comuns para as telas de Login, Criar Conta e Esqueci minha Senha */
-#screen-login .container,
-#screen-register .container,
-#screen-forgot .container {
-  max-width: 400px;    /* Largura máxima de 400px */
-  width: 100%;         /* Garante que o container ocupe toda a largura disponível dentro do max-width */
-  padding: 30px;       /* Espaçamento interno igual */
-  margin: 0 15px;        /* Margem automática para centralizar o container */
-  background-color: #fff;
-  color: #333;
-  border-radius: 15px; /* Bordas arredondadas iguais */
-  box-sizing: border-box; /* Inclui o padding no cálculo da largura total */
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); /* Sombra para o container */
-}
+    /* Estilos para outras telas (Login, Cadastro, etc.) */
+    /* Tela de Login */
+    #screen-login .container,
+    #screen-register .container,
+    #screen-forgot .container {
+      background-color: #fff;
+      color: #333;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+      margin: 0 15px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
     #screen-login h1,
     #screen-register h1,
     #screen-forgot h1 {
@@ -262,7 +261,7 @@
 <div id="screen-forgot" class="screen">
   <button class="btn-back" onclick="navigateTo('screen-login')"><i class="fas fa-arrow-left"></i> Voltar</button>
   <div class="container">
-    <h1>Esqueci minha senha</h1>  <!-- Alterado para "senha" em minúsculo -->
+    <h1>Esqueci minha Senha</h1>
     <form>
       <input type="email" id="email" placeholder="Digite seu e-mail">
       <button class="btn-green" type="button" onclick="alert('Instruções enviadas para redefinir sua senha!')">
@@ -271,6 +270,7 @@
     </form>
   </div>
 </div>
+
 <!-- CSS para o botão "Enviar" na tela de Esqueci minha Senha -->
 <style>
   #screen-forgot .btn-green {
@@ -306,6 +306,7 @@
     border-radius: 20px;  /* Arredondando as bordas do botão */
   }
 </style>
+
 
   <script>
     function navigateTo(screenId) {
