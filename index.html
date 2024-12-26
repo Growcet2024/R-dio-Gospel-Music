@@ -4,12 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>App Completo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
     /* Estilo Global */
     body {
       margin: 0;
       padding: 0;
-      font-family: 'Arial', sans-serif;
+      font-family: 'Roboto', sans-serif;
       background: linear-gradient(to bottom right, #007BFF, #0056b3);
       color: #fff;
       height: 100vh;
@@ -18,13 +20,13 @@
       align-items: center;
     }
 
-    /* Container Principal da Tela de Apresentação */
+    /* Container Principal */
     .container {
       max-width: 550px;
       background: rgba(255, 255, 255, 0.1);
       padding: 30px;
-      border-radius: 20px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      border-radius: 15px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
       margin: 0 15px;
       display: flex;
       flex-direction: column;
@@ -32,6 +34,7 @@
       align-items: center;
     }
 
+    /* Tela */
     .screen {
       display: none;
       position: absolute;
@@ -41,6 +44,7 @@
       height: 100%;
       background: inherit;
       color: inherit;
+      transition: opacity 0.3s ease-in-out;
     }
 
     .active {
@@ -48,173 +52,169 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
+      opacity: 1;
     }
 
-    /* Estilo para os botões */
+    /* Botões */
     button {
-      margin: 10px 0; /* Ajuste para garantir espaço entre o campo e o botão */
-      padding: 10px 20px; /* Botões com padding adequado */
+      margin: 10px 0;
+      padding: 12px 20px;
       border: none;
-      border-radius: 5px;
       font-size: 16px;
       cursor: pointer;
+      transition: background-color 0.3s, transform 0.3s;
     }
 
     /* Botão Acessar (Tela de Apresentação) */
-    #screen-welcome .btn-green {
-      width: 200px; /* Definir largura do botão Acessar */
-      height: 45px; /* Definir altura proporcional */
-    }
-
-    /* Botões de Login */
     .btn-green {
       background-color: #28a745;
       color: white;
+      border-radius: 20px;
+      padding: 12px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.3s;
     }
 
     .btn-green:hover {
       background-color: #218838;
+      transform: translateY(-2px);
     }
 
-    .btn-blue {
-      background-color: #007bff;
-      color: white;
+    /* Botão Quadrado da Tela de Login */
+    #screen-login .btn-green {
+      border-radius: 0;  /* Tornando o botão quadrado */
+      width: 100%;  /* Tamanho igual ao campo de senha */
     }
 
-    .btn-blue:hover {
-      background-color: #0056b3;
-    }
-
-    .btn-white {
-      background-color: white;
-      color: #333;
-    }
-
-    .btn-white:hover {
-      background-color: #ddd;
-    }
-
-    /* Estilo para diminuir o espaçamento entre as linhas de texto */
-    p {
-      line-height: 1.2; /* Espaçamento entre as linhas */
-      margin-bottom: 5px; /* Menor espaçamento entre os parágrafos */
-    }
-
-    /* Estilo para a tela de Login */
-    #screen-login .container {
-      background-color: #fff; /* Cor de fundo branco */
-      color: #333; /* Cor do texto */
-      position: relative; /* Para posicionar o botão de Voltar */
-      padding-top: 30px; /* Espaço para o botão Voltar no topo */
-      max-width: 400px;
-      width: 100%; /* Tornar a largura do container responsiva */
-    }
-
-    /* Título da tela Login e Esqueci Minha Senha */
-    #screen-login h1, #screen-forgot h1, #screen-register h1 {
-      color: #007bff; /* Cor azul para o título */
-      font-size: 24px; /* Tamanho da fonte reduzido */
-      margin-bottom: 5px; /* Ajuste para reduzir o espaço abaixo do título */
-    }
-
-    /* Ajuste para garantir que o campo de senha e o botão "Entrar" fiquem do mesmo tamanho */
-    #screen-login input[type="password"],
-    #screen-login input[type="email"],
-    #screen-register input[type="text"],
-    #screen-register input[type="email"],
-    #screen-register input[type="password"],
-    #screen-login button[type="button"],
-    #screen-register button[type="button"],
-    #screen-forgot input[type="email"],
-    #screen-forgot button[type="button"] {
-      width: 100%; /* Garantir que ambos ocupem 100% da largura */
-      height: 45px; /* Definir uma altura proporcional para ambos */
-      padding: 0 10px; /* Padding apenas nas laterais */
-      font-size: 16px; /* Garantir que o texto tenha o mesmo tamanho */
-      box-sizing: border-box; /* Incluir o padding no tamanho total do elemento */
-    }
-
-    /* Estilo do botão "Voltar" no topo da tela */
-    #screen-login .btn-back,
-    #screen-forgot .btn-back,
-    #screen-register .btn-back {
+    /* Botão Voltar */
+    .btn-back {
       position: absolute;
       top: 10px;
       left: 20px;
       background: none;
       color: #fff;
       border: none;
-      font-size: 18px;
+      font-size: 24px; /* Aumentando o tamanho da seta */
       cursor: pointer;
     }
 
-    #screen-login .btn-back:hover,
-    #screen-forgot .btn-back:hover,
-    #screen-register .btn-back:hover {
-      color: #ccc;
+    /* Estilo para campos de formulário */
+    input:focus {
+      border: 2px solid #007bff;
+      outline: none;
     }
 
-    /* Ajustes para a tela de Esqueci Minha Senha */
-    #screen-forgot .container {
-      background-color: #fff; /* Cor de fundo branco */
-      color: #333; /* Cor do texto */
-      position: relative; /* Para posicionar o botão de Voltar */
-      padding-top: 30px; /* Espaço para o botão Voltar no topo */
-      max-width: 400px;
-      width: 100%; /* Tornar a largura do container responsiva */
+    /* Tela de Boas-vindas */
+    #screen-welcome .container {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
     }
 
-    #screen-forgot h1 {
-      color: #007bff; /* Cor azul para o título */
-      font-size: 24px; /* Tamanho da fonte reduzido */
-      margin-bottom: 5px; /* Ajuste para reduzir o espaço abaixo do título */
-    }
-
-    /* Ajustes para a tela de Criar Conta */
-    #screen-register .container {
-      background-color: #fff; /* Cor de fundo branco */
-      color: #333; /* Cor do texto */
-      position: relative; /* Para posicionar o botão de Voltar */
-      padding-top: 30px; /* Espaço para o botão Voltar no topo */
-      max-width: 400px;
-      width: 100%; /* Tornar a largura do container responsiva */
-    }
-
-    #screen-register h1 {
-      color: #007bff; /* Cor azul para o título */
-      font-size: 24px; /* Tamanho da fonte reduzido */
-      margin-bottom: 5px; /* Ajuste para reduzir o espaço abaixo do título */
-    }
-
-    /* Ajuste para reduzir o espaço entre título e subtítulo da tela de apresentação */
     #screen-welcome h1 {
-      margin-bottom: 10px; /* Menos espaço abaixo do título */
+      margin-bottom: 10px;
     }
 
     #screen-welcome h2 {
-      margin-top: 0; /* Remover o espaço acima do subtítulo */
-      margin-bottom: 20px; /* Ajustar o espaço abaixo do subtítulo */
+      margin-top: 0;
+      margin-bottom: 20px;
     }
 
-    /* Estilo para os textos abaixo do container */
-    #screen-login .extra-info {
+    /* Estilos para outras telas (Login, Cadastro, etc.) */
+    /* Tela de Login */
+    #screen-login .container,
+    #screen-register .container,
+    #screen-forgot .container {
+      background-color: #fff;
+      color: #333;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+      margin: 0 15px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #screen-login h1,
+    #screen-register h1,
+    #screen-forgot h1 {
+      color: #007bff;
+      font-size: 24px;
+      margin-bottom: 5px;
+    }
+
+    #screen-login input[type="password"],
+    #screen-login input[type="email"],
+    #screen-register input[type="text"],
+    #screen-register input[type="email"],
+    #screen-register input[type="password"],
+    #screen-forgot input[type="email"] {
+      width: 100%;
+      height: 45px;
+      padding: 0 10px;
+      font-size: 16px;
+      box-sizing: border-box;
+      margin-bottom: 15px; /* Espaçamento entre os campos */
+    }
+
+    /* Ajustes de responsividade */
+    @media (max-width: 600px) {
+      .container {
+        padding: 20px;
+      }
+
+      h1 {
+        font-size: 20px;
+      }
+
+      button {
+        width: 100%;
+        font-size: 14px;
+      }
+    }
+
+    /* Estilos específicos para a tela de Login */
+    #screen-login .container p {
       margin-top: 20px;
       text-align: center;
+    }
+
+    #screen-login .container a {
+      color: #007bff;
+      text-decoration: none;
+    }
+
+    #screen-login .container a:hover {
+      text-decoration: underline;
+    }
+
+    /* Estilos para os links abaixo do container */
+    #screen-login .extra-links {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    #screen-login .extra-links a {
       color: #fff;
-      font-size: 16px;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 18px; /* Aumentando o tamanho da fonte */
     }
 
-    /* Estilo do link "Saiba mais!" */
-    .extra-info a {
-      color: #28a745;
-      text-decoration: underline; /* Deixa o texto sublinhado */
-      font-size: 18px; /* Aumenta o tamanho da fonte */
+    #screen-login .extra-links a:hover {
+      text-decoration: underline;
     }
 
-    .extra-info a:hover {
-      color: #218838; /* Cor ao passar o mouse */
+    #screen-login .developer-info {
+      text-align: center;
+      margin-top: 10px;
+      color: #fff;
+      font-size: 14px;
     }
-
   </style>
 </head>
 <body>
@@ -233,52 +233,51 @@
 
   <!-- Tela de Login -->
   <div id="screen-login" class="screen">
-    <!-- Botão Voltar fixo no topo da tela -->
-    <button class="btn-back" onclick="navigateTo('screen-welcome')">Voltar</button>
-    
+    <button class="btn-back" onclick="navigateTo('screen-welcome')"><i class="fas fa-arrow-left"></i></button>
     <div class="container">
       <h1>Login</h1>
       <form>
         <input type="password" id="login-password" placeholder="Digite sua senha">
-        <button class="btn-green" type="button" onclick="alert('Login realizado!')">Entrar</button>
+        <button class="btn-green" type="button" onclick="alert('Login realizado!')"><i class="fas fa-sign-in-alt"></i> Entrar</button>
       </form>
       <p>
         <a href="#" onclick="navigateTo('screen-register')">Criar conta</a> |
         <a href="#" onclick="navigateTo('screen-forgot')">Esqueci minha senha</a>
       </p>
     </div>
-
-    <!-- Informações adicionais abaixo do container -->
-    <div class="extra-info">
+    
+    <!-- Links abaixo do container -->
+    <div class="extra-links">
       <p><a href="#">Saiba mais!</a></p>
+    </div>
+    
+    <div class="developer-info">
       <p>Growcet desenvolvedor</p>
     </div>
   </div>
 
   <!-- Tela de Esqueci Minha Senha -->
   <div id="screen-forgot" class="screen">
-    <button class="btn-back" onclick="navigateTo('screen-login')">Voltar</button>
-    
+    <button class="btn-back" onclick="navigateTo('screen-login')"><i class="fas fa-arrow-left"></i> Voltar</button>
     <div class="container">
       <h1>Esqueci Minha Senha</h1>
       <form>
         <input type="email" id="email" placeholder="Digite seu e-mail">
-        <button class="btn-green" type="button" onclick="alert('Instruções enviadas para redefinir sua senha!')">Enviar</button>
+        <button class="btn-green" type="button" onclick="alert('Instruções enviadas para redefinir sua senha!')"><i class="fas fa-paper-plane"></i> Enviar</button>
       </form>
     </div>
   </div>
 
   <!-- Tela de Criar Conta -->
   <div id="screen-register" class="screen">
-    <button class="btn-back" onclick="navigateTo('screen-login')">Voltar</button>
-    
+    <button class="btn-back" onclick="navigateTo('screen-login')"><i class="fas fa-arrow-left"></i> Voltar</button>
     <div class="container">
       <h1>Cadastre-se</h1>
       <form>
         <input type="text" id="name" placeholder="Digite seu nome">
         <input type="email" id="email" placeholder="Digite seu e-mail">
         <input type="password" id="password" placeholder="Digite sua senha">
-        <button class="btn-green" type="button" onclick="alert('Conta criada com sucesso!')">Criar Conta</button>
+        <button class="btn-green" type="button" onclick="alert('Conta criada com sucesso!')"><i class="fas fa-user-plus"></i> Criar Conta</button>
       </form>
     </div>
   </div>
@@ -293,4 +292,3 @@
   </script>
 </body>
 </html>
-
