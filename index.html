@@ -127,10 +127,10 @@
     #screen-login .container {
       background-color: #fff;
       color: #333;
-      padding: 30px; /* Espaçamento interno (padding) */
+      padding-top: 30px;
       max-width: 400px;
       width: 100%;
-      margin: 0 20px; /* Margem externa nas laterais */
+      margin: 0 20px; /* Adicionando margem */
     }
 
     #screen-login h1 {
@@ -233,14 +233,38 @@
         <a href="#" onclick="navigateTo('screen-forgot')">Esqueci minha senha</a>
       </p>
     </div>
-    
     <!-- Links abaixo do container -->
     <div class="extra-links">
       <p><a href="#">Saiba mais!</a></p>
     </div>
-    
     <div class="developer-info">
       <p>Growcet desenvolvedor</p>
+    </div>
+  </div>
+
+  <!-- Tela de Esqueci Minha Senha -->
+  <div id="screen-forgot" class="screen">
+    <button class="btn-back" onclick="navigateTo('screen-login')"><i class="fas fa-arrow-left"></i> Voltar</button>
+    <div class="container">
+      <h1>Esqueci Minha Senha</h1>
+      <form>
+        <input type="email" id="email" placeholder="Digite seu e-mail">
+        <button class="btn-green" type="button" onclick="alert('Instruções enviadas para redefinir sua senha!')"><i class="fas fa-paper-plane"></i> Enviar</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Tela de Criar Conta -->
+  <div id="screen-register" class="screen">
+    <button class="btn-back" onclick="navigateTo('screen-login')"><i class="fas fa-arrow-left"></i> Voltar</button>
+    <div class="container">
+      <h1>Cadastre-se</h1>
+      <form>
+        <input type="text" id="name" placeholder="Digite seu nome">
+        <input type="email" id="email" placeholder="Digite seu e-mail">
+        <input type="password" id="password" placeholder="Digite sua senha">
+        <button class="btn-green" type="button" onclick="alert('Conta criada com sucesso!')"><i class="fas fa-user-plus"></i> Criar Conta</button>
+      </form>
     </div>
   </div>
 
