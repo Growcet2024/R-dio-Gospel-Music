@@ -91,19 +91,25 @@
   /* Estilo do botão "Voltar" no topo da tela */
 /* Botão Voltar */
 .btn-back {
-  position: absolute; /* Posiciona o botão de forma absoluta em relação ao contêiner */
-  top: 0;             /* Alinha ao topo */
-  left: 0;            /* Alinha à esquerda */
-  background: none;   /* Sem fundo */
-  color: #fff;        /* Cor branca para a seta */
-  border: none;       /* Remove a borda */
-  font-size: 24px;    /* Tamanho da seta */
-  width: auto;        /* Ajusta a largura automaticamente */
-  height: auto;       /* Ajusta a altura automaticamente */
-  padding: 0;         /* Remove qualquer padding extra */
-  cursor: pointer;   /* Cursor pointer para indicar que é clicável */
-  z-index: 999;       /* Garante que o botão fique acima de outros elementos */
+  position: absolute;  /* Posiciona de forma absoluta */
+  top: 10px;           /* Alinha ao topo com pequeno espaço */
+  left: 10px;          /* Alinha à esquerda com 10px de distância */
+  background: none;    /* Sem fundo */
+  color: #fff;         /* Cor da seta */
+  border: none;        /* Remove a borda */
+  font-size: 24px;     /* Tamanho da seta */
+  width: auto;         /* Ajusta automaticamente a largura */
+  height: auto;        /* Ajusta automaticamente a altura */
+  padding: 0;          /* Remove padding */
+  cursor: pointer;    /* Cursor de pointer para indicar que é clicável */
+  z-index: 999;        /* Garante que o botão fique acima de outros elementos */
 }
+
+/* Garantir que o contêiner da tela (Login) tenha position relative */
+#screen-login {
+  position: relative;  /* Faz o botão de voltar se posicionar em relação a esse contêiner */
+}
+
 
 
     
