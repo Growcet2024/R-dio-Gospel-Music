@@ -3,22 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>App Completo</title>
+  <title>App Tela de login</title>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
+
     /* Estilo Global */
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Roboto', sans-serif;
-      background: linear-gradient(to bottom right, #007BFF, #0056b3);
-      color: #fff;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
+    /* Tela de Apresentação - Cor de Fundo e Cor do Contêiner */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Roboto', sans-serif;
+  background: linear-gradient(to bottom right, #007BFF, #0056b3); /* Cor do fundo da tela */
+  color: #fff;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
     /* Container Principal */
     .container {
@@ -65,17 +67,18 @@
       transition: background-color 0.3s, transform 0.3s;
     }
 
-   /* Botão Acessar (Tela de Apresentação) */
+  /* Botão Acessar (Tela de Apresentação) */
 .btn-green {
   background-color: #28a745;
   color: white;
   border-radius: 20px;
-  padding: 8px 16px; /* Menor padding para um botão menor */
-  font-size: 16px;
+  padding: 10px 20px; /* Ajustando o padding */
+  font-size: 18px;    /* Ajustando o tamanho da fonte */
   cursor: pointer;
   transition: background-color 0.3s, transform 0.3s;
-  width: auto; /* Faz o botão ajustar o tamanho conforme o conteúdo */
+  width: 150px;       /* Largura fixa em pixels */
 }
+
 
 
     .btn-green:hover {
@@ -88,7 +91,6 @@
   border-radius: 20px;  /* Arredondando o botão */
   width: 100%;  /* Tamanho igual ao campo de senha */
 }
-
 
   /* Estilo do botão "Voltar" no topo da tela */
 /* Botão Voltar */
@@ -238,7 +240,7 @@
 <div id="screen-welcome" class="screen active">
   <div class="container">
     <h1 style="font-size: 25px; text-align: center; line-height: 1.1;">Marcador de Presença</h1>
-    <h2 style="font-size: 18px; text-align: center; line-height: 1.1;">Por Coordenadas Geográficas</h2>
+    <h2 style="font-size: 18px; text-align: center; line-height: 1.1; font-weight: normal;">Por Coordenadas Geográficas</h2>
     <p style="font-size: 15px; text-align: left; line-height: 1.0;"><span>✔</span> Você já precisou comprovar que esteve ou está em um determinado lugar?</p>
     <p style="font-size: 15px; text-align: left; line-height: 1.0;"><span>✔</span> Comprove sua entrada e saída em locais de trabalho, eventos ou reuniões.</p>
     <p style="font-size: 15px; text-align: left; line-height: 1.0;"><span>✔</span> Registre sua presença em um local específico com data e hora.</p>
@@ -246,9 +248,6 @@
     <button class="btn-green" onclick="navigateTo('screen-login')">Acessar</button>
   </div>
 </div>
-
-
-
 
   <!-- Tela de Login -->
   <div id="screen-login" class="screen">
@@ -325,7 +324,7 @@
 </style>
 
 
-  <script>
+<script>
     function navigateTo(screenId) {
       document.querySelectorAll('.screen').forEach(screen => {
         screen.classList.remove('active');
