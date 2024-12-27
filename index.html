@@ -124,38 +124,21 @@
     }
 
     /* Estilos para outras telas (Login, Cadastro, etc.) */
-/* Tela de Login */
-#screen-login .container,
-#screen-register .container,
-#screen-forgot .container {
-  max-width: 400px;    /* Largura máxima de 400px */
-  width: 100%;         /* O container vai ocupar a largura disponível, mas com max-width de 400px */
-  padding: 30px;       /* Espaçamento interno */
-  margin: 0;           /* Sem margem aqui, pois o espaçamento vai ser controlado pelo padding do body */
-  background-color: #fff;
-  color: #333;
-  border-radius: 15px; /* Bordas arredondadas */
-  box-sizing: border-box; /* Garantir que padding e bordas sejam inclusos na largura total */
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); /* Sombra */
-}
-
-/* Ajustes no body para adicionar espaçamento nas laterais */
-body {
-  margin: 0;
-  padding: 0 15px;  /* Adiciona uma margem de 15px nas laterais */
-  font-family: 'Roboto', sans-serif;
-  background: linear-gradient(to bottom right, #007BFF, #0056b3);
-  color: #fff;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
+    /* Tela de Login */
+    #screen-login .container,
+    #screen-register .container,
+    #screen-forgot .container {
+      background-color: #fff;
+      color: #333;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+      margin: 0 15px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
 
     #screen-login h1,
     #screen-register h1,
@@ -273,7 +256,6 @@ body {
       <p>Growcet desenvolvedor</p>
     </div>
   </div>
-
 <!-- Tela de Esqueci minha Senha -->
 <div id="screen-forgot" class="screen">
   <button class="btn-back" onclick="navigateTo('screen-login')"><i class="fas fa-arrow-left"></i> Voltar</button>
@@ -288,7 +270,7 @@ body {
   </div>
 </div>
 
-<!-- CSS para o botão "Enviar" na tela de Esqueci minha Senha -->
+<!-- CSS para o botão "Enviar" na tela de Esqueci Minha Senha -->
 <style>
   #screen-forgot .btn-green {
     width: 100%;         /* Largura igual ao campo de entrada */
