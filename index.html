@@ -79,8 +79,6 @@ body {
   width: 150px;       /* Largura fixa em pixels */
 }
 
-
-
     .btn-green:hover {
       background-color: #218838;
       transform: translateY(-2px);
@@ -113,10 +111,7 @@ body {
 #screen-login {
   position: relative;  /* Faz o botão de voltar se posicionar em relação a esse contêiner */
 }
-
-
-
-    
+   
     /* Estilo para campos de formulário */
     input:focus {
       border: 2px solid #007bff;
@@ -142,28 +137,20 @@ body {
 
     /* Estilos para outras telas (Login, Cadastro, etc.) */
     /* Tela de Login */
-   #screen-login .container,
-#screen-register .container,
-#screen-forgot .container {
-  background-color: #fff;
-  color: #333;
-  padding: 30px;
-  border-radius: 15px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-  margin: 0 0; /* Remove o espaçamento lateral */
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  
-  /* Ajustando o tamanho do container */
-  min-height: 400px;
-  max-height: 500px;
-  height: 450px;
-  
-  /* O container agora ocupa 100% da largura disponível */
-  width: 100%;
-}
+    #screen-login .container,
+    #screen-register .container,
+    #screen-forgot .container {
+      background-color: #fff;
+      color: #333;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+      margin: 0 15px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
 
     #screen-login h1,
     #screen-register h1,
@@ -332,7 +319,7 @@ body {
 </style>
 
 
-<script>
+  <script>
     function navigateTo(screenId) {
       document.querySelectorAll('.screen').forEach(screen => {
         screen.classList.remove('active');
