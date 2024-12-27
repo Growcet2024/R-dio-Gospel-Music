@@ -88,17 +88,19 @@
 }
 
 
-    /* Botão Voltar */
-    .btn-back {
-      position: absolute;
-      top: 10px;
-      left: 20px;
-      background: none;
-      color: #fff;
-      border: none;
-      font-size: 24px; /* Aumentando o tamanho da seta */
-      cursor: pointer;
-    }
+ /* Botão Voltar */
+.btn-back {
+  position: absolute;
+  top: 20px;  /* Distância do topo */
+  left: 20px; /* Distância da esquerda */
+  background: none;
+  color: #fff;
+  border: none;
+  font-size: 24px; /* Tamanho da seta */
+  cursor: pointer;
+}
+
+
 
     /* Estilo para campos de formulário */
     input:focus {
@@ -220,17 +222,20 @@
 </head>
 <body>
   <!-- Tela de Apresentação -->
-  <div id="screen-welcome" class="screen active">
-    <div class="container">
-      <h1>Marcador de Presença</h1>
-      <h2>Por Coordenadas Geográficas</h2>
-      <p><span>✔</span> Você já precisou comprovar que esteve ou está em um determinado lugar?</p>
-      <p><span>✔</span> Comprove sua entrada e saída em locais de trabalho, eventos ou reuniões.</p>
-      <p><span>✔</span> Registre sua presença em um local específico com data e hora.</p>
-      <p><span>✔</span> Compartilhe os detalhes do local via WhatsApp ou em PDF.</p>
-      <button class="btn-green" onclick="navigateTo('screen-login')">Acessar</button>
-    </div>
+<div id="screen-welcome" class="screen active">
+  <div class="container">
+    <h1 style="font-size: 30px; text-align: center; line-height: 1.1;">Marcador de Presença</h1>
+    <h2 style="font-size: 22px; text-align: center; line-height: 1.1;">Por Coordenadas Geográficas</h2>
+    <p style="font-size: 15px; text-align: left; line-height: 1.0;"><span>✔</span> Você já precisou comprovar que esteve ou está em um determinado lugar?</p>
+    <p style="font-size: 15px; text-align: left; line-height: 1.0;"><span>✔</span> Comprove sua entrada e saída em locais de trabalho, eventos ou reuniões.</p>
+    <p style="font-size: 15px; text-align: left; line-height: 1.0;"><span>✔</span> Registre sua presença em um local específico com data e hora.</p>
+    <p style="font-size: 15px; text-align: left; line-height: 1.0;"><span>✔</span> Compartilhe os detalhes do local via WhatsApp ou em PDF.</p>
+    <button class="btn-green" onclick="navigateTo('screen-login')">Acessar</button>
   </div>
+</div>
+
+
+
 
   <!-- Tela de Login -->
   <div id="screen-login" class="screen">
@@ -260,7 +265,7 @@
 <div id="screen-forgot" class="screen">
   <button class="btn-back" onclick="navigateTo('screen-login')"><i class="fas fa-arrow-left"></i> Voltar</button>
   <div class="container">
-    <h1>Esqueci minha Senha</h1>
+    <h1>Esqueci Minha Senha</h1>
     <form>
       <input type="email" id="email" placeholder="Digite seu e-mail">
       <button class="btn-green" type="button" onclick="alert('Instruções enviadas para redefinir sua senha!')">
