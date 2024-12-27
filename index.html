@@ -91,14 +91,16 @@
 /* Botão Voltar */
 .btn-back {
   position: absolute;
-  top: 2px;   /* Ajuste a distância do topo */
-  left: 2px;  /* Ajuste a distância da esquerda */
+  top: 0;   /* Ajuste para topo 0 */
+  left: 0;  /* Ajuste para a esquerda 0 */
   background: none;
   color: #fff;
   border: none;
-  font-size: 24px; /* Aumentando o tamanho da seta */
+  font-size: 24px; /* Tamanho da seta */
   cursor: pointer;
+  z-index: 999; /* Garante que o botão fique acima de outros elementos */
 }
+
 
     /* Estilo para campos de formulário */
     input:focus {
