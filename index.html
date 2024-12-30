@@ -1,329 +1,139 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>App Tela de login</title>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <style>
-
-    /* Estilo Global */
-    /* Tela de Apresentação - Cor de Fundo e Cor do Contêiner */
-body {
-  margin: 0;
-  padding: 0;
-  font-family: 'Roboto', sans-serif;
-  background: linear-gradient(to bottom right, #007BFF, #0056b3); /* Cor do fundo da tela */
-  color: #fff;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-    /* Container Principal */
-    .container {
-      max-width: 550px;
-      background: rgba(255, 255, 255, 0.1);
-      padding: 30px;
-      border-radius: 20px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-      margin: 0 15px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-    }
-
-    /* Tela */
-    .screen {
-      display: none;
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: inherit;
-      color: inherit;
-      transition: opacity 0.3s ease-in-out;
-    }
-
-    .active {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      opacity: 1;
-    }
-
-    /* Botões */
-    button {
-      margin: 10px 0;
-      padding: 12px 20px;
-      border: none;
-      font-size: 16px;
-      cursor: pointer;
-      transition: background-color 0.3s, transform 0.3s;
-    }
-
-  /* Botão Acessar (Tela de Apresentação) */
-.btn-green {
-  background-color: #28a745;
-  color: white;
-  border-radius: 20px;
-  padding: 10px 20px; /* Ajustando o padding */
-  font-size: 18px;    /* Ajustando o tamanho da fonte */
-  cursor: pointer;
-  transition: background-color 0.3s, transform 0.3s;
-  width: 150px;       /* Largura fixa em pixels */
-}
-
-    .btn-green:hover {
-      background-color: #218838;
-      transform: translateY(-2px);
-    }
-
-    /* Botão Arredondado da Tela de Login */
-#screen-login .btn-green {
-  border-radius: 20px;  /* Arredondando o botão */
-  width: 100%;  /* Tamanho igual ao campo de senha */
-}
-
-  /* Estilo do botão "Voltar" no topo da tela */
-/* Botão Voltar */
-.btn-back {
-  position: absolute;  /* Posiciona de forma absoluta */
-  top: 10px;           /* Alinha ao topo com pequeno espaço */
-  left: 15px;          /* Alinha à esquerda com 10px de distância */
-  background: none;    /* Sem fundo */
-  color: #fff;         /* Cor da seta */
-  border: none;        /* Remove a borda */
-  font-size: 24px;     /* Tamanho da seta */
-  width: auto;         /* Ajusta automaticamente a largura */
-  height: auto;        /* Ajusta automaticamente a altura */
-  padding: 0;          /* Remove padding */
-  cursor: pointer;    /* Cursor de pointer para indicar que é clicável */
-  z-index: 999;        /* Garante que o botão fique acima de outros elementos */
-}
-
-/* Garantir que o contêiner da tela (Login) tenha position relative */
-#screen-login {
-  position: relative;  /* Faz o botão de voltar se posicionar em relação a esse contêiner */
-}
-   
-    /* Estilo para campos de formulário */
-    input:focus {
-      border: 2px solid #007bff;
-      outline: none;
-    }
-
-    /* Tela de Boas-vindas */
-    #screen-welcome .container {
-      background: rgba(255, 255, 255, 0.1);
-      padding: 30px;
-      border-radius: 15px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-    }
-
-    #screen-welcome h1 {
-      margin-bottom: 10px;
-    }
-
-    #screen-welcome h2 {
-      margin-top: 0;
-      margin-bottom: 20px;
-    }
-
-    /* Estilos para outras telas (Login, Cadastro, etc.) */
-    /* Tela de Login */
-    #screen-login .container,
-    #screen-register .container,
-    #screen-forgot .container {
-      background-color: #fff;
-      color: #333;
-      padding: 30px;
-      border-radius: 15px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-      margin: 0 15px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-    }
-
-    #screen-login h1,
-    #screen-register h1,
-    #screen-forgot h1 {
-      color: #007bff;
-      font-size: 24px;
-      margin-bottom: 5px;
-    }
-
-    #screen-login input[type="password"],
-    #screen-login input[type="email"],
-    #screen-register input[type="text"],
-    #screen-register input[type="email"],
-    #screen-register input[type="password"],
-    #screen-forgot input[type="email"] {
-      width: 100%;
-      height: 45px;
-      padding: 0 10px;
-      font-size: 16px;
-      box-sizing: border-box;
-      margin-bottom: 15px; /* Espaçamento entre os campos */
-    }
-
-    /* Ajustes de responsividade */
-    @media (max-width: 600px) {
-      .container {
-        padding: 20px;
-      }
-
-      h1 {
-        font-size: 20px;
-      }
-
-      button {
-        width: 100%;
-        font-size: 14px;
-      }
-    }
-
-    /* Estilos específicos para a tela de Login */
-    #screen-login .container p {
-      margin-top: 20px;
-      text-align: center;
-    }
-
-    #screen-login .container a {
-      color: #007bff;
-      text-decoration: none;
-    }
-
-    #screen-login .container a:hover {
-      text-decoration: underline;
-    }
-
-    /* Estilos para os links abaixo do container */
-    #screen-login .extra-links {
-      text-align: center;
-      margin-top: 20px;
-    }
-
-    #screen-login .extra-links a {
-      color: #fff;
-      text-decoration: none;
-      font-weight: bold;
-      font-size: 18px; /* Aumentando o tamanho da fonte */
-    }
-
-    #screen-login .extra-links a:hover {
-      text-decoration: underline;
-    }
-
-    #screen-login .developer-info {
-      text-align: center;
-      margin-top: 10px;
-      color: #fff;
-      font-size: 14px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marcador de Presença</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to bottom, #2575fc, #2575fc);
+            color: white;
+            text-align: center;
+        }
+        .container {
+            max-width: 550px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            margin: 50px auto;
+        }
+        button {
+            background-color: #1964a1;
+            border: none;
+            padding: 10px 20px;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #1a5bbf;
+        }
+        .back-button {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        .link {
+            color: #add8e6;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: none;
+        }
+        footer {
+            margin-top: 20px;
+            font-size: 14px;
+        }
+    </style>
 </head>
 <body>
-  <!-- Tela de Apresentação -->
-<div id="screen-welcome" class="screen active">
-  <div class="container">
-    <h1 style="font-size: 25px; text-align: center; line-height: 1.1;">Marcador de Presença</h1>
-    <h2 style="font-size: 18px; text-align: center; line-height: 1.1; font-weight: normal;">Por Coordenadas Geográficas</h2>
-    <p style="font-size: 16px; text-align: left; line-height: 1.0;"><span>✔</span> Você já precisou comprovar que esteve ou está em um determinado lugar?</p>
-    <p style="font-size: 16px; text-align: left; line-height: 1.0;"><span>✔</span> Comprove sua entrada e saída em locais de trabalho, eventos ou reuniões.</p>
-    <p style="font-size: 16px; text-align: left; line-height: 1.0;"><span>✔</span> Registre sua presença em um local específico com data e hora.</p>
-    <p style="font-size: 16px; text-align: left; line-height: 1.0;"><span>✔</span> Compartilhe os detalhes do local via WhatsApp ou em PDF.</p>
-    <button class="btn-green" onclick="navigateTo('screen-login')">Acessar</button>
-  </div>
-</div>
+    <div id="app">
+        <!-- Tela de Apresentação -->
+        <div class="container" id="presentation" style="display: none;">
+            <h1>Marcador de Presença</h1>
+            <h2>Por Coordenadas Geográficas</h2>
+            <p><span>✔</span> Você já precisou comprovar que esteve ou está em um determinado lugar?</p>
+            <p><span>✔</span> Comprove sua entrada e saída em locais de trabalho, eventos ou reuniões.</p>
+            <p><span>✔</span> Registre sua presença em um local específico com data e hora.</p>
+            <p><span>✔</span> Compartilhe os detalhes do local via WhatsApp ou em PDF.</p>
+            <button onclick="navigateTo('login')">Acessar</button>
+        </div>
 
-  <!-- Tela de Login -->
-  <div id="screen-login" class="screen">
-    <button class="btn-back" onclick="navigateTo('screen-welcome')"><i class="fas fa-arrow-left"></i></button>
-    <div class="container">
-      <h1>Login</h1>
-      <form>
-        <input type="password" id="login-password" placeholder="Digite sua senha">
-        <button class="btn-green" type="button" onclick="alert('Login realizado!')"><i class="fas fa-sign-in-alt"></i> Entrar</button>
-      </form>
-      <p>
-        <a href="#" onclick="navigateTo('screen-register')">Criar conta</a> |
-        <a href="#" onclick="navigateTo('screen-forgot')">Esqueci minha senha</a>
-      </p>
+        <!-- Tela de Login -->
+        <div class="container" id="login" style="display: none;">
+            <button class="back-button" onclick="navigateTo('presentation')">←</button>
+            <input type="password" placeholder="Digite sua senha" style="width: 100%; padding: 10px; margin: 15px 0; border-radius: 5px; border: none;">
+            <button onclick="navigateTo('main')">Entrar</button>
+            <div style="margin-top: 20px;">
+                <span class="link" onclick="navigateTo('create-account')">Criar Conta</span> |
+                <span class="link" onclick="navigateTo('forgot-password')">Esqueci minha senha</span>
+            </div>
+            <div class="link" style="margin-top: 20px;" onclick="alert('Informações adicionais')">Saiba mais!</div>
+            <footer>Growcet desenvolvedor</footer>
+        </div>
+
+        <!-- Tela Principal -->
+        <div class="container" id="main" style="display: none;">
+            <button class="back-button" onclick="navigateTo('login')">←</button>
+            <h1>Bem-vindo à Tela Principal</h1>
+            <button onclick="navigateTo('history')">Histórico de Presença</button>
+        </div>
+
+        <!-- Tela de Histórico -->
+        <div class="container" id="history" style="display: none;">
+            <button class="back-button" onclick="navigateTo('main')">←</button>
+            <h1>Histórico de Presença</h1>
+            <p>Aqui você verá o histórico de presença registrado.</p>
+        </div>
+
+        <!-- Tela Criar Conta -->
+        <div class="container" id="create-account" style="display: none;">
+            <button class="back-button" onclick="navigateTo('login')">←</button>
+            <h1>Cadastre-se</h1>
+            <form>
+                <input type="text" placeholder="Digite seu nome" required>
+                <input type="email" placeholder="Digite seu e-mail" required>
+                <input type="password" placeholder="Digite sua senha" required>
+                <button type="submit">Criar conta</button>
+            </form>
+        </div>
+
+        <!-- Tela Esqueci minha Senha -->
+        <div class="container" id="forgot-password" style="display: none;">
+            <button class="back-button" onclick="navigateTo('login')">←</button>
+            <h1>Esqueci minha Senha</h1>
+            <form>
+                <input type="email" placeholder="Digite seu e-mail" required>
+                <button type="submit">Enviar</button>
+            </form>
+        </div>
     </div>
-    
-    <!-- Links abaixo do container -->
-    <div class="extra-links">
-      <p><a href="#">Saiba mais!</a></p>
-    </div>
-    
-    <div class="developer-info">
-      <p>Growcet desenvolvedor</p>
-    </div>
-  </div>
-<!-- Tela de Esqueci minha Senha -->
-<div id="screen-forgot" class="screen">
-  <button class="btn-back" onclick="navigateTo('screen-login')"><i class="fas fa-arrow-left"></i> </button>
-  <div class="container">
-    <h1>Esqueci Minha Senha</h1>
-    <form>
-      <input type="email" id="email" placeholder="Digite seu e-mail">
-      <button class="btn-green" type="button" onclick="alert('Instruções enviadas para redefinir sua senha!')">
-        <i class="fas fa-paper-plane"></i> Enviar
-      </button>
-    </form>
-  </div>
-</div>
 
-<!-- CSS para o botão "Enviar" na tela de Esqueci Minha Senha -->
-<style>
-  #screen-forgot .btn-green {
-    width: 100%;         /* Largura igual ao campo de entrada */
-    height: 45px;        /* Altura igual aos campos de texto */
-    padding: 0;          /* Removendo padding extra, caso tenha */
-    box-sizing: border-box;  /* Garantindo que o padding não afete a largura */
-  }
-</style>
+    <script>
+        function navigateTo(screen) {
+            const screens = document.querySelectorAll('.container');
+            screens.forEach(s => s.style.display = 'none');
+            document.getElementById(screen).style.display = 'block';
+        }
 
- <!-- Tela de Criar Conta -->
-<div id="screen-register" class="screen">
-  <button class="btn-back" onclick="navigateTo('screen-login')"><i class="fas fa-arrow-left"></i></button>
-  <div class="container">
-    <h1>Cadastre-se</h1>
-    <form>
-      <input type="text" id="name" placeholder="Digite seu nome">
-      <input type="email" id="email" placeholder="Digite seu e-mail">
-      <input type="password" id="password" placeholder="Digite sua senha">
-      <button class="btn-green" type="button" onclick="alert('Conta criada com sucesso!')">
-        <i class="fas fa-user-plus"></i> Criar Conta
-      </button>
-    </form>
-  </div>
-</div>
-
-<!-- CSS para o botão "Criar Conta" -->
-<style>
-  #screen-register .btn-green {
-    width: 100%;   /* Largura igual ao campo de entrada */
-    height: 45px;  /* Altura igual aos campos de texto */
-    border-radius: 20px;  /* Arredondando as bordas do botão */
-  }
-</style>
-
-  <script>
-    function navigateTo(screenId) {
-      document.querySelectorAll('.screen').forEach(screen => {
-        screen.classList.remove('active');
-      });
-      document.getElementById(screenId).classList.add('active');
-    }
-  </script>
+        // Inicializa na tela de apresentação
+        navigateTo('presentation');
+    </script>
 </body>
 </html>
+
