@@ -146,6 +146,15 @@
             margin-top: 0;
             padding-top: 0;
         }
+
+        /* Remover borda e fundo */
+        .extra-content {
+            background: none;
+            border: none;
+            outline: none;
+            padding: 10px 0;
+            color: black;
+        }
     </style>
 </head>
 <body>
@@ -191,6 +200,8 @@
                 </svg>
             </button>
             <h1>Bem-vindo à Tela Principal</h1>
+            <!-- Espaço para colocar conteúdo -->
+            <div class="extra-content">Coloque seu conteúdo aqui...</div>
             <button onclick="navigateTo('history')">Histórico de Presença</button>
         </div>
 
@@ -248,4 +259,5 @@
     </script>
 </body>
 </html>
+
 
