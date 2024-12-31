@@ -46,12 +46,14 @@
             cursor: pointer;
             font-size: 16px;
             transition: background-color 0.3s ease;
+            width: 100%; /* Mantém os outros botões 100% */
         }
 
         button:hover {
             background-color: #1a5bbf;
         }
 
+        /* Estilo da seta de voltar */
         .back-button {
             position: fixed;
             top: 10px;
@@ -59,10 +61,10 @@
             background: none;
             border: none;
             color: white;
-            font-size: 28px; /* Aumentando o tamanho da seta */
+            font-size: 40px;  /* Aumentei o tamanho da seta */
+            font-weight: bold; /* Aumenta a espessura da seta */
             cursor: pointer;
-            padding: 12px 12px;
-            border-radius: 5px;
+            padding: 12px;
             z-index: 10;
             width: auto;
         }
@@ -118,7 +120,7 @@
             color: white;
         }
 
-        /* Ajustando o botão de acessar para ficar pequeno */
+        /* Ajustando o botão "Acessar" para ficar pequeno, enquanto os outros permanecem com 100% */
         #presentation button {
             width: auto;
             padding: 10px 20px;
@@ -149,7 +151,7 @@
 
         <!-- Tela de Login -->
         <div class="container" id="login" style="display: none;">
-            <button class="back-button" onclick="navigateTo('presentation')">←</button>
+            <button class="back-button" onclick="navigateTo('presentation')"><</button>
             <h1>Login</h1>
             <input type="password" placeholder="Digite sua senha" required>
             <button onclick="navigateTo('main')">Entrar</button>
@@ -165,7 +167,7 @@
 
         <!-- Tela Principal -->
         <div class="container" id="main" style="display: none;">
-            <button class="back-button" onclick="navigateTo('login')">←</button>
+            <button class="back-button" onclick="navigateTo('login')"><</button>
             <h1>Bem-vindo à Tela Principal</h1>
             <p>Coloque seu conteúdo aqui...</p>
             <button onclick="navigateTo('history')">Histórico de Presença</button>
@@ -173,14 +175,14 @@
 
         <!-- Tela de Histórico -->
         <div class="container" id="history" style="display: none;">
-            <button class="back-button" onclick="navigateTo('main')">←</button>
+            <button class="back-button" onclick="navigateTo('main')"><</button>
             <h1>Histórico de Presença</h1>
             <p>Coloque seu conteúdo aqui...</p>
         </div>
 
         <!-- Tela Criar Conta -->
         <div class="container" id="create-account" style="display: none;">
-            <button class="back-button" onclick="navigateTo('login')">←</button>
+            <button class="back-button" onclick="navigateTo('login')"><</button>
             <h2>Cadastre-se</h2>
             <form>
                 <input type="text" placeholder="Digite seu nome" required>
@@ -192,7 +194,7 @@
 
         <!-- Tela Esqueci a Senha -->
         <div class="container" id="forgot-password" style="display: none;">
-            <button class="back-button" onclick="navigateTo('login')">←</button>
+            <button class="back-button" onclick="navigateTo('login')"><</button>
             <h2>Esqueci a Senha</h2>
             <form>
                 <input type="email" placeholder="Digite seu e-mail" required>
