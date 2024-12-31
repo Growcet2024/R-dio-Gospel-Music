@@ -13,40 +13,14 @@
             color: white;
             text-align: center;
         }
-
-     /* Container Principal */
-    .container {
-      max-width: 550px;
-      background: rgba(255, 255, 255, 0.1);
-      padding: 30px;
-      border-radius: 20px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-      margin: 0 15px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-    }
-
-
-        /* Container da Tela de Apresentação com cor específica */
-        #presentation {
-            background-color: #007bff; /* Cor solicitada */
-            color: white;
+        .container {
+            max-width: 550px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            margin: 50px auto;
         }
-
-        /* Containers das demais telas com fundo branco */
-        #login, #create-account, #forgot-password, #main, #history {
-            background-color: white;
-            color: black;
-            margin-top: 60px;
-        }
-
-        /* Estilo dos títulos */
-        h1, h2, h3 {
-            color: black; /* Cor preta para os títulos */
-        }
-
         button {
             background-color: #1964a1;
             border: none;
@@ -56,11 +30,9 @@
             cursor: pointer;
             font-size: 16px;
         }
-
         button:hover {
             background-color: #1a5bbf;
         }
-
         .back-button {
             position: absolute;
             top: 10px;
@@ -71,27 +43,18 @@
             font-size: 24px;
             cursor: pointer;
         }
-
         .link {
             color: #add8e6;
             text-decoration: underline;
             cursor: pointer;
         }
-
-        /* Estilo dos campos de entrada */
         input {
             width: 100%;
             padding: 10px;
             margin: 10px 0;
             border-radius: 5px;
-            border: 2px solid #ccc; /* Contorno nos campos de entrada */
+            border: none;
         }
-
-        input:focus {
-            border-color: #007bff; /* Cor do contorno ao focar */
-            outline: none;
-        }
-
         footer {
             margin-top: 20px;
             font-size: 14px;
@@ -102,8 +65,8 @@
     <div id="app">
         <!-- Tela de Apresentação -->
         <div class="container" id="presentation" style="display: none;">
-            <h2>Marcador de Presença</h2>
-            <h3>Por Coordenadas Geográficas</h3>
+            <h2>Marcador de Presença</h1>
+            <h3>Por Coordenadas Geográficas</h2>
             <p><span>✔</span> Você já precisou comprovar que esteve ou está em um determinado lugar?</p>
             <p><span>✔</span> Comprove sua entrada e saída em locais de trabalho, eventos ou reuniões.</p>
             <p><span>✔</span> Registre sua presença em um local específico com data e hora.</p>
@@ -115,17 +78,18 @@
         <div class="container" id="login" style="display: none;">
             <button class="back-button" onclick="navigateTo('presentation')">←</button>
             <h1>Login</h1>
-            <input type="password" placeholder="Digite sua senha" required>
+            <input type="password" placeholder="Digite sua senha" style="width: 100%; padding: 10px; margin: 15px 0; border-radius: 5px; border: none;">
             <button onclick="navigateTo('main')">Entrar</button>
             <div style="margin-top: 20px;">
                 <span class="link" onclick="navigateTo('create-account')">Criar Conta</span> |
                 <span class="link" onclick="navigateTo('forgot-password')">Esqueci minha senha</span>
             </div>
             <div class="link" style="margin-top: 20px;" onclick="alert('Informações adicionais')">Saiba mais!</div>
-            <footer>Growcet desenvolvedor</footer>
-        </div>
+            <footer>Growcet desenvolvedor</footer> 
 
-        <!-- Tela Principal -->
+        </div>
+        
+       <!-- Tela Principal -->
         <div class="container" id="main" style="display: none;">
             <button class="back-button" onclick="navigateTo('login')">←</button>
             <h1>Bem-vindo à Tela Principal</h1>
@@ -142,7 +106,7 @@
         <!-- Tela Criar Conta -->
         <div class="container" id="create-account" style="display: none;">
             <button class="back-button" onclick="navigateTo('login')">←</button>
-            <h2>Cadastrar</h2>
+            <h2>Cadastrar</h1>
             <form>
                 <input type="text" placeholder="Digite seu nome" required>
                 <input type="email" placeholder="Digite seu e-mail" required>
@@ -154,7 +118,7 @@
         <!-- Tela Esqueci minha Senha -->
         <div class="container" id="forgot-password" style="display: none;">
             <button class="back-button" onclick="navigateTo('login')">←</button>
-            <h2>Esqueci minha Senha</h2>
+            <h2>Esqueci minha Senha</h1>
             <form>
                 <input type="email" placeholder="Digite seu e-mail" required>
                 <button type="submit">Enviar</button>
@@ -174,4 +138,3 @@
     </script>
 </body>
 </html>
-
