@@ -14,37 +14,29 @@
             text-align: center;
         }
 
-        /* Estilo para todos os contêineres */
         .container {
             max-width: 550px;
             padding: 30px;
-            border-radius: 20px;
+            border-radius: 30px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-            margin: 80px auto 50px auto; /* Margem superior aumentada */
+            margin: 80px auto 50px auto;
             position: relative;
             background: white;
             color: black;
         }
 
-        /* Contêineres com margem nas laterais, exceto Principal e Histórico */
-        #login, #create-account, #forgot-password, #presentation {
-            margin-left: 15px;
-            margin-right: 15px;
+        @media (max-width: 768px) {
+            .container {
+                margin: 80px 15px 50px 15px;
+            }
         }
 
-        /* Tela Principal e Histórico sem margens laterais */
-        #main, #history {
-            margin-left: 0;
-            margin-right: 0;
+        @media (min-width: 769px) {
+            .container {
+                margin: 80px auto 50px auto;
+            }
         }
 
-        /* Estilo específico para a tela de apresentação */
-        #presentation {
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-        }
-
-        /* Botões */
         button {
             background-color: #1964a1;
             border: none;
@@ -53,7 +45,6 @@
             border-radius: 20px;
             cursor: pointer;
             font-size: 16px;
-            width: 100%;
             transition: background-color 0.3s ease;
         }
 
@@ -61,40 +52,21 @@
             background-color: #1a5bbf;
         }
 
-        #presentation button {
-            width: auto;
-            padding: 10px 20px;
-            border-radius: 15px;
-        }
-
-        /* Botão de voltar */
         .back-button {
             position: fixed;
-            top: 20px;
+            top: 10px;
             left: 10px;
             background: none;
             border: none;
             color: white;
-            font-size: 28px;
+            font-size: 28px; /* Aumentando o tamanho da seta */
             cursor: pointer;
-            padding: 16px 16px;
-            border-radius: 8px;
+            padding: 12px 12px;
+            border-radius: 5px;
             z-index: 10;
             width: auto;
         }
 
-        .back-button:hover {
-            background-color: rgba(255, 255, 255, 0.2);
-        }
-
-        /* Links */
-        .link {
-            color: #add8e6;
-            text-decoration: underline;
-            cursor: pointer;
-        }
-
-        /* Inputs */
         input {
             width: 100%;
             padding: 10px;
@@ -114,7 +86,6 @@
             font-size: 14px;
         }
 
-        /* Ajuste na posição do rodapé */
         #login .footer-links {
             position: absolute;
             bottom: -80px;
@@ -141,11 +112,26 @@
             color: white;
         }
 
-        /* Ajuste nos títulos */
-        h1, h2 {
-            margin-top: 0;
-            padding-top: 0;
+        /* Cor de fundo azul para a tela de apresentação */
+        #presentation {
+            background: rgba(37, 117, 252, 0.8); /* Cor de fundo azul */
+            color: white;
         }
+
+        /* Ajustando o botão de acessar para ficar pequeno */
+        #presentation button {
+            width: auto;
+            padding: 10px 20px;
+            border-radius: 15px;
+        }
+
+        /* Estilo de link clicável para os links de criar conta e esqueci a senha */
+        .link {
+            color: #add8e6;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
     </style>
 </head>
 <body>
@@ -163,11 +149,7 @@
 
         <!-- Tela de Login -->
         <div class="container" id="login" style="display: none;">
-            <button class="back-button" onclick="navigateTo('presentation')">
-                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M15 18l-6-6 6-6"></path>
-                </svg>
-            </button>
+            <button class="back-button" onclick="navigateTo('presentation')">←</button>
             <h1>Login</h1>
             <input type="password" placeholder="Digite sua senha" required>
             <button onclick="navigateTo('main')">Entrar</button>
@@ -175,8 +157,6 @@
                 <span class="link" onclick="navigateTo('create-account')">Criar Conta</span> |
                 <span class="link" onclick="navigateTo('forgot-password')">Esqueci a senha</span>
             </div>
-
-            <!-- Frases fora do contêiner -->
             <div class="footer-links">
                 <span class="saiba-mais" onclick="alert('Link de informações adicionais')">Saiba mais!</span>
                 <span class="developer">Growcet desenvolvedor</span>
@@ -185,33 +165,22 @@
 
         <!-- Tela Principal -->
         <div class="container" id="main" style="display: none;">
-            <button class="back-button" onclick="navigateTo('login')">
-                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M15 18l-6-6 6-6"></path>
-                </svg>
-            </button>
+            <button class="back-button" onclick="navigateTo('login')">←</button>
             <h1>Bem-vindo à Tela Principal</h1>
+            <p>Coloque seu conteúdo aqui...</p>
             <button onclick="navigateTo('history')">Histórico de Presença</button>
         </div>
 
         <!-- Tela de Histórico -->
         <div class="container" id="history" style="display: none;">
-            <button class="back-button" onclick="navigateTo('main')">
-                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M15 18l-6-6 6-6"></path>
-                </svg>
-            </button>
+            <button class="back-button" onclick="navigateTo('main')">←</button>
             <h1>Histórico de Presença</h1>
-            <p>Aqui você verá o histórico de presença registrado.</p>
+            <p>Coloque seu conteúdo aqui...</p>
         </div>
 
         <!-- Tela Criar Conta -->
         <div class="container" id="create-account" style="display: none;">
-            <button class="back-button" onclick="navigateTo('login')">
-                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M15 18l-6-6 6-6"></path>
-                </svg>
-            </button>
+            <button class="back-button" onclick="navigateTo('login')">←</button>
             <h2>Cadastre-se</h2>
             <form>
                 <input type="text" placeholder="Digite seu nome" required>
@@ -223,11 +192,7 @@
 
         <!-- Tela Esqueci a Senha -->
         <div class="container" id="forgot-password" style="display: none;">
-            <button class="back-button" onclick="navigateTo('login')">
-                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M15 18l-6-6 6-6"></path>
-                </svg>
-            </button>
+            <button class="back-button" onclick="navigateTo('login')">←</button>
             <h2>Esqueci a Senha</h2>
             <form>
                 <input type="email" placeholder="Digite seu e-mail" required>
@@ -248,5 +213,3 @@
     </script>
 </body>
 </html>
-
-
