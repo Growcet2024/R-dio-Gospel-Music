@@ -18,7 +18,7 @@
             padding: 30px;
             border-radius: 30px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-            margin: 50px auto;
+            margin: 100px auto 50px auto; /* Aumento da margem superior */
             position: relative;
             background: white;
             color: black;
@@ -48,20 +48,23 @@
             padding: 10px 20px;
             border-radius: 15px;
         }
-        /* Botão de voltar (ajustado para ficar fora do contêiner) */
+        /* Botão de voltar (ajustado para ficar maior e afastado) */
         .back-button {
             position: fixed;
-            top: 10px;
-            left: 10px;
+            top: 20px; /* Afastado um pouco mais da parte superior */
+            left: 20px;
             background: none;
             border: none;
             color: white;
-            font-size: 24px;
+            font-size: 28px; /* Aumento do tamanho da fonte */
             cursor: pointer;
-            padding: 12px 12px;
-            border-radius: 5px;
+            padding: 16px 16px; /* Aumento do padding */
+            border-radius: 8px;
             z-index: 10;
             width: auto;
+        }
+        .back-button:hover {
+            background-color: rgba(255, 255, 255, 0.2); /* Adicionando um efeito hover */
         }
         .link {
             color: #add8e6;
@@ -114,13 +117,17 @@
             color: white;
         }
 
+        /* Ajuste para a tela de login e outras telas de navegação */
+        #login, #create-account, #forgot-password, #main, #history {
+            padding-top: 60px; /* Ajuste no padding superior para as telas */
+        }
     </style>
 </head>
 <body>
     <div id="app">
         <!-- Tela de Apresentação -->
         <div class="container" id="presentation" style="display: none;">
-            <h1 style="font-size: 25px; text-align: center; line-height: 0;">Marcador de Presença</h1>
+            <h1 style="font-size: 25px; text-align: center; line-height: 0.1;">Marcador de Presença</h1>
             <h2 style="font-size: 18px; text-align: center; line-height: 3.5; font-weight: normal;">Por Coordenadas Geográficas</h2>
             <p style="font-size: 18px; text-align: left; line-height: 1.5;"><span>✔</span> Você já precisou comprovar que esteve ou está em um determinado lugar?</p>
             <p style="font-size: 18px; text-align: left; line-height: 1.5;"><span>✔</span> Comprove sua entrada e saída em locais de trabalho, eventos ou reuniões.</p>
@@ -131,7 +138,11 @@
 
         <!-- Tela de Login -->
         <div class="container" id="login" style="display: none;">
-            <button class="back-button" onclick="navigateTo('presentation')">←</button>
+            <button class="back-button" onclick="navigateTo('presentation')">
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M15 18l-6-6 6-6"></path>
+                </svg>
+            </button>
             <h1>Login</h1>
             <input type="password" placeholder="Digite sua senha" required>
             <button onclick="navigateTo('main')">Entrar</button>
@@ -149,21 +160,33 @@
 
         <!-- Tela Principal -->
         <div class="container" id="main" style="display: none;">
-            <button class="back-button" onclick="navigateTo('login')">←</button>
+            <button class="back-button" onclick="navigateTo('login')">
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M15 18l-6-6 6-6"></path>
+                </svg>
+            </button>
             <h1>Bem-vindo à Tela Principal</h1>
             <button onclick="navigateTo('history')">Histórico de Presença</button>
         </div>
 
         <!-- Tela de Histórico -->
         <div class="container" id="history" style="display: none;">
-            <button class="back-button" onclick="navigateTo('main')">←</button>
+            <button class="back-button" onclick="navigateTo('main')">
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M15 18l-6-6 6-6"></path>
+                </svg>
+            </button>
             <h1>Histórico de Presença</h1>
             <p>Aqui você verá o histórico de presença registrado.</p>
         </div>
 
         <!-- Tela Criar Conta -->
         <div class="container" id="create-account" style="display: none;">
-            <button class="back-button" onclick="navigateTo('login')">←</button>
+            <button class="back-button" onclick="navigateTo('login')">
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M15 18l-6-6 6-6"></path>
+                </svg>
+            </button>
             <h2>Cadastre-se</h2>
             <form>
                 <input type="text" placeholder="Digite seu nome" required>
@@ -175,7 +198,11 @@
 
         <!-- Tela Esqueci a Senha -->
         <div class="container" id="forgot-password" style="display: none;">
-            <button class="back-button" onclick="navigateTo('login')">←</button>
+            <button class="back-button" onclick="navigateTo('login')">
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M15 18l-6-6 6-6"></path>
+                </svg>
+            </button>
             <h2>Esqueci a Senha</h2>
             <form>
                 <input type="email" placeholder="Digite seu e-mail" required>
@@ -196,3 +223,4 @@
     </script>
 </body>
 </html>
+
