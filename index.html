@@ -15,26 +15,42 @@
         }
         .container {
             max-width: 550px;
-            background: rgba(255, 255, 255, 0.1);
             padding: 30px;
-            border-radius: 20px;
+            border-radius: 30px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
             margin: 50px auto;
+            position: relative;
+            background: white;
+            color: black;
+        }
+        /* Estilo específico para a tela de apresentação */
+        #presentation {
+            background: rgba(255, 255, 255, 0.1);
+            color: white; /* Cor do texto na tela de apresentação ajustada para branco */
         }
         button {
             background-color: #1964a1;
             border: none;
-            padding: 10px 20px;
+            padding: 12px 0;
             color: white;
-            border-radius: 5px;
+            border-radius: 20px;
             cursor: pointer;
             font-size: 16px;
+            width: 100%; /* Botão ocupa toda a largura do contêiner */
+            transition: background-color 0.3s ease;
         }
         button:hover {
             background-color: #1a5bbf;
         }
+        /* Botão da tela de apresentação permanece pequeno */
+        #presentation button {
+            width: auto;
+            padding: 10px 20px;
+            border-radius: 15px;
+        }
+        /* Botão de voltar (ajustado para ficar fora do contêiner) */
         .back-button {
-            position: absolute;
+            position: fixed;
             top: 10px;
             left: 10px;
             background: none;
@@ -42,6 +58,10 @@
             color: white;
             font-size: 24px;
             cursor: pointer;
+            padding: 12px 12px;
+            border-radius: 5px;
+            z-index: 10;
+            width: auto;
         }
         .link {
             color: #add8e6;
@@ -52,27 +72,60 @@
             width: 100%;
             padding: 10px;
             margin: 10px 0;
-            border-radius: 5px;
-            border: none;
+            border-radius: 10px;
+            border: 2px solid #1964a1;
+            box-sizing: border-box;
+        }
+        input:focus {
+            border-color: #1a5bbf;
+            outline: none;
         }
         footer {
             margin-top: 20px;
             font-size: 14px;
         }
+
+        /* Ajuste para posicionar "Saiba mais!" e "Growcet desenvolvedor" fora do contêiner, com mais espaçamento */
+        #login .footer-links {
+            position: absolute;
+            bottom: -80px; /* Aumento do valor para afastar mais o "Saiba mais!" */
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            width: 100%;
+        }
+
+        #login .footer-links span {
+            display: block;
+            margin-top: 5px;
+            color: white;
+        }
+
+        /* "Saiba mais!" com link */
+        #login .footer-links .saiba-mais {
+            color: white;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+        /* "Growcet desenvolvedor" sem link */
+        #login .footer-links .developer {
+            text-decoration: none;
+            color: white;
+        }
+
     </style>
 </head>
 <body>
     <div id="app">
         <!-- Tela de Apresentação -->
         <div class="container" id="presentation" style="display: none;">
-            
-         <h1 style="font-size: 25px; text-align: center; line-height: 0.1;">Marcador de Presença</h1>
-    <h2 style="font-size: 18px; text-align: center; line-height: 3.5; font-weight: normal;">Por Coordenadas Geográficas</h2>
-    <p style="font-size: 18px; text-align: left; line-height: 1.5;"><span>✔</span> Você já precisou comprovar que esteve ou está em um determinado lugar?</p>
-    <p style="font-size: 18px; text-align: left; line-height: 1.5;"><span>✔</span> Comprove sua entrada e saída em locais de trabalho, eventos ou reuniões.</p>
-    <p style="font-size: 18px; text-align: left; line-height: 1.5;"><span>✔</span> Registre sua presença em um local específico com data e hora.</p>
-    <p style="font-size: 18px; text-align: left; line-height: 1.5;"><span>✔</span> Compartilhe os detalhes do local via WhatsApp ou em PDF.</p>
-            
+            <h1 style="font-size: 25px; text-align: center; line-height: 1.1;">Marcador de Presença</h1>
+            <h2 style="font-size: 18px; text-align: center; line-height: 1.1; font-weight: normal;">Por Coordenadas Geográficas</h2>
+            <p style="font-size: 16px; text-align: left; line-height: 1.0;"><span>✔</span> Você já precisou comprovar que esteve ou está em um determinado lugar?</p>
+            <p style="font-size: 16px; text-align: left; line-height: 1.0;"><span>✔</span> Comprove sua entrada e saída em locais de trabalho, eventos ou reuniões.</p>
+            <p style="font-size: 16px; text-align: left; line-height: 1.0;"><span>✔</span> Registre sua presença em um local específico com data e hora.</p>
+            <p style="font-size: 16px; text-align: left; line-height: 1.0;"><span>✔</span> Compartilhe os detalhes do local via WhatsApp ou em PDF.</p>
             <button onclick="navigateTo('login')">Acessar</button>
         </div>
 
@@ -80,18 +133,21 @@
         <div class="container" id="login" style="display: none;">
             <button class="back-button" onclick="navigateTo('presentation')">←</button>
             <h1>Login</h1>
-            <input type="password" placeholder="Digite sua senha" style="width: 100%; padding: 10px; margin: 15px 0; border-radius: 5px; border: none;">
+            <input type="password" placeholder="Digite sua senha" required>
             <button onclick="navigateTo('main')">Entrar</button>
             <div style="margin-top: 20px;">
                 <span class="link" onclick="navigateTo('create-account')">Criar Conta</span> |
                 <span class="link" onclick="navigateTo('forgot-password')">Esqueci minha senha</span>
             </div>
-            <div class="link" style="margin-top: 20px;" onclick="alert('Informações adicionais')">Saiba mais!</div>
-            <footer>Growcet desenvolvedor</footer> 
 
+            <!-- Frases fora do contêiner, com mais espaçamento -->
+            <div class="footer-links">
+                <span class="saiba-mais" onclick="alert('Link de informações adicionais')">Saiba mais!</span>
+                <span class="developer">Growcet desenvolvedor</span>
+            </div>
         </div>
-        
-       <!-- Tela Principal -->
+
+        <!-- Tela Principal -->
         <div class="container" id="main" style="display: none;">
             <button class="back-button" onclick="navigateTo('login')">←</button>
             <h1>Bem-vindo à Tela Principal</h1>
@@ -108,7 +164,7 @@
         <!-- Tela Criar Conta -->
         <div class="container" id="create-account" style="display: none;">
             <button class="back-button" onclick="navigateTo('login')">←</button>
-            <h2>Cadastrar</h1>
+            <h2>Cadastrar</h2>
             <form>
                 <input type="text" placeholder="Digite seu nome" required>
                 <input type="email" placeholder="Digite seu e-mail" required>
@@ -120,7 +176,7 @@
         <!-- Tela Esqueci minha Senha -->
         <div class="container" id="forgot-password" style="display: none;">
             <button class="back-button" onclick="navigateTo('login')">←</button>
-            <h2>Esqueci minha Senha</h1>
+            <h2>Esqueci minha Senha</h2>
             <form>
                 <input type="email" placeholder="Digite seu e-mail" required>
                 <button type="submit">Enviar</button>
@@ -140,3 +196,4 @@
     </script>
 </body>
 </html>
+
