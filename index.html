@@ -13,21 +13,38 @@
             color: white;
             text-align: center;
         }
+
+        /* Estilo para todos os contêineres */
         .container {
             max-width: 550px;
             padding: 30px;
             border-radius: 30px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-            margin: 100px auto 50px auto; /* Aumento da margem superior */
+            margin: 100px auto 50px auto; /* Margem superior aumentada */
             position: relative;
             background: white;
             color: black;
         }
+
+        /* Contêineres com margem nas laterais, exceto Principal e Histórico */
+        #login, #create-account, #forgot-password, #presentation {
+            margin-left: 15px;
+            margin-right: 15px;
+        }
+
+        /* Tela Principal e Histórico sem margens laterais */
+        #main, #history {
+            margin-left: 0;
+            margin-right: 0;
+        }
+
         /* Estilo específico para a tela de apresentação */
         #presentation {
             background: rgba(255, 255, 255, 0.1);
-            color: white; /* Cor do texto na tela de apresentação ajustada para branco */
+            color: white;
         }
+
+        /* Botões */
         button {
             background-color: #1964a1;
             border: none;
@@ -36,41 +53,48 @@
             border-radius: 20px;
             cursor: pointer;
             font-size: 16px;
-            width: 100%; /* Botão ocupa toda a largura do contêiner */
+            width: 100%;
             transition: background-color 0.3s ease;
         }
+
         button:hover {
             background-color: #1a5bbf;
         }
-        /* Botão da tela de apresentação permanece pequeno */
+
         #presentation button {
             width: auto;
             padding: 10px 20px;
             border-radius: 15px;
         }
-        /* Botão de voltar (ajustado para ficar maior e afastado) */
+
+        /* Botão de voltar */
         .back-button {
             position: fixed;
-            top: 20px; /* Afastado um pouco mais da parte superior */
-            left: 10px; /* Mover mais para a esquerda */
+            top: 20px;
+            left: 10px;
             background: none;
             border: none;
             color: white;
-            font-size: 28px; /* Aumento do tamanho da fonte */
+            font-size: 28px;
             cursor: pointer;
-            padding: 16px 16px; /* Aumento do padding */
+            padding: 16px 16px;
             border-radius: 8px;
             z-index: 10;
             width: auto;
         }
+
         .back-button:hover {
-            background-color: rgba(255, 255, 255, 0.2); /* Adicionando um efeito hover */
+            background-color: rgba(255, 255, 255, 0.2);
         }
+
+        /* Links */
         .link {
             color: #add8e6;
             text-decoration: underline;
             cursor: pointer;
         }
+
+        /* Inputs */
         input {
             width: 100%;
             padding: 10px;
@@ -79,19 +103,21 @@
             border: 2px solid #1964a1;
             box-sizing: border-box;
         }
+
         input:focus {
             border-color: #1a5bbf;
             outline: none;
         }
+
         footer {
             margin-top: 20px;
             font-size: 14px;
         }
 
-        /* Ajuste para posicionar "Saiba mais!" e "Growcet desenvolvedor" fora do contêiner, com mais espaçamento */
+        /* Ajuste na posição do rodapé */
         #login .footer-links {
             position: absolute;
-            bottom: -80px; /* Aumento do valor para afastar mais o "Saiba mais!" */
+            bottom: -80px;
             left: 50%;
             transform: translateX(-50%);
             text-align: center;
@@ -104,22 +130,21 @@
             color: white;
         }
 
-        /* "Saiba mais!" com link */
         #login .footer-links .saiba-mais {
             color: white;
             text-decoration: underline;
             cursor: pointer;
         }
 
-        /* "Growcet desenvolvedor" sem link */
         #login .footer-links .developer {
             text-decoration: none;
             color: white;
         }
 
-        /* Ajuste para a tela de login e outras telas de navegação */
-        #login, #create-account, #forgot-password, #main, #history {
-            padding-top: 60px; /* Ajuste no padding superior para as telas */
+        /* Ajuste nos títulos */
+        h1, h2 {
+            margin-top: 0;
+            padding-top: 0;
         }
     </style>
 </head>
@@ -151,7 +176,7 @@
                 <span class="link" onclick="navigateTo('forgot-password')">Esqueci a senha</span>
             </div>
 
-            <!-- Frases fora do contêiner, com mais espaçamento -->
+            <!-- Frases fora do contêiner -->
             <div class="footer-links">
                 <span class="saiba-mais" onclick="alert('Link de informações adicionais')">Saiba mais!</span>
                 <span class="developer">Growcet desenvolvedor</span>
@@ -223,4 +248,5 @@
     </script>
 </body>
 </html>
+
 
