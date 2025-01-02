@@ -1,267 +1,156 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Marcador de Presença</title>
+    <title>Tela de Boas-Vindas</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background: linear-gradient(to bottom, #2575fc, #2575fc);
-            color: white;
-            text-align: center;
-        }
-
-        /* Estilo para todos os contêineres */
-        .container {
-            max-width: 550px;
-            padding: 30px;
-            border-radius: 20px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-            margin: 80px auto 50px auto; /* Margem superior aumentada */
-            position: relative;
-            background: white;
-            color: black;
-        }
-
-        /* Contêineres com margem nas laterais, exceto Principal e Histórico */
-        #login, #create-account, #forgot-password, #presentation {
-            margin-left: 15px;
-            margin-right: 15px;
-        }
-
-        /* Tela Principal e Histórico sem margens laterais */
-        #main, #history {
-            margin-left: 0;
-            margin-right: 0;
-        }
-
-        /* Estilo específico para a tela de apresentação */
-        #presentation {
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-        }
-
-        /* Botões */
-        button {
-            background-color: #1964a1;
-            border: none;
-            padding: 12px 0;
-            color: white;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 16px;
-            width: 100%;
-            transition: background-color 0.3s ease;
-        }
-
-        button:hover {
-            background-color: #1a5bbf;
-        }
-
-        #presentation button {
-            width: auto;
-            padding: 10px 20px;
-            border-radius: 15px;
-        }
-
-        /* Botão de voltar */
-        .back-button {
+        /* Tela de Boas-Vindas */
+        .welcome-screen {
             position: fixed;
-            top: 20px;
-            left: 10px;
-            background: none;
-            border: none;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, #4CAF50, #81C784);
             color: white;
-            font-size: 28px;
-            cursor: pointer;
-            padding: 16px 16px;
-            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
             z-index: 10;
-            width: auto;
+            padding-top: 10px; /* Distância entre o título e o topo da tela */
+        }
+
+        /* Título - "Bem-vindo ao Marcador de Presença" */
+        .welcome-screen h1 {
+            font-size: 36px;
+            margin-bottom: 5px; /* Distância entre título e frase */
+        }
+
+        /* Frase - "Gerencie suas localizações e registros de maneira simples e eficiente." */
+        .welcome-screen p {
+            font-size: 18px;
+            margin-top: 0px; /* Removido a margem superior para reduzir o espaço */
+            margin-bottom: 5px; /* Distância entre a frase e o contêiner */
+        }
+
+        /* Estilo para o contêiner de texto adicional */
+        .extra-text {
+            max-width: 550px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px 30px;  /* Ajusta o padding para aproximar o texto da margem */
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            margin-top: 20px; /* Distância entre frase e o contêiner */
+            margin-bottom: 20px; /* Distância entre o contêiner e o botão */
+        }
+
+        .extra-text h1 {
+            font-size: 25px;
+            text-align: center;
+            line-height: 1.1;
+        }
+
+        .extra-text h2 {
+            font-size: 18px;
+            text-align: center;
+            line-height: 1.1;
+            font-weight: normal;
+        }
+
+        .extra-text p {
+            font-size: 16px;
+            text-align: left;
+            line-height: 1.0;
+            margin-bottom: 15px; /* Distância entre frases dentro do contêiner */
+        }
+
+        /* Estilo para o botão "Acessar" fora do contêiner */
+        .access-button {
+            padding: 15px 30px; /* Tamanho do botão */
+            font-size: 18px; /* Tamanho da fonte do botão */
+            border: none;
+            border-radius: 25px;
+            background: #2196F3;
+            color: white;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-top: 5px; /* Distância entre o contêiner e o botão */
+            width: 150px; /* Largura do botão */
+        }
+
+        .access-button:hover {
+            background: #64B5F6;
+        }
+
+        /* Estilo para o botão de voltar */
+        .back-button {
+            font-size: 30px;
+            color: rgb(65, 232, 226);
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            transition: color 0.3s;
+            margin-top: 10px;
         }
 
         .back-button:hover {
-            background-color: rgba(255, 255, 255, 0.2);
-        }
-
-        /* Links */
-        .link {
-            color: #add8e6;
-            text-decoration: underline;
-            cursor: pointer;
-        }
-
-        /* Inputs */
-        input {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border-radius: 10px;
-            border: 2px solid #1964a1;
-            box-sizing: border-box;
-        }
-
-        input:focus {
-            border-color: #1a5bbf;
-            outline: none;
-        }
-
-        footer {
-            margin-top: 20px;
-            font-size: 14px;
-        }
-
-        /* Ajuste na posição do rodapé */
-        #login .footer-links {
-            position: absolute;
-            bottom: -80px;
-            left: 50%;
-            transform: translateX(-50%);
-            text-align: center;
-            width: 100%;
-        }
-
-        #login .footer-links span {
-            display: block;
-            margin-top: 5px;
-            color: white;
-        }
-
-        #login .footer-links .saiba-mais {
-            color: white;
-            text-decoration: underline;
-            cursor: pointer;
-        }
-
-        #login .footer-links .developer {
-            text-decoration: none;
-            color: white;
-        }
-
-        /* Ajuste nos títulos */
-        h1, h2 {
-            margin-top: 0;
-            padding-top: 0;
-        }
-
-        /* Remover borda e fundo */
-        .extra-content {
-            background: none;
-            border: none;
-            outline: none;
-            padding: 10px 0;
-            color: black;
+            color: #64B5F6;
         }
     </style>
-</head>
-<body>
-    <div id="app">
-        <!-- Tela de Apresentação -->
-        <div class="container" id="presentation" style="display: none;">
-            <h1 style="font-size: 25px; text-align: center; line-height: 0.1;">Marcador de Presença</h1>
-            <h2 style="font-size: 18px; text-align: center; line-height: 3.5; font-weight: normal;">Por Coordenadas Geográficas</h2>
-            <p style="font-size: 18px; text-align: left; line-height: 1.5;"><span>✔</span> Você já precisou comprovar que esteve ou está em um determinado lugar?</p>
-            <p style="font-size: 18px; text-align: left; line-height: 1.5;"><span>✔</span> Comprove sua entrada e saída em locais de trabalho, eventos ou reuniões.</p>
-            <p style="font-size: 18px; text-align: left; line-height: 1.5;"><span>✔</span> Registre sua presença em um local específico com data e hora.</p>
-            <p style="font-size: 18px; text-align: left; line-height: 1.5;"><span>✔</span> Compartilhe os detalhes do local via WhatsApp ou em PDF.</p>
-            <button onclick="navigateTo('login')">Acessar</button>
-        </div>
-
-        <!-- Tela de Login -->
-        <div class="container" id="login" style="display: none;">
-            <button class="back-button" onclick="navigateTo('presentation')">
-                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M15 18l-6-6 6-6"></path>
-                </svg>
-            </button>
-            <h2>Login</h2>
-            <input type="password" placeholder="Digite sua senha" required>
-            <button onclick="navigateTo('main')">Entrar</button>
-            <div style="margin-top: 20px;">
-                <span class="link" onclick="navigateTo('create-account')">Criar Conta</span> |
-                <span class="link" onclick="navigateTo('forgot-password')">Esqueci a senha</span>
-            </div>
-
-            <!-- Frases fora do contêiner -->
-            <div class="footer-links">
-                <span class="saiba-mais" onclick="alert('Link de informações adicionais')">Saiba mais!</span>
-                <span class="developer">Growcet desenvolvedor</span>
-            </div>
-        </div>
-
-        <!-- Tela Principal -->
-        <div class="container" id="main" style="display: none;">
-            <button class="back-button" onclick="navigateTo('login')">
-                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M15 18l-6-6 6-6"></path>
-                </svg>
-            </button>
-            <h2>Bem-vindo à Tela Principal</h2>
-            <!-- Espaço para colocar conteúdo -->
-            <div class="extra-content">
-                
-            <p></p>Coloque seu conteúdo aqui...
-            <p></p>Coloque seu conteúdo aqui...
-            <p></p>Coloque seu conteúdo aqui...
-
-        </div>
-            <button onclick="navigateTo('history')">Histórico de Presença</button>
-        </div>
-
-        <!-- Tela de Histórico -->
-        <div class="container" id="history" style="display: none;">
-            <button class="back-button" onclick="navigateTo('main')">
-                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M15 18l-6-6 6-6"></path>
-                </svg>
-            </button>
-            <h2>Histórico de Presença</h2>
-            <p>Aqui você verá o histórico de presença registrado.</p>
-        </div>
-
-        <!-- Tela Criar Conta -->
-        <div class="container" id="create-account" style="display: none;">
-            <button class="back-button" onclick="navigateTo('login')">
-                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M15 18l-6-6 6-6"></path>
-                </svg>
-            </button>
-            <h2>Cadastre-se</h2>
-            <form>
-                <input type="text" placeholder="Digite seu nome" required>
-                <input type="email" placeholder="Digite seu e-mail" required>
-                <input type="password" placeholder="Digite sua senha" required>
-                <button type="submit">Criar conta</button>
-            </form>
-        </div>
-
-        <!-- Tela Esqueci a Senha -->
-        <div class="container" id="forgot-password" style="display: none;">
-            <button class="back-button" onclick="navigateTo('login')">
-                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M15 18l-6-6 6-6"></path>
-                </svg>
-            </button>
-            <h2>Esqueci a Senha</h2>
-            <form>
-                <input type="email" placeholder="Digite seu e-mail" required>
-                <button type="submit">Enviar</button>
-            </form>
-        </div>
-    </div>
-
     <script>
-        function navigateTo(screen) {
-            const screens = document.querySelectorAll('.container');
-            screens.forEach(s => s.style.display = 'none');
-            document.getElementById(screen).style.display = 'block';
+        function enterApp() {
+            // Ocultar tela de boas-vindas
+            document.getElementById('welcome-screen').style.display = 'none';
+            // Exibir o conteúdo principal
+            document.getElementById('main-content').style.display = 'block';
         }
 
-        // Inicializa na tela de apresentação
-        navigateTo('presentation');
+        function goBackToWelcome() {
+            // Exibe a tela de boas-vindas novamente
+            document.getElementById('welcome-screen').style.display = 'flex';
+            // Esconde o conteúdo principal
+            document.getElementById('main-content').style.display = 'none';
+        }
     </script>
+</head>
+<body>
+    <!-- Tela de Boas-Vindas -->
+    <div id="welcome-screen" class="welcome-screen">
+        <h1>Bem-vindo ao Marcador de Presença</h1>
+        <p>Gerencie suas localizações e registros de maneira simples.</p>
+        
+        <!-- Novo texto adicionado fora do contêiner principal -->
+        <div class="extra-text">
+            
+            <h2 style="font-size: 23px; text-align: center; line-height: 1.1; font-weight: normal;">Por Coordenadas Geográficas</h2>
+            <p style="font-size: 20px; text-align: left; line-height: 1.0;"><span>✔</span> Você já precisou comprovar que esteve ou está em um determinado lugar?</p>
+            <p style="font-size: 20px; text-align: left; line-height: 1.0;"><span>✔</span> Comprove sua entrada e saída em locais de trabalho, eventos ou reuniões.</p>
+            <p style="font-size: 20px; text-align: left; line-height: 1.0;"><span>✔</span> Registre sua presença em um local específico com data e hora.</p>
+            <p style="font-size: 20px; text-align: left; line-height: 1.0;"><span>✔</span> Compartilhe os detalhes do local via WhatsApp ou em PDF.</p>
+        
+        </div>
+
+        <!-- Botão Fora do Contêiner -->
+        <button class="access-button" onclick="enterApp()">Acessar</button>
+    </div>
+
+    <!-- Conteúdo Principal -->
+    <div id="main-content">
+        <!-- Botão para voltar à tela de boas-vindas -->
+        <button class="back-button" onclick="goBackToWelcome()">&#60;</button>
+
+        <!-- Aqui vai todo o conteúdo original do projeto -->
+
+        <h1>
+            
+            Conteúdo Principal
+        
+        </h1>
+        <p>Este é o conteúdo principal do sistema.</p>
+    </div>
 </body>
 </html>
+
