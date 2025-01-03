@@ -36,17 +36,20 @@
             margin-bottom: 2px; /* Distância entre a frase e o contêiner */
         }
 
-        /* Estilo para o contêiner de texto adicional */
-        .extra-text {
-            max-width: 550px;
-            background: rgba(255, 255, 255, 0.1);
-            padding: 10px 30px;  /* Ajusta o padding para aproximar o texto da margem */
-            border-radius: 25px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-            margin-top: 20px; /* Distância entre frase e o contêiner */
-            margin-bottom: 20px; /* Distância entre o contêiner e o botão */
-            margin: 0 15px;
-        }
+       /* Estilo para o contêiner de texto adicional */
+.extra-text {
+    max-width: 100%; /* Faz o contêiner se ajustar à largura disponível */
+    background: rgba(255, 255, 255, 0.1);
+    padding: 10px 20px;  /* Ajusta o padding para não ocupar tanto espaço lateral */
+    border-radius: 25px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    margin-top: 20px; /* Distância entre frase e o contêiner */
+    margin-bottom: 20px; /* Distância entre o contêiner e o botão */
+    margin-left: 15px; /* Ajuste da margem para a esquerda */
+    margin-right: 15px; /* Ajuste da margem para a direita */
+    overflow: hidden; /* Impede transbordamento */
+}
+
 
         .extra-text h1 {
             font-size: 25px;
