@@ -86,48 +86,7 @@
             background: #64B5F6;
         }
 
-        <!-- Botão de Sair no rodapé -->
-<button id="exit-button" class="exit-button" onclick="exitApp()">Sair</button>
-
-<style>
-    /* Estilo para o botão "Sair" */
-    .exit-button {
-        font-size: 20px; /* Tamanho da fonte */
-        color: white; /* Cor do texto */
-        background: #FF5733; /* Cor de fundo */
-        border: none; /* Sem borda */
-        cursor: pointer; /* Tipo mãozinha */
-        position: fixed; /* Fixa no rodapé */
-        bottom: 0; /* Fixa no fundo */
-        left: 50%; /* Move o botão para a metade da tela */
-        transform: translateX(-50%); /* Centraliza o botão */
-        text-align: center; /* Texto no centro */
-        padding: 15px; /* Distância interna */
-        box-sizing: border-box; /* Para incluir o padding no tamanho total */
-        z-index: 10; /* Garante que o botão fique acima de outros elementos */
-        width: auto; /* Largura do botão ajustada ao conteúdo */
-    }
-
-    .exit-button:hover {
-        background: #C70039; /* Cor ao passar o mouse */
-    }
-</style>
-
-<script>
-    function exitApp() {
-        // Esconde o conteúdo principal
-        document.getElementById('main-content').style.display = 'none';
-
-        // Exibe a tela de boas-vindas novamente
-        document.getElementById('welcome-screen').style.display = 'flex';
-    }
-</script>
-
-
-
-
-
-
+       
     </style>
     <script>
         function enterApp() {
@@ -165,20 +124,52 @@
         <button class="access-button" onclick="enterApp()">Acessar</button>
     </div>
 
-    <!-- Conteúdo Principal -->
+    <!-- INÍCIO PARA A TELA PRINCIPAL -->
     <div id="main-content">
-      
-      <!-- Botão de Sair no rodapé -->
-      <button id="exit-button" class="exit-button" onclick="exitApp()">Sair</button>  
-
-        <!-- Aqui vai todo o conteúdo original do projeto -->
-
-        <h1>
-            
-            Conteúdo Principal
         
-        </h1>
-        <p>Este é o conteúdo principal do sistema.</p>
+        <!-- Botão "Sair" no final do conteúdo -->
+        <button id="exit-button" class="exit-button" onclick="exitApp()">Sair</button>
     </div>
-</body>
+    <style>
+       
+     /* Estilo para o botão "Sair" */
+    .exit-button {
+        font-size: 20px; /* Tamanho da fonte */
+        color: white; /* Cor do texto */
+        background: #FF5733; /* Cor de fundo */
+        border: none; /* Sem borda */
+        cursor: pointer; /* Tipo mãozinha */
+        padding: 8px 12px; /* Distância interna */
+        box-sizing: border-box; /* Para incluir o padding no tamanho total */
+        border-radius: 5px; /* Bordas arredondas */
+        position: fixed; /* Fixa o botão no rodapé */
+        bottom: 0; /* Coloca no fundo */
+        right: 20px; /* Ajuste do botão para a direita */
+        width: auto; /* Ajuste da largura do botão */
+        z-index: 1; /* Garante que o botão fique atrás do conteúdo principal */
+    }
+
+    .exit-button:hover {
+        background: #C70039; /* Cor ao passar o mouse */
+    }
+</style>
+
+<script>
+    function exitApp() {
+        // Esconde o conteúdo principal
+        document.getElementById('main-content').style.display = 'none';
+
+        // Exibe a tela de boas-vindas novamente
+        document.getElementById('welcome-screen').style.display = 'flex';
+    }
+
+
+</script>
+    
+        <!-- INÍCIO DO CONTEÚDO DA PÁGINA - COLE ABAIXO-->
+
+        Conteúdo Principal
+        <p>Este é o conteúdo principal da sua página.</p>
+
+ </body>
 </html>
