@@ -209,146 +209,336 @@
  <!-- Conteúdo principal -->
  <div id="main-content">
 
-    <!DOCTYPE html>
-    <html lang="pt-br">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Projeto base</title>
-        <style>
-            /* ============================ Estilo geral ============================ */
-            body {
-                font-family: Arial, sans-serif;
-                margin: 0;
-                padding: 0;
-                background-color: #f5f7f8; /* Cor de fundo do corpo */
+  <!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <!-- Cabeçalho da Página -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marcador de Presença</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+
+    <style>
+        /* Estilos Globais */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+
+        /* Estilos do Cabeçalho */
+        header {
+            text-align: center;
+            padding: 20px;
+            background-color: #f9f9f9;
+            color: #000000;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        /* Estilos do Container Principal */
+        .container {
+            padding: 20px;
+            max-width: 600px;
+            margin: auto;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        .container h2 {
+            font-size: 18px;
+            color: #000000;
+        }
+
+        /* Estilos do Mapa */
+        #map {
+            border-radius: 8px;
+        }
+
+        /* Estilos da Área de Texto (Descrição) */
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            resize: none;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+
+        /* Estilos dos Botões */
+        button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+            box-sizing: border-box;
+        }
+
+        button:hover {
+            background-color: #2196f3;
+            transform: scale(1.02);
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        button:nth-child(1) {
+            background: linear-gradient(to right, #4CAF50, #81C784);
+            color: white;
+        }
+
+        button:nth-child(2) {
+            background: linear-gradient(to right, #2196F3, #64B5F6);
+            color: white;
+        }
+
+        button:nth-child(3) {
+            background: linear-gradient(to right, #FFC107, #FFD54F);
+            color: #333;
+        }
+
+        button:nth-child(4) {
+            background: linear-gradient(to right, #2196F3, #64B5F6);
+            color: white;
+        }
+
+        /* Estilos dos Campos de Coordenadas, Data/Hora e Endereço */
+        .field {
+            margin: 10px 0;
+        }
+
+        .field h2 {
+            font-size: 16px;
+            color: #333;
+        }
+
+        /* Estilos do Rodapé */
+        footer {
+            text-align: center;
+            padding: 10px;
+            background-color: #f9f9f9;
+            color: #000000;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+        }
+
+        footer p {
+            font-size: 10px; /* Alterado para 40px conforme pedido */
+        }
+    </style>
+
+    <script>
+        /* Variáveis Globais */
+        let currentLatitude = "-";
+        let currentLongitude = "-";
+        let userName = "Usuário Logado";
+
+        /* Funções JavaScript */
+
+        // Função para rastrear a localização do usuário
+        function trackLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        currentLatitude = position.coords.latitude;
+                        currentLongitude = position.coords.longitude;
+
+                        const timestamp = new Date().toLocaleString();
+
+                        document.getElementById("coordinates").innerText =
+                            `Latitude: ${currentLatitude}\nLongitude: ${currentLongitude}`;
+                        document.getElementById("timestamp").innerText = timestamp;
+
+                        getAddressFromCoordinates(currentLatitude, currentLongitude);
+                        updateMap(currentLatitude, currentLongitude);
+                        playSound("location-sound.mp3");
+                    },
+                    (error) => {
+                        console.error("Erro ao obter localização:", error);
+                        document.getElementById("coordinates").innerText =
+                            "Erro ao obter localização.";
+                        playSound("error-sound.mp3");
+                    }
+                );
+            } else {
+                alert("Geolocalização não é suportada neste navegador.");
             }
-    
-            /* ============================ Estilo do cabeçalho ============================ */
-            header {
-                text-align: left; /* Alinha o título à esquerda */
-                background-color: #ffffff; /* Cor de fundo do cabeçalho */
-                padding: 20px;
-                margin-bottom: 0;
-                border-bottom: 2px solid #e0e0e0; /* Linha inferior para separar o cabeçalho */
-            }
-    
-            header h1 {
-                margin: 0;
-                font-size: 35px; /* Tamanho da fonte do título */
-                color: #5e88a6; /* Cor do texto do título */
-            }
-    
-            hr.separator {
-                margin: 0;
-                border: 0;
-                border-top: 3px solid #ffffff; /* Linha separadora */
-                margin-top: 0;
-                margin-bottom: 20px;
-            }
-    
-            /* ============================ Container de Conteúdo ============================ */
-            .container {
-                max-width: 600px; /* Largura máxima do container */
-                margin: 0 auto; /* Centraliza o container */
-                padding: 20px;
-                background-color: #ffffff; /* Cor de fundo do container */
-                border-radius: 8px; /* Bordas arredondadas */
-                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra suave ao redor do container */
-            }
-    
-            /* ============================ Estilo para o título da seção ============================ */
-            .title {
-                font-size: 16px;
-                font-weight: bold;
-                margin-bottom: 5px;
-                color: #333; /* Cor do título */
-            }
-    
-            /* ============================ Caixa de texto (Text Area) ============================ */
-            .text-area {
-                width: 100%; /* Ocupa toda a largura disponível */
-                padding: 20px;
-                border-radius: 5px; /* Bordas arredondadas */
-                background-color: #e0f7fa; /* Cor de fundo da caixa de texto */
-                font-size: 16px; /* Tamanho da fonte do texto */
-                border: 1px solid #ccc; /* Cor da borda */
-                min-height: 150px; /* Altura mínima da caixa de texto */
-                color: #333; /* Cor do texto */
-                box-sizing: border-box; /* Inclui o padding no cálculo do tamanho total */
-            }
-    
-            /* ============================ Estilo do rodapé ============================ */
-            footer {
-                text-align: center; /* Alinha o conteúdo do rodapé ao centro */
-                padding: 20px;
-                margin-top: 20px;
-                font-size: 14px; /* Tamanho da fonte do rodapé */
-                background-color: #ffffff; /* Cor de fundo do rodapé */
-                border-top: 2px solid #0cbe5c; /* Linha superior com a cor verde (#20d48f) */
-                position: relative;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                gap: 10px; /* Espaço entre o logo e o texto */
-            }
-    
-            /* ============================ Estilo do logo do rodapé ============================ */
-            .footer-logo {
-                height: 20px; /* Tamanho fixo do logo (altura) */
-                width: auto;  /* Largura proporcional à altura */
-            }
-    
-            /* ============================ Estilo para a frase do rodapé ============================ */
-            .small-title {
-                font-size: 14px;
-                font-weight: normal;
-                margin-bottom: 10px;
-                color: #333; /* Cor da frase do rodapé */
-            }
-    
-            /* ============================ Barra azul no rodapé ============================ */
-            .blue-bar-footer {
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 3px;
-                background-color: #e0e0e0; /* Cor da barra azul */
-                z-index: 1;
-            }
-        </style>
-    </head>
-    <body>
-    
-        <!-- ============================ Cabeçalho (Header) ============================ -->
-        <header>
-            <h1>Projeto base</h1> <!-- Título da página -->
-        </header>
-    
-        <hr class="separator">
-    
-        <!-- ============================ Container de Conteúdo ============================ -->
-        <div class="container">
-            <!-- Seção para título e caixa de texto -->
-            <div class="title">Escreva seu texto aqui...</div> <!-- Título da seção -->
-            <div class="text-area">
-                Digite o seu texto aqui. Você pode colocar qualquer conteúdo desejado nesse espaço.
-            </div>
+        }
+
+        // Função para obter o endereço a partir das coordenadas
+        function getAddressFromCoordinates(latitude, longitude) {
+            const apiUrl = `https://us1.locationiq.com/v1/reverse?key=pk.73c7ec951f7e0c38e842f740a1a63917&lat=${latitude}&lon=${longitude}&format=json`;
+
+            fetch(apiUrl)
+                .then(response => response.json())
+                .then(data => {
+                    const address = `Rua: ${data.address.road || "N/A"},
+                                     Bairro: ${data.address.residential || "N/A"},
+                                     Região: ${data.address.suburb || "N/A"},
+                                     Cidade: ${data.address.city || "N/A"},
+                                     Estado: ${data.address.state || "N/A"},
+                                     CEP: ${data.address.postcode || "N/A"},
+                                     País: ${data.address.country || "N/A"}`;
+
+                    document.getElementById("address").innerText = address;
+                })
+                .catch(error => {
+                    console.error("Erro ao obter endereço:", error);
+                    document.getElementById("address").innerText =
+                        "Erro ao obter endereço.";
+                });
+        }
+
+        // Função para salvar o registro
+        function saveRecord() {
+            const coordinates = document.getElementById("coordinates").innerText;
+            const address = document.getElementById("address").innerText;
+            const timestamp = document.getElementById("timestamp").innerText;
+            const description = document.getElementById("description").value || "Nenhuma descrição fornecida.";
+
+            const record = {
+                userName,
+                coordinates,
+                address,
+                description,
+                timestamp,
+            };
+
+            const records = JSON.parse(localStorage.getItem("presenceRecords")) || [];
+            records.push(record);
+            localStorage.setItem("presenceRecords", JSON.stringify(records));
+            
+            const saveButton = document.querySelector("button[onclick='saveRecord()']");
+            saveButton.innerText = "Registro salvo com sucesso!";
+            setTimeout(() => {
+                saveButton.innerText = "Salvar Registro";
+            }, 2000);
+        }
+
+        // Função para compartilhar a localização via WhatsApp
+        function shareLocation() {
+            const coordinates = document.getElementById("coordinates").innerText;
+            const address = document.getElementById("address").innerText;
+            const timestamp = document.getElementById("timestamp").innerText;
+            const description = document.getElementById("description").value || "Nenhuma descrição fornecida.";
+
+            const message = `*Marcador de Presença*\n\nEu estive aqui:\n\nUsuário: ${userName}\n${coordinates}\n${address}\nDescrição: ${description}\nData/hora local: ${timestamp}\n\nhttps://maps.google.com/?q=${currentLatitude},${currentLongitude}`;
+
+            const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
+            window.open(whatsappUrl, '_blank');
+        }
+
+        // Função para gerar o PDF
+        async function generatePDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            const coordinates = document.getElementById("coordinates").innerText;
+            const address = document.getElementById("address").innerText;
+            const timestamp = document.getElementById("timestamp").innerText;
+            const description = document.getElementById("description").value || "Nenhuma descrição fornecida.";
+
+            const title = "Marcador de Presença";
+            const message = `Eu estive aqui:\n\nUsuário: ${userName}\n${coordinates}\n${address}\nDescrição: ${description}\nData/hora local: ${timestamp}\n\nhttps://maps.google.com/?q=${currentLatitude},${currentLongitude}`;
+
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(16);
+            doc.text(title, 10, 20);
+
+            doc.setFont("helvetica", "normal");
+            doc.setFontSize(12);
+            const textStartY = 30;
+            const textWidth = 180;
+            doc.text(message, 10, textStartY, { maxWidth: textWidth });
+
+            doc.save("Marcador de Presença.pdf");
+        }
+
+        // Função para atualizar o mapa no iframe
+        function updateMap(lat, lon) {
+            const map = document.getElementById("map");
+            map.src = `https://maps.google.com/maps?q=${lat},${lon}&z=15&output=embed`;
+        }
+
+        // Função para tocar um som
+        function playSound(soundFile) {
+            const audio = new Audio(soundFile);
+            audio.play();
+        }
+
+        // Chamada da função trackLocation ao carregar a página
+        window.onload = function () {
+            trackLocation();
+        };
+    </script>
+</head>
+
+<body>
+    <!-- Cabeçalho -->
+    <header>
+        <h1>Marcador de Presença</h1>
+    </header>
+
+    <!-- Container Principal -->
+    <div class="container">
+        <h2>Usuário: Usuário Logado</h2>
+
+        <!-- Mapa -->
+        <iframe id="map" width="100%" height="300" style="border:0;" allowfullscreen></iframe>
+
+        <!-- Área de Descrição -->
+        <textarea id="description" placeholder="Adicione uma descrição (opcional)"></textarea>
+
+        <!-- Botões -->
+        <button class="button" onclick="saveRecord()">Salvar Registro</button>
+
+        <!-- Coordenadas -->
+        <div class="field">
+            <h2>Coordenadas</h2>
+            <p id="coordinates">Latitude: -, Longitude: -</p>
         </div>
-    
-        <!-- ============================ Rodapé (Footer) ============================ -->
-        <footer>
-            <!-- Logo do rodapé -->
-            <img src="https://i.imgur.com/HhGiTJA.png" alt="Logo Growcet" class="footer-logo">
-            
-            <!-- Frase de direitos autorais -->
-            <p>© 2024 Growcet. Todos os direitos reservados.</p>
-            
-            <!-- Barra azul no rodapé -->
-            <div class="blue-bar-footer"></div>
-        </footer>
-    
-    </body>
-    </html>
-    
+
+        <!-- Data e Hora -->
+        <div class="field">
+            <h2>Data e Hora</h2>
+            <p id="timestamp">Local</p>
+        </div>
+
+        <!-- Endereço -->
+        <div class="field">
+            <h2>Endereço</h2>
+            <p id="address">Local</p>
+        </div>
+
+        <!-- Compartilhar via WhatsApp -->
+        <button class="button" onclick="shareLocation()">Compartilhar pelo WhatsApp</button>
+
+        <!-- Gerar PDF -->
+        <button class="button" onclick="generatePDF()">Gerar PDF</button>
+
+        <!-- Histórico de Presença -->
+        <button class="button" onclick="window.location.href='historico.html'">Ver Histórico de Presença</button>
+    </div>
+
+    <!-- Rodapé -->
+    <footer>
+        <p>© 2024 Marcador de Presença. Todos os direitos reservados.</p>
+    </footer>
+</body>
+</html>
