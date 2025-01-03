@@ -86,16 +86,25 @@
             background: #64B5F6;
         }
 
-        /* Estilo para o botão de voltar */
-        .back-button {
-            font-size: 30px;
-            color: rgb(65, 232, 226);
-            background: transparent;
-            border: none;
-            cursor: pointer;
-            transition: color 0.3s;
-            margin-top: 5px;
-        }
+       /* Estilo para o botão de voltar (ajustado para o rodapé) */
+.back-button {
+    font-size: 30px;
+    color: rgb(65, 232, 226);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: color 0.3s;
+    position: fixed; /* Fixa o botão no rodapé */
+    bottom: 20px; /* Distância do rodapé */
+    left: 50%; /* Alinha o botão horizontalmente ao centro */
+    transform: translateX(-50%); /* Ajusta para o centro exato */
+    z-index: 11; /* Garante que o botão fique sobre outros elementos */
+}
+
+.back-button:hover {
+    color: #64B5F6;
+}
+
 
         .back-button:hover {
             color: #64B5F6;
