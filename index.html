@@ -68,25 +68,26 @@
 }
 
 
-        /* Botão de Voltar no Rodapé (Posicionado à direita) */
-        #backButton {
-            position: fixed;
-            bottom: 70px; /* Ajustado para ficar acima do rodapé */
-            right: 20px;
-            padding: 10px 20px;
-            font-size: 16px;
-            color: white;
-            background-color: #e53935;
-            border: none;
-            border-radius: 25px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
+      /* Botão de Voltar (Agora abaixo do conteúdo) */
+#backButton {
+    display: block;  /* Garante que o botão ocupe toda a largura possível */
+    margin-top: 20px; /* Espaço acima do botão */
+    padding: 10px 20px;
+    font-size: 16px;
+    color: white;
+    background-color: #e53935;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
 
-        #backButton:hover {
-            background-color: #d32f2f;
-        }
+#backButton:hover {
+    background-color: #d32f2f;
+}
+ 
 
+      
         /* Rodapé fixo */
         footer {
             text-align: center;
