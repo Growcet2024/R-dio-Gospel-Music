@@ -1,219 +1,9 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tela de Boas-Vindas</title>
-    <style>
-
-        /* Tela de Boas-Vindas */
-        .welcome-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(to bottom, #007BFF, #007BFF);
-            color: white;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            z-index: 10;
-            padding-top: 0px; /* Distância entre o título e o topo da tela */
-        }
-
-
-
-        /* Título - "Bem-vindo  Marcador de Presença" */
-        .welcome-screen h2 {
-            font-size: 36px;
-            margin-bottom: 0px; /* Distância entre título e frase */
-        }
-
-        /* Frase - "Gerencie suas localizações e registros de maneira simples e eficiente." */
-        .welcome-screen p {
-            font-size: 18px;
-            margin-top: 10px; /* Removido a margem superior para reduzir o espaço */
-            margin-bottom: 2px; /* Distância entre a frase e o contêiner */
-        }
-
-       /* Estilo para o contêiner de texto adicional */
-.extra-text {
-    max-width: 80%; /* Faz o contêiner se ajustar à largura disponível */
-    background: rgba(255, 255, 255, 0.1);
-    padding: 10px 20px;  /* Ajusta o padding para não ocupar tanto espaço lateral */
-    border-radius: 25px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-    margin-top: 20px; /* Distância entre frase e o contêiner */
-    margin-bottom: 20px; /* Distância entre o contêiner e o botão */
-    margin-left: 15px; /* Ajuste da margem para a esquerda */
-    margin-right: 15px; /* Ajuste da margem para a direita */
-    overflow: hidden; /* Impede transbordamento */
-}
-
-
-        .extra-text h1 {
-            font-size: 25px;
-            text-align: center;
-            line-height: 1.1;
-        }
-
-        .extra-text h2 {
-            font-size: 18px;
-            text-align: center;
-            line-height: 1.1;
-            font-weight: normal;
-        }
-
-        .extra-text p {
-            font-size: 16px;
-            text-align: left;
-            line-height: 1.0;
-            margin-bottom: 15px; /* Distância entre frases dentro do contêiner */
-        }
-
-        /* Estilo para o botão "Acessar" fora do contêiner */
-        .access-button {
-            padding: 10px 25px; /* Tamanho do botão */
-            font-size: 18px; /* Tamanho da fonte do botão */
-            border: none;
-            border-radius: 25px;
-            background: #28a745;
-            color: white;
-            cursor: pointer;
-            transition: background 0.3s;
-            margin-top: 20px; /* Distância entre o contêiner e o botão */
-            width: 150px; /* Largura do botão */
-        }
-
-        .access-button:hover {
-            background: #64B5F6;
-        }
-
-      
-    /* Estilo para o botão "Sair" */
-    .exit-button {
-        font-size: 20px; /* Tamanho da fonte */
-        color: white; /* Cor do texto */
-        background: #FF5733; /* Cor de fundo */
-        border: none; /* Sem borda */
-        cursor: pointer; /* Tipo mãozinha */
-        padding: 15px 30px; /* Distância interna */
-        box-sizing: border-box; /* Para incluir o padding no tamanho total */
-        border-radius: 5px; /* Bordas arredondas */
-        position: fixed; /* Fixa o botão no rodapé */
-        bottom: 0; /* Coloca no fundo */
-        right: 20px; /* Ajuste do botão para a direita */
-        width: auto; /* Ajuste da largura do botão */
-        z-index: 1; /* Garante que o botão fique atrás do conteúdo principal */
-    }
-
-    .exit-button:hover {
-        background: #C70039; /* Cor ao passar o mouse */
-    }
-</style>
-
-<script>
-    function exitApp() {
-        // Esconde o conteúdo principal
-        document.getElementById('main-content').style.display = 'none';
-
-        // Exibe a tela de boas-vindas novamente
-        document.getElementById('welcome-screen').style.display = 'flex';
-    }
-</script>
-
-
-</style>
-    <script>
-        function enterApp() {
-            // Ocultar tela de boas-vindas
-            document.getElementById('welcome-screen').style.display = 'none';
-            // Exibir o conteúdo principal
-            document.getElementById('main-content').style.display = 'block';
-        }
-
-        function goBackToWelcome() {
-            // Exibe a tela de boas-vindas novamente
-            document.getElementById('welcome-screen').style.display = 'flex';
-            // Esconde o conteúdo principal
-            document.getElementById('main-content').style.display = 'none';
-        }
-    </script>
-</head>
-<body>
-    <!-- Tela de Boas-Vindas -->
-    <div id="welcome-screen" class="welcome-screen">
-       
-        <h3>Marcador de Presença</h3>
-        
-        <!-- Novo texto adicionado fora do contêiner principal -->
-        <div class="extra-text">
-            <h2 style="font-size: 18px; text-align: center; line-height: 1.8; font-weight: normal;">Por Coordenadas Geográficas</h2>
-            <p style="font-size: 16px; text-align: left; line-height: 1.8;"><span>✔</span> Você já precisou comprovar que esteve ou está em um determinado lugar?</p>
-            <p style="font-size: 16px; text-align: left; line-height: 1.8;"><span>✔</span> Comprove sua entrada e saída em locais de trabalho, eventos ou reuniões.</p>
-            <p style="font-size: 16px; text-align: left; line-height: 1.8;"><span>✔</span> Registre sua presença em um local específico com data e hora.</p>
-            <p style="font-size: 16px; text-align: left; line-height: 1.8;"><span>✔</span> Compartilhe os detalhes do local via WhatsApp ou em PDF.</p>
-        
-        </div>
-
-        <!-- Botão Fora do Contêiner -->
-        <button class="access-button" onclick="enterApp()">Acessar</button>
-    </div>
-
-
-
-    <!-- Conteúdo Principal -->
-    <div id="main-content">
-      
-      <!-- Botão de Sair no rodapé -->
-<button id="exit-button" class="exit-button" onclick="exitApp()">Sair</button>
-  
-
-        <!-- AQUI INÍCIO DA TELA PRINCIPAL -->
-   
-
-    <!-- Botão "Sair" no final do conteúdo -->
-    <button id="exit-button" class="exit-button" onclick="exitApp()">Sair</button>
-</div>
-
-<style>
-    /* Estilo para o botão "Sair" */
-    .exit-button {
-        font-size: 20px; /* Tamanho da fonte */
-        color: white; /* Cor do texto */
-        background: #FF5733; /* Cor de fundo */
-        border: none; /* Sem borda */
-        cursor: pointer; /* Tipo mãozinha */
-        padding: 10px 10px; /* Distância interna */
-        box-sizing: border-box; /* Para incluir o padding no tamanho total */
-        border-radius: 5px; /* Bordas arredondadas */
-        width: auto; /* Ajuste da largura do botão */
-        margin-top: 20px; /* Distância do botão para o conteúdo anterior */
-        display: block; /* Faz o botão ocupar a linha inteira */
-        margin-left: auto; /* Alinha o botão à direita */
-        margin-right: auto; /* Alinha o botão à direita */
-    }
-
-    .exit-button:hover {
-        background: #C70039; /* Cor ao passar o mouse */
-    }
-</style>
- <!-- conteúdo abaixo -->
-
-    
-
-    <!DOCTYPE html>
-<html lang="pt-BR">
-<head>
     <!-- Cabeçalho da Página -->
-    
     <meta charset="UTF-8">
-    
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
     <title>Marcador de Presença</title>
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
@@ -241,18 +31,16 @@
             font-size: 24px;
         }
 
-
-  /* Estilos do Container Principal */
+        /* Estilos do Container Principal */
         .container {
             padding: 20px;
-            max-width: 550px;
-            margin: 0;
+            max-width: 600px;
+            margin: auto;
             background-color: #fff;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             border-radius: 8px;
         }
 
-        
         .container h2 {
             font-size: 18px;
             color: #000000;
@@ -264,7 +52,7 @@
         }
 
         /* Estilos da Área de Texto (Descrição) */
-        textarea {
+        textarea, input[type="text"] {
             width: 100%;
             padding: 10px;
             margin: 10px 0;
@@ -389,7 +177,8 @@
             fetch(apiUrl)
                 .then(response => response.json())
                 .then(data => {
-                    const address = `Rua: ${data.address.road || "N/A"},
+                    const roadName = data.address.road || "N/A";
+                    const address = `Rua: ${roadName},
                                      Bairro: ${data.address.residential || "N/A"},
                                      Região: ${data.address.suburb || "N/A"},
                                      Cidade: ${data.address.city || "N/A"},
@@ -397,12 +186,13 @@
                                      CEP: ${data.address.postcode || "N/A"},
                                      País: ${data.address.country || "N/A"}`;
 
+                    document.getElementById("road-name").innerText = `Rua: ${roadName}`;
                     document.getElementById("address").innerText = address;
                 })
                 .catch(error => {
                     console.error("Erro ao obter endereço:", error);
-                    document.getElementById("address").innerText =
-                        "Erro ao obter endereço.";
+                    document.getElementById("road-name").innerText = "Erro ao obter nome da rua.";
+                    document.getElementById("address").innerText = "Erro ao obter endereço.";
                 });
         }
 
@@ -411,10 +201,11 @@
             const coordinates = document.getElementById("coordinates").innerText;
             const address = document.getElementById("address").innerText;
             const timestamp = document.getElementById("timestamp").innerText;
+            const userInput = document.getElementById("user-name").value || "Usuário Anônimo";
             const description = document.getElementById("description").value || "Nenhuma descrição fornecida.";
 
             const record = {
-                userName,
+                userName: userInput,
                 coordinates,
                 address,
                 description,
@@ -437,9 +228,10 @@
             const coordinates = document.getElementById("coordinates").innerText;
             const address = document.getElementById("address").innerText;
             const timestamp = document.getElementById("timestamp").innerText;
+            const userInput = document.getElementById("user-name").value || "Usuário Anônimo";
             const description = document.getElementById("description").value || "Nenhuma descrição fornecida.";
 
-            const message = `*Marcador de Presença*\n\nEu estive aqui:\n\nUsuário: ${userName}\n${coordinates}\n${address}\nDescrição: ${description}\nData/hora local: ${timestamp}\n\nhttps://maps.google.com/?q=${currentLatitude},${currentLongitude}`;
+            const message = `*Marcador de Presença*\n\nEu estive aqui:\n\nUsuário: ${userInput}\n${coordinates}\n${address}\nDescrição: ${description}\nData/hora local: ${timestamp}\n\nhttps://maps.google.com/?q=${currentLatitude},${currentLongitude}`;
 
             const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
             window.open(whatsappUrl, '_blank');
@@ -453,10 +245,11 @@
             const coordinates = document.getElementById("coordinates").innerText;
             const address = document.getElementById("address").innerText;
             const timestamp = document.getElementById("timestamp").innerText;
+            const userInput = document.getElementById("user-name").value || "Usuário Anônimo";
             const description = document.getElementById("description").value || "Nenhuma descrição fornecida.";
 
             const title = "Marcador de Presença";
-            const message = `Eu estive aqui:\n\nUsuário: ${userName}\n${coordinates}\n${address}\nDescrição: ${description}\nData/hora local: ${timestamp}\n\nhttps://maps.google.com/?q=${currentLatitude},${currentLongitude}`;
+            const message = `Eu estive aqui:\n\nUsuário: ${userInput}\n${coordinates}\n${address}\nDescrição: ${description}\nData/hora local: ${timestamp}\n\nhttps://maps.google.com/?q=${currentLatitude},${currentLongitude}`;
 
             doc.setFont("helvetica", "bold");
             doc.setFontSize(16);
@@ -498,10 +291,14 @@
 
     <!-- Container Principal -->
     <div class="container">
-        <h2>Usuário: Usuário Logado</h2>
+        <!-- Nome da Rua -->
+        <h2 id="road-name">Rua: Local desconhecido</h2>
 
         <!-- Mapa -->
         <iframe id="map" width="100%" height="300" style="border:0;" allowfullscreen></iframe>
+
+        <!-- Campo para o Nome do Usuário -->
+        <input type="text" id="user-name" placeholder="Digite seu nome">
 
         <!-- Área de Descrição -->
         <textarea id="description" placeholder="Adicione uma descrição (opcional)"></textarea>
@@ -543,30 +340,6 @@
     </footer>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
    
