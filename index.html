@@ -70,25 +70,34 @@
     min-height: 100vh;
 }
 
+/* Botão de Voltar */
+#backButton {
+    position: relative; /* Agora o botão será posicionado no fluxo normal da página */
+    margin-top: 0px; /* Distância do conteúdo superior */
+    right: 0px; /* Distância da lateral direita */
     
-  /* Botão de Voltar no Rodapé (Posicionado à direita) */
-        #backButton {
-            position: fixed;
-            bottom: 70px; /* Ajustado para ficar acima do rodapé */
-            right: 20px;
-            padding: 10px 20px;
-            font-size: 16px;
-            color: white;
-            background-color: #e53935;
-            border: none;
-            border-radius: 25px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
+    /* Ajustando o tamanho do botão com padding */
+    padding: 10px 20px; /* 20px no topo e no fundo, 30px à esquerda e à direita */
 
-        #backButton:hover {
-            background-color: #d32f2f;
-        }
+    font-size: 16px; /* Tamanho da fonte */
+    color: white; /* Cor do texto */
+    background-color: #e53935; /* Cor do fundo */
+    border: none; /* Retira borda */
+    border-radius: 20px; /* Bordas arredondadas */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+/* Efeito de hover para o botão */
+#backButton:hover {
+    background-color: #d32f2f; /* Cor de fundo ao passar o mouse */
+    transform: scale(1.1); /* Leve aumento de tamanho ao passar o mouse */
+}
+    
+ 
 
 
         /* Rodapé */
