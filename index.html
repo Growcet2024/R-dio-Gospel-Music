@@ -129,7 +129,8 @@
 
 
             
-          <!DOCTYPE html>
+
+  <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <!-- Cabeçalho da Página -->
@@ -151,25 +152,25 @@
 
         /* Estilos do Cabeçalho */
         header {
-            text-align: center;
-            padding: 20px;
+            text-align: left;
+            padding: 10px;
             background-color: #f9f9f9;
             color: #000000;
         }
 
         header h1 {
             margin: 0;
-            font-size: 24px;
+            font-size: 20px;
         }
 
         /* Estilos do Container Principal */
         .container {
-            padding: 20px;
+            padding: 10px;
             max-width: 600px;
             margin: auto;
             background-color: #fff;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
+            border-radius: 15px;
         }
 
         .container h2 {
@@ -183,7 +184,7 @@
         }
 
         /* Estilos da Área de Texto (Descrição) */
-        textarea {
+        textarea, input[type="text"] {
             width: 100%;
             padding: 10px;
             margin: 10px 0;
@@ -249,7 +250,7 @@
 
         /* Estilos do Rodapé */
         footer {
-            text-align: center;
+            text-align: left;
             padding: 10px;
             background-color: #f9f9f9;
             color: #000000;
@@ -308,7 +309,8 @@
             fetch(apiUrl)
                 .then(response => response.json())
                 .then(data => {
-                    const address = `Rua: ${data.address.road || "N/A"},
+                    const roadName = data.address.road || "N/A";
+                    const address = `Local: ${roadName},
                                      Bairro: ${data.address.residential || "N/A"},
                                      Região: ${data.address.suburb || "N/A"},
                                      Cidade: ${data.address.city || "N/A"},
@@ -316,12 +318,13 @@
                                      CEP: ${data.address.postcode || "N/A"},
                                      País: ${data.address.country || "N/A"}`;
 
+                    document.getElementById("road-name").innerText = `Local: ${roadName}`;
                     document.getElementById("address").innerText = address;
                 })
                 .catch(error => {
                     console.error("Erro ao obter endereço:", error);
-                    document.getElementById("address").innerText =
-                        "Erro ao obter endereço.";
+                    document.getElementById("road-name").innerText = "Erro ao obter nome da rua.";
+                    document.getElementById("address").innerText = "Erro ao obter endereço.";
                 });
         }
 
@@ -330,10 +333,11 @@
             const coordinates = document.getElementById("coordinates").innerText;
             const address = document.getElementById("address").innerText;
             const timestamp = document.getElementById("timestamp").innerText;
+            const userInput = document.getElementById("user-name").value || "Usuário Anônimo";
             const description = document.getElementById("description").value || "Nenhuma descrição fornecida.";
 
             const record = {
-                userName,
+                userName: userInput,
                 coordinates,
                 address,
                 description,
@@ -356,9 +360,10 @@
             const coordinates = document.getElementById("coordinates").innerText;
             const address = document.getElementById("address").innerText;
             const timestamp = document.getElementById("timestamp").innerText;
+            const userInput = document.getElementById("user-name").value || "Usuário Anônimo";
             const description = document.getElementById("description").value || "Nenhuma descrição fornecida.";
 
-            const message = `*Marcador de Presença*\n\nEu estive aqui:\n\nUsuário: ${userName}\n${coordinates}\n${address}\nDescrição: ${description}\nData/hora local: ${timestamp}\n\nhttps://maps.google.com/?q=${currentLatitude},${currentLongitude}`;
+            const message = `*Marcador de Presença*\n\nEu estive aqui:\n\nUsuário: ${userInput}\n${coordinates}\n${address}\nDescrição: ${description}\nData/hora local: ${timestamp}\n\nhttps://maps.google.com/?q=${currentLatitude},${currentLongitude}`;
 
             const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
             window.open(whatsappUrl, '_blank');
@@ -372,10 +377,11 @@
             const coordinates = document.getElementById("coordinates").innerText;
             const address = document.getElementById("address").innerText;
             const timestamp = document.getElementById("timestamp").innerText;
+            const userInput = document.getElementById("user-name").value || "Usuário Anônimo";
             const description = document.getElementById("description").value || "Nenhuma descrição fornecida.";
 
             const title = "Marcador de Presença";
-            const message = `Eu estive aqui:\n\nUsuário: ${userName}\n${coordinates}\n${address}\nDescrição: ${description}\nData/hora local: ${timestamp}\n\nhttps://maps.google.com/?q=${currentLatitude},${currentLongitude}`;
+            const message = `Eu estive aqui:\n\nUsuário: ${userInput}\n${coordinates}\n${address}\nDescrição: ${description}\nData/hora local: ${timestamp}\n\nhttps://maps.google.com/?q=${currentLatitude},${currentLongitude}`;
 
             doc.setFont("helvetica", "bold");
             doc.setFontSize(16);
@@ -417,10 +423,14 @@
 
     <!-- Container Principal -->
     <div class="container">
-        <h2>Usuário: Usuário Logado</h2>
+        <!-- Nome da Rua -->
+        <h2 id="road-name">Rua: Local desconhecido</h2>
 
         <!-- Mapa -->
         <iframe id="map" width="100%" height="300" style="border:0;" allowfullscreen></iframe>
+
+        <!-- Campo para o Nome do Usuário -->
+        <input type="text" id="user-name" placeholder="Digite seu nome">
 
         <!-- Área de Descrição -->
         <textarea id="description" placeholder="Adicione uma descrição (opcional)"></textarea>
@@ -463,8 +473,11 @@
 </body>
 </html>
 
-
-
+      
+    
+    
+    
+       
 
 
             
