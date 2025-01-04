@@ -70,28 +70,30 @@
     min-height: 100vh;
 }
 
-       /* Botão de Voltar (Agora abaixo do conteúdo) */
+     /* Botão de Voltar (quadrado, no canto inferior direito) */
 #backButton {
-    display: block;  /* Garante que o botão ocupe toda a largura possível */
-    margin-top: 20px; /* Espaço acima do botão */
-    padding: 10px 20px;
-    font-size: 16px;
-    color: white;
-    background-color: #e53935;
-    border: none;
-    border-radius: 25px;
+    position: fixed; /* Fixo na tela */
+    bottom: 20px; /* Distância do fundo da tela */
+    right: 20px; /* Distância da lateral direita */
+    width: 50px; /* Largura do botão */
+    height: 50px; /* Altura do botão (faz o botão ser quadrado) */
+    font-size: 16px; /* Tamanho da fonte */
+    color: white; /* Cor do texto */
+    background-color: #e53935; /* Cor do fundo */
+    border: none; /* Retira borda */
+    border-radius: 10px; /* Bordas arredondadas, para não ficar um quadrado totalmente reto */
+    display: flex;
+    justify-content: center;
+    align-items: center;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: background-color 0.3s, transform 0.2s;
 }
 
 #backButton:hover {
-    background-color: #d32f2f;
+    background-color: #d32f2f; /* Cor de fundo ao passar o mouse */
+    transform: scale(1.1); /* Leve aumento de tamanho ao passar o mouse */
 }
 
-
-        #backButton:hover {
-            background-color: #d32f2f;
-        }
 
 
         /* Rodapé */
