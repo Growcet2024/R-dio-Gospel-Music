@@ -1,343 +1,506 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <!-- Cabeçalho da Página -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Marcador de Presença</title>
-    <link rel="stylesheet" href="styles.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
-
+    <title>Template Básico</title>
     <style>
-        /* Estilos Globais */
+        /* Estilos gerais */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f9f9f9;
+            background-color: #f4f4f9;
+            color: #333;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        /* === Tela de Boas-Vindas === */
+        .welcome-container {
+            text-align: center;
+            padding: 30px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .welcome-container h1 {
+            font-size: 32px;
             color: #333;
         }
 
-        /* Estilos do Cabeçalho */
-        header {
-            text-align: center;
-            padding: 20px;
-            background-color: #f9f9f9;
-            color: #000000;
+        .welcome-container p {
+            font-size: 16px;
+            color: #555;
         }
 
-        header h1 {
-            margin: 0;
-            font-size: 24px;
-        }
-
-        /* Estilos do Container Principal */
-        .container {
-            padding: 20px;
-            max-width: 600px;
-            margin: auto;
-            background-color: #fff;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-        }
-
-        .container h2 {
-            font-size: 18px;
-            color: #000000;
-        }
-
-        /* Estilos do Mapa */
-        #map {
-            border-radius: 8px;
-        }
-
-        /* Estilos da Área de Texto (Descrição) */
-        textarea, input[type="text"] {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            resize: none;
-            font-size: 14px;
-            box-sizing: border-box;
-        }
-
-        /* Estilos dos Botões */
-        button {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
+        .welcome-container button {
+            padding: 10px 20px;
+            font-size: 16px;
+            color: white;
+            background-color: #2196F3;
             border: none;
             border-radius: 25px;
-            font-size: 16px;
-            font-weight: bold;
             cursor: pointer;
             transition: background-color 0.3s, transform 0.2s;
-            box-sizing: border-box;
         }
 
-        button:hover {
-            background-color: #2196f3;
-            transform: scale(1.02);
+        .welcome-container button:hover {
+            background-color: #0d8bf2;
+            transform: scale(1.05);
         }
 
-        button:active {
-            transform: scale(0.98);
+        /* === Tela Vazia === */
+        .main-container {
+            display: none; /* Tela vazia começa oculta */
+            padding: 20px;
+            background-color: white;
+            margin: 0;
+            min-height: 100vh;
         }
 
-        button:nth-child(1) {
-            background: linear-gradient(to right, #4CAF50, #81C784);
-            color: white;
-        }
-
-        button:nth-child(2) {
-            background: linear-gradient(to right, #2196F3, #64B5F6);
-            color: white;
-        }
-
-        button:nth-child(3) {
-            background: linear-gradient(to right, #FFC107, #FFD54F);
-            color: #333;
-        }
-
-        button:nth-child(4) {
-            background: linear-gradient(to right, #2196F3, #64B5F6);
-            color: white;
-        }
-
-        /* Estilos dos Campos de Coordenadas, Data/Hora e Endereço */
-        .field {
-            margin: 10px 0;
-        }
-
-        .field h2 {
+        /* Botão de Voltar no Rodapé (Posicionado à direita) */
+        #backButton {
+            position: fixed;
+            bottom: 70px; /* Ajustado para ficar acima do rodapé */
+            right: 20px;
+            padding: 10px 20px;
             font-size: 16px;
-            color: #333;
+            color: white;
+            background-color: #e53935;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: background-color 0.3s;
         }
 
-        /* Estilos do Rodapé */
+        #backButton:hover {
+            background-color: #d32f2f;
+        }
+
+        /* Rodapé fixo */
         footer {
             text-align: center;
             padding: 10px;
-            background-color: #f9f9f9;
-            color: #000000;
-            position: relative;
+            background-color: #f4f4f9; /* Cor cinza igual ao fundo */
+            color: #000;
+            position: fixed;
             bottom: 0;
             width: 100%;
         }
 
         footer p {
-            font-size: 10px; /* Alterado para 40px conforme pedido */
+            font-size: 10px;
+            display: none; /* Removido a inscrição */
+        }
+
+        /* Área simples para conteúdo */
+        #simpleContent {
+            padding: 20px;
+            margin-top: 20px;
+            background-color: #f4f4f9;
         }
     </style>
-
-    <script>
-        /* Variáveis Globais */
-        let currentLatitude = "-";
-        let currentLongitude = "-";
-        let userName = "Usuário Logado";
-
-        /* Funções JavaScript */
-
-        // Função para rastrear a localização do usuário
-        function trackLocation() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(
-                    (position) => {
-                        currentLatitude = position.coords.latitude;
-                        currentLongitude = position.coords.longitude;
-
-                        const timestamp = new Date().toLocaleString();
-
-                        document.getElementById("coordinates").innerText =
-                            `Latitude: ${currentLatitude}\nLongitude: ${currentLongitude}`;
-                        document.getElementById("timestamp").innerText = timestamp;
-
-                        getAddressFromCoordinates(currentLatitude, currentLongitude);
-                        updateMap(currentLatitude, currentLongitude);
-                        playSound("location-sound.mp3");
-                    },
-                    (error) => {
-                        console.error("Erro ao obter localização:", error);
-                        document.getElementById("coordinates").innerText =
-                            "Erro ao obter localização.";
-                        playSound("error-sound.mp3");
-                    }
-                );
-            } else {
-                alert("Geolocalização não é suportada neste navegador.");
-            }
-        }
-
-        // Função para obter o endereço a partir das coordenadas
-        function getAddressFromCoordinates(latitude, longitude) {
-            const apiUrl = `https://us1.locationiq.com/v1/reverse?key=pk.73c7ec951f7e0c38e842f740a1a63917&lat=${latitude}&lon=${longitude}&format=json`;
-
-            fetch(apiUrl)
-                .then(response => response.json())
-                .then(data => {
-                    const roadName = data.address.road || "N/A";
-                    const address = `Local: ${roadName},
-                                     Bairro: ${data.address.residential || "N/A"},
-                                     Região: ${data.address.suburb || "N/A"},
-                                     Cidade: ${data.address.city || "N/A"},
-                                     Estado: ${data.address.state || "N/A"},
-                                     CEP: ${data.address.postcode || "N/A"},
-                                     País: ${data.address.country || "N/A"}`;
-
-                    document.getElementById("road-name").innerText = `Local: ${roadName}`;
-                    document.getElementById("address").innerText = address;
-                })
-                .catch(error => {
-                    console.error("Erro ao obter endereço:", error);
-                    document.getElementById("road-name").innerText = "Erro ao obter nome da rua.";
-                    document.getElementById("address").innerText = "Erro ao obter endereço.";
-                });
-        }
-
-        // Função para salvar o registro
-        function saveRecord() {
-            const coordinates = document.getElementById("coordinates").innerText;
-            const address = document.getElementById("address").innerText;
-            const timestamp = document.getElementById("timestamp").innerText;
-            const userInput = document.getElementById("user-name").value || "Usuário Anônimo";
-            const description = document.getElementById("description").value || "Nenhuma descrição fornecida.";
-
-            const record = {
-                userName: userInput,
-                coordinates,
-                address,
-                description,
-                timestamp,
-            };
-
-            const records = JSON.parse(localStorage.getItem("presenceRecords")) || [];
-            records.push(record);
-            localStorage.setItem("presenceRecords", JSON.stringify(records));
-            
-            const saveButton = document.querySelector("button[onclick='saveRecord()']");
-            saveButton.innerText = "Registro salvo com sucesso!";
-            setTimeout(() => {
-                saveButton.innerText = "Salvar Registro";
-            }, 2000);
-        }
-
-        // Função para compartilhar a localização via WhatsApp
-        function shareLocation() {
-            const coordinates = document.getElementById("coordinates").innerText;
-            const address = document.getElementById("address").innerText;
-            const timestamp = document.getElementById("timestamp").innerText;
-            const userInput = document.getElementById("user-name").value || "Usuário Anônimo";
-            const description = document.getElementById("description").value || "Nenhuma descrição fornecida.";
-
-            const message = `*Marcador de Presença*\n\nEu estive aqui:\n\nUsuário: ${userInput}\n${coordinates}\n${address}\nDescrição: ${description}\nData/hora local: ${timestamp}\n\nhttps://maps.google.com/?q=${currentLatitude},${currentLongitude}`;
-
-            const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
-            window.open(whatsappUrl, '_blank');
-        }
-
-        // Função para gerar o PDF
-        async function generatePDF() {
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-
-            const coordinates = document.getElementById("coordinates").innerText;
-            const address = document.getElementById("address").innerText;
-            const timestamp = document.getElementById("timestamp").innerText;
-            const userInput = document.getElementById("user-name").value || "Usuário Anônimo";
-            const description = document.getElementById("description").value || "Nenhuma descrição fornecida.";
-
-            const title = "Marcador de Presença";
-            const message = `Eu estive aqui:\n\nUsuário: ${userInput}\n${coordinates}\n${address}\nDescrição: ${description}\nData/hora local: ${timestamp}\n\nhttps://maps.google.com/?q=${currentLatitude},${currentLongitude}`;
-
-            doc.setFont("helvetica", "bold");
-            doc.setFontSize(16);
-            doc.text(title, 10, 20);
-
-            doc.setFont("helvetica", "normal");
-            doc.setFontSize(12);
-            const textStartY = 30;
-            const textWidth = 180;
-            doc.text(message, 10, textStartY, { maxWidth: textWidth });
-
-            doc.save("Marcador de Presença.pdf");
-        }
-
-        // Função para atualizar o mapa no iframe
-        function updateMap(lat, lon) {
-            const map = document.getElementById("map");
-            map.src = `https://maps.google.com/maps?q=${lat},${lon}&z=15&output=embed`;
-        }
-
-        // Função para tocar um som
-        function playSound(soundFile) {
-            const audio = new Audio(soundFile);
-            audio.play();
-        }
-
-        // Chamada da função trackLocation ao carregar a página
-        window.onload = function () {
-            trackLocation();
-        };
-    </script>
 </head>
-
 <body>
-    <!-- Cabeçalho -->
-    <header>
-        <h1>Marcador de Presença</h1>
-    </header>
 
-    <!-- Container Principal -->
-    <div class="container">
-        <!-- Nome da Rua -->
-        <h2 id="road-name">Rua: Local desconhecido</h2>
+    <!-- === Tela de Boas-Vindas === -->
+    <div class="welcome-container" id="welcomeScreen">
+        <h1>Bem-vindo!</h1>
+        <p>Clique no botão abaixo para acessar a tela vazia e adicionar seu conteúdo.</p>
+        <button id="accessButton" onclick="accessMain()">Acessar</button>
+    </div>
 
-        <!-- Mapa -->
-        <iframe id="map" width="100%" height="300" style="border:0;" allowfullscreen></iframe>
 
-        <!-- Campo para o Nome do Usuário -->
-        <input type="text" id="user-name" placeholder="Digite seu nome">
 
-        <!-- Área de Descrição -->
-        <textarea id="description" placeholder="Adicione uma descrição (opcional)"></textarea>
+    <!-- === Tela Vazia === -->
+    <div class="main-container" id="mainScreen">
+        <!-- Aqui vai o conteúdo simples do seu projeto -->
+        <div id="simpleContent">
 
-        <!-- Botões -->
-        <button class="button" onclick="saveRecord()">Salvar Registro</button>
+          
+            <!DOCTYPE html>
+            <html lang="pt-BR">
+            <head>
+                <!-- Cabeçalho da Página -->
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Marcador de Presença</title>
+                <link rel="stylesheet" href="styles.css">
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+            
+                <style>
+                    /* Estilos Globais */
+                    body {
+                        font-family: Arial, sans-serif;
+                        margin: 0;
+                        padding: 0;
+                        background-color: #f9f9f9;
+                        color: #333;
+                    }
+            
+                    /* Estilos do Cabeçalho */
+                    header {
+                        text-align: left;
+                        padding: 10px;
+                        background-color: #f9f9f9;
+                        color: #000000;
+                    }
+            
+                    header h1 {
+                        margin: 0;
+                        font-size: 20px;
+                    }
+            
+                    /* Estilos do Container Principal */
+                    .container {
+                        padding: 10px;
+                        max-width: 600px;
+                        margin: auto;
+                        background-color: #fff;
+                        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                        border-radius: 15px;
+                    }
+            
+                    .container h2 {
+                        font-size: 18px;
+                        color: #000000;
+                    }
+            
+                    /* Estilos do Mapa */
+                    #map {
+                        border-radius: 8px;
+                    }
+            
+                    /* Estilos da Área de Texto (Descrição) */
+                    textarea, input[type="text"] {
+                        width: 100%;
+                        padding: 10px;
+                        margin: 10px 0;
+                        border: 1px solid #ccc;
+                        border-radius: 5px;
+                        resize: none;
+                        font-size: 14px;
+                        box-sizing: border-box;
+                    }
+            
+                    /* Estilos dos Botões */
+                    button {
+                        width: 100%;
+                        padding: 10px;
+                        margin: 10px 0;
+                        border: none;
+                        border-radius: 25px;
+                        font-size: 16px;
+                        font-weight: bold;
+                        cursor: pointer;
+                        transition: background-color 0.3s, transform 0.2s;
+                        box-sizing: border-box;
+                    }
+            
+                    button:hover {
+                        background-color: #2196f3;
+                        transform: scale(1.02);
+                    }
+            
+                    button:active {
+                        transform: scale(0.98);
+                    }
+            
+                    button:nth-child(1) {
+                        background: linear-gradient(to right, #4CAF50, #81C784);
+                        color: white;
+                    }
+            
+                    button:nth-child(2) {
+                        background: linear-gradient(to right, #2196F3, #64B5F6);
+                        color: white;
+                    }
+            
+                    button:nth-child(3) {
+                        background: linear-gradient(to right, #FFC107, #FFD54F);
+                        color: #333;
+                    }
+            
+                    button:nth-child(4) {
+                        background: linear-gradient(to right, #2196F3, #64B5F6);
+                        color: white;
+                    }
+            
+                    /* Estilos dos Campos de Coordenadas, Data/Hora e Endereço */
+                    .field {
+                        margin: 10px 0;
+                    }
+            
+                    .field h2 {
+                        font-size: 16px;
+                        color: #333;
+                    }
+            
+                    /* Estilos do Rodapé */
+                    footer {
+                        text-align: left;
+                        padding: 10px;
+                        background-color: #f9f9f9;
+                        color: #000000;
+                        position: relative;
+                        bottom: 0;
+                        width: 100%;
+                    }
+            
+                    footer p {
+                        font-size: 10px; /* Alterado para 40px conforme pedido */
+                    }
+                </style>
+            
+                <script>
+                    /* Variáveis Globais */
+                    let currentLatitude = "-";
+                    let currentLongitude = "-";
+                    let userName = "Usuário Logado";
+            
+                    /* Funções JavaScript */
+            
+                    // Função para rastrear a localização do usuário
+                    function trackLocation() {
+                        if (navigator.geolocation) {
+                            navigator.geolocation.getCurrentPosition(
+                                (position) => {
+                                    currentLatitude = position.coords.latitude;
+                                    currentLongitude = position.coords.longitude;
+            
+                                    const timestamp = new Date().toLocaleString();
+            
+                                    document.getElementById("coordinates").innerText =
+                                        `Latitude: ${currentLatitude}\nLongitude: ${currentLongitude}`;
+                                    document.getElementById("timestamp").innerText = timestamp;
+            
+                                    getAddressFromCoordinates(currentLatitude, currentLongitude);
+                                    updateMap(currentLatitude, currentLongitude);
+                                    playSound("location-sound.mp3");
+                                },
+                                (error) => {
+                                    console.error("Erro ao obter localização:", error);
+                                    document.getElementById("coordinates").innerText =
+                                        "Erro ao obter localização.";
+                                    playSound("error-sound.mp3");
+                                }
+                            );
+                        } else {
+                            alert("Geolocalização não é suportada neste navegador.");
+                        }
+                    }
+            
+                    // Função para obter o endereço a partir das coordenadas
+                    function getAddressFromCoordinates(latitude, longitude) {
+                        const apiUrl = `https://us1.locationiq.com/v1/reverse?key=pk.73c7ec951f7e0c38e842f740a1a63917&lat=${latitude}&lon=${longitude}&format=json`;
+            
+                        fetch(apiUrl)
+                            .then(response => response.json())
+                            .then(data => {
+                                const roadName = data.address.road || "N/A";
+                                const address = `Local: ${roadName},
+                                                 Bairro: ${data.address.residential || "N/A"},
+                                                 Região: ${data.address.suburb || "N/A"},
+                                                 Cidade: ${data.address.city || "N/A"},
+                                                 Estado: ${data.address.state || "N/A"},
+                                                 CEP: ${data.address.postcode || "N/A"},
+                                                 País: ${data.address.country || "N/A"}`;
+            
+                                document.getElementById("road-name").innerText = `Local: ${roadName}`;
+                                document.getElementById("address").innerText = address;
+                            })
+                            .catch(error => {
+                                console.error("Erro ao obter endereço:", error);
+                                document.getElementById("road-name").innerText = "Erro ao obter nome da rua.";
+                                document.getElementById("address").innerText = "Erro ao obter endereço.";
+                            });
+                    }
+            
+                    // Função para salvar o registro
+                    function saveRecord() {
+                        const coordinates = document.getElementById("coordinates").innerText;
+                        const address = document.getElementById("address").innerText;
+                        const timestamp = document.getElementById("timestamp").innerText;
+                        const userInput = document.getElementById("user-name").value || "Usuário Anônimo";
+                        const description = document.getElementById("description").value || "Nenhuma descrição fornecida.";
+            
+                        const record = {
+                            userName: userInput,
+                            coordinates,
+                            address,
+                            description,
+                            timestamp,
+                        };
+            
+                        const records = JSON.parse(localStorage.getItem("presenceRecords")) || [];
+                        records.push(record);
+                        localStorage.setItem("presenceRecords", JSON.stringify(records));
+                        
+                        const saveButton = document.querySelector("button[onclick='saveRecord()']");
+                        saveButton.innerText = "Registro salvo com sucesso!";
+                        setTimeout(() => {
+                            saveButton.innerText = "Salvar Registro";
+                        }, 2000);
+                    }
+            
+                    // Função para compartilhar a localização via WhatsApp
+                    function shareLocation() {
+                        const coordinates = document.getElementById("coordinates").innerText;
+                        const address = document.getElementById("address").innerText;
+                        const timestamp = document.getElementById("timestamp").innerText;
+                        const userInput = document.getElementById("user-name").value || "Usuário Anônimo";
+                        const description = document.getElementById("description").value || "Nenhuma descrição fornecida.";
+            
+                        const message = `*Marcador de Presença*\n\nEu estive aqui:\n\nUsuário: ${userInput}\n${coordinates}\n${address}\nDescrição: ${description}\nData/hora local: ${timestamp}\n\nhttps://maps.google.com/?q=${currentLatitude},${currentLongitude}`;
+            
+                        const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
+                        window.open(whatsappUrl, '_blank');
+                    }
+            
+                    // Função para gerar o PDF
+                    async function generatePDF() {
+                        const { jsPDF } = window.jspdf;
+                        const doc = new jsPDF();
+            
+                        const coordinates = document.getElementById("coordinates").innerText;
+                        const address = document.getElementById("address").innerText;
+                        const timestamp = document.getElementById("timestamp").innerText;
+                        const userInput = document.getElementById("user-name").value || "Usuário Anônimo";
+                        const description = document.getElementById("description").value || "Nenhuma descrição fornecida.";
+            
+                        const title = "Marcador de Presença";
+                        const message = `Eu estive aqui:\n\nUsuário: ${userInput}\n${coordinates}\n${address}\nDescrição: ${description}\nData/hora local: ${timestamp}\n\nhttps://maps.google.com/?q=${currentLatitude},${currentLongitude}`;
+            
+                        doc.setFont("helvetica", "bold");
+                        doc.setFontSize(16);
+                        doc.text(title, 10, 20);
+            
+                        doc.setFont("helvetica", "normal");
+                        doc.setFontSize(12);
+                        const textStartY = 30;
+                        const textWidth = 180;
+                        doc.text(message, 10, textStartY, { maxWidth: textWidth });
+            
+                        doc.save("Marcador de Presença.pdf");
+                    }
+            
+                    // Função para atualizar o mapa no iframe
+                    function updateMap(lat, lon) {
+                        const map = document.getElementById("map");
+                        map.src = `https://maps.google.com/maps?q=${lat},${lon}&z=15&output=embed`;
+                    }
+            
+                    // Função para tocar um som
+                    function playSound(soundFile) {
+                        const audio = new Audio(soundFile);
+                        audio.play();
+                    }
+            
+                    // Chamada da função trackLocation ao carregar a página
+                    window.onload = function () {
+                        trackLocation();
+                    };
+                </script>
+            </head>
+            
+            <body>
+                <!-- Cabeçalho -->
+                <header>
+                    <h1>Marcador de Presença</h1>
+                </header>
+            
+                <!-- Container Principal -->
+                <div class="container">
+                    <!-- Nome da Rua -->
+                    <h2 id="road-name">Rua: Local desconhecido</h2>
+            
+                    <!-- Mapa -->
+                    <iframe id="map" width="100%" height="300" style="border:0;" allowfullscreen></iframe>
+            
+                    <!-- Campo para o Nome do Usuário -->
+                    <input type="text" id="user-name" placeholder="Digite seu nome">
+            
+                    <!-- Área de Descrição -->
+                    <textarea id="description" placeholder="Adicione uma descrição (opcional)"></textarea>
+            
+                    <!-- Botões -->
+                    <button class="button" onclick="saveRecord()">Salvar Registro</button>
+            
+                    <!-- Coordenadas -->
+                    <div class="field">
+                        <h2>Coordenadas</h2>
+                        <p id="coordinates">Latitude: -, Longitude: -</p>
+                    </div>
+            
+                    <!-- Data e Hora -->
+                    <div class="field">
+                        <h2>Data e Hora</h2>
+                        <p id="timestamp">Local</p>
+                    </div>
+            
+                    <!-- Endereço -->
+                    <div class="field">
+                        <h2>Endereço</h2>
+                        <p id="address">Local</p>
+                    </div>
+            
+                    <!-- Compartilhar via WhatsApp -->
+                    <button class="button" onclick="shareLocation()">Compartilhar pelo WhatsApp</button>
+            
+                    <!-- Gerar PDF -->
+                    <button class="button" onclick="generatePDF()">Gerar PDF</button>
+            
+                    <!-- Histórico de Presença -->
+                    <button class="button" onclick="window.location.href='historico.html'">Ver Histórico de Presença</button>
+                </div>
+            
+                <!-- Rodapé -->
+                <footer>
+                    <p>© 2024 Marcador de Presença. Todos os direitos reservados.</p>
+                </footer>
+            </body>
+            </html>
+            
 
-        <!-- Coordenadas -->
-        <div class="field">
-            <h2>Coordenadas</h2>
-            <p id="coordinates">Latitude: -, Longitude: -</p>
+
         </div>
 
-        <!-- Data e Hora -->
-        <div class="field">
-            <h2>Data e Hora</h2>
-            <p id="timestamp">Local</p>
-        </div>
 
-        <!-- Endereço -->
-        <div class="field">
-            <h2>Endereço</h2>
-            <p id="address">Local</p>
-        </div>
 
-        <!-- Compartilhar via WhatsApp -->
-        <button class="button" onclick="shareLocation()">Compartilhar pelo WhatsApp</button>
 
-        <!-- Gerar PDF -->
-        <button class="button" onclick="generatePDF()">Gerar PDF</button>
 
-        <!-- Histórico de Presença -->
-        <button class="button" onclick="window.location.href='historico.html'">Ver Histórico de Presença</button>
+        <!-- Botão de Voltar (Posicionado à direita) -->
+        <button id="backButton" onclick="backToWelcome()">Voltar</button>
     </div>
 
     <!-- Rodapé -->
     <footer>
-        <p>© 2024 Marcador de Presença. Todos os direitos reservados.</p>
+        <p>&copy; 2025 Template Básico</p> <!-- Removido a inscrição conforme solicitado -->
     </footer>
+
+    <script>
+        // Função para acessar a tela vazia
+        function accessMain() {
+            document.getElementById("welcomeScreen").style.display = "none";  // Oculta a tela de boas-vindas
+            document.getElementById("mainScreen").style.display = "block";     // Mostra a tela vazia
+        }
+
+        // Função para voltar à tela de boas-vindas
+        function backToWelcome() {
+            document.getElementById("mainScreen").style.display = "none";      // Oculta a tela vazia
+            document.getElementById("welcomeScreen").style.display = "block";  // Mostra a tela de boas-vindas
+        }
+    </script>
+
 </body>
 </html>
 
