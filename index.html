@@ -178,7 +178,7 @@
                 .then(response => response.json())
                 .then(data => {
                     const roadName = data.address.road || "N/A";
-                    const address = `Rua: ${roadName},
+                    const address = `Local: ${roadName},
                                      Bairro: ${data.address.residential || "N/A"},
                                      Região: ${data.address.suburb || "N/A"},
                                      Cidade: ${data.address.city || "N/A"},
@@ -186,7 +186,7 @@
                                      CEP: ${data.address.postcode || "N/A"},
                                      País: ${data.address.country || "N/A"}`;
 
-                    document.getElementById("road-name").innerText = `Rua: ${roadName}`;
+                    document.getElementById("road-name").innerText = `Local: ${roadName}`;
                     document.getElementById("address").innerText = address;
                 })
                 .catch(error => {
