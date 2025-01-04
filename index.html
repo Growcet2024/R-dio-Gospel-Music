@@ -71,17 +71,18 @@
 }
 
     
-/* Botão de Voltar (no canto inferior direito, com padding) */
+/* Botão de Voltar (deslocando ele junto com o conteúdo) */
 #backButton {
-    position: fixed; /* Fixo na tela */
-    bottom: 20px; /* Distância do fundo da tela */
+    position: relative; /* Ao invés de "fixed", usa-se "relative" para seguir o fluxo do conteúdo */
+    margin-top: 20px; /* Distância do conteúdo */
     right: 20px; /* Distância da lateral direita */
-    padding: 15px 30px; /* Padding vertical (acima/abaixo) e horizontal (esquerda/direita) */
-    font-size: 16px; /* Tamanho da fonte */
-    color: white; /* Cor do texto */
-    background-color: #e53935; /* Cor do fundo */
-    border: none; /* Retira borda */
-    border-radius: 10px; /* Bordas arredondadas */
+    width: 60px; /* Largura do botão */
+    height: 60px; /* Altura do botão */
+    font-size: 16px;
+    color: white;
+    background-color: #e53935;
+    border: none;
+    border-radius: 10px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -90,8 +91,8 @@
 }
 
 #backButton:hover {
-    background-color: #d32f2f; /* Cor de fundo ao passar o mouse */
-    transform: scale(1.1); /* Leve aumento de tamanho ao passar o mouse */
+    background-color: #d32f2f;
+    transform: scale(1.1);
 }
 
 
