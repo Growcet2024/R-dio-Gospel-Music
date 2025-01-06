@@ -3,152 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Template Básico</title>
-    <style>
-        /* Estilos gerais */
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f9;
-            color: #333;
-            position: relative;
-            min-height: 100vh;
-        }
-
-        /* Estilos do Container da Tela de Apresentação */
-.welcome-container {
-    text-align: center;
-    padding: 10px;  /* Ajuste no padding conforme solicitado */
-    max-width: 1000px;  /* Limite máximo de largura */
-    margin: auto;  /* Centraliza o container */
-    background-color: #fff;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);  /* Sombra leve */
-    border-radius: 15px;  /* Cantos arredondados */
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);  /* Centraliza na tela */
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
-        .welcome-container h1 {
-            font-size: 32px;
-            color: #333;
-        }
-
-        .welcome-container p {
-            font-size: 16px;
-            color: #555;
-        }
-
-        .welcome-container button {
-            padding: 10px 20px;
-            font-size: 16px;
-            color: white;
-            background-color: #2196F3;
-            border: none;
-            border-radius: 25px;
-            cursor: pointer;
-            transition: background-color 0.3s, transform 0.2s;
-        }
-
-        .welcome-container button:hover {
-            background-color: #0d8bf2;
-            transform: scale(1.05);
-        }
-
-        
-/* === Tela Vazia === */
-.main-container {
-    display: none; /* Tela vazia começa oculta */
-    padding: 20px;
-    background-color: transparent; /* Alterado para transparente */
-    margin: 0;
-    min-height: 100vh;
-}
-
-/* Botão de Voltar */
-#backButton {
-    position: relative; /* Agora o botão será posicionado no fluxo normal da página */
-    margin-top: 0px; /* Distância do conteúdo superior */
-    right: 0px; /* Distância da lateral direita */
-    
-    /* Ajustando o tamanho do botão com padding */
-    padding: 10px 20px; /* 20px no topo e no fundo, 30px à esquerda e à direita */
-
-    font-size: 16px; /* Tamanho da fonte */
-    color: white; /* Cor do texto */
-    background-color: #e53935; /* Cor do fundo */
-    border: none; /* Retira borda */
-    border-radius: 20px; /* Bordas arredondadas */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    transition: background-color 0.3s, transform 0.2s;
-}
-
-/* Efeito de hover para o botão */
-#backButton:hover {
-    background-color: #d32f2f; /* Cor de fundo ao passar o mouse */
-    transform: scale(1.1); /* Leve aumento de tamanho ao passar o mouse */
-}
-    
- 
-
-
-        /* Rodapé */
-footer footer {
-    text-align: center;
-    padding: 5px 0;  /* Diminuir o espaço interno (5px para cima e para baixo, 0px para os lados) */
-    background-color: #f4f4f9; /* Cor cinza igual ao fundo */
-    color: #000;
-    width: 100%;  /* Largura continua 100% */
-    max-width: 600px;  /* Limite máximo de largura */
-    margin: auto;  /* Centraliza o rodapé */
-    position: fixed;
-    bottom: 0;
-}
-
-
-        /* Área simples para conteúdo */
-#simpleContent {
-    padding: 0;  /* Remove o espaçamento interno */
-    margin: 0;   /* Remove o espaçamento externo */
-    background-color: #f4f4f9;
-}
-
-
-    </style>
-</head>
-<body>
-
-    <!-- === Tela de Boas-Vindas === -->
-    <div class="welcome-container" id="welcomeScreen">
-        <h1>Bem-vindo!</h1>
-        <p>Clique no botão abaixo para acessar a tela vazia e adicionar seu conteúdo.</p>
-        <button id="accessButton" onclick="accessMain()">Acessar</button>
-    </div>
-
-    <!-- === Tela Vazia === Colar apaixo novo app-->
-    <div class="main-container" id="mainScreen">
-        <!-- Aqui vai o conteúdo simples do seu projeto -->
-        <div id="simpleContent">
-
- <!--Colar apaixo novo app-->
-  
-    <!-- Cabeçalho da Página -->
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Marcador de Presença</title>
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
 
     <style>
-        /* Estilos Globais */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -157,7 +16,6 @@ footer footer {
             color: #333;
         }
 
-        /* Estilos do Cabeçalho */
         header {
             text-align: left;
             padding: 10px;
@@ -170,14 +28,16 @@ footer footer {
             font-size: 20px;
         }
 
-        /* Estilos do Container Principal */
         .container {
-            padding: 10px;
+            padding: 20px;
             max-width: 600px;
             margin: auto;
             background-color: #fff;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         .container h2 {
@@ -185,12 +45,12 @@ footer footer {
             color: #000000;
         }
 
-        /* Estilos do Mapa */
         #map {
             border-radius: 8px;
+            width: 100%;
+            height: 300px;
         }
 
-        /* Estilos da Área de Texto (Descrição) */
         textarea, input[type="text"] {
             width: 100%;
             padding: 10px;
@@ -202,7 +62,6 @@ footer footer {
             box-sizing: border-box;
         }
 
-        /* Estilos dos Botões */
         button {
             width: 100%;
             padding: 10px;
@@ -245,17 +104,28 @@ footer footer {
             color: white;
         }
 
-        /* Estilos dos Campos de Coordenadas, Data/Hora e Endereço */
-        .field {
-            margin: 10px 0;
+        .history-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: space-between;
+            width: 100%;
         }
 
-        .field h2 {
-            font-size: 16px;
-            color: #333;
+        .history-buttons button {
+            width: 30%;
         }
 
-        /* Estilos do Rodapé */
+        .history-content {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            margin-top: 20px;
+        }
+
+        .history-content div {
+            margin-bottom: 20px;
+        }
+
         footer {
             text-align: left;
             padding: 10px;
@@ -267,26 +137,53 @@ footer footer {
         }
 
         footer p {
-            font-size: 10px; /* Alterado para 40px conforme pedido */
+            font-size: 10px;
+        }
+
+        /* Estilo para o histórico dentro do contêiner */
+        #history-container {
+            width: 100%;
+            display: none;
+            padding: 20px;
+            border-top: 2px solid #ccc;
+            margin-top: 20px;
+        }
+
+        #records-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .record {
+            background-color: #f2f2f2;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .record p {
+            margin: 5px 0;
+        }
+
+        .record hr {
+            margin: 15px 0;
+            border: 0;
+            border-top: 1px solid #ccc;
         }
     </style>
 
     <script>
-        /* Variáveis Globais */
         let currentLatitude = "-";
         let currentLongitude = "-";
         let userName = "Usuário Logado";
 
-        /* Funções JavaScript */
-
-        // Função para rastrear a localização do usuário
         function trackLocation() {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(
                     (position) => {
                         currentLatitude = position.coords.latitude;
                         currentLongitude = position.coords.longitude;
-
                         const timestamp = new Date().toLocaleString();
 
                         document.getElementById("coordinates").innerText =
@@ -309,7 +206,6 @@ footer footer {
             }
         }
 
-        // Função para obter o endereço a partir das coordenadas
         function getAddressFromCoordinates(latitude, longitude) {
             const apiUrl = `https://us1.locationiq.com/v1/reverse?key=pk.73c7ec951f7e0c38e842f740a1a63917&lat=${latitude}&lon=${longitude}&format=json`;
 
@@ -335,7 +231,6 @@ footer footer {
                 });
         }
 
-        // Função para salvar o registro
         function saveRecord() {
             const coordinates = document.getElementById("coordinates").innerText;
             const address = document.getElementById("address").innerText;
@@ -362,7 +257,6 @@ footer footer {
             }, 2000);
         }
 
-        // Função para compartilhar a localização via WhatsApp
         function shareLocation() {
             const coordinates = document.getElementById("coordinates").innerText;
             const address = document.getElementById("address").innerText;
@@ -376,7 +270,6 @@ footer footer {
             window.open(whatsappUrl, '_blank');
         }
 
-        // Função para gerar o PDF
         async function generatePDF() {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
@@ -403,107 +296,124 @@ footer footer {
             doc.save("Marcador de Presença.pdf");
         }
 
-        // Função para atualizar o mapa no iframe
         function updateMap(lat, lon) {
             const map = document.getElementById("map");
             map.src = `https://maps.google.com/maps?q=${lat},${lon}&z=15&output=embed`;
         }
 
-        // Função para tocar um som
         function playSound(soundFile) {
             const audio = new Audio(soundFile);
             audio.play();
         }
 
-        // Chamada da função trackLocation ao carregar a página
         window.onload = function () {
             trackLocation();
         };
+
+        function toggleHistory() {
+            const historyContainer = document.getElementById("history-container");
+            const records = JSON.parse(localStorage.getItem("presenceRecords")) || [];
+
+            if (historyContainer.style.display === "none") {
+                historyContainer.style.display = "block";
+                const recordsList = document.getElementById("records-list");
+                recordsList.innerHTML = ""; // Limpar a lista antes de adicionar novamente
+
+                // Adicionar os registros
+                records.forEach((record, index) => {
+                    const recordDiv = document.createElement("div");
+                    recordDiv.classList.add("record");
+
+                    recordDiv.innerHTML = `
+                        <p><strong>Usuário:</strong> ${record.userName}</p>
+                        <p><strong>Coordenadas:</strong> ${record.coordinates}</p>
+                        <p><strong>Endereço:</strong> ${record.address}</p>
+                        <p><strong>Descrição:</strong> ${record.description}</p>
+                        <p><strong>Data/Hora:</strong> ${record.timestamp}</p>
+                        <div class="history-buttons">
+                            <button onclick="shareLocationHistory(${index})">Compartilhar no WhatsApp</button>
+                            <button onclick="generatePDFHistory(${index})">Gerar PDF</button>
+                            <button onclick="deleteRecord(${index})">Apagar Registro</button>
+                        </div>
+                        <hr>
+                    `;
+                    recordsList.appendChild(recordDiv);
+                });
+            } else {
+                historyContainer.style.display = "none";
+            }
+        }
+
+        function shareLocationHistory(index) {
+            const records = JSON.parse(localStorage.getItem("presenceRecords")) || [];
+            const record = records[index];
+
+            const message = `*Marcador de Presença*\n\nEu estive aqui:\n\nUsuário: ${record.userName}\n${record.coordinates}\n${record.address}\nDescrição: ${record.description}\nData/hora local: ${record.timestamp}\n\nhttps://maps.google.com/?q=${record.coordinates.split(": ")[1].split(",")[0]},${record.coordinates.split(": ")[2]}`;
+
+            const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
+            window.open(whatsappUrl, '_blank');
+        }
+
+        async function generatePDFHistory(index) {
+            const records = JSON.parse(localStorage.getItem("presenceRecords")) || [];
+            const record = records[index];
+
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            const title = "Marcador de Presença";
+            const message = `Eu estive aqui:\n\nUsuário: ${record.userName}\n${record.coordinates}\n${record.address}\nDescrição: ${record.description}\nData/hora local: ${record.timestamp}\n\nhttps://maps.google.com/?q=${record.coordinates.split(": ")[1].split(",")[0]},${record.coordinates.split(": ")[2]}`;
+
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(16);
+            doc.text(title, 10, 20);
+
+            doc.setFont("helvetica", "normal");
+            doc.setFontSize(12);
+            const textStartY = 30;
+            const textWidth = 180;
+            doc.text(message, 10, textStartY, { maxWidth: textWidth });
+
+            doc.save(`${record.userName}_Marcador_de_Presença.pdf`);
+        }
+
+        function deleteRecord(index) {
+            const records = JSON.parse(localStorage.getItem("presenceRecords")) || [];
+            records.splice(index, 1);
+            localStorage.setItem("presenceRecords", JSON.stringify(records));
+            toggleHistory();
+        }
     </script>
 </head>
-
 <body>
-    <!-- Cabeçalho -->
     <header>
         <h1>Marcador de Presença</h1>
     </header>
 
-    <!-- Container Principal -->
     <div class="container">
-        <!-- Nome da Rua -->
-        <h2 id="road-name">Rua: Local desconhecido</h2>
+        <h2>Registro de Presença</h2>
 
-        <!-- Mapa -->
-        <iframe id="map" width="100%" height="300" style="border:0;" allowfullscreen></iframe>
+        <div id="map"></div>
 
-        <!-- Campo para o Nome do Usuário -->
-        <input type="text" id="user-name" placeholder="Digite seu nome">
+        <textarea id="description" placeholder="Descrição (Opcional)"></textarea>
+        <input id="user-name" type="text" placeholder="Nome do usuário (Opcional)">
 
-        <!-- Área de Descrição -->
-        <textarea id="description" placeholder="Adicione uma descrição (opcional)"></textarea>
+        <p id="coordinates">Latitude e Longitude: -</p>
+        <p id="address">Endereço: -</p>
+        <p id="road-name">Local: -</p>
+        <p id="timestamp">Data/Hora: -</p>
 
-        <!-- Botões -->
-        <button class="button" onclick="saveRecord()">Salvar Registro</button>
-
-        <!-- Coordenadas -->
-        <div class="field">
-            <h2>Coordenadas</h2>
-            <p id="coordinates">Latitude: -, Longitude: -</p>
-        </div>
-
-        <!-- Data e Hora -->
-        <div class="field">
-            <h2>Data e Hora</h2>
-            <p id="timestamp">Local</p>
-        </div>
-
-        <!-- Endereço -->
-        <div class="field">
-            <h2>Endereço</h2>
-            <p id="address">Local</p>
-        </div>
-
-        <!-- Compartilhar via WhatsApp -->
-        <button class="button" onclick="shareLocation()">Compartilhar pelo WhatsApp</button>
-
-        <!-- Gerar PDF -->
-        <button class="button" onclick="generatePDF()">Gerar PDF</button>
-
-        <!-- Histórico de Presença -->
-        <button class="button" onclick="window.location.href='historico.html'">Ver Histórico de Presença</button>
+        <button onclick="saveRecord()">Salvar Registro</button>
+        <button onclick="toggleHistory()">Mostrar Histórico</button>
     </div>
 
-    <!-- Rodapé -->
+    <div id="history-container">
+        <h2>Histórico de Presença</h2>
+        <div id="records-list"></div>
+    </div>
+
     <footer>
-        <p>© 2024 Marcador de Presença. Todos os direitos reservados.</p>
+        <p>&copy; 2025 Marcador de Presença. Todos os direitos reservados.</p>
     </footer>
-
-
-
-
-        </div>
-
-        <!-- Botão de Voltar (Posicionado à direita) -->
-        <button id="backButton" onclick="backToWelcome()">Voltar</button>
-    </div>
-
-    
-
-    <script>
-        // Função para acessar a tela vazia
-        function accessMain() {
-            document.getElementById("welcomeScreen").style.display = "none";  // Oculta a tela de boas-vindas
-            document.getElementById("mainScreen").style.display = "block";     // Mostra a tela vazia
-        }
-
-        // Função para voltar à tela de boas-vindas
-        function backToWelcome() {
-            document.getElementById("mainScreen").style.display = "none";      // Oculta a tela vazia
-            document.getElementById("welcomeScreen").style.display = "block";  // Mostra a tela de boas-vindas
-        }
-    </script>
-
 </body>
 </html>
-
-   
