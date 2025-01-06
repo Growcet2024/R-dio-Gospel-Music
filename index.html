@@ -38,6 +38,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            box-sizing: border-box;
         }
 
         .container h2 {
@@ -147,12 +148,14 @@
             padding: 20px;
             border-top: 2px solid #ccc;
             margin-top: 20px;
+            box-sizing: border-box;
         }
 
         #records-list {
             display: flex;
             flex-direction: column;
             gap: 20px;
+            width: 100%;
         }
 
         .record {
@@ -160,6 +163,8 @@
             padding: 15px;
             border-radius: 10px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            box-sizing: border-box;
         }
 
         .record p {
@@ -394,26 +399,24 @@
         <h2>Registro de Presença</h2>
 
         <div id="map"></div>
+        <textarea id="description" placeholder="Descreva sua presença aqui..."></textarea>
+        <input type="text" id="user-name" placeholder="Nome do usuário" />
 
-        <textarea id="description" placeholder="Descrição (Opcional)"></textarea>
-        <input id="user-name" type="text" placeholder="Nome do usuário (Opcional)">
-
-        <p id="coordinates">Latitude e Longitude: -</p>
-        <p id="address">Endereço: -</p>
-        <p id="road-name">Local: -</p>
-        <p id="timestamp">Data/Hora: -</p>
-
+        <button onclick="trackLocation()">Rastrear Localização</button>
         <button onclick="saveRecord()">Salvar Registro</button>
-        <button onclick="toggleHistory()">Mostrar Histórico</button>
-    </div>
+        <button onclick="shareLocation()">Compartilhar no WhatsApp</button>
+        <button onclick="generatePDF()">Gerar PDF</button>
 
-    <div id="history-container">
-        <h2>Histórico de Presença</h2>
-        <div id="records-list"></div>
+        <div class="history-content">
+            <button onclick="toggleHistory()">Ver Histórico</button>
+            <div id="history-container">
+                <div id="records-list"></div>
+            </div>
+        </div>
     </div>
 
     <footer>
-        <p>&copy; 2025 Marcador de Presença. Todos os direitos reservados.</p>
+        <p>Projeto de marcador de presença</p>
     </footer>
 </body>
 </html>
