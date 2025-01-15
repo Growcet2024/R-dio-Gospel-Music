@@ -20,9 +20,9 @@
         /* Estilos do Container da Tela de Apresentação */
 .welcome-container {
     text-align: center;
-    padding: 20px; /* Espaço interno aumentado */
-    width: 90%; /* O contêiner ocupará até 90% da largura da tela */
-    max-width: 600px; /* Limite máximo de largura */
+    padding: 20px; /* Espaço interno */
+    width: calc(90% - 10px); /* 90% da tela menos 10px para incluir as margens */
+    max-width: calc(600px - 10px); /* Limita a largura máxima menos 10px para as margens */
     margin: 5px; /* Margem de 5px em todos os lados */
     background-color: #fff;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra leve */
@@ -35,6 +35,7 @@
     flex-direction: column;
     justify-content: center;
 }
+
 
 
 
