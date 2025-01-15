@@ -10,45 +10,43 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f9;
-            color: #333;
+            background-color: #007BFF; 
+            color: #000000; 
             position: relative;
             min-height: 100vh;
         }
 
-        /* Estilos do Container da Tela de Apresentação */
-.welcome-container {
-    text-align: center;
-    padding: 10px;  /* Ajuste no padding conforme solicitado */
-    max-width: 1000px;  /* Limite máximo de largura */
-    margin: auto;  /* Centraliza o container */
-    background-color: #fff;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);  /* Sombra leve */
-    border-radius: 15px;  /* Cantos arredondados */
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);  /* Centraliza na tela */
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
+        /* === Tela de Boas-Vindas === */
+        .welcome-container {
+            text-align: center;
+            padding: 30px;
+            background-color: #0d8bf2;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
 
         .welcome-container h1 {
             font-size: 32px;
-            color: #333;
+            color: #888;
         }
 
         .welcome-container p {
             font-size: 16px;
-            color: #555;
+            color: #000000;
         }
 
         .welcome-container button {
             padding: 10px 20px;
             font-size: 16px;
             color: white;
-            background-color: #2196F3;
+            background-color: #28a745;
             border: none;
             border-radius: 25px;
             cursor: pointer;
@@ -56,95 +54,94 @@
         }
 
         .welcome-container button:hover {
-            background-color: #0d8bf2;
+            background-color: #f3f310;
             transform: scale(1.05);
         }
 
-        
-/* === Tela Vazia === */
-.main-container {
-    display: none; /* Tela vazia começa oculta */
-    padding: 20px;
-    background-color: transparent; /* Alterado para transparente */
-    margin: 0;
-    min-height: 100vh;
-}
+        /* === Tela Vazia === */
+        .main-container {
+            display: none; /* Tela vazia começa oculta */
+            padding: 20px;
+            background-color: white;
+            margin: 0;
+            min-height: 100vh;
+        }
 
+        /* Botão de Voltar no Rodapé (Posicionado à direita) */
+        #backButton {
+            position: fixed;
+            bottom: 70px; /* Ajustado para ficar acima do rodapé */
+            right: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: white;
+            background-color: #e53935;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
 
-/* Botão de Voltar */
-#backButton {
-    position: relative; /* Agora o botão será posicionado no fluxo normal da página */
-    margin-top: 0px; /* Distância do conteúdo superior */
-    right: 0px; /* Distância da lateral direita */
-    
-    /* Ajustando o tamanho do botão com padding */
-    padding: 10px 20px; /* 20px no topo e no fundo, 30px à esquerda e à direita */
+        #backButton:hover {
+            background-color: #d32f2f;
+        }
 
-    font-size: 16px; /* Tamanho da fonte */
-    color: white; /* Cor do texto */
-    background-color: #e53935; /* Cor do fundo */
-    border: none; /* Retira borda */
-    border-radius: 20px; /* Bordas arredondadas */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    transition: background-color 0.3s, transform 0.2s;
-}
+        /* Rodapé fixo */
+        footer {
+            text-align: center;
+            padding: 10px;
+            background-color: #f4f4f9; /* Cor cinza igual ao fundo */
+            color: #000;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
 
-/* Efeito de hover para o botão */
-#backButton:hover {
-    background-color: #d32f2f; /* Cor de fundo ao passar o mouse */
-    transform: scale(1.1); /* Leve aumento de tamanho ao passar o mouse */
-}
-
-      
-
-
-
-        /* Rodapé */
-footer footer {
-    text-align: center;
-    padding: 5px 0;  /* Diminuir o espaço interno (5px para cima e para baixo, 0px para os lados) */
-    background-color: #f4f4f9; /* Cor cinza igual ao fundo */
-    color: #000;
-    width: 100%;  /* Largura continua 100% */
-    max-width: 600px;  /* Limite máximo de largura */
-    margin: auto;  /* Centraliza o rodapé */
-    position: fixed;
-    bottom: 0;
-}
-
+        footer p {
+            font-size: 10px;
+            display: none; /* Removido a inscrição */
+        }
 
         /* Área simples para conteúdo */
-#simpleContent {
-    padding: 0;  /* Remove o espaçamento interno */
-    margin: 0;   /* Remove o espaçamento externo */
-    background-color: #f4f4f9;
-}
-
-
+        #simpleContent {
+            padding: 20px;
+            margin-top: 20px;
+            background-color: #f4f4f9;
+        }
     </style>
 </head>
 <body>
 
     <!-- === Tela de Boas-Vindas === -->
     <div class="welcome-container" id="welcomeScreen">
-        <h1>Bem-vindo!</h1>
-        <p>Clique no botão abaixo para acessar a tela vazia e adicionar seu conteúdo.</p>
+        <h2>Marcador de presença</h2>
+
+<!-- Tela de Apresentação -->
+<div id="screen-welcome" class="screen active">
+    <div class="container">
+     
+      <h2 style="font-size: 18px; text-align: left; line-height: 1.1; font-weight: normal;"><span>✔</span>Por Coordenadas Geográficas</h2>
+      <p style="font-size: 16px; text-align: left; line-height: 1.0;"><span>✔</span> Você já precisou comprovar que esteve ou está em um determinado lugar?</p>
+      <p style="font-size: 16px; text-align: left; line-height: 1.0;"><span>✔</span> Comprove sua entrada e saída em locais de trabalho, eventos ou reuniões.</p>
+      <p style="font-size: 16px; text-align: left; line-height: 1.0;"><span>✔</span> Registre sua presença em um local específico com data e hora.</p>
+      <p style="font-size: 16px; text-align: left; line-height: 1.0;"><span>✔</span> Compartilhe os detalhes do local via WhatsApp ou em PDF.</p>
+      
+    </div>
+  </div>
+
         <button id="accessButton" onclick="accessMain()">Acessar</button>
     </div>
 
-
-    <!-- === Tela Vazia === Colar apaixo novo app-->
-
+    <!-- === Tela Vazia === -->
     <div class="main-container" id="mainScreen">
         <!-- Aqui vai o conteúdo simples do seu projeto -->
         <div id="simpleContent">
 
- <!-- === Início marcador de presença = novo app-->
 
-           <!DOCTYPE html>
+
+<!-- Aqui início do código do seu projeto -->
+
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <!-- Cabeçalho da Página -->
@@ -824,8 +821,7 @@ function shareLocationHistory(index) {
         
 </body>
 </html>
-
-<!-- === Fim marcador de presença = novo app-->
+<!-- Aqui fim do código do seu projeto -->
 
 
         </div>
@@ -834,7 +830,10 @@ function shareLocationHistory(index) {
         <button id="backButton" onclick="backToWelcome()">Voltar</button>
     </div>
 
-    
+    <!-- Rodapé -->
+    <footer>
+        <p>&copy; 2025 Template Básico</p> <!-- Removido a inscrição conforme solicitado -->
+    </footer>
 
     <script>
         // Função para acessar a tela vazia
