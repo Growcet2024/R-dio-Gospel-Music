@@ -21,20 +21,20 @@
 
 .welcome-container {
     text-align: center;
-    padding: 20px; /* Espaço interno */
-    width: 90%; /* Largura ajustada para 90% da tela */
-    max-width: 600px; /* Limite máximo de largura */
-    margin-top: 0;
-    margin-bottom: 0;
-    padding-left: 20px; /* Margem esquerda de 10px */
-    padding-right: 20px; /* Margem direita de 10px */
+    padding: 20px; /* Espaço interno aumentado */
+    width: calc(90% - 20px); /* Largura ajustada para considerar as margens laterais */
+    max-width: calc(600px - 20px); /* Limite máximo de largura, considerando as margens laterais */
+    margin-top: 0; /* Sem margem no topo */
+    margin-bottom: 0; /* Sem margem na parte inferior */
+    margin-left: 10px; /* Margem esquerda de 10px */
+    margin-right: 10px; /* Margem direita de 10px */
     background-color: #fff;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra leve */
     border-radius: 15px; /* Cantos arredondados */
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%); /* Centraliza o contêiner */
+    transform: translate(-50%, -50%); /* Centraliza na tela */
     display: flex;
     flex-direction: column;
     justify-content: center;
