@@ -99,7 +99,7 @@
 /* Estilos para o link Voltar com estilo de botão */
 #backButton {
     font-size: 14px; /* Tamanho da fonte */
-    color: #e53935; /* Cor do texto */
+    color: #7fbff0; /* Cor do texto */
     background: none; /* Sem fundo */
     border: none; /* Sem borda */
     text-transform: capitalize; /* Primeira letra de cada palavra maiúscula */
@@ -113,43 +113,9 @@
 /* Efeito de hover no link Voltar */
 #backButton:hover {
     color: #81bd32; /* Cor do texto ao passar o mouse */
-    border-color: #1c0b51; /* Cor da tarja também ao passar o mouse */
+    border-color: #f1f10e; /* Cor da tarja também ao passar o mouse */
     transform: scale(1.1); /* Aumento de tamanho ao passar o mouse */
 }
-
-
-
-/* Botão de fechar */
-
-/* Estilos para o botão Fechar (igual ao estilo do botão Voltar) */
-#closeButton {
-    font-size: 14px; /* Tamanho da fonte */
-    color: #e53935; /* Cor do texto */
-    background: none; /* Sem fundo */
-    border: none; /* Sem borda */
-    text-transform: capitalize; /* Primeira letra de cada palavra maiúscula */
-    cursor: pointer; /* Cursor de ponteiro */
-    padding: 1px 0; /* Menos espaçamento em cima e embaixo (aproxima a tarja) */
-    text-decoration: none; /* Remove o sublinhado */
-}
-
-/* Efeito de hover no link Fechar */
-#closeButton:hover {
-    color: #81bd32; /* Cor do texto ao passar o mouse */
-    border-color: #1c0b51; /* Cor da tarja também ao passar o mouse */
-    transform: scale(1.1); /* Aumento de tamanho ao passar o mouse */
-}
-
-
-
-
-/* Efeito de hover no botão Fechar */
-#closeButton:hover {
-    color: #81bd32; /* Cor do texto ao passar o mouse */
-    border-color: #1c0b51; /* Cor da tarja também ao passar o mouse */
-    transform: scale(1.1); /* Aumento de tamanho ao passar o mouse */
-}
-
 
 
     
@@ -183,8 +149,8 @@ footer footer {
     <div class="welcome-container" id="welcomeScreen">
 
         
-        <h2 style="font-size: 32px; margin-bottom: 5px;">Marcador de presença</h2>
-        <h2 style="font-size: 24px; text-align: center; line-height: 1.1; font-weight: normal; margin-top: 0; margin-bottom: 5px;">Por Coordenadas Geográficas</h2>
+        <h2 style="font-size: 25px; margin-bottom: 5px;">Marcador de presença</h2>
+        <h2 style="font-size: 20px; text-align: center; line-height: 1.1; font-weight: normal; margin-top: 0; margin-bottom: 5px;">Por Coordenadas Geográficas</h2>
         
       <p style="font-size: 16px; text-align: left; line-height: 1.0;"><span>✔</span> Você já precisou comprovar que esteve ou está em um determinado lugar?</p>
       <p style="font-size: 16px; text-align: left; line-height: 1.0;"><span>✔</span> Comprove sua entrada e saída em locais de trabalho, eventos ou reuniões.</p>
@@ -204,6 +170,8 @@ footer footer {
 
 
  <!-- === Início marcador de presença = novo app-->
+
+
 
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -893,15 +861,7 @@ function shareLocationHistory(index) {
         <!-- Botão de Voltar (Posicionado à direita) -->
         <button id="backButton" onclick="backToWelcome()">Voltar</button>
 
-    
-      <!-- Botão Fechar App -->
-<button id="closeButton" onclick="closeApp()">Fechar</button>
-
-
-
     </div>
-
-    
 
     <script>
 
