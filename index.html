@@ -120,13 +120,15 @@
 /* Estilos para o link Voltar com estilo de botão */
 #backButton {
     font-size: 14px; /* Tamanho da fonte */
-    color: #7fbff0; /* Cor do texto */
+    color: #e53935; /* Cor do texto */
     background: none; /* Sem fundo */
     border: none; /* Sem borda */
+    border-bottom: 1px solid #e53935; /* Tarja mais fina e próxima do texto */
     text-transform: capitalize; /* Primeira letra de cada palavra maiúscula */
     cursor: pointer; /* Cursor de ponteiro */
     padding: 1px 0; /* Menos espaçamento em cima e embaixo (aproxima a tarja) */
     text-decoration: none; /* Remove o sublinhado */
+    margin-top: 5px; /* Adicionando espaçamento na parte superior do botão */
 }
 
 
@@ -838,7 +840,6 @@ function shareLocationHistory(index) {
     </div>
 </div>
 
-
 <!-- Estilos CSS -->
 <style>
     /* Estilos para os campos de nome de usuário e botões dentro do container */
@@ -914,15 +915,6 @@ function shareLocationHistory(index) {
             document.getElementById("mainScreen").style.display = "none";      // Oculta a tela vazia
             document.getElementById("welcomeScreen").style.display = "block";  // Mostra a tela de boas-vindas
         }
-
-
-
-     // Função para fechar o app
-     function closeApp() {
-    // Isso pode ser ajustado conforme a necessidade (ex.: ocultar uma tela ou redirecionar)
-    window.close(); // Fecha a janela atual
-}
-
 
     </script>
 
