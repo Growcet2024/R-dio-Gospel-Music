@@ -85,20 +85,21 @@
     border-bottom: 2px solid #d32f2f; /* Tarja também muda de cor */
 }
 
-/* Estilo do botão Acessar */
-.welcome-container button {
-    padding: 10px 20px; /* Ajuste o padding para diminuir o tamanho do botão */
-    font-size: 16px; /* Tamanho da fonte */
-    color: white; /* Cor do texto */
-    background-color: #2196F3; /* Cor de fundo */
-    border: none; /* Remove a borda */
-    border-radius: 25px; /* Bordas arredondadas */
+/* Estilos para o link Voltar com estilo de botão */
+#backButton {
+    font-size: 14px; /* Tamanho da fonte */
+    color: #e53935; /* Cor do texto */
+    background: none; /* Sem fundo */
+    border: none; /* Sem borda */
+    border-bottom: 1px solid #e53935; /* Tarja mais fina e próxima do texto */
+    text-transform: capitalize; /* Primeira letra de cada palavra maiúscula */
     cursor: pointer; /* Cursor de ponteiro */
-    transition: background-color 0.3s, transform 0.2s;
-    width: auto; /* Garante que o botão não ocupe toda a largura da tela */
-    max-width: 250px; /* Limita a largura máxima do botão */
-    margin: 20px auto; /* Centraliza o botão com uma margem de 20px em cima e embaixo */
+    padding: 1px 0; /* Menos espaçamento em cima e embaixo (aproxima a tarja) */
+    text-decoration: none; /* Remove o sublinhado */
+    margin-top: 10px; /* Adicionando espaçamento na parte superior do botão */
+
 }
+        
 
 /* Efeito de hover para o botão Acessar */
 .welcome-container button:hover {
