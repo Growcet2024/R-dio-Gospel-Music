@@ -154,12 +154,29 @@ footer footer {
 }
 
 
-        /* Área simples para conteúdo */
+       
+/* Área simples para conteúdo */
 #simpleContent {
-    padding: 0;  /* Remove o espaçamento interno */
-    margin: 0;   /* Remove o espaçamento externo */
-    background-color: #f4f4f9;
+    padding: 0;   /* Remove o espaçamento interno */
+    margin: 0;    /* Remove o espaçamento externo */
+    background-color: #13b1eb;  /* Cor de fundo */
+    width: 100%;  /* Garante que o conteúdo ocupe toda a largura da tela */
+    box-sizing: border-box;  /* Inclui bordas e padding na largura e altura do elemento */
 }
+html, body {
+    margin: 0;   /* Remove a margem */
+    padding: 0;  /* Remove o preenchimento */
+    width: 100%;  /* Garante que o body ocupe toda a largura da tela */
+    height: 100%; /* Garante que o body ocupe toda a altura da tela */
+}
+.main-container {
+    display: none;  /* Tela vazia começa oculta */
+    padding: 0;     /* Remover o padding */
+    margin: 0;      /* Remover a margem */
+    background-color: transparent; /* Fundo transparente */
+    width: 100%;    /* Garantir que o container ocupe toda a largura da tela */
+}
+
 
 
     </style>
