@@ -19,19 +19,12 @@
 
 
 
-    // Função para atualizar o mapa no iframe
-    function updateMap(lat, lon) {
-    const map = document.getElementById("map");
-    // Atualizando o src do iframe com a URL correta do Google Maps
-    map.src = `https://maps.google.com/maps?q=${lat},${lon}&z=15&output=embed`;
-}
-
 function trackLocation() {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
             (position) => {
-                currentLatitude = position.coords.latitude;
-                currentLongitude = position.coords.longitude;
+                const currentLatitude = position.coords.latitude;
+                const currentLongitude = position.coords.longitude;
 
                 const timestamp = new Date().toLocaleString();
 
@@ -55,6 +48,12 @@ function trackLocation() {
         alert("Geolocalização não é suportada neste navegador.");
     }
 }
+
+// Chama a função ao carregar a página
+window.onload = function () {
+    trackLocation();
+};
+
 
 
 // Bloco do iframe google mapas= fim
@@ -176,8 +175,8 @@ function trackLocation() {
         <h2>Usuário: Usuário Logado</h2>
 
         
-        <iframe id="map" width="100%" height="300" style="border:0;" allowfullscreen loading="lazy"
-    src="https://www.google.com/maps/embed/v1/view?zoom=15&center=latitude,longitude&key=YOUR_API_KEY"></iframe>
+      <iframe id="map" width="100%" height="300" style="border:0;" allowfullscreen loading="lazy" src=""></iframe>
+>
 
         <textarea id="description" placeholder="Adicione uma descrição (opcional)"></textarea>
         <button class="button" onclick="saveRecord()">Salvar Registro</button>
