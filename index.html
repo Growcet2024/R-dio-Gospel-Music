@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Marcador de Presença</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 </head>
 <body>
     <header>
@@ -11,8 +13,8 @@
     </header>
 
     <div class="container">
-        <!-- Local do iframe do Google Maps -->
-        <iframe id="map" width="100%" height="300" style="border:0;" allowfullscreen loading="lazy" src=""></iframe>
+        <!-- Local do mapa OpenStreetMap -->
+        <div id="map" style="width: 100%; height: 300px;"></div>
 
         <textarea id="description" placeholder="Adicione uma descrição (opcional)"></textarea>
         <button class="button" onclick="saveRecord()">Salvar Registro</button>
@@ -53,9 +55,18 @@
 
                         getAddressFromCoordinates(currentLatitude, currentLongitude);
 
-                        // Atualizando o iframe com o Google Maps sem chave
-                        const map = document.getElementById("map");
-                        map.src = `https://www.google.com/maps?q=${currentLatitude},${currentLongitude}&z=15&output=embed`;
+                        // Inicializando o mapa com OpenStreetMap
+                        const map = L.map('map').setView([currentLatitude, currentLongitude], 15);
+
+                        // Camada de OpenStreetMap
+                        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                        }).addTo(map);
+
+                        // Adicionando marcador
+                        L.marker([currentLatitude, currentLongitude]).addTo(map)
+                            .bindPopup('Você está aqui!')
+                            .openPopup();
                     },
                     (error) => {
                         console.error("Erro ao obter localização:", error);
@@ -97,3 +108,4 @@
     </script>
 </body>
 </html>
+
