@@ -4,158 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Marcador de Presença</title>
-    <link rel="stylesheet" href="styles.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-    <script>
-        let currentLatitude = "-";
-        let currentLongitude = "-";
-        let userName = "Usuário Logado";
-
-        // Função que não foi alterada (permanece a mesma)
-        function trackLocation() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(
-                    (position) => {
-                        currentLatitude = position.coords.latitude;
-                        currentLongitude = position.coords.longitude;
-
-                        const timestamp = new Date().toLocaleString();
-
-                        document.getElementById("coordinates").innerText =
-                            `Latitude: ${currentLatitude}\nLongitude: ${currentLongitude}`;
-                        document.getElementById("timestamp").innerText = timestamp;
-
-                        getAddressFromCoordinates(currentLatitude, currentLongitude);
-                        
-                        // Alteração aqui: agora chama a função updateMap que usa Leaflet
-                        updateMap(currentLatitude, currentLongitude); // Alteração: Atualizado para usar Leaflet
-
-                        playSound("location-sound.mp3");
-                    },
-                    (error) => {
-                        console.error("Erro ao obter localização:", error);
-                        document.getElementById("coordinates").innerText =
-                            "Erro ao obter localização.";
-                        playSound("error-sound.mp3");
-                    }
-                );
-            } else {
-                alert("Geolocalização não é suportada neste navegador.");
-            }
-        }
-
-        // Função que não foi alterada (permanece a mesma)
-        function getAddressFromCoordinates(latitude, longitude) {
-            const apiUrl = `https://us1.locationiq.com/v1/reverse?key=pk.73c7ec951f7e0c38e842f740a1a63917&lat=${latitude}&lon=${longitude}&format=json`;
-
-            fetch(apiUrl)
-                .then(response => response.json())
-                .then(data => {
-                    const address = `Rua: ${data.address.road || "N/A"},
-                                     Bairro: ${data.address.residential || "N/A"},
-                                     Região: ${data.address.suburb || "N/A"},
-                                     Cidade: ${data.address.city || "N/A"},
-                                     Estado: ${data.address.state || "N/A"},
-                                     País: ${data.address.country || "N/A"}`;
-
-                    document.getElementById("address").innerText = address;
-                })
-                .catch(error => {
-                    console.error("Erro ao obter endereço:", error);
-                    document.getElementById("address").innerText =
-                        "Erro ao obter endereço.";
-                });
-        }
-
-        // Alteração feita: A função updateMap foi modificada para usar Leaflet com OpenStreetMap
-        function updateMap(lat, lon) {
-            // Inicializando o mapa com OpenStreetMap usando Leaflet
-            const map = L.map('map').setView([lat, lon], 15); // Alteração: agora usa o Leaflet
-
-            // Camada de OpenStreetMap
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            }).addTo(map);
-
-            // Adicionando marcador no mapa
-            L.marker([lat, lon]).addTo(map)
-                .bindPopup('Você está aqui!')
-                .openPopup();
-        }
-
-        function saveRecord() {
-            const coordinates = document.getElementById("coordinates").innerText;
-            const address = document.getElementById("address").innerText;
-            const timestamp = document.getElementById("timestamp").innerText;
-            const description = document.getElementById("description").value || "Nenhuma descrição fornecida.";
-
-            const record = {
-                userName,
-                coordinates,
-                address,
-                description,
-                timestamp,
-            };
-
-            const records = JSON.parse(localStorage.getItem("presenceRecords")) || [];
-            records.push(record);
-            localStorage.setItem("presenceRecords", JSON.stringify(records));
-            
-            const saveButton = document.querySelector("button[onclick='saveRecord()']");
-            saveButton.innerText = "Registro salvo com sucesso!";
-            setTimeout(() => {
-                saveButton.innerText = "Salvar Registro";
-            }, 2000);
-        }
-
-        function shareLocation() {
-            const coordinates = document.getElementById("coordinates").innerText;
-            const address = document.getElementById("address").innerText;
-            const timestamp = document.getElementById("timestamp").innerText;
-            const description = document.getElementById("description").value || "Nenhuma descrição fornecida.";
-
-            const message = `*Marcador de Presença*\n\nEu estive aqui:\n\nUsuário: ${userName}\n${coordinates}\n${address}\nDescrição: ${description}\nData/hora local: ${timestamp}\n\nhttps://maps.google.com/?q=${currentLatitude},${currentLongitude}`;
-
-            const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
-            window.open(whatsappUrl, '_blank');
-        }
-
-        async function generatePDF() {
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-
-            const coordinates = document.getElementById("coordinates").innerText;
-            const address = document.getElementById("address").innerText;
-            const timestamp = document.getElementById("timestamp").innerText;
-            const description = document.getElementById("description").value || "Nenhuma descrição fornecida.";
-
-            const title = "Marcador de Presença";
-            const message = `Eu estive aqui:\n\nUsuário: ${userName}\n${coordinates}\n${address}\nDescrição: ${description}\nData/hora local: ${timestamp}\n\nhttps://maps.google.com/?q=${currentLatitude},${currentLongitude}`;
-
-            doc.setFont("helvetica", "bold");
-            doc.setFontSize(16);
-            doc.text(title, 10, 20);
-
-            doc.setFont("helvetica", "normal");
-            doc.setFontSize(12);
-            const textStartY = 30;
-            const textWidth = 180;
-            doc.text(message, 10, textStartY, { maxWidth: textWidth });
-
-            doc.save("Marcador de Presença.pdf");
-        }
-
-        function playSound(soundFile) {
-            const audio = new Audio(soundFile);
-            audio.play();
-        }
-
-        window.onload = function () {
-            trackLocation();
-        };
-    </script>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 </head>
 <body>
     <header>
@@ -163,10 +13,8 @@
     </header>
 
     <div class="container">
-        <h2>Usuário: Usuário Logado</h2>
-
-        <!-- Alteração: Substituímos o iFrame pelo div que será usado para renderizar o mapa com Leaflet -->
-        <div id="map" style="width: 100%; height: 300px;"></div> <!-- Alteração: Agora usa Leaflet com OpenStreetMap -->
+        <!-- Local do mapa OpenStreetMap -->
+        <div id="map" style="width: 100%; height: 300px;"></div>
 
         <textarea id="description" placeholder="Adicione uma descrição (opcional)"></textarea>
         <button class="button" onclick="saveRecord()">Salvar Registro</button>
@@ -186,16 +34,99 @@
             <p id="address">Local</p>
         </div>
 
-        <button class="button" onclick="shareLocation()">Compartilhar pelo WhatsApp</button>
-        <button class="button" onclick="generatePDF()">Gerar PDF</button>
-        <button class="button" onclick="window.location.href='historico.html'">Ver Histórico de Presença</button>
-
-        <!-- O botão "Ver no Google Maps" foi removido conforme solicitado -->
+        <!-- Botão para abrir no Google Maps -->
+        <button class="button" id="googleMapsBtn" style="display:none;" onclick="openGoogleMaps()">Ver no Google Maps</button>
     </div>
 
     <footer>
         <p>© 2024 Marcador de Presença. Todos os direitos reservados.</p>
     </footer>
+
+    <script>
+        let currentLatitude = null;
+        let currentLongitude = null;
+
+        function trackLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        currentLatitude = position.coords.latitude;
+                        currentLongitude = position.coords.longitude;
+
+                        const timestamp = new Date().toLocaleString();
+                        document.getElementById("coordinates").innerText = 
+                            `Latitude: ${currentLatitude}\nLongitude: ${currentLongitude}`;
+                        document.getElementById("timestamp").innerText = timestamp;
+
+                        getAddressFromCoordinates(currentLatitude, currentLongitude);
+                        updateMap(currentLatitude, currentLongitude);
+                    },
+                    (error) => {
+                        console.error("Erro ao obter localização:", error);
+                        document.getElementById("coordinates").innerText = "Erro ao obter localização.";
+                    }
+                );
+            } else {
+                alert("Geolocalização não é suportada neste navegador.");
+            }
+        }
+
+        function getAddressFromCoordinates(latitude, longitude) {
+            const apiUrl = `https://us1.locationiq.com/v1/reverse?key=pk.73c7ec951f7e0c38e842f740a1a63917&lat=${latitude}&lon=${longitude}&format=json`;
+
+            fetch(apiUrl)
+                .then(response => response.json())
+                .then(data => {
+                    const address = `Rua: ${data.address.road || "N/A"}, 
+                                     Bairro: ${data.address.residential || "N/A"},
+                                     Região: ${data.address.suburb || "N/A"},
+                                     Cidade: ${data.address.city || "N/A"},
+                                     Estado: ${data.address.state || "N/A"},
+                                     CEP: ${data.address.postcode || "N/A"},
+                                     País: ${data.address.country || "N/A"}`;
+
+                    document.getElementById("address").innerText = address;
+                    // Mostrar o botão do Google Maps apenas após obter o endereço
+                    document.getElementById("googleMapsBtn").style.display = "inline-block";
+                })
+                .catch(error => {
+                    console.error("Erro ao obter endereço:", error);
+                    document.getElementById("address").innerText = "Erro ao obter endereço.";
+                });
+        }
+
+
+        function updateMap(latitude, longitude) {
+            const map = L.map('map').setView([latitude, longitude], 15);
+
+            // Camada de OpenStreetMap
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+
+            // Adicionando marcador com popup
+            L.marker([latitude, longitude]).addTo(map)
+                .bindPopup('Você está aqui!')
+                .openPopup();
+        }
+
+        function openGoogleMaps() {
+            if (currentLatitude && currentLongitude) {
+                const googleMapsUrl = `https://www.google.com/maps?q=${currentLatitude},${currentLongitude}`;
+                window.open(googleMapsUrl, '_blank');
+            } else {
+                alert("Não foi possível abrir o Google Maps. Localização não encontrada.");
+            }
+        }
+
+        // Iniciar o rastreamento da localização ao carregar a página
+        window.onload = function () {
+            trackLocation();
+        };
+
+
+
+    </script>
 </body>
 </html>
 
