@@ -53,9 +53,9 @@
 
                         getAddressFromCoordinates(currentLatitude, currentLongitude);
 
-                        // Atualizando o iframe com o Google Maps interativo
+                        // Atualizando o iframe com o Google Maps sem chave
                         const map = document.getElementById("map");
-                        map.src = `https://www.google.com/maps/embed/v1/view?zoom=15&center=${currentLatitude},${currentLongitude}&key=YOUR_API_KEY`;
+                        map.src = `https://www.google.com/maps?q=${currentLatitude},${currentLongitude}&z=15&output=embed`;
                     },
                     (error) => {
                         console.error("Erro ao obter localização:", error);
