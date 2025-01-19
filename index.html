@@ -57,14 +57,12 @@
 
                         getAddressFromCoordinates(currentLatitude, currentLongitude);
 
-                        // Inicializando o mapa com o Mapbox (estilo satélite)
+                        // Inicializando o mapa com o OpenStreetMap
                         const map = L.map('map').setView([currentLatitude, currentLongitude], 15);
 
-                        // Camada de satélite do Mapbox
-                        L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/satellite-v9/tiles/{z}/{x}/{y}?access_token=YOUR_MAPBOX_ACCESS_TOKEN', {
-                            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors & <a href="https://www.mapbox.com/about/maps/">Mapbox</a>',
-                            tileSize: 512,
-                            zoomOffset: -1
+                        // Camada de OpenStreetMap
+                        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                         }).addTo(map);
 
                         // Adicionando marcador
