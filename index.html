@@ -17,44 +17,48 @@
 // Bloco do iframe google mapas= início
 
 
+<iframe id="map" width="100%" height="300" style="border:0;" allowfullscreen loading="lazy" src=""></iframe>
 
+<script>
+    function trackLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const currentLatitude = position.coords.latitude;
+                    const currentLongitude = position.coords.longitude;
 
-function trackLocation() {
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-                const currentLatitude = position.coords.latitude;
-                const currentLongitude = position.coords.longitude;
+                    const timestamp = new Date().toLocaleString();
 
-                const timestamp = new Date().toLocaleString();
+                    document.getElementById("coordinates").innerText =
+                        `Latitude: ${currentLatitude}\nLongitude: ${currentLongitude}`;
+                    document.getElementById("timestamp").innerText = timestamp;
 
-                document.getElementById("coordinates").innerText =
-                    `Latitude: ${currentLatitude}\nLongitude: ${currentLongitude}`;
-                document.getElementById("timestamp").innerText = timestamp;
+                    getAddressFromCoordinates(currentLatitude, currentLongitude);
 
-                getAddressFromCoordinates(currentLatitude, currentLongitude);
-
-                // Atualizando o iframe com o Google Maps interativo
-                const map = document.getElementById("map");
-                map.src = `https://www.google.com/maps/embed/v1/view?zoom=15&center=${currentLatitude},${currentLongitude}&key=YOUR_API_KEY`;
-            },
-            (error) => {
-                console.error("Erro ao obter localização:", error);
-                document.getElementById("coordinates").innerText =
-                    "Erro ao obter localização.";
-            }
-        );
-    } else {
-        alert("Geolocalização não é suportada neste navegador.");
+                    // Atualizando o iframe com o Google Maps interativo
+                    const map = document.getElementById("map");
+                    map.src = `https://www.google.com/maps/embed/v1/view?zoom=15&center=${currentLatitude},${currentLongitude}&key=YOUR_API_KEY`;
+                },
+                (error) => {
+                    console.error("Erro ao obter localização:", error);
+                    document.getElementById("coordinates").innerText =
+                        "Erro ao obter localização.";
+                }
+            );
+        } else {
+            alert("Geolocalização não é suportada neste navegador.");
+        }
     }
-}
 
-// Chama a função ao carregar a página
-window.onload = function () {
-    trackLocation();
-};
+    // Chama a função ao carregar a página
+    window.onload = function () {
+        trackLocation();
+    };
+</script>
 
 
+
+              
 
 // Bloco do iframe google mapas= fim
 
@@ -175,8 +179,10 @@ window.onload = function () {
         <h2>Usuário: Usuário Logado</h2>
 
         
-      <iframe id="map" width="100%" height="300" style="border:0;" allowfullscreen loading="lazy" src=""></iframe>
->
+    
+<iframe id="map" width="100%" height="300" style="border:0;" allowfullscreen loading="lazy"
+    src="https://www.google.com/maps/embed/v1/view?zoom=15&center=latitude,longitude&key=YOUR_API_KEY"></iframe>
+
 
         <textarea id="description" placeholder="Adicione uma descrição (opcional)"></textarea>
         <button class="button" onclick="saveRecord()">Salvar Registro</button>
