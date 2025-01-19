@@ -34,6 +34,10 @@
             <h2>Endereço</h2>
             <p id="address">Local</p>
         </div>
+        
+        <!-- Botões para alternar entre o mapa normal e satélite -->
+        <button onclick="setMapType('standard')">Mapa Normal</button>
+        <button onclick="setMapType('satellite')">Mapa Satélite</button>
     </div>
 
     <footer>
@@ -41,6 +45,40 @@
     </footer>
 
     <script>
+        let map;
+        let standardLayer;
+        let satelliteLayer;
+
+        // Função para iniciar o mapa
+        function initMap() {
+            // Inicializando o mapa
+            map = L.map('map').setView([0, 0], 2);  // Posição inicial no meio do mundo
+
+            // Camada padrão (OpenStreetMap)
+            standardLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+
+            // Camada de satélite (Esri)
+            satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+                attribution: '&copy; <a href="https://www.esri.com/">Esri</a> contributors'
+            });
+
+            // Colocando o marcador
+            L.marker([0, 0]).addTo(map).bindPopup('Você está aqui!').openPopup();
+        }
+
+        // Função para alternar entre os tipos de mapa
+        function setMapType(type) {
+            if (type === 'satellite') {
+                map.removeLayer(standardLayer);
+                satelliteLayer.addTo(map);
+            } else {
+                map.removeLayer(satelliteLayer);
+                standardLayer.addTo(map);
+            }
+        }
+
         // Função para obter a localização do usuário
         function trackLocation() {
             if (navigator.geolocation) {
@@ -57,15 +95,10 @@
 
                         getAddressFromCoordinates(currentLatitude, currentLongitude);
 
-                        // Inicializando o mapa com o OpenStreetMap
-                        const map = L.map('map').setView([currentLatitude, currentLongitude], 15);
+                        // Atualizar o mapa para a localização atual do usuário
+                        map.setView([currentLatitude, currentLongitude], 15);
 
-                        // Camada de OpenStreetMap
-                        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                        }).addTo(map);
-
-                        // Adicionando marcador
+                        // Atualizando o marcador
                         L.marker([currentLatitude, currentLongitude]).addTo(map)
                             .bindPopup('Você está aqui!')
                             .openPopup();
@@ -105,11 +138,13 @@
                 });
         }
 
-        // Quando a página for carregada, obtém a localização
+        // Iniciar o mapa e a localização assim que a página carregar
         window.onload = function () {
+            initMap();
             trackLocation();
         };
     </script>
 </body>
 </html>
+
 
