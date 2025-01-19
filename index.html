@@ -4,16 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Marcador de Presença</title>
-
-    <!-- Incluindo o script da API do Google Maps -->
-    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&callback=initMap" async defer></script>
-
-    <style>
-        #map {
-            width: 100%;
-            height: 300px;
-        }
-    </style>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 </head>
 <body>
     <header>
@@ -21,12 +13,13 @@
     </header>
 
     <div class="container">
-        <!-- O mapa interativo será exibido aqui -->
-        <div id="map"></div>
+        
+        <!-- Local do mapa OpenStreetMap -->
+        <div id="map" style="width: 100%; height: 300px;"></div>
 
         <textarea id="description" placeholder="Adicione uma descrição (opcional)"></textarea>
         <button class="button" onclick="saveRecord()">Salvar Registro</button>
-
+        
         <div class="field">
             <h2>Coordenadas</h2>
             <p id="coordinates">Latitude: -, Longitude: -</p>
@@ -47,12 +40,11 @@
         <p>© 2024 Marcador de Presença. Todos os direitos reservados.</p>
     </footer>
 
-    <script>
-        let map;
-        let marker;
 
-        // Função para inicializar o mapa interativo
-        function initMap() {
+
+
+    <script>
+        function trackLocation() {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(
                     (position) => {
@@ -65,21 +57,20 @@
                             `Latitude: ${currentLatitude}\nLongitude: ${currentLongitude}`;
                         document.getElementById("timestamp").innerText = timestamp;
 
-                        // Função para obter o endereço com base nas coordenadas
                         getAddressFromCoordinates(currentLatitude, currentLongitude);
 
-                        // Inicializando o mapa interativo
-                        map = new google.maps.Map(document.getElementById('map'), {
-                            center: { lat: currentLatitude, lng: currentLongitude },
-                            zoom: 15
-                        });
+                        // Inicializando o mapa com OpenStreetMap
+                        const map = L.map('map').setView([currentLatitude, currentLongitude], 15);
 
-                        // Adicionando um marcador
-                        marker = new google.maps.Marker({
-                            position: { lat: currentLatitude, lng: currentLongitude },
-                            map: map,
-                            title: "Você está aqui!"
-                        });
+                        // Camada de OpenStreetMap
+                        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                        }).addTo(map);
+
+                        // Adicionando marcador
+                        L.marker([currentLatitude, currentLongitude]).addTo(map)
+                            .bindPopup('Você está aqui!')
+                            .openPopup();
                     },
                     (error) => {
                         console.error("Erro ao obter localização:", error);
@@ -92,7 +83,10 @@
             }
         }
 
-        // Função para obter o endereço
+
+
+
+
         function getAddressFromCoordinates(latitude, longitude) {
             const apiUrl = `https://us1.locationiq.com/v1/reverse?key=pk.73c7ec951f7e0c38e842f740a1a63917&lat=${latitude}&lon=${longitude}&format=json`;
 
@@ -116,9 +110,8 @@
                 });
         }
 
-        // Quando a página carregar, inicialize o mapa
         window.onload = function () {
-            initMap();
+            trackLocation();
         };
     </script>
 </body>
