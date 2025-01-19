@@ -14,7 +14,7 @@
 
     <div class="container">
         
-        <!-- Local do mapa -->
+        <!-- Local do mapa OpenStreetMap -->
         <div id="map" style="width: 100%; height: 300px;"></div>
 
         <textarea id="description" placeholder="Adicione uma descrição (opcional)"></textarea>
@@ -34,74 +34,41 @@
             <h2>Endereço</h2>
             <p id="address">Local</p>
         </div>
-        
-        <!-- Botões para alternar entre o mapa normal e satélite -->
-        <button onclick="setMapType('standard')">Mapa Normal</button>
-        <button onclick="setMapType('satellite')">Mapa Satélite</button>
     </div>
 
     <footer>
         <p>© 2024 Marcador de Presença. Todos os direitos reservados.</p>
     </footer>
 
+
+
+
     <script>
-        let map;
-        let standardLayer;
-        let satelliteLayer;
-        let userLatitude;
-        let userLongitude;
-
-        // Função para iniciar o mapa
-        function initMap() {
-            // Inicializando o mapa com uma posição padrão (no início fica em algum lugar neutro)
-            map = L.map('map').setView([0, 0], 2);
-
-            // Camada padrão (OpenStreetMap)
-            standardLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            }).addTo(map);
-
-            // Camada de satélite (Esri)
-            satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-                attribution: '&copy; <a href="https://www.esri.com/">Esri</a> contributors'
-            });
-
-            // Atualizar a localização assim que os dados estiverem prontos
-            trackLocation();
-        }
-
-        // Função para alternar entre os tipos de mapa
-        function setMapType(type) {
-            if (type === 'satellite') {
-                map.removeLayer(standardLayer);
-                satelliteLayer.addTo(map);
-            } else {
-                map.removeLayer(satelliteLayer);
-                standardLayer.addTo(map);
-            }
-        }
-
-        // Função para obter a localização do usuário
         function trackLocation() {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(
                     (position) => {
-                        userLatitude = position.coords.latitude;
-                        userLongitude = position.coords.longitude;
+                        const currentLatitude = position.coords.latitude;
+                        const currentLongitude = position.coords.longitude;
 
                         const timestamp = new Date().toLocaleString();
 
                         document.getElementById("coordinates").innerText =
-                            `Latitude: ${userLatitude}\nLongitude: ${userLongitude}`;
+                            `Latitude: ${currentLatitude}\nLongitude: ${currentLongitude}`;
                         document.getElementById("timestamp").innerText = timestamp;
 
-                        getAddressFromCoordinates(userLatitude, userLongitude);
+                        getAddressFromCoordinates(currentLatitude, currentLongitude);
 
-                        // Atualizar o mapa para a localização atual do usuário
-                        map.setView([userLatitude, userLongitude], 15);
+                        // Inicializando o mapa com OpenStreetMap
+                        const map = L.map('map').setView([currentLatitude, currentLongitude], 15);
 
-                        // Adicionando o marcador na localização do usuário
-                        L.marker([userLatitude, userLongitude]).addTo(map)
+                        // Camada de OpenStreetMap
+                        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                        }).addTo(map);
+
+                        // Adicionando marcador
+                        L.marker([currentLatitude, currentLongitude]).addTo(map)
                             .bindPopup('Você está aqui!')
                             .openPopup();
                     },
@@ -116,7 +83,10 @@
             }
         }
 
-        // Função para obter o endereço com base nas coordenadas
+
+
+
+
         function getAddressFromCoordinates(latitude, longitude) {
             const apiUrl = `https://us1.locationiq.com/v1/reverse?key=pk.73c7ec951f7e0c38e842f740a1a63917&lat=${latitude}&lon=${longitude}&format=json`;
 
@@ -140,9 +110,8 @@
                 });
         }
 
-        // Iniciar o mapa e a localização assim que a página carregar
         window.onload = function () {
-            initMap();
+            trackLocation();
         };
     </script>
 </body>
