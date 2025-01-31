@@ -1,120 +1,879 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+    <!-- Cabeçalho da Página -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Marcador de Presença</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+
+
+
+ <title>Marcador de Presença</title>
+ <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+
+
+    <style>
+        /* Estilos Globais */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+
+        /* Estilos do Cabeçalho */
+        header {
+            text-align: left;
+            padding: 10px;
+            background-color: #f9f9f9;
+            color: #000000;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 20px;
+        }
+
+        /* Estilos do Container Principal */
+        .container {
+            padding: 10px;
+            max-width: 600px;
+            margin: auto;
+            background-color: #333;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 15px;
+        }
+
+        .container h2 {
+            font-size: 18px;
+            color: #000000;
+        }
+
+        /* Estilos do Mapa */
+        #map {
+            border-radius: 8px;
+        }
+
+        /* Estilos da Área de Texto (Descrição) */
+        textarea, input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            resize: none;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+
+        /* Estilos dos Botões */
+        button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+            box-sizing: border-box;
+        }
+
+        button:hover {
+            background-color: #2196f3;
+            transform: scale(1.02);
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        button:nth-child(1) {
+            background: linear-gradient(to right, #4CAF50, #81C784);
+            color: white;
+        }
+
+        button:nth-child(2) {
+            background: linear-gradient(to right, #2196F3, #64B5F6);
+            color: white;
+        }
+
+        button:nth-child(3) {
+            background: linear-gradient(to right, #FFC107, #FFD54F);
+            color: #333;
+        }
+
+        button:nth-child(4) {
+            background: linear-gradient(to right, #2196F3, #64B5F6);
+            color: white;
+        }
+
+        /* Estilos dos Campos de Coordenadas, Data/Hora e Endereço */
+        .field {
+            margin: 10px 0;
+        }
+
+        .field h2 {
+            font-size: 16px;
+            color: #333;
+        }
+
+        /* Estilos do Rodapé */
+        footer {
+            text-align: left;
+            padding: 10px;
+            background-color: #f9f9f9;
+            color: #000000;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+        }
+
+        footer p {
+            font-size: 10px; /* Alterado para 40px conforme pedido */
+        }
+    </style>
+
+<script>
+    /* Variáveis Globais */
+    let currentLatitude = "-";
+    let currentLongitude = "-";
+    let userName = "Usuário Logado";
+
+    /* Funções JavaScript */
+
+
+    // Função para gerar um ID único de 8 caracteres aleatórios (números e letras)
+function generateRandomID() {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let randomID = '';
+    for (let i = 0; i < 8; i++) {
+        randomID += characters.charAt(Math.floor(Math.random() * characters.length));
+    }
+    return randomID;
+}
+
+// Função para verificar se o nome e ID já foram salvos
+function checkUserName() {
+    const savedUserName = localStorage.getItem("userName");
+    const savedUserID = localStorage.getItem("userID");
+
+    if (savedUserName && savedUserID) {
+        document.getElementById("user-name").style.display = "none";  // Esconde o campo de nome
+        document.getElementById("user-name-display").style.display = "inline";  // Exibe o nome do usuário
+        document.getElementById("user-name-display").innerText = `Usuário: ${savedUserName} (ID: ${savedUserID})`;  // Exibe o nome e ID
+        document.getElementById("save-name-button").style.display = "none";  // Esconde o botão de salvar
+        document.getElementById("edit-name-button").style.display = "inline";  // Exibe o botão de editar
+    } else {
+        document.getElementById("user-name").style.display = "inline";  // Exibe o campo de nome
+        document.getElementById("save-name-button").style.display = "inline";  // Exibe o botão de salvar
+        document.getElementById("edit-name-button").style.display = "none";  // Esconde o botão de editar
+    }
+}
+
+
+// Função para salvar o nome do usuário e gerar um ID único
+
+function saveUserName() {
+    const userName = document.getElementById("user-name").value.trim();
+    if (userName) {
+        // Verifica se já existe um ID único no localStorage
+        let userID = localStorage.getItem("userID");
+        if (!userID) {
+            // Se não existir, gera um novo ID único e salva no localStorage
+            userID = generateRandomID();
+            localStorage.setItem("userID", userID);  // Salva o ID único no localStorage
+        }
+
+        // Atualiza o nome do usuário sem alterar o ID
+        localStorage.setItem("userName", userName);  // Salvando o nome do usuário
+
+        checkUserName();  // Atualiza a interface com o nome e ID salvos
+    } else {
+        alert("Por favor, digite um nome.");
+    }
+}
+
+
+// Função para permitir editar o nome do usuário
+function editUserName() {
+    document.getElementById("user-name").style.display = "inline";
+    document.getElementById("save-name-button").style.display = "inline";
+    document.getElementById("user-name-display").style.display = "none";
+    document.getElementById("edit-name-button").style.display = "none";
+    document.getElementById("user-name").value = localStorage.getItem("userName");
+}
+
+    // Função para obter o endereço a partir das coordenadas
+    function getAddressFromCoordinates(latitude, longitude) {
+        const apiUrl = `https://us1.locationiq.com/v1/reverse?key=pk.73c7ec951f7e0c38e842f740a1a63917&lat=${latitude}&lon=${longitude}&format=json`;
+
+        fetch(apiUrl)
+            .then(response => response.json())
+            .then(data => {
+                const roadName = data.address.road || "N/A";
+                const address = `Local: ${roadName},
+                                 Bairro: ${data.address.residential || "N/A"},
+                                 Região: ${data.address.suburb || "N/A"},
+                                 Cidade: ${data.address.city || "N/A"},
+                                 Estado: ${data.address.state || "N/A"},
+                                 CEP: ${data.address.postcode || "N/A"},
+                                 País: ${data.address.country || "N/A"}`;
+
+                document.getElementById("road-name").innerText = `Local: ${roadName}`;
+                document.getElementById("address").innerText = address;
+            })
+            .catch(error => {
+                console.error("Erro ao obter endereço:", error);
+                document.getElementById("road-name").innerText = "Erro ao obter nome da rua.";
+                document.getElementById("address").innerText = "Erro ao obter endereço.";
+            });
+    }
+
+
+
+// Bloco=2 = Alteração feita: A função updateMap foi modificada para usar Leaflet com OpenStreetMap
+function updateMap(lat, lon) {
+            // Inicializando o mapa com OpenStreetMap usando Leaflet
+            const map = L.map('map').setView([lat, lon], 15); // Alteração: agora usa o Leaflet
+
+            // Camada de OpenStreetMap
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+
+            // Adicionando marcador no mapa
+            L.marker([lat, lon]).addTo(map)
+                .bindPopup('Você está aqui!')
+                .openPopup();
+        }
+             // Bloco= 2 fim
+
+
+    // Função para salvar o registro
+function saveRecord() {
+    const coordinates = document.getElementById("coordinates").innerText;
+    const address = document.getElementById("address").innerText;
+    const timestamp = document.getElementById("timestamp").innerText;
+
+    // Agora recupera o nome do usuário salvo no localStorage
+    const userInput = localStorage.getItem("userName") || "Usuário";  // Pega o nome salvo ou usa um valor padrão
+    const description = document.getElementById("description").value || "Nenhuma descrição fornecida.";
+
+    const record = {
+        userName: userInput,
+        coordinates,
+        address,
+        description,
+        timestamp,
+    };
+
+    const records = JSON.parse(localStorage.getItem("presenceRecords")) || [];
+    records.push(record);
+    localStorage.setItem("presenceRecords", JSON.stringify(records));
+
+    const saveButton = document.querySelector("button[onclick='saveRecord()']");
+    saveButton.innerText = "Registro salvo com sucesso!";
+    setTimeout(() => {
+        saveButton.innerText = "Salvar Registro";
+    }, 2000);
+}
+
+
+// Função para compartilhar a localização via WhatsApp
+function shareLocation() {
+    const coordinates = document.getElementById("coordinates").innerText; // Exemplo: "Latitude: -23.7214749 Longitude: -46.7786972"
+    const address = document.getElementById("address").innerText;
+    const timestamp = document.getElementById("timestamp").innerText;
+    const userName = localStorage.getItem("userName") || "Usuário";  // Usando o nome salvo no localStorage
+    const userID = localStorage.getItem("userID");  // ID único do usuário (fixo)
+    const description = document.getElementById("description").value || "Nenhuma descrição fornecida.";
+
+    // Verificar se as coordenadas estão no formato correto
+    if (coordinates.includes("Latitude") && coordinates.includes("Longitude")) {
+        // Extrair latitude e longitude da string 'coordinates'
+        const coordinatesArray = coordinates.split("Longitude"); // Divide a string em dois: latitude e longitude
+        const latitude = coordinatesArray[0].replace("Latitude: ", "").trim();
+        const longitude = coordinatesArray[1].replace(": ", "").trim();
+
+        // Gerar a mensagem com as coordenadas e o link do Google Maps
+        const message = `*Marcador de Presença*\n\nDeclaração de comparecimento: \n\nEu estive aqui,\nUsuário: ${userName} (ID: ${userID})\n${coordinates}\n${address}\nDescrição: ${description}\nData/hora local: ${timestamp}\n\nhttps://maps.google.com/?q=${latitude},${longitude}`;
+
+        // Gerar a URL do WhatsApp
+        const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
+        window.open(whatsappUrl, '_blank');
+    } else {
+        alert("Coordenadas inválidas ou não encontradas.");
+    }
+}
+
+
+async function generatePDF() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    const coordinates = document.getElementById("coordinates").innerText; // Exemplo: "Latitude: -23.7214749 Longitude: -46.7786972"
+    const address = document.getElementById("address").innerText;
+    const timestamp = document.getElementById("timestamp").innerText;
+    const userName = localStorage.getItem("userName") || "Usuário";  // Usando o nome salvo no localStorage
+    const userID = localStorage.getItem("userID");  // ID único do usuário (fixo)
+    const description = document.getElementById("description").value || "Nenhuma descrição fornecida.";
+
+    // Verificar se as coordenadas estão no formato correto
+    if (coordinates.includes("Latitude") && coordinates.includes("Longitude")) {
+        // Extrair latitude e longitude da string 'coordinates'
+        const coordinatesArray = coordinates.split("Longitude"); // Divide a string em dois: latitude e longitude
+        const latitude = coordinatesArray[0].replace("Latitude: ", "").trim();
+        const longitude = coordinatesArray[1].replace(": ", "").trim();
+
+        // Gerar a mensagem com as coordenadas e o link do Google Maps
+        const message = `Declaração de comparecimento: \n\nEu estive aqui,\nUsuário: ${userName} (ID: ${userID})\n${coordinates}\n${address}\nDescrição: ${description}\nData/hora local: ${timestamp}\n\nhttps://maps.google.com/?q=${latitude},${longitude}`;
+
+        // Adicionando o título
+        const title = "Marcador de Presença";
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(16);
+        doc.text(title, 10, 20);
+
+        // Adicionando a mensagem
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(12);
+        const textStartY = 30;
+        const textWidth = 180;
+        doc.text(message, 10, textStartY, { maxWidth: textWidth });
+
+        // Gerar e salvar o PDF
+        doc.save("Marcador_de_Presença.pdf");
+    } else {
+        alert("Coordenadas inválidas ou não encontradas.");
+    }
+}
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+
+       // Bloco= 3 =
+         // Função botão ver no google mapas - adicionado
+         function openGoogleMaps() {
+    const googleMapsUrl = `https://maps.google.com/?q=${currentLatitude},${currentLongitude}`;
+    window.open(googleMapsUrl, '_blank');
+}
+     // Bloco= 3 = fim
+
+
+
+       
+              
+    // Bloco= 1 inicio Carregando
+
+    // Variáveis para armazenar o mapa
+    let map;
+
+    // Função para inicializar o mapa
+    function initializeMap(latitude, longitude) {
+        // Inicializa o mapa com a posição fornecida
+        map = L.map('map').setView([latitude, longitude], 15);
+
+        // Camada de OpenStreetMap
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // Adicionando o marcador no mapa
+        L.marker([latitude, longitude]).addTo(map)
+            .bindPopup('Você está aqui!')
+            .openPopup();
+    }
+
+    // Função que não foi alterada (permanece a mesma)
+    function trackLocation() {
+        // Exibe o GIF de carregamento assim que começa a buscar a localização
+        showLoading(); 
+
+        // Esconde o mapa até que ele seja carregado
+        document.getElementById("map").style.display = 'none';
+
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+
+                    const currentLatitude = position.coords.latitude;
+                    const currentLongitude = position.coords.longitude;
+
+                    const timestamp = new Date().toLocaleString();
+
+                    document.getElementById("coordinates").innerText =
+                        `Latitude: ${currentLatitude}\nLongitude: ${currentLongitude}`;
+                    document.getElementById("timestamp").innerText = timestamp;
+
+                    getAddressFromCoordinates(currentLatitude, currentLongitude);
+
+                    // Exibe o mapa agora que ele foi carregado
+                    document.getElementById("map").style.display = 'block';
+
+                    // Inicializa o mapa e ajusta o tamanho
+                    initializeMap(currentLatitude, currentLongitude);
+
+                    // Espera um momento para garantir que o mapa seja renderizado antes de redimensionar
+                    setTimeout(function() {
+                        map.invalidateSize();  // Redimensiona o mapa para garantir que ele ocupe o espaço correto
+                    }, 100);
+
+                    // Esconde o GIF de carregamento após o mapa ser carregado
+                    hideLoading();
+                },
+                (error) => {
+                    console.error("Erro ao obter localização:", error);
+                    document.getElementById("coordinates").innerText =
+                        "Erro ao obter localização.";
+                    playSound("error-sound.mp3");
+
+                    // Esconde o GIF de carregamento em caso de erro
+                    hideLoading();
+                }
+            );
+        } else {
+            alert("Geolocalização não é suportada neste navegador.");
+
+            // Esconde o GIF de carregamento caso a geolocalização não seja suportada
+            hideLoading();
+        }
+    }
+
+    // Função para exibir o GIF de carregamento
+    function showLoading() {
+        document.getElementById("loadingImage").style.display = 'block';
+    }
+
+    // Função para esconder o GIF de carregamento
+    function hideLoading() {
+        document.getElementById("loadingImage").style.display = 'none';
+    }
+
+    // Chama a função trackLocation quando a página for carregada
+    window.onload = function () {
+        trackLocation();
+    };
+
+   // Bloco= 1 fim Carregando
+
+
+    // Função para exibir o GIF de carregamento
+    function showLoading() {
+        document.getElementById("loadingImage").style.display = 'block';
+    }
+
+    // Função para esconder o GIF de carregamento
+    function hideLoading() {
+        document.getElementById("loadingImage").style.display = 'none';
+    }
+
+    // Chama a função trackLocation quando a página for carregada
+    window.onload = function () {
+        trackLocation();
+    };
+
+
+                     
+
+ // Bloco= 1 fim
+// Bloco mapa na tela fim
+
+
+
+
+
+
+
+
+
+
+    // Função para tocar um som
+    function playSound(soundFile) {
+        const audio = new Audio(soundFile);
+        audio.play();
+    }
+
+    // Chamada da função trackLocation ao carregar a página
+    window.onload = function () {
+        checkUserName();  // Verificar e carregar o nome do usuário salvo
+        trackLocation();   // Rastrear a localização do usuário
+    };
+</script>
+
 </head>
+
 <body>
+    <!-- Cabeçalho Tela principal-->
     <header>
         <h1>Marcador de Presença</h1>
     </header>
 
+    <!-- Container Principal -->
     <div class="container">
+        <!-- Nome da Rua -->
+        <h2 id="road-name">Rua: Local Carregando!</h2>
         
-        <!-- Local do mapa OpenStreetMap -->
+
+        <!-- Boco Mapa tipo iFrame -->
+          <!-- Exibindo o GIF de carregamento antes de carregar o mapa -->
+ <div id="loadingImage" style="text-align: center;">
+    <img src="https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif" alt="Carregando..." style="width: 100px; height: 100px;">
+</div>
+
+<!-- Local do mapa OpenStreetMap -->
         <div id="map" style="width: 100%; height: 300px;"></div>
 
-        <textarea id="description" placeholder="Adicione uma descrição (opcional)"></textarea>
-        <button class="button" onclick="saveRecord()">Salvar Registro</button>
-        
+
+        <!-- Coordenadas -->
         <div class="field">
             <h2>Coordenadas</h2>
             <p id="coordinates">Latitude: -, Longitude: -</p>
         </div>
 
+        <!-- Data e Hora -->
         <div class="field">
             <h2>Data e Hora</h2>
             <p id="timestamp">Local</p>
         </div>
 
+        <!-- Endereço -->
         <div class="field">
             <h2>Endereço</h2>
             <p id="address">Local</p>
         </div>
+
+        <!-- Movendo o campo de descrição e o botão "Salvar Registro" acima do botão Compartilhar -->
+        <div class="description-container">
+            <textarea id="description" placeholder="Adicione uma descrição (opcional)"></textarea>
+            <button class="button" onclick="saveRecord()">Salvar Registro</button>
+        </div>
+
+        <!-- Declaração de comparecimento na tela -->
+
+        <p class="copyright">
+            Precisa provar ao seu chefe que foi ao médico? 
+            Comprove com um clique. 
+            Gere o registro ele é uma prova incontestável com nome e ID, e envie por WhatsApp ou em formato PDF.
+            </p> 
+
+        <!-- Compartilhar via WhatsApp -->
+        <button class="button" onclick="shareLocation()">Compartilhar pelo WhatsApp</button>
+
+        <!-- Gerar PDF -->
+        <button class="button" onclick="generatePDF()">Gerar PDF</button>
+
+        <!-- Botão para Exibir o Histórico dentro do mesmo container -->
+        <button class="button" onclick="toggleHistory()">Ver Histórico de Presença</button>
+
+        <!-- Alteração: Botão para abrir o local no Google Maps -->
+        <button class="button" onclick="openGoogleMaps()">Ver no Google Maps</button>
+
+
+        <!-- Frase de Copyright -->
+        <p class="copyright">Growcet © Desenvolvedor</p>
     </div>
 
-    <footer>
-        <p>© 2024 Marcador de Presença. Todos os direitos reservados.</p>
-    </footer>
+    <!-- Rodapé -->
+    <!-- Não é mais necessário, já que movemos a frase para dentro do container -->
+
+    <!-- CSS para estilizar a frase de copyright -->
+    <style>
+        .copyright {
+            font-size: 13px; /* Ajuste o tamanho da fonte aqui */
+            color: #000000; /* Cor do texto */
+            text-align: center; /* Centralizar o texto */
+            margin-top: 20px; /* Distância do conteúdo acima */
+        }
+    </style>
+</body>
 
 
 
+  <!-- PARTE DO HISTÓRICO -->
 
-    <script>
-        function trackLocation() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(
-                    (position) => {
-                        const currentLatitude = position.coords.latitude;
-                        const currentLongitude = position.coords.longitude;
+<!-- Container para Exibir o Histórico de Presença -->
+<div id="history-container" style="display: none;">
+    <h2>Histórico de Presença</h2>
+    <div id="records-list" style="background-color: #ffffff; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); overflow-y: auto; padding: 10px;">
+        <!-- Lista de registros será carregada aqui -->
+    </div>
+</div>
 
-                        const timestamp = new Date().toLocaleString();
+<!-- Estilos CSS -->
+<style>
 
-                        document.getElementById("coordinates").innerText =
-                            `Latitude: ${currentLatitude}\nLongitude: ${currentLongitude}`;
-                        document.getElementById("timestamp").innerText = timestamp;
+/* Estilos do Container do Histórico */
 
-                        getAddressFromCoordinates(currentLatitude, currentLongitude);
+#history-container {
+    padding: 10px;
+    max-width: 600px; /* Tamanho igual ao do container principal */
+    margin-left: auto; /* Centraliza o conteúdo horizontalmente */
+    margin-right: auto; /* Centraliza o conteúdo horizontalmente */
+    background-color: #ffffff;  fundo
+    box-shadow: 0 4px 8px  rgba(0, 0, 0, 0.1)
+    border-radius: 15px; /* Bordas arredondadas */
+}
 
-                        // Inicializando o mapa com OpenStreetMap
-                        const map = L.map('map').setView([currentLatitude, currentLongitude], 15);
+.record {
+        background-color: #ffffff;
+        border: 2px solid #ddd; /* Borda do contorno do registro */
+        padding: 5px;
+        margin-bottom: 10px; /* Espaçamento entre os registros */
+        border-radius: 8px;  /* Arredondamento nas bordas */
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Sombra leve para destacar o registro */
+    }
+   
 
-                        // Camada de OpenStreetMap
-                        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                        }).addTo(map);
+/* Estilos para o histórico */
+#history-container {
+    margin-top: 10px; /* Adiciona um espaço acima do histórico */
+    padding: 0 1px; /* Ajuste para garantir que o conteúdo não fique colado nas laterais */
 
-                        // Adicionando marcador
-                        L.marker([currentLatitude, currentLongitude]).addTo(map)
-                            .bindPopup('Você está aqui!')
-                            .openPopup();
-                    },
-                    (error) => {
-                        console.error("Erro ao obter localização:", error);
-                        document.getElementById("coordinates").innerText =
-                            "Erro ao obter localização.";
-                    }
-                );
+</style>
+
+
+<script>
+    // Função para alternar a visibilidade do histórico
+
+    function toggleHistory() {
+            const historyContainer = document.getElementById("history-container");
+            const records = JSON.parse(localStorage.getItem("presenceRecords")) || [];
+
+            if (historyContainer.style.display === "none") {
+                historyContainer.style.display = "block";
+                const recordsList = document.getElementById("records-list");
+                recordsList.innerHTML = ""; // Limpar a lista antes de adicionar novamente
+
+// Ordenar os registros de forma decrescente (mais recente primeiro)
+records.reverse();  // Aqui é onde você inverte a ordem dos registros
+
+
+
+// Adicionar os registros parte ver na tela do app
+records.forEach((record, index) => {
+                    const recordDiv = document.createElement("div");
+                    recordDiv.classList.add("record");
+
+                    recordDiv.innerHTML = `
+                    
+                    <p><strong>Declaração de comparecimento:</strong>
+                    
+                    <p><strong>Usuário:</strong> ${record.userName}</p>
+                    <p><strong>Coordenadas:</strong> ${record.coordinates}</p>
+                    <p><strong>Endereço:</strong> ${record.address}</p>
+                    <p><strong>Descrição:</strong> ${record.description}</p>
+                    <p><strong>Data/Hora:</strong> ${record.timestamp}</p>
+                    <div class="history-buttons">
+                    <button onclick="shareLocationHistory(${index})">Compartilhar no WhatsApp</button>
+                    <button onclick="generatePDFHistory(${index})">Gerar PDF</button>
+                    <button onclick="deleteRecord(${index})">Apagar Registro</button>
+                    </div>
+                       
+                    `;
+                    recordsList.appendChild(recordDiv);
+                });
             } else {
-                alert("Geolocalização não é suportada neste navegador.");
+                historyContainer.style.display = "none";
             }
         }
+    
+       
+// Função para compartilhar no WhatsApp a partir do histórico
+function shareLocationHistory(index) {
+    const records = JSON.parse(localStorage.getItem("presenceRecords")) || [];
+
+    // Ordenar os registros de forma decrescente (mais recente primeiro)
+    records.reverse();
+
+    const record = records[index];  // Pega o registro com o índice passado
+
+    // Obtenção do nome e ID fixos
+    const userName = localStorage.getItem("userName") || "Usuário";  // Nome fixo
+    const userID = localStorage.getItem("userID");  // ID fixo
+
+    console.log(record.latitude, record.longitude); // Verifique as coordenadas
+const message = `Declaração de comparecimento: \n\nEu estive aqui,\nUsuário: ${userName} (ID: ${userID})\nLatitude: ${record.latitude}\nLongitude: ${record.longitude}\n${record.address}\nDescrição: ${record.description}\nData/hora local: ${new Date().toLocaleString()}\n\nhttps://maps.google.com/?q=${record.latitude},${record.longitude}`;
+
+    const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
 
 
 
 
 
-        function getAddressFromCoordinates(latitude, longitude) {
-            const apiUrl = `https://us1.locationiq.com/v1/reverse?key=pk.73c7ec951f7e0c38e842f740a1a63917&lat=${latitude}&lon=${longitude}&format=json`;
 
-            fetch(apiUrl)
-                .then(response => response.json())
-                .then(data => {
-                    const address = `Rua: ${data.address.road || "N/A"},
-                                     Bairro: ${data.address.residential || "N/A"},
-                                     Região: ${data.address.suburb || "N/A"},
-                                     Cidade: ${data.address.city || "N/A"},
-                                     Estado: ${data.address.state || "N/A"},
-                                     CEP: ${data.address.postcode || "N/A"},
-                                     País: ${data.address.country || "N/A"}`;
+}
+ 
+           // Função para gerar PDF a partir do histórico
+         async function generatePDFHistory(index) {
+         const records = JSON.parse(localStorage.getItem("presenceRecords")) || [];
 
-                    document.getElementById("address").innerText = address;
-                })
-                .catch(error => {
-                    console.error("Erro ao obter endereço:", error);
-                    document.getElementById("address").innerText =
-                        "Erro ao obter endereço.";
-                });
-        }
+         // Ordenar os registros de forma decrescente (mais recente primeiro)
+         records.reverse();
 
-        window.onload = function () {
-            trackLocation();
-        };
+         const record = records[index];
+
+         const { jsPDF } = window.jspdf;
+         const doc = new jsPDF();
+
+         // Obtenção do nome e ID fixos
+         const userName = localStorage.getItem("userName") || "Usuário";  // Nome fixo
+         const userID = localStorage.getItem("userID");  // ID fixo
+
+         const title = "Marcador de Presença";
+
+         const googleMapsLink = `https://maps.google.com/?q=${record.latitude},${record.longitude}`;
+
+         const message = `Declaração de comparecimento: \n\nEu estive aqui,\nUsuário: ${userName} (ID: ${userID})\n${record.coordinates}\n${record.address}\nDescrição: ${record.description}\nData/hora local: ${new Date().toLocaleString()}\n\nhttps://maps.google.com/?q=${record.latitude},${record.longitude}`;
+
+
+
+         doc.setFont("helvetica", "bold");
+         doc.setFontSize(16);
+         doc.text(title, 10, 20);
+
+         doc.setFont("helvetica", "normal");
+         doc.setFontSize(12);
+         const textStartY = 30;
+         const textWidth = 180;
+         doc.text(message, 10, textStartY, { maxWidth: textWidth });
+
+         doc.save(`${userName}_Marcador_de_Presença.pdf`);
+}
+
+
+
+
+
+
+
+
+
+            // Função delete a partir do histórico
+           
+            function deleteRecord(index) {
+            const records = JSON.parse(localStorage.getItem("presenceRecords")) || [];
+    
+            // Índice original no localStorage (sem inversão)
+            const originalIndex = records.length - 1 - index; // Corrigido para usar o índice original
+
+            // Remover o registro correto
+            records.splice(originalIndex, 1);
+
+            // Salvar os registros atualizados no localStorage
+            localStorage.setItem("presenceRecords", JSON.stringify(records));
+
+            // Recarregar o histórico com a lista atualizada
+            toggleHistory();
+}
     </script>
+</head>
+<body>
+
+
+  <!-- Campo para o Nome do Usuário -->
+ 
+  <!-- Carregando o Font Awesome -->
+<head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+
+<!-- Carregando o Font Awesome -->
+<head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+
+
+<!-- Campo para o Nome do Usuário -->
+<div class="container">
+    <div class="container" style="margin-bottom: 2px;"> <!-- Linha adicionada para o espaçamento -->
+    <div style="padding: 10px; max-width: 600px; margin: auto;">
+        <!-- Input do Nome -->
+        <input type="text" id="user-name" placeholder="Digite seu nome" style="display: none; width: 100%; padding: 8px; margin-bottom: 10px;">
+        
+        <!-- Nome do Usuário exibido e Ícone de Lápis para Editar -->
+        <div style="display: flex; align-items: center; justify-content: space-between;">
+            <span id="user-name-display" style="font-weight: bold; display: none;"></span>
+            <!-- Ícone de Lápis (apenas o ícone, sem botão) -->
+            <i id="edit-name-button" onclick="editUserName()" class="fas fa-pencil-alt" style="font-size: 24px; color: #ffc107; cursor: pointer; background: none; border: none;"></i>
+        </div>
+
+        <!-- Botão Salvar -->
+        <button id="save-name-button" onclick="saveUserName()" class="button" style="width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 15px; background-color: #28a745;">
+            Salvar
+        </button>
+    </div>
+</div>
+
+
+<!-- Estilos CSS -->
+<style>
+    /* Estilos para os campos de nome de usuário e botões dentro do container */
+    .container {
+        padding: 10px;
+        max-width: 600px; /* Limite de largura */
+        margin-top: 5px; /* Margem superior de 30px */
+        background-color: #fff;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 15px; /* Bordas arredondadas */
+    }
+
+    .button {
+        background-color: #ccc;
+        color: white;
+        border: none;
+        font-size: 16px;
+        cursor: pointer;
+        border-radius: 15px; /* Bordas arredondadas para outros botões */
+    }
+
+    .button:hover {
+        background-color: #2196f3;
+    }
+
+    /* Estilos para os botões específicos Salvar e Editar */
+    #save-name-button, #edit-name-button {
+        border-radius: 15px; /* Botões arredondados */
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+
+    #save-name-button {
+        background-color: #28a745; /* Verde para Salvar */
+    }
+
+    #save-name-button:hover {
+        background-color: #218838;
+    }
+
+    #edit-name-button {
+        background-color: #ffc107; /* Amarelo para Editar */
+    }
+
+    #edit-name-button:hover {
+        background-color: #e0a800;
+    }
+</style>
+
+        
 </body>
 </html>
-
-
