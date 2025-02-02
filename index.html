@@ -8,14 +8,6 @@
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
 
-
-
- <title>Marcador de Presença</title>
- <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-
-
-
     <style>
         /* Estilos Globais */
         body {
@@ -44,7 +36,7 @@
             padding: 10px;
             max-width: 600px;
             margin: auto;
-            background-color: #333;
+            background-color: #fff;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             border-radius: 15px;
         }
@@ -237,25 +229,6 @@ function editUserName() {
     }
 
 
-
-// Bloco=2 = Alteração feita: A função updateMap foi modificada para usar Leaflet com OpenStreetMap
-function updateMap(lat, lon) {
-            // Inicializando o mapa com OpenStreetMap usando Leaflet
-            const map = L.map('map').setView([lat, lon], 15); // Alteração: agora usa o Leaflet
-
-            // Camada de OpenStreetMap
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            }).addTo(map);
-
-            // Adicionando marcador no mapa
-            L.marker([lat, lon]).addTo(map)
-                .bindPopup('Você está aqui!')
-                .openPopup();
-        }
-             // Bloco= 2 fim
-
-
     // Função para salvar o registro
 function saveRecord() {
     const coordinates = document.getElementById("coordinates").innerText;
@@ -285,226 +258,85 @@ function saveRecord() {
     }, 2000);
 }
 
-
-// Função para compartilhar a localização via WhatsApp
+    // Função para compartilhar a localização via WhatsApp
 function shareLocation() {
-    const coordinates = document.getElementById("coordinates").innerText; // Exemplo: "Latitude: -23.7214749 Longitude: -46.7786972"
+    const coordinates = document.getElementById("coordinates").innerText;
     const address = document.getElementById("address").innerText;
     const timestamp = document.getElementById("timestamp").innerText;
     const userName = localStorage.getItem("userName") || "Usuário";  // Usando o nome salvo no localStorage
     const userID = localStorage.getItem("userID");  // ID único do usuário (fixo)
     const description = document.getElementById("description").value || "Nenhuma descrição fornecida.";
 
-    // Verificar se as coordenadas estão no formato correto
-    if (coordinates.includes("Latitude") && coordinates.includes("Longitude")) {
-        // Extrair latitude e longitude da string 'coordinates'
-        const coordinatesArray = coordinates.split("Longitude"); // Divide a string em dois: latitude e longitude
-        const latitude = coordinatesArray[0].replace("Latitude: ", "").trim();
-        const longitude = coordinatesArray[1].replace(": ", "").trim();
+    // Verificando se o nome e o ID estão corretos e preparando a mensagem
+    const message = `*Marcador de Presença*\n\nEu estive aqui:\n\nUsuário: ${userName} (ID: ${userID})\n${coordinates}\n${address}\nDescrição: ${description}\nData/hora local: ${timestamp}\n\nhttps://maps.google.com/?q=${currentLatitude},${currentLongitude}`;
 
-        // Gerar a mensagem com as coordenadas e o link do Google Maps
-        const message = `*Marcador de Presença*\n\nDeclaração de comparecimento: \n\nEu estive aqui,\nUsuário: ${userName} (ID: ${userID})\n${coordinates}\n${address}\nDescrição: ${description}\nData/hora local: ${timestamp}\n\nhttps://maps.google.com/?q=${latitude},${longitude}`;
-
-        // Gerar a URL do WhatsApp
-        const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
-        window.open(whatsappUrl, '_blank');
-    } else {
-        alert("Coordenadas inválidas ou não encontradas.");
-    }
+    const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
 }
 
-
+   // Função para gerar o PDF
 async function generatePDF() {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
 
-    const coordinates = document.getElementById("coordinates").innerText; // Exemplo: "Latitude: -23.7214749 Longitude: -46.7786972"
+    const coordinates = document.getElementById("coordinates").innerText;
     const address = document.getElementById("address").innerText;
     const timestamp = document.getElementById("timestamp").innerText;
     const userName = localStorage.getItem("userName") || "Usuário";  // Usando o nome salvo no localStorage
     const userID = localStorage.getItem("userID");  // ID único do usuário (fixo)
     const description = document.getElementById("description").value || "Nenhuma descrição fornecida.";
 
-    // Verificar se as coordenadas estão no formato correto
-    if (coordinates.includes("Latitude") && coordinates.includes("Longitude")) {
-        // Extrair latitude e longitude da string 'coordinates'
-        const coordinatesArray = coordinates.split("Longitude"); // Divide a string em dois: latitude e longitude
-        const latitude = coordinatesArray[0].replace("Latitude: ", "").trim();
-        const longitude = coordinatesArray[1].replace(": ", "").trim();
+    const title = "Marcador de Presença";
+    const message = `Eu estive aqui:\n\nUsuário: ${userName} (ID: ${userID})\n${coordinates}\n${address}\nDescrição: ${description}\nData/hora local: ${timestamp}\n\nhttps://maps.google.com/?q=${currentLatitude},${currentLongitude}`;
 
-        // Gerar a mensagem com as coordenadas e o link do Google Maps
-        const message = `Declaração de comparecimento: \n\nEu estive aqui,\nUsuário: ${userName} (ID: ${userID})\n${coordinates}\n${address}\nDescrição: ${description}\nData/hora local: ${timestamp}\n\nhttps://maps.google.com/?q=${latitude},${longitude}`;
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(16);
+    doc.text(title, 10, 20);
 
-        // Adicionando o título
-        const title = "Marcador de Presença";
-        doc.setFont("helvetica", "bold");
-        doc.setFontSize(16);
-        doc.text(title, 10, 20);
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(12);
+    const textStartY = 30;
+    const textWidth = 180;
+    doc.text(message, 10, textStartY, { maxWidth: textWidth });
 
-        // Adicionando a mensagem
-        doc.setFont("helvetica", "normal");
-        doc.setFontSize(12);
-        const textStartY = 30;
-        const textWidth = 180;
-        doc.text(message, 10, textStartY, { maxWidth: textWidth });
+    doc.save("Marcador_de_Presença.pdf");
+}
 
-        // Gerar e salvar o PDF
-        doc.save("Marcador_de_Presença.pdf");
+    // Bloco do iframe google mapas
+
+    // Função para atualizar o mapa no iframe
+    function updateMap(lat, lon) {
+    const map = document.getElementById("map");
+    // Atualizando o src do iframe com a URL correta do Google Maps
+    map.src = `https://maps.google.com/maps?q=${lat},${lon}&z=15&output=embed`;
+}
+
+function trackLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                currentLatitude = position.coords.latitude;
+                currentLongitude = position.coords.longitude;
+
+                const timestamp = new Date().toLocaleString();
+
+                document.getElementById("coordinates").innerText =
+                    `Latitude: ${currentLatitude}\nLongitude: ${currentLongitude}`;
+                document.getElementById("timestamp").innerText = timestamp;
+
+                getAddressFromCoordinates(currentLatitude, currentLongitude);
+                updateMap(currentLatitude, currentLongitude);  // Atualizar o iframe com a localização
+            },
+            (error) => {
+                console.error("Erro ao obter localização:", error);
+                document.getElementById("coordinates").innerText =
+                    "Erro ao obter localização.";
+            }
+        );
     } else {
-        alert("Coordenadas inválidas ou não encontradas.");
+        alert("Geolocalização não é suportada neste navegador.");
     }
 }
-
-
-
-
-  
-  
-
-
-
-
-
-
-
-
-
-
-       // Bloco= 3 =
-         // Função botão ver no google mapas - adicionado
-         function openGoogleMaps() {
-    const googleMapsUrl = `https://maps.google.com/?q=${currentLatitude},${currentLongitude}`;
-    window.open(googleMapsUrl, '_blank');
-}
-     // Bloco= 3 = fim
-
-
-
-       
-              
-    // Bloco= 1 inicio Carregando
-
-    // Variáveis para armazenar o mapa
-    let map;
-
-    // Função para inicializar o mapa
-    function initializeMap(latitude, longitude) {
-        // Inicializa o mapa com a posição fornecida
-        map = L.map('map').setView([latitude, longitude], 15);
-
-        // Camada de OpenStreetMap
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        }).addTo(map);
-
-        // Adicionando o marcador no mapa
-        L.marker([latitude, longitude]).addTo(map)
-            .bindPopup('Você está aqui!')
-            .openPopup();
-    }
-
-    // Função que não foi alterada (permanece a mesma)
-    function trackLocation() {
-        // Exibe o GIF de carregamento assim que começa a buscar a localização
-        showLoading(); 
-
-        // Esconde o mapa até que ele seja carregado
-        document.getElementById("map").style.display = 'none';
-
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-                (position) => {
-
-                    const currentLatitude = position.coords.latitude;
-                    const currentLongitude = position.coords.longitude;
-
-                    const timestamp = new Date().toLocaleString();
-
-                    document.getElementById("coordinates").innerText =
-                        `Latitude: ${currentLatitude}\nLongitude: ${currentLongitude}`;
-                    document.getElementById("timestamp").innerText = timestamp;
-
-                    getAddressFromCoordinates(currentLatitude, currentLongitude);
-
-                    // Exibe o mapa agora que ele foi carregado
-                    document.getElementById("map").style.display = 'block';
-
-                    // Inicializa o mapa e ajusta o tamanho
-                    initializeMap(currentLatitude, currentLongitude);
-
-                    // Espera um momento para garantir que o mapa seja renderizado antes de redimensionar
-                    setTimeout(function() {
-                        map.invalidateSize();  // Redimensiona o mapa para garantir que ele ocupe o espaço correto
-                    }, 100);
-
-                    // Esconde o GIF de carregamento após o mapa ser carregado
-                    hideLoading();
-                },
-                (error) => {
-                    console.error("Erro ao obter localização:", error);
-                    document.getElementById("coordinates").innerText =
-                        "Erro ao obter localização.";
-                    playSound("error-sound.mp3");
-
-                    // Esconde o GIF de carregamento em caso de erro
-                    hideLoading();
-                }
-            );
-        } else {
-            alert("Geolocalização não é suportada neste navegador.");
-
-            // Esconde o GIF de carregamento caso a geolocalização não seja suportada
-            hideLoading();
-        }
-    }
-
-    // Função para exibir o GIF de carregamento
-    function showLoading() {
-        document.getElementById("loadingImage").style.display = 'block';
-    }
-
-    // Função para esconder o GIF de carregamento
-    function hideLoading() {
-        document.getElementById("loadingImage").style.display = 'none';
-    }
-
-    // Chama a função trackLocation quando a página for carregada
-    window.onload = function () {
-        trackLocation();
-    };
-
-   // Bloco= 1 fim Carregando
-
-
-    // Função para exibir o GIF de carregamento
-    function showLoading() {
-        document.getElementById("loadingImage").style.display = 'block';
-    }
-
-    // Função para esconder o GIF de carregamento
-    function hideLoading() {
-        document.getElementById("loadingImage").style.display = 'none';
-    }
-
-    // Chama a função trackLocation quando a página for carregada
-    window.onload = function () {
-        trackLocation();
-    };
-
-
-                     
-
- // Bloco= 1 fim
-// Bloco mapa na tela fim
-
-
-
-
-
-
-
-
-
 
     // Função para tocar um som
     function playSound(soundFile) {
@@ -519,7 +351,10 @@ async function generatePDF() {
     };
 </script>
 
+
 </head>
+
+
 
 <body>
     <!-- Cabeçalho Tela principal-->
@@ -531,17 +366,9 @@ async function generatePDF() {
     <div class="container">
         <!-- Nome da Rua -->
         <h2 id="road-name">Rua: Local Carregando!</h2>
-        
 
-        <!-- Boco Mapa tipo iFrame -->
-          <!-- Exibindo o GIF de carregamento antes de carregar o mapa -->
- <div id="loadingImage" style="text-align: center;">
-    <img src="https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif" alt="Carregando..." style="width: 100px; height: 100px;">
-</div>
-
-<!-- Local do mapa OpenStreetMap -->
-        <div id="map" style="width: 100%; height: 300px;"></div>
-
+        <!-- Mapa -->
+        <iframe id="map" width="100%" height="300" style="border:0;" allowfullscreen></iframe>
 
         <!-- Coordenadas -->
         <div class="field">
@@ -567,14 +394,6 @@ async function generatePDF() {
             <button class="button" onclick="saveRecord()">Salvar Registro</button>
         </div>
 
-        <!-- Declaração de comparecimento na tela -->
-
-        <p class="copyright">
-            Precisa provar ao seu chefe que foi ao médico? 
-            Comprove com um clique. 
-            Gere o registro ele é uma prova incontestável com nome e ID, e envie por WhatsApp ou em formato PDF.
-            </p> 
-
         <!-- Compartilhar via WhatsApp -->
         <button class="button" onclick="shareLocation()">Compartilhar pelo WhatsApp</button>
 
@@ -584,12 +403,8 @@ async function generatePDF() {
         <!-- Botão para Exibir o Histórico dentro do mesmo container -->
         <button class="button" onclick="toggleHistory()">Ver Histórico de Presença</button>
 
-        <!-- Alteração: Botão para abrir o local no Google Maps -->
-        <button class="button" onclick="openGoogleMaps()">Ver no Google Maps</button>
-
-
         <!-- Frase de Copyright -->
-        <p class="copyright">Growcet © Desenvolvedor</p>
+        <p class="copyright">© 2024 Marcador de Presença. Todos os direitos reservados.</p>
     </div>
 
     <!-- Rodapé -->
@@ -598,28 +413,29 @@ async function generatePDF() {
     <!-- CSS para estilizar a frase de copyright -->
     <style>
         .copyright {
-            font-size: 13px; /* Ajuste o tamanho da fonte aqui */
-            color: #000000; /* Cor do texto */
+            font-size: 12px; /* Ajuste o tamanho da fonte aqui */
+            color: #888; /* Cor do texto */
             text-align: center; /* Centralizar o texto */
             margin-top: 20px; /* Distância do conteúdo acima */
         }
     </style>
 </body>
 
-
-
   <!-- PARTE DO HISTÓRICO -->
 
 <!-- Container para Exibir o Histórico de Presença -->
 <div id="history-container" style="display: none;">
     <h2>Histórico de Presença</h2>
-    <div id="records-list" style="background-color: #ffffff; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); overflow-y: auto; padding: 10px;">
+    <div id="records-list" style="background-color: #f9f9f9; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); overflow-y: auto; padding: 10px;">
         <!-- Lista de registros será carregada aqui -->
     </div>
 </div>
 
 <!-- Estilos CSS -->
 <style>
+
+   
+/* Estilos do Container do Histórico */
 
 /* Estilos do Container do Histórico */
 
@@ -636,17 +452,17 @@ async function generatePDF() {
 .record {
         background-color: #ffffff;
         border: 2px solid #ddd; /* Borda do contorno do registro */
-        padding: 5px;
+        padding: 15px;
         margin-bottom: 10px; /* Espaçamento entre os registros */
         border-radius: 8px;  /* Arredondamento nas bordas */
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Sombra leve para destacar o registro */
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra leve para destacar o registro */
     }
    
 
 /* Estilos para o histórico */
 #history-container {
-    margin-top: 10px; /* Adiciona um espaço acima do histórico */
-    padding: 0 1px; /* Ajuste para garantir que o conteúdo não fique colado nas laterais */
+    margin-top: 20px; /* Adiciona um espaço acima do histórico */
+    padding: 0 10px; /* Ajuste para garantir que o conteúdo não fique colado nas laterais */
 
 </style>
 
@@ -668,14 +484,13 @@ records.reverse();  // Aqui é onde você inverte a ordem dos registros
 
 
 
-// Adicionar os registros parte ver na tela do app
+
+// Adicionar os registros
 records.forEach((record, index) => {
                     const recordDiv = document.createElement("div");
                     recordDiv.classList.add("record");
 
                     recordDiv.innerHTML = `
-                    
-                    <p><strong>Declaração de comparecimento:</strong>
                     
                     <p><strong>Usuário:</strong> ${record.userName}</p>
                     <p><strong>Coordenadas:</strong> ${record.coordinates}</p>
@@ -695,9 +510,9 @@ records.forEach((record, index) => {
                 historyContainer.style.display = "none";
             }
         }
-    
-       
-// Função para compartilhar no WhatsApp a partir do histórico
+        
+   
+  // Função para compartilhar no WhatsApp a partir do histórico
 function shareLocationHistory(index) {
     const records = JSON.parse(localStorage.getItem("presenceRecords")) || [];
 
@@ -710,19 +525,13 @@ function shareLocationHistory(index) {
     const userName = localStorage.getItem("userName") || "Usuário";  // Nome fixo
     const userID = localStorage.getItem("userID");  // ID fixo
 
-    console.log(record.latitude, record.longitude); // Verifique as coordenadas
-const message = `Declaração de comparecimento: \n\nEu estive aqui,\nUsuário: ${userName} (ID: ${userID})\nLatitude: ${record.latitude}\nLongitude: ${record.longitude}\n${record.address}\nDescrição: ${record.description}\nData/hora local: ${new Date().toLocaleString()}\n\nhttps://maps.google.com/?q=${record.latitude},${record.longitude}`;
+    const message = `*Marcador de Presença*\n\nEu estive aqui:\n\nUsuário: ${userName} (ID: ${userID})\n${record.coordinates}\n${record.address}\nDescrição: ${record.description}\nData/hora local: ${record.timestamp}\n\nhttps://maps.google.com/?q=${record.latitude},${record.longitude}`;
 
     const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
-
-
-
-
-
-
 }
- 
+           
+
            // Função para gerar PDF a partir do histórico
          async function generatePDFHistory(index) {
          const records = JSON.parse(localStorage.getItem("presenceRecords")) || [];
@@ -740,12 +549,7 @@ const message = `Declaração de comparecimento: \n\nEu estive aqui,\nUsuário: 
          const userID = localStorage.getItem("userID");  // ID fixo
 
          const title = "Marcador de Presença";
-
-         const googleMapsLink = `https://maps.google.com/?q=${record.latitude},${record.longitude}`;
-
-         const message = `Declaração de comparecimento: \n\nEu estive aqui,\nUsuário: ${userName} (ID: ${userID})\n${record.coordinates}\n${record.address}\nDescrição: ${record.description}\nData/hora local: ${new Date().toLocaleString()}\n\nhttps://maps.google.com/?q=${record.latitude},${record.longitude}`;
-
-
+         const message = `Eu estive aqui:\n\nUsuário: ${userName} (ID: ${userID})\n${record.coordinates}\n${record.address}\nDescrição: ${record.description}\nData/hora local: ${record.timestamp}\n\nhttps://maps.google.com/?q=${record.latitude},${record.longitude}`;
 
          doc.setFont("helvetica", "bold");
          doc.setFontSize(16);
@@ -759,13 +563,6 @@ const message = `Declaração de comparecimento: \n\nEu estive aqui,\nUsuário: 
 
          doc.save(`${userName}_Marcador_de_Presença.pdf`);
 }
-
-
-
-
-
-
-
 
 
             // Função delete a partir do histórico
@@ -789,7 +586,6 @@ const message = `Declaração de comparecimento: \n\nEu estive aqui,\nUsuário: 
 </head>
 <body>
 
-
   <!-- Campo para o Nome do Usuário -->
  
   <!-- Carregando o Font Awesome -->
@@ -802,10 +598,8 @@ const message = `Declaração de comparecimento: \n\nEu estive aqui,\nUsuário: 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
 
-
 <!-- Campo para o Nome do Usuário -->
 <div class="container">
-    <div class="container" style="margin-bottom: 2px;"> <!-- Linha adicionada para o espaçamento -->
     <div style="padding: 10px; max-width: 600px; margin: auto;">
         <!-- Input do Nome -->
         <input type="text" id="user-name" placeholder="Digite seu nome" style="display: none; width: 100%; padding: 8px; margin-bottom: 10px;">
