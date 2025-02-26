@@ -112,8 +112,7 @@
             let imc = (parseFloat(currentWeight) / (parseFloat(height) * parseFloat(height))).toFixed(2);
             document.getElementById('imcResult').innerText = `IMC: ${imc}`;
             
-            let timestamp = new Date().toLocaleString();
-            let entry = `${timestamp} - ${currentWeight} kg (Saldo: ${balanceSign} kg, IMC: ${imc})`;
+            let entry = `${new Date().toLocaleDateString()} - ${currentWeight} kg (Saldo: ${balanceSign} kg, IMC: ${imc})`;
             history.unshift(entry);
             localStorage.setItem('history', JSON.stringify(history));
             updateHistory();
@@ -121,13 +120,7 @@
 
         function updateHistory() {
             let historyList = document.getElementById('historyList');
-            historyList.innerHTML = history.map((entry, index) => `<li>${entry} <button onclick="deleteEntry(${index})">Apagar</button></li>`).join('');
-        }
-
-        function deleteEntry(index) {
-            history.splice(index, 1);
-            localStorage.setItem('history', JSON.stringify(history));
-            updateHistory();
+            historyList.innerHTML = history.map(entry => `<li>${entry}</li>`).join('');
         }
 
         updateHistory();
