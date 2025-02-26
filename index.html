@@ -38,86 +38,47 @@ body {
 
             h2 {
                 color: #333;
-                font-size: 26px; /* Título topo*/
+                font-size: 24px;
                 margin-bottom: 20px;
             }
     
             h3 {
-                color: #555; 
-                font-size: 26px;  /* Título histórico*/
+                color: #555;
+                font-size: 20px;
                 margin-top: 30px;
             }
     
             label {
-    display: block;
-    margin-bottom: 8px;
-    font-size: 18px; /* Mantendo o tamanho ajustado, se necessário */
-    color: #555;
-    font-weight: bold; /* Torna o texto do label em negrito */
-}
-
+                display: block;
+                margin-bottom: 8px;
+                font-size: 14px;
+                color: #555;
+            }
     
-
-            /* Estilo para os inputs de texto */
-input[type="text"] {
-    width: 100%; /* Garante que o input ocupe toda a largura disponível */
-    padding: 8px; /* Adiciona um espaço interno no campo */
-    margin-bottom: 15px; /* Adiciona um espaço entre os campos */
-    border-radius: 4px; /* Bordas arredondadas */
-    border: 1px solid #ccc; /* Borda do campo */
-    font-size: 16px; /* Tamanho da fonte */
-    box-sizing: border-box; /* Inclui o padding e a borda no cálculo da largura total */
-}
-
-            
-
-
-/* Adiciona espaço entre os campos */
-label {
-    display: block; /* Faz com que o label ocupe a largura total e fique em uma linha */
-    text-align: left; /* Alinha o texto do label à esquerda */
-    margin-bottom: 5px; /* Adiciona um pequeno espaço entre o label e o input */
-}
-
-/* Para o campo ID */
-#userId {
-    text-align: left; /* Alinha o texto à esquerda */
-    margin-top: 10px; /* Adiciona espaço acima do ID */
-}
-
+            input[type="text"] {
+                width: 100%;
+                padding: 10px;
+                margin-bottom: 15px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                font-size: 16px;
+                box-sizing: border-box;
+            }
     
-
-
-  /* Estilo do botão */
-button {
-    width: 100%; /* Garante que o botão ocupe toda a largura disponível */
-    padding: 10px; /* Adiciona o preenchimento do botão */
-    margin: 0; /* Remove qualquer margem externa */
-    background-color: #4CAF50; /* Cor de fundo do botão */
-    color: white; /* Cor do texto */
-    border: none; /* Remove bordas */
-    font-size: 16px; /* Tamanho da fonte */
-    cursor: pointer; /* Indica que o botão é clicável */
-    border-radius: 5px; /* Arredonda os cantos */
-    box-sizing: border-box; /* Inclui padding e border no cálculo da largura */
-}
-
-/* Adiciona um efeito visual ao passar o mouse */
-button:hover {
-    background-color: #45a049;
-}
-
-/* Ajusta os botões específicos para Editar e Salvar */
-#editButton, #saveButton {
-    margin: 0; /* Remove margens adicionais */
-}
-
-/* Para os botões que têm largura total, garantir o alinhamento */
-#editButton, #saveButton {
-    display: block; /* Garante que eles ocupem uma linha inteira */
-}
-
-
+            button {
+                background-color: #4CAF50;
+                color: white;
+                padding: 10px 20px;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+                font-size: 16px;
+                margin-top: 10px;
+            }
+    
+            button:hover {
+                background-color: #45a049;
+            }
     
             button:disabled {
                 background-color: #ccc;
@@ -191,7 +152,6 @@ button:hover {
     <div class="container">
         <h2>Controle de Peso</h2>
         <div id="userSection">
-
             <label for="userName">Nome:</label>
             <input type="text" id="userName" placeholder="Digite seu nome" disabled>
             
@@ -200,7 +160,6 @@ button:hover {
             
             <label for="desiredWeight">Peso Desejado (kg):</label>
             <input type="text" id="desiredWeight" placeholder="Digite seu peso desejado" disabled>
-
             
             <button id="registerButton" onclick="registerUser()">Registrar</button>
             <button id="editButton" onclick="editUser()" style="display: none;">Editar</button>
@@ -235,7 +194,6 @@ button:hover {
             return userId;
         }
 
-    
         let userId = localStorage.getItem('userId') || null;
         let userName = localStorage.getItem('userName') || "";
         let height = localStorage.getItem('height') || "";
@@ -252,12 +210,6 @@ button:hover {
             document.getElementById('registerButton').style.display = 'none';
             document.getElementById('editButton').style.display = 'inline';
         }
-
-
-      
-
-
-
 
         function editUser() {
             document.getElementById('userName').disabled = false;
