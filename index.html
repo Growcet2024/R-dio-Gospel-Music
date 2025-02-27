@@ -147,10 +147,11 @@ button:hover {
         let desiredWeight = localStorage.getItem('desiredWeight') || "";
         let history = JSON.parse(localStorage.getItem('history')) || [];
 
-        document.getElementById('userName').value = userName || "";
-document.getElementById('height').value = height ? height.replace('.', ',') : null;
-document.getElementById('desiredWeight').value = desiredWeight ? desiredWeight.replace('.', ',') : null;
-
+        document.getElementById('userName').value = userName;
+        document.getElementById('height').value = height ? height.replace('.', ',') : "";
+        document.getElementById('desiredWeight').value = desiredWeight ? desiredWeight.replace('.', ',') : "";
+        
+      
       
 
 
