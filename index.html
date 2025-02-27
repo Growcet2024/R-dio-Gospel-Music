@@ -1,15 +1,197 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Controle de Peso</title>
-    <link rel="stylesheet" href="styles.css">
+    
+    
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Controle de Peso</title>
+    
+        <!-- Código CSS dentro da tag <style> -->
+        <style>
+
+            
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px 0; /* Adicionando espaço no topo e embaixo */
+    background-color: #f4f4f4;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* Alinha no topo */
+    height: 100vh; /* Garante que o conteúdo ocupe 100% da altura da tela */
+}
+
+.container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 600px;
+    text-align: center;
+}
+
+
+
+            h2 {
+                color: #333;
+                font-size: 26px; /* Título topo*/
+                margin-bottom: 20px;
+            }
+    
+            h3 {
+                color: #555; 
+                font-size: 26px;  /* Título histórico*/
+                margin-top: 30px;
+            }
+    
+            label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 18px; /* Mantendo o tamanho ajustado, se necessário */
+    color: #555;
+    font-weight: bold; /* Torna o texto do label em negrito */
+}
+
+    
+
+            /* Estilo para os inputs de texto */
+input[type="text"] {
+    width: 100%; /* Garante que o input ocupe toda a largura disponível */
+    padding: 8px; /* Adiciona um espaço interno no campo */
+    margin-bottom: 15px; /* Adiciona um espaço entre os campos */
+    border-radius: 4px; /* Bordas arredondadas */
+    border: 1px solid #ccc; /* Borda do campo */
+    font-size: 16px; /* Tamanho da fonte */
+    box-sizing: border-box; /* Inclui o padding e a borda no cálculo da largura total */
+}
+
+
+
+/* Adiciona espaço entre os campos */
+label {
+    display: block; /* Faz com que o label ocupe a largura total e fique em uma linha */
+    text-align: left; /* Alinha o texto do label à esquerda */
+    margin-bottom: 5px; /* Adiciona um pequeno espaço entre o label e o input */
+}
+
+
+/* Para o campo ID */
+#userId {
+    text-align: left; /* Alinha o texto à esquerda */
+    margin-top: 10px; /* Adiciona espaço acima do ID */
+}
+
+    
+
+
+  /* Estilo do botão */
+button {
+    width: 100%; /* Garante que o botão ocupe toda a largura disponível */
+    padding: 10px; /* Adiciona o preenchimento do botão */
+    margin: 0; /* Remove qualquer margem externa */
+    background-color: #4CAF50; /* Cor de fundo do botão */
+    color: white; /* Cor do texto */
+    border: none; /* Remove bordas */
+    font-size: 16px; /* Tamanho da fonte */
+    cursor: pointer; /* Indica que o botão é clicável */
+    border-radius: 5px; /* Arredonda os cantos */
+    box-sizing: border-box; /* Inclui padding e border no cálculo da largura */
+}
+
+/* Adiciona um efeito visual ao passar o mouse */
+button:hover {
+    background-color: #45a049;
+}
+
+/* Ajusta os botões específicos para Editar e Salvar */
+#editButton, #saveButton {
+    margin: 0; /* Remove margens adicionais */
+}
+
+/* Para os botões que têm largura total, garantir o alinhamento */
+#editButton, #saveButton {
+    display: block; /* Garante que eles ocupem uma linha inteira */
+}
+
+
+    
+            button:disabled {
+                background-color: #ccc;
+                cursor: not-allowed;
+            }
+    
+            button + button {
+                margin-left: 10px;
+            }
+    
+            #weightBalance, #imcResult {
+                font-size: 18px;
+                font-weight: bold;
+                margin-top: 20px;
+                color: #333;
+            }
+    
+            #weightBalance {
+                color: #e74c3c;
+            }
+    
+            #imcResult {
+                color: #3498db;
+            }
+    
+            #historyList {
+                list-style-type: none;
+                padding: 0;
+                margin-top: 20px;
+            }
+    
+            #historyList li {
+                background-color: #f9f9f9;
+                margin-bottom: 8px;
+                padding: 10px;
+                border-radius: 4px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                font-size: 14px;
+                color: #555;
+            }
+    
+            #historyList li button {
+                background-color: #e74c3c;
+                color: white;
+                padding: 5px 10px;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+                font-size: 12px;
+            }
+    
+            #historyList li button:hover {
+                background-color: #c0392b;
+            }
+    
+            #userId {
+                color: #888;
+                font-size: 14px;
+                margin-top: 10px;
+            }
+        </style>
+    </head>
+    
+
+
+
 </head>
 <body>
     <div class="container">
         <h2>Controle de Peso</h2>
         <div id="userSection">
+
             <label for="userName">Nome:</label>
             <input type="text" id="userName" placeholder="Digite seu nome" disabled>
             
@@ -18,7 +200,8 @@
             
             <label for="desiredWeight">Peso Desejado (kg):</label>
             <input type="text" id="desiredWeight" placeholder="Digite seu peso desejado" disabled>
-            
+
+
             <button id="registerButton" onclick="registerUser()">Registrar</button>
             <button id="editButton" onclick="editUser()" style="display: none;">Editar</button>
             <button id="saveButton" onclick="saveUser()" style="display: none;">Salvar</button>
@@ -52,6 +235,7 @@
             return userId;
         }
 
+    
         let userId = localStorage.getItem('userId') || null;
         let userName = localStorage.getItem('userName') || "";
         let height = localStorage.getItem('height') || "";
@@ -61,13 +245,55 @@
         document.getElementById('userName').value = userName;
         document.getElementById('height').value = height ? height.replace('.', ',') : "";
         document.getElementById('desiredWeight').value = desiredWeight ? desiredWeight.replace('.', ',') : "";
+
+
         
-        if (userId) {
-            document.getElementById('userId').innerText = `ID do Usuário: ${userId}`;
-            document.getElementById('userId').style.display = 'block';
-            document.getElementById('registerButton').style.display = 'none';
-            document.getElementById('editButton').style.display = 'inline';
-        }
+         // alteração 2 início //
+        function registerUser() {
+    userName = document.getElementById('userName').value.trim();
+    height = formatNumber(document.getElementById('height').value.trim());
+    desiredWeight = formatNumber(document.getElementById('desiredWeight').value.trim());
+
+    if (!userName || !height || !desiredWeight) {
+        alert("Por favor, preencha todos os campos corretamente.");
+        return;
+    }
+
+    userId = generateUserId(); // Gera um novo ID de usuário
+    localStorage.setItem('userId', userId);
+    localStorage.setItem('userName', userName);
+    localStorage.setItem('height', height);
+    localStorage.setItem('desiredWeight', desiredWeight);
+
+    document.getElementById('userId').innerText = `ID do Usuário: ${userId}`;
+    document.getElementById('userId').style.display = 'block';
+    document.getElementById('registerButton').style.display = 'none';
+    document.getElementById('editButton').style.display = 'inline';
+
+    document.getElementById('userName').disabled = true;
+    document.getElementById('height').disabled = true;
+    document.getElementById('desiredWeight').disabled = true;
+}
+    // alteração 2 início fim //
+
+
+ // alteração 1 início// 
+ if (userId) {
+    document.getElementById('userId').innerText = `ID do Usuário: ${userId}`;
+    document.getElementById('userId').style.display = 'block';
+    document.getElementById('registerButton').style.display = 'none';
+    document.getElementById('editButton').style.display = 'inline';
+} else {
+
+    // Permitir que o usuário digite seus dados ao abrir o app pela primeira vez
+    document.getElementById('userName').disabled = false;
+    document.getElementById('height').disabled = false;
+    document.getElementById('desiredWeight').disabled = false;
+}
+  // alteração 1 fim //
+
+
+
 
         function editUser() {
             document.getElementById('userName').disabled = false;
@@ -112,7 +338,8 @@
             let imc = (parseFloat(currentWeight) / (parseFloat(height) * parseFloat(height))).toFixed(2);
             document.getElementById('imcResult').innerText = `IMC: ${imc}`;
             
-            let entry = `${new Date().toLocaleDateString()} - ${currentWeight} kg (Saldo: ${balanceSign} kg, IMC: ${imc})`;
+            let timestamp = new Date().toLocaleString();
+            let entry = `${timestamp} - ${currentWeight} kg (Saldo: ${balanceSign} kg, IMC: ${imc})`;
             history.unshift(entry);
             localStorage.setItem('history', JSON.stringify(history));
             updateHistory();
@@ -120,7 +347,13 @@
 
         function updateHistory() {
             let historyList = document.getElementById('historyList');
-            historyList.innerHTML = history.map(entry => `<li>${entry}</li>`).join('');
+            historyList.innerHTML = history.map((entry, index) => `<li>${entry} <button onclick="deleteEntry(${index})">Apagar</button></li>`).join('');
+        }
+
+        function deleteEntry(index) {
+            history.splice(index, 1);
+            localStorage.setItem('history', JSON.stringify(history));
+            updateHistory();
         }
 
         updateHistory();
