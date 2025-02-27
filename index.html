@@ -7,117 +7,27 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-
-    <style>
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start; /* Em vez de center, coloca flex-start */
-    min-height: 100vh; /* Usa min-height para evitar corte */
-    padding-top: 20px; /* Dá um pequeno espaço extra no topo */
-}
-
-        .container {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 400px;
-        }
-    
-        h2 {
-            text-align: center;
-            color: #333;
-        }
-    
-        label {
-            font-weight: bold;
-            margin-top: 10px;
-            display: block;
-        }
-    
-        input {
-    width: 100%; /* Ocupa toda a largura disponível */
-    padding: 10px;
-    margin: 5px 0;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-sizing: border-box;
-}
-
-button {
-    width: 100%; /* Faz os botões ocuparem a mesma largura dos inputs */
-    padding: 10px;
-    margin: 5px 0;
-    border: none;
-    border-radius: 5px;
-    background-color: #007bff;
-    color: white;
-    cursor: pointer;
-}
-
-button:hover {
-    background-color: #0056b3;
-}
-
-    
-        ul {
-            list-style-type: none;
-            padding: 0;
-        }
-    
-        li {
-            background: #f9f9f9;
-            padding: 10px;
-            margin-top: 5px;
-            border-radius: 5px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-    
-        li button {
-            background-color: #dc3545;
-            padding: 5px 10px;
-            font-size: 14px;
-        }
-    
-        li button:hover {
-            background-color: #c82333;
-        }
-    </style>
-    
-
-   <div class="container">
+    <div class="container">
         <h2>Controle de Peso</h2>
-         <div id="userSection">
+        <div id="userSection">
             <label for="userName">Nome:</label>
             <input type="text" id="userName" placeholder="Digite seu nome" disabled>
-
             
             <label for="height">Altura (m):</label>
-            <input type="number" id="height" placeholder="Digite sua altura" step="0.01" disabled>
-
+            <input type="text" id="height" placeholder="Digite sua altura" pattern="\d{1},\d{2}" disabled>
+            
             <label for="desiredWeight">Peso Desejado (kg):</label>
-            <input type="number" id="desiredWeight" placeholder="Digite seu peso desejado" step="0.1" disabled>
-
+            <input type="text" id="desiredWeight" placeholder="Digite seu peso desejado" disabled>
             
             <button id="registerButton" onclick="registerUser()">Registrar</button>
             <button id="editButton" onclick="editUser()" style="display: none;">Editar</button>
             <button id="saveButton" onclick="saveUser()" style="display: none;">Salvar</button>
             
             <p id="userId" style="display: none;"></p>
-         </div>
+        </div>
 
-         <label for="currentWeight">Peso Atual (kg):</label>
-         <input type="number" id="currentWeight" placeholder="Digite seu peso atual" step="0.1">
-
-
+        <label for="currentWeight">Peso Atual (kg):</label>
+        <input type="text" id="currentWeight" placeholder="Digite seu peso atual">
         
         <button onclick="addWeight()">Adicionar Registro</button>
         
@@ -129,6 +39,7 @@ button:hover {
     </div>
 
     <script>
+
         function formatNumber(value) {
             return value.replace(',', '.');
         }
@@ -151,12 +62,12 @@ button:hover {
         document.getElementById('userName').value = userName;
         document.getElementById('height').value = height ? height.replace('.', ',') : "";
         document.getElementById('desiredWeight').value = desiredWeight ? desiredWeight.replace('.', ',') : "";
+
+
+
+
         
       
-      
-
-
-
      // alteração 2 início //
         function registerUser() {
     userName = document.getElementById('userName').value.trim();
@@ -210,8 +121,6 @@ button:hover {
             document.getElementById('saveButton').style.display = 'inline';
         }
 
-
-
         function saveUser() {
             userName = document.getElementById('userName').value.trim();
             height = formatNumber(document.getElementById('height').value.trim());
@@ -232,8 +141,6 @@ button:hover {
             document.getElementById('saveButton').style.display = 'none';
             document.getElementById('editButton').style.display = 'inline';
         }
-
-
 
         function addWeight() {
             let currentWeight = formatNumber(document.getElementById('currentWeight').value.trim());
@@ -271,6 +178,5 @@ button:hover {
     </script>
 </body>
 </html>
-
 
 
