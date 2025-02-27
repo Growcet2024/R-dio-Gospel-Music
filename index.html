@@ -103,10 +103,10 @@ button:hover {
             <input type="text" id="userName" placeholder="Digite seu nome" disabled>
             
             <label for="height">Altura (m):</label>
-            <input type="number" id="height" placeholder="Digite sua altura" pattern="\d{1},\d{2}" disabled>
+            <input type="text" id="height" placeholder="Digite sua altura" pattern="\d{1},\d{2}" disabled>
             
             <label for="desiredWeight">Peso Desejado (kg):</label>
-            <input type="number" id="desiredWeight" placeholder="Digite seu peso desejado" disabled>
+            <input type="text" id="desiredWeight" placeholder="Digite seu peso desejado" disabled>
             
             <button id="registerButton" onclick="registerUser()">Registrar</button>
             <button id="editButton" onclick="editUser()" style="display: none;">Editar</button>
@@ -116,7 +116,7 @@ button:hover {
         </div>
 
         <label for="currentWeight">Peso Atual (kg):</label>
-        <input type="number" id="currentWeight" placeholder="Digite seu peso atual">
+        <input type="text" id="currentWeight" placeholder="Digite seu peso atual">
         
         <button onclick="addWeight()">Adicionar Registro</button>
         
