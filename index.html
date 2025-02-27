@@ -1,216 +1,123 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    
-    
-
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Controle de Peso</title>
-    
-        <!-- Código CSS dentro da tag <style> -->
-        <style>
-
-            
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 20px 0; /* Adicionando espaço no topo e embaixo */
-    background-color: #f4f4f4;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start; /* Alinha no topo */
-    height: 100vh; /* Garante que o conteúdo ocupe 100% da altura da tela */
-}
-
-.container {
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 600px;
-    text-align: center;
-}
-
-
-
-            h2 {
-                color: #333;
-                font-size: 26px; /* Título topo*/
-                margin-bottom: 20px;
-            }
-    
-            h3 {
-                color: #555; 
-                font-size: 26px;  /* Título histórico*/
-                margin-top: 30px;
-            }
-    
-            label {
-    display: block;
-    margin-bottom: 8px;
-    font-size: 18px; /* Mantendo o tamanho ajustado, se necessário */
-    color: #555;
-    font-weight: bold; /* Torna o texto do label em negrito */
-}
-
-    
-
-            /* Estilo para os inputs de texto */
-input[type="text"] {
-    width: 100%; /* Garante que o input ocupe toda a largura disponível */
-    padding: 8px; /* Adiciona um espaço interno no campo */
-    margin-bottom: 15px; /* Adiciona um espaço entre os campos */
-    border-radius: 4px; /* Bordas arredondadas */
-    border: 1px solid #ccc; /* Borda do campo */
-    font-size: 16px; /* Tamanho da fonte */
-    box-sizing: border-box; /* Inclui o padding e a borda no cálculo da largura total */
-}
-
-
-
-/* Adiciona espaço entre os campos */
-label {
-    display: block; /* Faz com que o label ocupe a largura total e fique em uma linha */
-    text-align: left; /* Alinha o texto do label à esquerda */
-    margin-bottom: 5px; /* Adiciona um pequeno espaço entre o label e o input */
-}
-
-
-/* Para o campo ID */
-#userId {
-    text-align: left; /* Alinha o texto à esquerda */
-    margin-top: 10px; /* Adiciona espaço acima do ID */
-}
-
-    
-
-
-  /* Estilo do botão */
-button {
-    width: 100%; /* Garante que o botão ocupe toda a largura disponível */
-    padding: 10px; /* Adiciona o preenchimento do botão */
-    margin: 0; /* Remove qualquer margem externa */
-    background-color: #4CAF50; /* Cor de fundo do botão */
-    color: white; /* Cor do texto */
-    border: none; /* Remove bordas */
-    font-size: 16px; /* Tamanho da fonte */
-    cursor: pointer; /* Indica que o botão é clicável */
-    border-radius: 5px; /* Arredonda os cantos */
-    box-sizing: border-box; /* Inclui padding e border no cálculo da largura */
-}
-
-/* Adiciona um efeito visual ao passar o mouse */
-button:hover {
-    background-color: #45a049;
-}
-
-/* Ajusta os botões específicos para Editar e Salvar */
-#editButton, #saveButton {
-    margin: 0; /* Remove margens adicionais */
-}
-
-/* Para os botões que têm largura total, garantir o alinhamento */
-#editButton, #saveButton {
-    display: block; /* Garante que eles ocupem uma linha inteira */
-}
-
-
-    
-            button:disabled {
-                background-color: #ccc;
-                cursor: not-allowed;
-            }
-    
-            button + button {
-                margin-left: 10px;
-            }
-    
-            #weightBalance, #imcResult {
-                font-size: 18px;
-                font-weight: bold;
-                margin-top: 20px;
-                color: #333;
-            }
-    
-            #weightBalance {
-                color: #e74c3c;
-            }
-    
-            #imcResult {
-                color: #3498db;
-            }
-    
-            #historyList {
-                list-style-type: none;
-                padding: 0;
-                margin-top: 20px;
-            }
-    
-            #historyList li {
-                background-color: #f9f9f9;
-                margin-bottom: 8px;
-                padding: 10px;
-                border-radius: 4px;
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                font-size: 14px;
-                color: #555;
-            }
-    
-            #historyList li button {
-                background-color: #e74c3c;
-                color: white;
-                padding: 5px 10px;
-                border: none;
-                border-radius: 4px;
-                cursor: pointer;
-                font-size: 12px;
-            }
-    
-            #historyList li button:hover {
-                background-color: #c0392b;
-            }
-    
-            #userId {
-                color: #888;
-                font-size: 14px;
-                margin-top: 10px;
-            }
-        </style>
-    </head>
-    
-
-
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Controle de Peso</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
-        <h2>Controle de Peso</h2>
-        <div id="userSection">
 
+    <style>
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* Em vez de center, coloca flex-start */
+    min-height: 100vh; /* Usa min-height para evitar corte */
+    padding-top: 20px; /* Dá um pequeno espaço extra no topo */
+}
+
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+    
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+    
+        label {
+            font-weight: bold;
+            margin-top: 10px;
+            display: block;
+        }
+    
+        input {
+    width: 100%; /* Ocupa toda a largura disponível */
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+button {
+    width: 100%; /* Faz os botões ocuparem a mesma largura dos inputs */
+    padding: 10px;
+    margin: 5px 0;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+    
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+    
+        li {
+            background: #f9f9f9;
+            padding: 10px;
+            margin-top: 5px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+    
+        li button {
+            background-color: #dc3545;
+            padding: 5px 10px;
+            font-size: 14px;
+        }
+    
+        li button:hover {
+            background-color: #c82333;
+        }
+    </style>
+    
+
+   <div class="container">
+        <h2>Controle de Peso</h2>
+         <div id="userSection">
             <label for="userName">Nome:</label>
             <input type="text" id="userName" placeholder="Digite seu nome" disabled>
+
             
             <label for="height">Altura (m):</label>
-            <input type="text" id="height" placeholder="Digite sua altura" pattern="\d{1},\d{2}" disabled>
-            
+            <input type="number" id="height" placeholder="Digite sua altura" step="0.01" disabled>
+
             <label for="desiredWeight">Peso Desejado (kg):</label>
-            <input type="text" id="desiredWeight" placeholder="Digite seu peso desejado" disabled>
+            <input type="number" id="desiredWeight" placeholder="Digite seu peso desejado" step="0.1" disabled>
 
-
+            
             <button id="registerButton" onclick="registerUser()">Registrar</button>
             <button id="editButton" onclick="editUser()" style="display: none;">Editar</button>
             <button id="saveButton" onclick="saveUser()" style="display: none;">Salvar</button>
             
             <p id="userId" style="display: none;"></p>
-        </div>
+         </div>
 
-        <label for="currentWeight">Peso Atual (kg):</label>
-        <input type="text" id="currentWeight" placeholder="Digite seu peso atual">
+         <label for="currentWeight">Peso Atual (kg):</label>
+         <input type="number" id="currentWeight" placeholder="Digite seu peso atual" step="0.1">
+
+
         
         <button onclick="addWeight()">Adicionar Registro</button>
         
@@ -235,7 +142,6 @@ button:hover {
             return userId;
         }
 
-    
         let userId = localStorage.getItem('userId') || null;
         let userName = localStorage.getItem('userName') || "";
         let height = localStorage.getItem('height') || "";
@@ -245,10 +151,13 @@ button:hover {
         document.getElementById('userName').value = userName;
         document.getElementById('height').value = height ? height.replace('.', ',') : "";
         document.getElementById('desiredWeight').value = desiredWeight ? desiredWeight.replace('.', ',') : "";
-
-
         
-         // alteração 2 início //
+      
+      
+
+
+
+     // alteração 2 início //
         function registerUser() {
     userName = document.getElementById('userName').value.trim();
     height = formatNumber(document.getElementById('height').value.trim());
@@ -293,8 +202,6 @@ button:hover {
   // alteração 1 fim //
 
 
-
-
         function editUser() {
             document.getElementById('userName').disabled = false;
             document.getElementById('height').disabled = false;
@@ -302,6 +209,8 @@ button:hover {
             document.getElementById('editButton').style.display = 'none';
             document.getElementById('saveButton').style.display = 'inline';
         }
+
+
 
         function saveUser() {
             userName = document.getElementById('userName').value.trim();
@@ -323,6 +232,8 @@ button:hover {
             document.getElementById('saveButton').style.display = 'none';
             document.getElementById('editButton').style.display = 'inline';
         }
+
+
 
         function addWeight() {
             let currentWeight = formatNumber(document.getElementById('currentWeight').value.trim());
