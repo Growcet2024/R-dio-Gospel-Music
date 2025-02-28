@@ -220,26 +220,35 @@ button:hover {
     
 // Garante que números sejam armazenados corretamente, fim do bloco //
 
-        function addWeight() {
-            let currentWeight = formatNumber(document.getElementById('currentWeight').value.trim());
-            if (!currentWeight) {
-                alert("Por favor, insira seu peso atual.");
-                return;
-            }
-            
-            let weightBalance = (parseFloat(currentWeight) - parseFloat(desiredWeight)).toFixed(2);
-            let balanceSign = weightBalance > 0 ? `+${weightBalance}` : weightBalance;
-            document.getElementById('weightBalance').innerText = `Peso Saldo: ${balanceSign} kg`;
-            
-            let imc = (parseFloat(currentWeight) / (parseFloat(height) * parseFloat(height))).toFixed(2);
-            document.getElementById('imcResult').innerText = `IMC: ${imc}`;
-            
-            let timestamp = new Date().toLocaleString();
-            let entry = `${timestamp} - ${currentWeight} kg (Saldo: ${balanceSign} kg, IMC: ${imc})`;
-            history.unshift(entry);
-            localStorage.setItem('history', JSON.stringify(history));
-            updateHistory();
-        }
+
+
+function addWeight() {
+    let currentWeight = formatNumber(document.getElementById('currentWeight').value.trim());
+    if (!currentWeight) {
+        alert("Por favor, insira seu peso atual.");
+        return;
+    }
+
+    let weightBalance = (parseFloat(currentWeight) - parseFloat(desiredWeight)).toFixed(2);
+    let balanceSign = weightBalance > 0 ? `+${weightBalance}` : weightBalance;
+    document.getElementById('weightBalance').innerText = `Peso Saldo: ${balanceSign} kg`;
+
+    let imc = (parseFloat(currentWeight) / (parseFloat(height) * parseFloat(height))).toFixed(2);
+    document.getElementById('imcResult').innerText = `IMC: ${imc}`;
+
+    let timestamp = new Date().toLocaleString();
+    let entry = `${timestamp} - ${currentWeight} kg (Saldo: ${balanceSign} kg, IMC: ${imc})`;
+    history.unshift(entry);
+    localStorage.setItem('history', JSON.stringify(history));
+    updateHistory();
+
+    // **Limpa o campo após adicionar**
+    document.getElementById('currentWeight').value = "";
+}
+
+
+
+
 
         function updateHistory() {
             let historyList = document.getElementById('historyList');
