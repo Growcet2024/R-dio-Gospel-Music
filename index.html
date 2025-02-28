@@ -113,7 +113,7 @@ button:hover {
         </div>
 
         <label for="currentWeight">Peso Atual (kg):</label>
-        <input type="number" id="currentWeight" placeholder="Digite seu peso atual">
+        <input type="number" id="currentWeight" placeholder="Digite seu peso atual, EX: 65.50 KLg">
         
         <button onclick="addWeight()">Adicionar Registro</button>
         
@@ -123,8 +123,6 @@ button:hover {
         <h3>Histórico de Pesagem</h3>
         <ul id="historyList"></ul>
     </div>
-
-
 
 
     <script>
@@ -231,29 +229,64 @@ function addWeight() {
 
     let weightBalance = (parseFloat(currentWeight) - parseFloat(desiredWeight)).toFixed(2);
     let balanceSign = weightBalance > 0 ? `+${weightBalance}` : weightBalance;
-    document.getElementById('weightBalance').innerText = `Peso Saldo: ${balanceSign} kg`;
-
     let imc = (parseFloat(currentWeight) / (parseFloat(height) * parseFloat(height))).toFixed(2);
-    document.getElementById('imcResult').innerText = `IMC: ${imc}`;
 
     let timestamp = new Date().toLocaleString();
-    let entry = `${timestamp} - ${currentWeight} kg (Saldo: ${balanceSign} kg, IMC: ${imc})`;
+
+    let entry = {
+        timestamp: timestamp,
+        currentWeight: currentWeight,
+        balanceSign: balanceSign,
+        imc: imc
+    };
+
     history.unshift(entry);
     localStorage.setItem('history', JSON.stringify(history));
+
     updateHistory();
 
-    // **Limpa o campo após adicionar**
     document.getElementById('currentWeight').value = "";
 }
 
+function updateHistory() {
+    let historyList = document.getElementById('historyList');
+    historyList.innerHTML = "";
+
+    history.forEach((entry, index) => {
+        let listItem = document.createElement('li');
+        
+        // Criar botão clicável com a data/hora
+        let button = document.createElement('button');
+        button.innerText = entry.timestamp;
+        button.style.display = "block";
+        button.style.width = "45%";   // alterei era 100% //
+        button.style.textAlign = "left";
+        button.style.marginBottom = "5px";
+        button.onclick = function() {
+            let details = this.nextElementSibling;
+            details.style.display = details.style.display === "none" ? "block" : "none";
+        };
+
+        // Criar div com os detalhes (inicialmente oculta)
+        let details = document.createElement('div');
+        details.style.display = "none";
+        details.style.padding = "5px";
+        details.style.border = "1px solid #ccc";
+        details.style.marginBottom = "10px";
+        details.innerHTML = `
+            <strong>Peso Atual:</strong> ${entry.currentWeight} kg<br>
+            <strong>Peso Saldo:</strong> ${entry.balanceSign} kg<br>
+            <strong>IMC:</strong> ${entry.imc}<br>
+            <button onclick="deleteEntry(${index})" style="margin-top: 5px;">Apagar</button>
+        `;
+
+        listItem.appendChild(button);
+        listItem.appendChild(details);
+        historyList.appendChild(listItem);
+    });
+}
 
 
-
-
-        function updateHistory() {
-            let historyList = document.getElementById('historyList');
-            historyList.innerHTML = history.map((entry, index) => `<li>${entry} <button onclick="deleteEntry(${index})">Apagar</button></li>`).join('');
-        }
 
         function deleteEntry(index) {
             history.splice(index, 1);
@@ -262,8 +295,7 @@ function addWeight() {
         }
 
         updateHistory();
+
     </script>
 </body>
 </html>
-
-
