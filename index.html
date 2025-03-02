@@ -112,20 +112,41 @@ button:hover {
             <p id="userId" style="display: none;"></p>
         </div>
 
-        <label for="currentWeight">Peso Atual (kg):</label>
-        <input type="number" id="currentWeight" placeholder="Digite seu peso atual, EX: 65.50 KLg">
+
+<!-- Campo oculto para armazenar o índice do histórico -->
+<input type="hidden" id="historyIndex"> 
+
+
+        <!-- Campo de peso atual -->
+<label for="currentWeight">Peso atual:</label>
+<input type="number" id="currentWeight" placeholder="Digite o peso atual" />
+
+<!-- Título "Data:" -->
+<label for="dateInput">Data:</label>
+
+<!-- Campo de data -->
+<input type="datetime-local" id="dateInput">
+
         
         <button onclick="addWeight()">Adicionar Registro</button>
-        
+
+<!-- Botão para salvar a edição após edição de dados -->
+<button onclick="saveEditedEntry()" style="width: 100%; padding: 8px; background-color: green; color: white; border: none; border-radius: 5px; cursor: pointer; margin-top: 10px;">
+    Salvar Edição
+</button>
+
+
         <p id="weightBalance">Peso Saldo: - kg</p>
         <p id="imcResult">IMC: -</p>
 
-        <h3>Histórico de Pesagem</h3>
-        <ul id="historyList"></ul>
-    </div>
+        <div id="historySection">
+            <h3>Histórico de Pesagem</h2>
+            <ul id="historyList"></ul>
+        </div>
 
-
+    
     <script>
+
         function formatNumber(value) {
             return value.replace(',', '.'); // Garante que números sejam armazenados corretamente
         }
@@ -215,13 +236,138 @@ button:hover {
             document.getElementById('editButton').style.display = 'inline';
         }
    
-    
 // Garante que números sejam armazenados corretamente, fim do bloco //
 
+
+document.addEventListener("DOMContentLoaded", function() {
+    // O campo "Peso atual" ficará visível desde o início
+    document.getElementById('currentWeight').style.display = 'inline';  // Exibe o campo de peso atual
+    
+    // Inicialmente, escondemos o título "Data:", o campo "Data" e o botão "Salvar Edição"
+    document.querySelector('label[for="dateInput"]').style.display = 'none';  // Esconde o título "Data:"
+    document.getElementById('dateInput').style.display = 'none';  // Esconde o campo de data
+    document.querySelector('button[onclick="saveEditedEntry()"]').style.display = 'none';  // Esconde o botão "Salvar Edição"
+    
+    // Garante que o botão "Adicionar Registro" esteja visível
+    document.querySelector('button[onclick="addWeight()"]').style.display = 'inline';
+
+    let historySection = document.getElementById('historySection');
+    let historyList = document.getElementById('historyList');
+    let toggleHistoryButton = document.getElementById('toggleHistoryButton');
+
+    if (!historySection || !historyList) {
+        console.error("Erro: Elementos de histórico não encontrados.");
+        return;
+    }
+
+    // Verifica se o botão de alternância já existe. Se não, cria-o.
+    if (!toggleHistoryButton) {
+        toggleHistoryButton = document.createElement('button');
+        toggleHistoryButton.innerText = "Histórico de Pesagem";
+        toggleHistoryButton.id = "toggleHistoryButton";
+        toggleHistoryButton.style.display = "block";
+        toggleHistoryButton.style.margin = "10px 0";
+        toggleHistoryButton.style.padding = "10px";
+        toggleHistoryButton.style.width = "100%";
+        toggleHistoryButton.style.background = "#007bff";
+        toggleHistoryButton.style.color = "white";
+        toggleHistoryButton.style.border = "none";
+        toggleHistoryButton.style.borderRadius = "5px";
+        toggleHistoryButton.style.cursor = "pointer";
+        toggleHistoryButton.style.fontSize = "16px";
+        toggleHistoryButton.style.fontWeight = "bold";
+
+        toggleHistoryButton.onclick = function() {
+            // Alterna entre exibir e ocultar o histórico
+            if (historyList.style.display === "none" || historyList.style.display === "") {
+                historyList.style.display = "block";
+                toggleHistoryButton.innerText = "Ocultar Histórico";
+            } else {
+                historyList.style.display = "none";
+                toggleHistoryButton.innerText = "Histórico de Pesagem";
+            }
+        };
+
+        // Inserir o botão antes da lista de histórico
+        historySection.insertBefore(toggleHistoryButton, historyList);
+    }
+
+    // Carregar o histórico do localStorage
+    let history = JSON.parse(localStorage.getItem('history')) || [];
+
+    // Se já houver histórico, exibe a lista
+    if (history.length > 0) {
+        historyList.style.display = "block"; // Exibe o histórico automaticamente
+        toggleHistoryButton.innerText = "Ocultar Histórico"; // Atualiza o texto do botão
+    } else {
+        historyList.style.display = "none"; // Mantém oculto se não houver histórico
+    }
+
+    // Atualiza a lista de histórico na tela
+    updateHistory();
+});
+
+// Função de editar os dados
+function editEntry(index) {
+    let entry = history[index];
+
+    // Carregar as informações do histórico nos campos de entrada
+    document.getElementById('currentWeight').value = entry.currentWeight;  // Preenche o peso atual
+    document.getElementById('historyIndex').value = index;  // Guarda o índice do item para atualizar depois
+    document.getElementById('dateInput').value = entry.timestamp;  // Preenche o campo de data
+    document.getElementById('currentWeight').focus();  // Dá foco no campo de peso atual
+
+    // Exibe os campos de edição e o botão "Salvar Edição"
+    document.querySelector('label[for="dateInput"]').style.display = 'inline'; // Exibe a palavra "Data:"
+    document.getElementById('dateInput').style.display = 'inline'; // Exibe o campo de data
+    document.querySelector('button[onclick="saveEditedEntry()"]').style.display = 'inline'; // Exibe o botão "Salvar Edição"
+    document.querySelector('button[onclick="addWeight()"]').style.display = 'none'; // Esconde o botão "Adicionar Registro"
+}
+
+
+// Função de salvar a edição
+function saveEditedEntry() {
+    let index = document.getElementById('historyIndex').value;  // Pega o índice do histórico que foi editado
+    let newWeight = document.getElementById('currentWeight').value.trim();  // Novo peso atual
+    let newDate = document.getElementById('dateInput').value;  // Nova data
+
+    if (!newWeight || !newDate) {
+        alert("Por favor, insira todos os dados.");
+        return;
+    }
+
+    // Atualizar os dados no histórico
+    history[index].currentWeight = newWeight;
+    history[index].timestamp = new Date(newDate).toLocaleString();  // Atualizar a data
+
+    // Atualizar o saldo e IMC
+    history[index].balanceSign = (parseFloat(newWeight) - parseFloat(desiredWeight)).toFixed(2);
+    history[index].imc = (parseFloat(newWeight) / (parseFloat(height) * parseFloat(height))).toFixed(2);
+
+    // Salvar no localStorage
+    localStorage.setItem('history', JSON.stringify(history));
+
+    // Atualiza o histórico na tela
+    updateHistory();
+
+    // Limpa os campos de edição
+    document.getElementById('currentWeight').value = '';
+    document.getElementById('dateInput').value = '';
+    document.getElementById('historyIndex').value = '';
+
+    // Esconde os campos de edição após salvar
+    document.querySelector('label[for="dateInput"]').style.display = 'none';  // Esconde o título "Data:"
+    document.getElementById('dateInput').style.display = 'none';  // Esconde o campo de data
+    document.querySelector('button[onclick="saveEditedEntry()"]').style.display = 'none';  // Esconde o botão "Salvar Edição"
+    
+    // Mostra o botão "Adicionar Registro"
+    document.querySelector('button[onclick="addWeight()"]').style.display = 'inline'; // Garante que o botão de adicionar registro volte a ser visível
+}
 
 
 function addWeight() {
     let currentWeight = formatNumber(document.getElementById('currentWeight').value.trim());
+
     if (!currentWeight) {
         alert("Por favor, insira seu peso atual.");
         return;
@@ -231,8 +377,11 @@ function addWeight() {
     let balanceSign = weightBalance > 0 ? `+${weightBalance}` : weightBalance;
     let imc = (parseFloat(currentWeight) / (parseFloat(height) * parseFloat(height))).toFixed(2);
 
-    let timestamp = new Date().toLocaleString();
+    // **📌 Atualiza os valores na tela principal**
+    document.getElementById('weightBalance').innerText = `Peso Saldo: ${balanceSign} kg`;
+    document.getElementById('imcResult').innerText = `IMC: ${imc}`;
 
+    let timestamp = new Date().toLocaleString();
     let entry = {
         timestamp: timestamp,
         currentWeight: currentWeight,
@@ -243,59 +392,74 @@ function addWeight() {
     history.unshift(entry);
     localStorage.setItem('history', JSON.stringify(history));
 
-    updateHistory();
+    updateHistory(); // Atualiza a lista no histórico
 
+    // **📌 Limpa o campo de peso após adicionar**
     document.getElementById('currentWeight').value = "";
 }
 
-function updateHistory() {
+
+ // 3º bloco
+ function updateHistory() {
     let historyList = document.getElementById('historyList');
-    historyList.innerHTML = "";
+    historyList.innerHTML = ""; // Limpa o conteúdo da lista
 
     history.forEach((entry, index) => {
-        let listItem = document.createElement('li');
-        
-        // Criar botão clicável com a data/hora
-        let button = document.createElement('button');
-        button.innerText = entry.timestamp;
-        button.style.display = "block";
-        button.style.width = "50%";   // alterei era 100% //
-        button.style.textAlign = "left";
-        button.style.marginBottom = "5px";
-        button.onclick = function() {
-            let details = this.nextElementSibling;
-            details.style.display = details.style.display === "none" ? "block" : "none";
-        };
+        let listItem = document.createElement('div');
+        listItem.style.borderBottom = "1px solid #ccc";
+        listItem.style.padding = "15px";
+        listItem.style.marginBottom = "10px";
+        listItem.style.backgroundColor = "#f9f9f9"; // Fundo levemente cinza para diferenciar os itens
 
-        // Criar div com os detalhes (inicialmente oculta)
-        let details = document.createElement('div');
-        details.style.display = "none";
-        details.style.padding = "5px";
-        details.style.border = "1px solid #ccc";
-        details.style.marginBottom = "10px";
-        details.innerHTML = `
-            <strong>Peso Atual:</strong> ${entry.currentWeight} kg<br>
-            <strong>Peso Saldo:</strong> ${entry.balanceSign} kg<br>
-            <strong>IMC:</strong> ${entry.imc}<br>
-            <button onclick="deleteEntry(${index})" style="margin-top: 5px;">Apagar</button>
+        listItem.innerHTML = `
+            <div style="font-size: 16px; font-weight: bold; color: #333;">
+                ${entry.timestamp}
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-top: 10px;">
+                <div>
+                    <strong>Peso Atual:</strong><br>
+                    <span>${entry.currentWeight} kg</span>
+                </div>
+                <div>
+                    <strong>Peso Saldo:</strong><br>
+                    <span>${entry.balanceSign} kg</span>
+                </div>
+                <div>
+                    <strong>IMC:</strong><br>
+                    <span>${entry.imc}</span>
+                </div>
+            </div>
+            <div style="margin-top: 10px;">
+                <button onclick="editEntry(${index})" style="width: 100%; padding: 8px; background-color: orange; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                    Editar
+                </button>
+                <button onclick="confirmDelete(${index})" style="width: 100%; padding: 8px; background-color: red; color: white; border: none; border-radius: 5px; cursor: pointer; margin-top: 8px;">
+                    Apagar
+                </button>
+            </div>
         `;
 
-        listItem.appendChild(button);
-        listItem.appendChild(details);
         historyList.appendChild(listItem);
     });
+
+    historyList.style.display = "block"; // Garante que o histórico esteja visível
 }
 
 
+function confirmDelete(index) {
+    let confirmation = confirm("Tem certeza que deseja apagar este registro?");
+    if (confirmation) {
+        deleteEntry(index);
+    }
+}
 
-        function deleteEntry(index) {
-            history.splice(index, 1);
-            localStorage.setItem('history', JSON.stringify(history));
-            updateHistory();
-        }
-
-        updateHistory();
+function deleteEntry(index) {
+    history.splice(index, 1);
+    localStorage.setItem('history', JSON.stringify(history));
+    updateHistory();
+}
 
     </script>
 </body>
 </html>
+
