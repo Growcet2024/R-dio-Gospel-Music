@@ -245,10 +245,10 @@ button:hover {
             localStorage.setItem('height', height);
             localStorage.setItem('desiredWeight', desiredWeight);
     
-            document.getElementById('userId').innerText = `ID: ${userId}`;
+            document.getElementById('userId').innerText = `/ ID: ${userId}`;
             <!-- Campo nome e ID -->
             document.getElementById('userNameDisplay').innerText = `Usuário: ${userName}`;
-            document.getElementById('userId').innerText = `ID: ${userId}`;
+            document.getElementById('userId').innerText = `/ ID: ${userId}`;
             document.getElementById('userId').style.display = 'block';
 
             document.getElementById('registerButton').style.display = 'none';
@@ -260,7 +260,7 @@ button:hover {
         }
     
         if (userId) {
-            document.getElementById('userId').innerText = `ID: ${userId}`;
+            document.getElementById('userId').innerText = `/ ID: ${userId}`;
 
             <!-- Campo nome e ID -->
             document.getElementById('userNameDisplay').innerText = `Usuário: ${userName}`;
