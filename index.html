@@ -105,13 +105,19 @@ button:hover {
             <label for="desiredWeight">Peso Desejado (kg):</label>
             <input type="number" id="desiredWeight" placeholder="Digite seu peso desejado" disabled>
             
+           
+           <!-- Campo nome e ID -->
+
+            <p id="userNameDisplay"></p>
+            <p id="userName" style="font-weight: bold; font-size: 16px; margin-bottom: 5px;"></p>
+            <p id="userId" style="display: none;"></p>
+
             <button id="registerButton" onclick="registerUser()">Registrar</button>
             <button id="editButton" onclick="editUser()" style="display: none;">Editar</button>
             <button id="saveButton" onclick="saveUser()" style="display: none;">Salvar</button>
+          
             
-            <p id="userId" style="display: none;"></p>
         </div>
-
 
 <!-- Campo oculto para armazenar o índice do histórico -->
 <input type="hidden" id="historyIndex"> 
@@ -135,16 +141,67 @@ button:hover {
     Salvar Edição
 </button>
 
-
         <p id="weightBalance">Peso Saldo: - kg</p>
         <p id="imcResult">IMC: -</p>
+
+ <!-- botão IMC -->
+        <button onclick="toggleTable()">Mostrar/Esconder Tabela IMC</button>
+
+             <!-- Tabela IMC -->
+             <table id="imcTable" style="width: 100%; margin-top: 10px; border-collapse: collapse; text-align: left; display: none;">
+
+            <thead>
+                <tr style="background-color: #007bff; color: white;">
+                    <th style="padding: 8px; border: 1px solid #ddd;">Classificação</th>
+                    <th style="padding: 8px; border: 1px solid #ddd;">IMC</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="padding: 8px; border: 1px solid #ddd;">Abaixo do peso</td>
+                    <td style="padding: 8px; border: 1px solid #ddd;">Menos de 18,5</td>
+                </tr>
+                <tr>
+                    <td style="padding: 8px; border: 1px solid #ddd;">Peso normal</td>
+                    <td style="padding: 8px; border: 1px solid #ddd;">18,5 - 24,9</td>
+                </tr>
+                <tr>
+                    <td style="padding: 8px; border: 1px solid #ddd;">Sobrepeso</td>
+                    <td style="padding: 8px; border: 1px solid #ddd;">25 - 29,9</td>
+                </tr>
+                <tr>
+                    <td style="padding: 8px; border: 1px solid #ddd;">Obesidade Grau 1</td>
+                    <td style="padding: 8px; border: 1px solid #ddd;">30 - 34,9</td>
+                </tr>
+                <tr>
+                    <td style="padding: 8px; border: 1px solid #ddd;">Obesidade Grau 2</td>
+                    <td style="padding: 8px; border: 1px solid #ddd;">35 - 39,9</td>
+                </tr>
+                <tr>
+                    <td style="padding: 8px; border: 1px solid #ddd;">Obesidade Grau 3</td>
+                    <td style="padding: 8px; border: 1px solid #ddd;">40 ou mais</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <script>
+            function toggleTable() {
+                var table = document.getElementById("imcTable");
+                if (table.style.display === "none" || table.style.display === "") {
+                    table.style.display = "table"; // Mostra a tabela
+                } else {
+                    table.style.display = "none"; // Oculta a tabela
+                }
+            }
+            </script>
+            
+
 
         <div id="historySection">
             <h3>Histórico de Pesagem</h2>
             <ul id="historyList"></ul>
         </div>
 
-    
     <script>
 
         function formatNumber(value) {
@@ -170,6 +227,8 @@ button:hover {
         document.getElementById('height').value = height ? parseFloat(height) : "";
         document.getElementById('desiredWeight').value = desiredWeight ? parseFloat(desiredWeight) : "";
     
+        
+        
         function registerUser() {
             userName = document.getElementById('userName').value.trim();
             height = document.getElementById('height').value.trim();
@@ -186,8 +245,12 @@ button:hover {
             localStorage.setItem('height', height);
             localStorage.setItem('desiredWeight', desiredWeight);
     
-            document.getElementById('userId').innerText = `ID do Usuário: ${userId}`;
+            document.getElementById('userId').innerText = `ID: ${userId}`;
+            <!-- Campo nome e ID -->
+            document.getElementById('userNameDisplay').innerText = `Usuário: ${userName}`;
+            document.getElementById('userId').innerText = `ID: ${userId}`;
             document.getElementById('userId').style.display = 'block';
+
             document.getElementById('registerButton').style.display = 'none';
             document.getElementById('editButton').style.display = 'inline';
     
@@ -197,8 +260,13 @@ button:hover {
         }
     
         if (userId) {
-            document.getElementById('userId').innerText = `ID do Usuário: ${userId}`;
+            document.getElementById('userId').innerText = `ID: ${userId}`;
+
+            <!-- Campo nome e ID -->
+            document.getElementById('userNameDisplay').innerText = `Usuário: ${userName}`;
+            document.getElementById('userId').innerText = `/ ID: ${userId}`;
             document.getElementById('userId').style.display = 'block';
+
             document.getElementById('registerButton').style.display = 'none';
             document.getElementById('editButton').style.display = 'inline';
         } else {
@@ -207,6 +275,9 @@ button:hover {
             document.getElementById('desiredWeight').disabled = false;
         }
     
+
+
+
         function editUser() {
             document.getElementById('userName').disabled = false;
             document.getElementById('height').disabled = false;
@@ -234,7 +305,11 @@ button:hover {
             document.getElementById('desiredWeight').disabled = true;
             document.getElementById('saveButton').style.display = 'none';
             document.getElementById('editButton').style.display = 'inline';
+
+            document.getElementById("userName").innerText = "Usuário: João"; // Troque "João" pelo nome salvo
+
         }
+
    
 // Garante que números sejam armazenados corretamente, fim do bloco //
 
