@@ -21,49 +21,63 @@ body {
     padding-top: 20px; /* Dá um pequeno espaço extra no topo */
 }
 
-        .container {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 400px;
-        }
+.container {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
     
-        h2 {
-            text-align: center;
-            color: #333;
-        }
-    
-        label {
-            font-weight: bold;
-            margin-top: 10px;
-            display: block;
-        }
-    
-        input {
-    width: 100%; /* Ocupa toda a largura disponível */
-    padding: 10px;
-    margin: 5px 0;
+    /* Adicione essas propriedades */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+
+
+
+
+input {
+    width: 75%; /* Mantém o mesmo tamanho para todos os campos */
+    padding: 8px;
+    margin: 8px 0; /* Adiciona espaçamento entre os campos */
     border: 1px solid #ccc;
-    border-radius: 5px;
-    box-sizing: border-box;
+    border-radius: 8px; /* Deixa os campos arredondados */
+    font-size: 16px;
+   
+    margin-left: auto;
+    margin-right: auto; /* Centraliza os inputs */
+    box-sizing: border-box; /* Garante que padding e borda não alterem o tamanho */
 }
 
+
+
+/* Estilizando os botões */
 button {
-    width: 100%; /* Faz os botões ocuparem a mesma largura dos inputs */
-    padding: 10px;
-    margin: 5px 0;
-    border: none;
-    border-radius: 5px;
-    background-color: #007bff;
-    color: white;
-    cursor: pointer;
+    width: 75%; /* Define a largura dos botões */
+    padding: 8px; /* Deixa os botões maiores */
+    background-color: #007bff; /* Cor azul para destaque */
+    color: white; /* Texto branco */
+    border: none; /* Remove a borda padrão */
+    border-radius: 8px; /* Deixa os cantos arredondados */
+    font-size: 16px; /* Ajusta o tamanho da fonte */
+    cursor: pointer; /* Muda o cursor ao passar por cima */
+    display: block; /* Cada botão ocupa uma linha */
+    margin: 10px auto; /* Centraliza e adiciona espaçamento */
 }
 
+
+
+/* Efeito ao passar o mouse */
 button:hover {
-    background-color: #0056b3;
+    background-color: #0056b3; /* Azul mais escuro ao passar o mouse */
 }
+
+
+
 
     
         ul {
@@ -95,60 +109,56 @@ button:hover {
 
     <div class="container">
         <h2>Controle de Peso</h2>
-        <div id="userSection">
-            <label for="userName">Nome:</label>
-            <input type="text" id="userName" placeholder="Digite seu nome" disabled>
-            
-            <label for="height">Altura (m):</label>
-            <input type="number" id="height" placeholder="Digite sua altura" pattern="\d{1},\d{2}" disabled>
-            
-            <label for="desiredWeight">Peso Desejado (kg):</label>
-            <input type="number" id="desiredWeight" placeholder="Digite seu peso desejado" disabled>
-            
+    
+        <!-- Formulário de informações do usuário -->
+        <div id="userForm">
            
-           <!-- Campo nome e ID -->
+            <input type="text" id="userName" placeholder="Digite seu nome">
+            <input type="text" id="height" placeholder="Digite sua altura">
+            <input type="text" id="desiredWeight" placeholder="Digite seu peso desejado">
 
-            <p id="userNameDisplay"></p>
-            <p id="userName" style="font-weight: bold; font-size: 16px; margin-bottom: 5px;"></p>
-            <p id="userId" style="display: none;"></p>
-
-            <button id="registerButton" onclick="registerUser()">Registrar</button>
-            <button id="editButton" onclick="editUser()" style="display: none;">Editar</button>
-            <button id="saveButton" onclick="saveUser()" style="display: none;">Salvar</button>
-          
-            
         </div>
+    
+        <!-- Exibe o nome e ID após cadastro -->
+        <p id="userInfo" style="font-weight: bold;"></p>
+    
+        <!-- Botões -->
+        <button id="registerButton" onclick="registerUser()">Registrar</button>
+        <button id="editButton" onclick="editUser()" style="display: none;">Editar</button>
+    
+        <!-- Campo nome e ID -->
+        <p id="userNameDisplay"></p>
+    
+        <p id="userInfo" style="font-weight: bold; font-size: 16px; margin-bottom: 5px;"></p>
+    
+        <p id="userId" style="display: none;"></p>
 
-<!-- Campo oculto para armazenar o índice do histórico -->
-<input type="hidden" id="historyIndex"> 
-
-
-        <!-- Campo de peso atual -->
-<label for="currentWeight">Peso atual:</label>
-<input type="number" id="currentWeight" placeholder="Digite o peso atual" />
-
-<!-- Título "Data:" -->
-<label for="dateInput">Data:</label>
-
-<!-- Campo de data -->
-<input type="datetime-local" id="dateInput">
-
-        
+          <!-- Campos de peso e data -->
+        <label for="currentWeight">Peso atual:</label>
+        <input type="number" id="currentWeight" placeholder="Digite o peso atual" />
+    
+        <!-- Título "Data:" -->
+        <label for="dateInput">Data:</label>
+    
+        <!-- Campo de data -->
+        <input type="datetime-local" id="dateInput">
+    
         <button onclick="addWeight()">Adicionar Registro</button>
-
-<!-- Botão para salvar a edição após edição de dados -->
-<button onclick="saveEditedEntry()" style="width: 100%; padding: 8px; background-color: green; color: white; border: none; border-radius: 5px; cursor: pointer; margin-top: 10px;">
-    Salvar Edição
-</button>
-
+    
+        <!-- Botão para salvar a edição após edição de dados -->
+        <button onclick="saveEditedEntry()" style="width: 100%; padding: 8px; background-color: green; color: white; border: none; border-radius: 5px; cursor: pointer; margin-top: 10px;">
+        Salvar Edição
+       </button>
+    
         <p id="weightBalance">Peso Saldo: - kg</p>
         <p id="imcResult">IMC: -</p>
+        
+        
+        <!-- Botão IMC -->
+        <button id="toggleButton" onclick="toggleTable()">Mostrar Tabela IMC</button>
 
- <!-- botão IMC -->
-        <button onclick="toggleTable()">Mostrar/Esconder Tabela IMC</button>
-
-             <!-- Tabela IMC -->
-             <table id="imcTable" style="width: 100%; margin-top: 10px; border-collapse: collapse; text-align: left; display: none;">
+        <!-- Tabela IMC -->
+        <table id="imcTable" style="width: 100%; margin-top: 10px; border-collapse: collapse; text-align: left; display: none;">
 
             <thead>
                 <tr style="background-color: #007bff; color: white;">
@@ -183,7 +193,16 @@ button:hover {
                 </tr>
             </tbody>
         </table>
-        
+    
+        <div id="historySection">
+            <h3>Histórico de Pesagem</h2>
+            <ul id="historyList"></ul>
+        </div>
+
+        <!-- Campo oculto para armazenar o índice do histórico -->
+        <input type="hidden" id="historyIndex">
+    </div>
+    
         <script>
             function toggleTable() {
                 var table = document.getElementById("imcTable");
@@ -195,14 +214,22 @@ button:hover {
             }
             </script>
             
-
-
-        <div id="historySection">
-            <h3>Histórico de Pesagem</h2>
-            <ul id="historyList"></ul>
-        </div>
-
     <script>
+
+function toggleTable() {
+    var table = document.getElementById("imcTable");
+    var button = document.getElementById("toggleButton");
+    
+    // Verifica se a tabela está visível
+    if (table.style.display === "none" || table.style.display === "") {
+        table.style.display = "table"; // Torna a tabela visível
+        button.textContent = "Fechar Tabela IMC"; // Altera o texto do botão
+    } else {
+        table.style.display = "none"; // Torna a tabela invisível
+        button.textContent = "Mostrar Tabela IMC"; // Restaura o texto original do botão
+    }
+}
+
 
         function formatNumber(value) {
             return value.replace(',', '.'); // Garante que números sejam armazenados corretamente
@@ -228,64 +255,72 @@ button:hover {
         document.getElementById('desiredWeight').value = desiredWeight ? parseFloat(desiredWeight) : "";
     
         
-        
         function registerUser() {
-            userName = document.getElementById('userName').value.trim();
-            height = document.getElementById('height').value.trim();
-            desiredWeight = document.getElementById('desiredWeight').value.trim();
-    
-            if (!userName || !height || !desiredWeight) {
-                alert("Por favor, preencha todos os campos corretamente.");
-                return;
-            }
-    
-            userId = generateUserId();
-            localStorage.setItem('userId', userId);
-            localStorage.setItem('userName', userName);
-            localStorage.setItem('height', height);
-            localStorage.setItem('desiredWeight', desiredWeight);
-    
-            document.getElementById('userId').innerText = `/ ID: ${userId}`;
-            <!-- Campo nome e ID -->
-            document.getElementById('userNameDisplay').innerText = `Usuário: ${userName}`;
-            document.getElementById('userId').innerText = `/ ID: ${userId}`;
-            document.getElementById('userId').style.display = 'block';
+    let userName = document.getElementById('userName').value.trim();
+    let height = document.getElementById('height').value.trim();
+    let desiredWeight = document.getElementById('desiredWeight').value.trim();
 
-            document.getElementById('registerButton').style.display = 'none';
-            document.getElementById('editButton').style.display = 'inline';
-    
-            document.getElementById('userName').disabled = true;
-            document.getElementById('height').disabled = true;
-            document.getElementById('desiredWeight').disabled = true;
-        }
-    
-        if (userId) {
-            document.getElementById('userId').innerText = `/ ID: ${userId}`;
+    if (!userName || !height || !desiredWeight) {
+        alert("Por favor, preencha todos os campos corretamente.");
+        return;
+    }
 
-            <!-- Campo nome e ID -->
-            document.getElementById('userNameDisplay').innerText = `Usuário: ${userName}`;
-            document.getElementById('userId').innerText = `/ ID: ${userId}`;
-            document.getElementById('userId').style.display = 'block';
+    let userId = localStorage.getItem('userId');
+    if (!userId) {
+        userId = generateUserId();
+        localStorage.setItem('userId', userId);
+    }
 
-            document.getElementById('registerButton').style.display = 'none';
-            document.getElementById('editButton').style.display = 'inline';
-        } else {
-            document.getElementById('userName').disabled = false;
-            document.getElementById('height').disabled = false;
-            document.getElementById('desiredWeight').disabled = false;
-        }
-    
+    localStorage.setItem('userName', userName);
+    localStorage.setItem('height', height);
+    localStorage.setItem('desiredWeight', desiredWeight);
+
+    // Atualiza exibição do nome e ID sem mudar o ID
+    document.getElementById('userInfo').innerText = `Usuário: ${userName} | ID: ${userId}`;
+
+    // Esconde os campos após o cadastro
+    document.getElementById('userForm').style.display = 'none';
+
+    // Ajusta os botões
+    document.getElementById('registerButton').style.display = 'none';
+    document.getElementById('editButton').style.display = 'inline';
+}
+
+function editUser() {
+    // Mostra os campos para edição
+    document.getElementById('userForm').style.display = 'block';
+
+    // Ajusta os botões
+    document.getElementById('registerButton').style.display = 'inline';
+    document.getElementById('editButton').style.display = 'none';
+}
+
+// Mantém os dados na tela ao recarregar a página
+window.onload = function() {
+    // Garantir que a fonte do botão tenha o tamanho correto logo que a página carregar
+    toggleHistoryButton.style.fontSize = "14px"; // Ajuste conforme necessário
+
+    let userId = localStorage.getItem('userId');
+    let userName = localStorage.getItem('userName');
+
+    if (userId && userName) {
+        document.getElementById('userInfo').innerText = `Usuário: ${userName} | ID: ${userId}`;
+        document.getElementById('userForm').style.display = 'none';
+        document.getElementById('registerButton').style.display = 'none';
+        document.getElementById('editButton').style.display = 'inline';
+    }
+};
 
 
 
-        function editUser() {
-            document.getElementById('userName').disabled = false;
-            document.getElementById('height').disabled = false;
-            document.getElementById('desiredWeight').disabled = false;
-            document.getElementById('editButton').style.display = 'none';
-            document.getElementById('saveButton').style.display = 'inline';
-        }
-    
+
+
+
+
+
+
+
+
         function saveUser() {
             userName = document.getElementById('userName').value.trim();
             height = document.getElementById('height').value.trim();
