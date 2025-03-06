@@ -9,16 +9,20 @@
 <body>
 
     <style>
+
+
+
+
 body {
     font-family: Arial, sans-serif;
     background-color: #f4f4f4;
     margin: 0;
     padding: 0;
     display: flex;
-    justify-content: center;
-    align-items: flex-start; /* Em vez de center, coloca flex-start */
-    min-height: 100vh; /* Usa min-height para evitar corte */
-    padding-top: 20px; /* Dá um pequeno espaço extra no topo */
+    justify-content: center; /* Centraliza o conteúdo horizontalmente */
+    align-items: flex-start; /* Deixa o conteúdo alinhado ao topo da tela */
+    min-height: 100vh; /* Garante que a altura do body ocupe toda a tela */
+    padding-top: 20px; /* Pequeno espaço no topo */
 }
 
 .container {
@@ -28,54 +32,47 @@ body {
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
     width: 100%;
     max-width: 400px;
-    
-    /* Adicione essas propriedades */
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
+    gap: 8px; /* Controla o espaço entre os elementos de forma mais eficiente */
 }
 
-
-
-
-
-input {
-    width: 75%; /* Mantém o mesmo tamanho para todos os campos */
-    padding: 8px;
-    margin: 8px 0; /* Adiciona espaçamento entre os campos */
+input, button {
+    width: 100%;
+    padding: 10px;
+    margin: 0; /* Remover margens externas para controle mais preciso */
+    border-radius: 5px;
     border: 1px solid #ccc;
-    border-radius: 8px; /* Deixa os campos arredondados */
-    font-size: 16px;
-   
-    margin-left: auto;
-    margin-right: auto; /* Centraliza os inputs */
-    box-sizing: border-box; /* Garante que padding e borda não alterem o tamanho */
+    box-sizing: border-box;
 }
 
-
-
-/* Estilizando os botões */
 button {
-    width: 75%; /* Define a largura dos botões */
-    padding: 8px; /* Deixa os botões maiores */
-    background-color: #007bff; /* Cor azul para destaque */
-    color: white; /* Texto branco */
-    border: none; /* Remove a borda padrão */
-    border-radius: 8px; /* Deixa os cantos arredondados */
-    font-size: 16px; /* Ajusta o tamanho da fonte */
-    cursor: pointer; /* Muda o cursor ao passar por cima */
-    display: block; /* Cada botão ocupa uma linha */
-    margin: 10px auto; /* Centraliza e adiciona espaçamento */
+    background-color: #007bff;
+    color: white;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    display: block;
 }
 
-
-
-/* Efeito ao passar o mouse */
 button:hover {
-    background-color: #0056b3; /* Azul mais escuro ao passar o mouse */
+    background-color: #0056b3;
 }
 
+input[type="text"], input[type="number"] {
+    margin-top: 10px; /* Ajusta o espaçamento entre os campos de input */
+}
+
+#registerButton, #editButton {
+    margin-bottom: 8px; /* Ajuste do espaçamento no botão */
+}
+
+/* Ajustando o espaçamento específico entre cada elemento */
+.container > * {
+    margin: 0; /* Remove margens automáticas */
+}
 
 
 
@@ -133,9 +130,12 @@ button:hover {
     
         <p id="userId" style="display: none;"></p>
 
+
+
           <!-- Campos de peso e data -->
-      
         <input type="number" id="currentWeight" placeholder="Digite o peso atual" />
+
+
     
         <!-- Título "Data:" -->
         <label for="dateInput">Data:</label>
@@ -149,11 +149,11 @@ button:hover {
         <button onclick="saveEditedEntry()" style="width: 100%; padding: 8px; background-color: green; color: white; border: none; border-radius: 5px; cursor: pointer; margin-top: 10px;">
         Salvar Edição
        </button>
+
+        <!-- Campo resultado peso saldo e IMC -->
+       <p id="resultDisplay">Peso Saldo: - kg | IMC: -</p>
+
     
-        <p id="weightBalance">Peso Saldo: - kg</p>
-        <p id="imcResult">IMC: -</p>
-        
-        
         <!-- Botão IMC -->
         <button id="toggleButton" onclick="toggleTable()">Mostrar Tabela IMC</button>
 
@@ -310,15 +310,6 @@ window.onload = function() {
         document.getElementById('editButton').style.display = 'inline';
     }
 };
-
-
-
-
-
-
-
-
-
 
 
         function saveUser() {
@@ -487,9 +478,10 @@ function addWeight() {
     let balanceSign = weightBalance > 0 ? `+${weightBalance}` : weightBalance;
     let imc = (parseFloat(currentWeight) / (parseFloat(height) * parseFloat(height))).toFixed(2);
 
+
+
     // **📌 Atualiza os valores na tela principal**
-    document.getElementById('weightBalance').innerText = `Peso Saldo: ${balanceSign} kg`;
-    document.getElementById('imcResult').innerText = `IMC: ${imc}`;
+    document.getElementById('resultDisplay').innerText = `Peso Saldo: ${balanceSign} kg | IMC: ${imc}`;
 
     let timestamp = new Date().toLocaleString();
     let entry = {
@@ -572,4 +564,3 @@ function deleteEntry(index) {
     </script>
 </body>
 </html>
-
