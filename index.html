@@ -9,98 +9,109 @@
 <body>
 
     <style>
-
-
-
-
 body {
     font-family: Arial, sans-serif;
     background-color: #f4f4f4;
     margin: 0;
     padding: 0;
     display: flex;
-    justify-content: center; /* Centraliza o conteúdo horizontalmente */
-    align-items: flex-start; /* Deixa o conteúdo alinhado ao topo da tela */
-    min-height: 100vh; /* Garante que a altura do body ocupe toda a tela */
-    padding-top: 20px; /* Pequeno espaço no topo */
+    justify-content: center;
+    align-items: flex-start; /* Em vez de center, coloca flex-start */
+    min-height: 100vh; /* Usa min-height para evitar corte */
+    padding-top: 20px; /* Dá um pequeno espaço extra no topo */
 }
+
+
 
 .container {
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
     width: 100%;
-    max-width: 400px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    gap: 8px; /* Controla o espaço entre os elementos de forma mais eficiente */
+    max-width: 800px; /* Limita a largura máxima para que o conteúdo não fique esticado demais */
+    margin: 0 auto; /* Centraliza o contêiner */
+    padding: 20px;
+    box-sizing: border-box;
+    text-align: center; /* Centraliza o conteúdo */
+    overflow: hidden; /* Evita que o conteúdo ultrapasse o contêiner */
+    background: white; /* Fundo branco */
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* Adiciona sombra */
 }
 
-input, button {
-    width: 100%;
-    padding: 10px;
-    margin: 0; /* Remover margens externas para controle mais preciso */
+input,
+button {
+    width: 90%; /* Garante que os inputs e botões ocupem 90% da largura do contêiner */
+    margin-bottom: 10px; /* Adiciona um pequeno espaçamento entre os campos */
+    padding: 8px;
     border-radius: 5px;
     border: 1px solid #ccc;
     box-sizing: border-box;
 }
 
+/* Estilizando os botões */
 button {
     background-color: #007bff;
     color: white;
-    border: none;
-    font-size: 16px;
     cursor: pointer;
-    display: block;
+    border: none;
 }
 
 button:hover {
     background-color: #0056b3;
 }
 
-input[type="text"], input[type="number"] {
-    margin-top: 10px; /* Ajusta o espaçamento entre os campos de input */
+/* Histórico de Pesagem */
+#historySection {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-#registerButton, #editButton {
-    margin-bottom: 8px; /* Ajuste do espaçamento no botão */
+#historyList {
+    list-style-type: none;
+    padding: 0;
 }
 
-/* Ajustando o espaçamento específico entre cada elemento */
-.container > * {
-    margin: 0; /* Remove margens automáticas */
+#imcTable {
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse;
+    display: none;
 }
 
+#imcTable th,
+#imcTable td {
+    padding: 8px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
 
+#imcTable th {
+    background-color: #007bff;
+    color: white;
+}
 
-    
-        ul {
-            list-style-type: none;
-            padding: 0;
-        }
-    
-        li {
-            background: #f9f9f9;
-            padding: 10px;
-            margin-top: 5px;
-            border-radius: 5px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-    
-        li button {
-            background-color: #dc3545;
-            padding: 5px 10px;
-            font-size: 14px;
-        }
-    
-        li button:hover {
-            background-color: #c82333;
-        }
+/* Resultados e outros textos */
+#resultDisplay {
+    font-weight: bold;
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+#toggleButton {
+    background-color: #28a745;
+    color: white;
+    padding: 8px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+#toggleButton:hover {
+    background-color: #218838;
+}
+
     </style>
     
 
@@ -109,11 +120,9 @@ input[type="text"], input[type="number"] {
     
         <!-- Formulário de informações do usuário -->
         <div id="userForm">
-           
             <input type="text" id="userName" placeholder="Digite seu nome">
             <input type="text" id="height" placeholder="Digite sua altura">
             <input type="text" id="desiredWeight" placeholder="Digite seu peso desejado">
-
         </div>
     
         <!-- Exibe o nome e ID após cadastro -->
@@ -129,13 +138,9 @@ input[type="text"], input[type="number"] {
         <p id="userInfo" style="font-weight: bold; font-size: 16px; margin-bottom: 5px;"></p>
     
         <p id="userId" style="display: none;"></p>
-
-
-
-          <!-- Campos de peso e data -->
+    
+        <!-- Campos de peso e data -->
         <input type="number" id="currentWeight" placeholder="Digite o peso atual" />
-
-
     
         <!-- Título "Data:" -->
         <label for="dateInput">Data:</label>
@@ -148,18 +153,16 @@ input[type="text"], input[type="number"] {
         <!-- Botão para salvar a edição após edição de dados -->
         <button onclick="saveEditedEntry()" style="width: 100%; padding: 8px; background-color: green; color: white; border: none; border-radius: 5px; cursor: pointer; margin-top: 10px;">
         Salvar Edição
-       </button>
-
+        </button>
+    
         <!-- Campo resultado peso saldo e IMC -->
-       <p id="resultDisplay">Peso Saldo: - kg | IMC: -</p>
-
+        <p id="resultDisplay">Peso Saldo: - kg | IMC: -</p>
     
         <!-- Botão IMC -->
         <button id="toggleButton" onclick="toggleTable()">Mostrar Tabela IMC</button>
-
+    
         <!-- Tabela IMC -->
         <table id="imcTable" style="width: 100%; margin-top: 10px; border-collapse: collapse; text-align: left; display: none;">
-
             <thead>
                 <tr style="background-color: #007bff; color: white;">
                     <th style="padding: 8px; border: 1px solid #ddd;">Classificação</th>
@@ -187,18 +190,28 @@ input[type="text"], input[type="number"] {
                     <td style="padding: 8px; border: 1px solid #ddd;">Obesidade Grau 2</td>
                     <td style="padding: 8px; border: 1px solid #ddd;">35 - 39,9</td>
                 </tr>
+
+
                 <tr>
                     <td style="padding: 8px; border: 1px solid #ddd;">Obesidade Grau 3</td>
                     <td style="padding: 8px; border: 1px solid #ddd;">40 ou mais</td>
                 </tr>
+                </tbody>
+                </table>
+                
+                <!-- Agora o Histórico de Pesagem fica após a Tabela IMC -->
+                <div id="historySection">
+                    <h3>Histórico de Pesagem</h3>
+                    <ul id="historyList"></ul>
+                </div>
+                
+
             </tbody>
         </table>
+    </div>
     
-        <div id="historySection">
-            <h3>Histórico de Pesagem</h2>
-            <ul id="historyList"></ul>
-        </div>
 
+    
         <!-- Campo oculto para armazenar o índice do histórico -->
         <input type="hidden" id="historyIndex">
     </div>
@@ -524,11 +537,11 @@ function addWeight() {
                 </div>
                 <div>
                     <strong>Peso Saldo:</strong><br>
-                    <span>${entry.balanceSign} kg</span>
+                    <span>${entry.balanceSign} kg</span> <!-- Aqui mostramos o Peso Saldo -->
                 </div>
                 <div>
                     <strong>IMC:</strong><br>
-                    <span>${entry.imc}</span>
+                    <span>${entry.imc}</span> <!-- Aqui mostramos o IMC -->
                 </div>
             </div>
             <div style="margin-top: 10px;">
@@ -548,6 +561,14 @@ function addWeight() {
 }
 
 
+
+
+
+
+
+
+
+
 function confirmDelete(index) {
     let confirmation = confirm("Tem certeza que deseja apagar este registro?");
     if (confirmation) {
@@ -562,5 +583,44 @@ function deleteEntry(index) {
 }
 
     </script>
-</body>
-</html>
+
+
+
+
+<script>
+    // Função para alternar entre mostrar e esconder o histórico
+    function toggleHistory() {
+        var historySection = document.getElementById("historySection");
+        var button = document.getElementById("toggleButtonHistory");
+    
+        // Verifica se o histórico está oculto ou visível
+        if (historySection.style.display === "none" || historySection.style.display === "") {
+            historySection.style.display = "block";
+            button.textContent = "Ocultar Histórico de Pesagem"; // Muda o texto do botão
+        } else {
+            historySection.style.display = "none";
+            button.textContent = "Mostrar Histórico de Pesagem"; // Restaura o texto do botão
+        }
+    }
+    
+    // Carregar o histórico no carregamento da página
+    window.onload = function() {
+        var historyData = JSON.parse(localStorage.getItem("historyData")) || [];
+        var historyList = document.getElementById("historyList");
+    
+        historyData.forEach(function(pesagem) {
+            var li = document.createElement("li");
+            li.textContent = "Data: " + pesagem.date + " - Peso: " + pesagem.peso;
+            historyList.appendChild(li);
+        });
+    };
+    </script>
+
+
+
+    
+    </body>
+    </html>
+
+
+
