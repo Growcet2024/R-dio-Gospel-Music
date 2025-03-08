@@ -42,7 +42,7 @@ input,
 button {
     width: 80%; /* Garante que os inputs e botões ocupem 90% da largura do contêiner */
     margin-bottom: 10px; /* Adiciona um pequeno espaçamento entre os campos */
-    padding: 8px;
+    padding: 10px;
     border-radius: 15px;
     border: 1px solid #ccc;
     box-sizing: border-box;
@@ -84,7 +84,7 @@ button:hover {
 
 #imcTable th,
 #imcTable td {
-    padding: 8px;
+    padding: 10px;
     border: 1px solid #ddd;
     text-align: left;
 }
@@ -106,7 +106,7 @@ button:hover {
 #toggleButton {
     background-color: #007bff;
     color: white;
-    padding: 8px;
+    padding: 10px;
     border: none;
     border-radius: 15px;
     cursor: pointer;
@@ -117,6 +117,39 @@ button:hover {
     background-color: #218838;
 }
 
+
+
+/* Estilo do botão de Histórico de Pesagem */
+.historyButton {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    margin-top: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.historyButton:hover {
+    background-color: #45a049;
+}
+
+/* Estilo da lista de histórico */
+#historyList {
+    margin-top: 20px;
+    padding-left: 20px;
+    display: none; /* Inicialmente escondido */
+    list-style-type: none;
+}
+
+#historyList li {
+    background-color: #f2f2f2;
+    margin: 5px 0;
+    padding: 10px;
+    border-radius: 5px;
+}
     </style>
     
 
@@ -163,9 +196,6 @@ button:hover {
         <!-- Campo resultado peso saldo e IMC -->
         <p id="resultDisplay">Peso Saldo: - kg | IMC: -</p>
 
-
-
-    
         <!-- Botão IMC -->
 <button id="toggleButton" onclick="toggleTable()">Mostrar Tabela IMC</button>
 
@@ -205,10 +235,90 @@ button:hover {
     </tbody>
 </table>
 
-    <!--  Botão Histórico de Pesagem -->
-    <div id="historySection">
-    <ul id="historyList"></ul>
+
+
+ 
+    
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página de Histórico de Pesagem</title>
+    <style>
+        /* Estilo para a seção do histórico inicialmente escondido */
+        #historySection {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Contêiner Principal -->
+    <div id="mainContainer">
+        <!-- Outros elementos do contêiner principal -->
+
+        <!-- Botão para alternar a visibilidade do histórico -->
+        <button id="toggleHistoryButton">Histórico de Pesagem</button>
+
+        <!-- Seção do histórico -->
+        <div id="historySection">
+            <ul id="historyList">
+                <!-- Os registros de pesagem serão inseridos aqui -->
+                <li>Registro 1</li>
+                <li>Registro 2</li>
+                <li>Registro 3</li>
+            </ul>
+        </div>
+
+        <!-- Outros elementos do contêiner principal -->
     </div>
+
+
+
+
+
+
+
+    <!-- Script JavaScript -->
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var historySection = document.getElementById("historySection");
+        var toggleButton = document.getElementById("toggleHistoryButton");
+
+        // Definindo o estado inicial do histórico como oculto
+        historySection.style.display = "none";
+        toggleButton.textContent = "Histórico de Pesagem";  // Texto inicial do botão
+
+        // Evento de clique no botão
+        toggleButton.addEventListener("click", function() {
+            // Verifica se o histórico está visível ou não
+            if (historySection.style.display === "none") {
+                historySection.style.display = "block";  // Exibe o histórico
+                this.textContent = "Ocultar Histórico de Pesagem";  // Altera o texto do botão
+            } else {
+                historySection.style.display = "none";  // Oculta o histórico
+                this.textContent = "Histórico de Pesagem";  // Restaura o texto do botão
+            }
+        });
+    });
+</script>
+
+
+
+
+
+
+
+
+
+
+
 
                 </tr>
             </tbody>
@@ -400,6 +510,9 @@ document.addEventListener("DOMContentLoaded", function() {
         toggleHistoryButton.style.fontSize = "16px";
         toggleHistoryButton.style.fontWeight = "bold";
 
+
+
+
         toggleHistoryButton.onclick = function() {
             // Alterna entre exibir e ocultar o histórico
             if (historyList.style.display === "none" || historyList.style.display === "") {
@@ -418,13 +531,30 @@ document.addEventListener("DOMContentLoaded", function() {
     // Carregar o histórico do localStorage
     let history = JSON.parse(localStorage.getItem('history')) || [];
 
-    // Se já houver histórico, exibe a lista
+    // Se já houver histórico, exibe a lista (Mudei o nome Ocultar Histórico)
     if (history.length > 0) {
         historyList.style.display = "block"; // Exibe o histórico automaticamente
-        toggleHistoryButton.innerText = "Ocultar Histórico"; // Atualiza o texto do botão
+        toggleHistoryButton.innerText = "Histórico de pesagem"; // Atualiza o texto do botão
     } else {
         historyList.style.display = "none"; // Mantém oculto se não houver histórico
     }
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
 
     // Atualiza a lista de histórico na tela
     updateHistory();
@@ -553,11 +683,12 @@ function addWeight() {
                     <span>${entry.imc}</span> <!-- Aqui mostramos o IMC -->
                 </div>
             </div>
+
             <div style="margin-top: 10px;">
-                <button onclick="editEntry(${index})" style="width: 100%; padding: 8px; background-color: orange; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                <button onclick="editEntry(${index})" style="width: 100%; padding: 10px; background-color: orange; color: white; border: none; border-radius: 15px; cursor: pointer;">
                     Editar
                 </button>
-                <button onclick="confirmDelete(${index})" style="width: 100%; padding: 8px; background-color: red; color: white; border: none; border-radius: 5px; cursor: pointer; margin-top: 8px;">
+                <button onclick="confirmDelete(${index})" style="width: 100%; padding: 10px; background-color: red; color: white; border: none; border-radius: 15px; cursor: pointer; margin-top: 8px;">
                     Apagar
                 </button>
             </div>
@@ -568,8 +699,6 @@ function addWeight() {
 
     historyList.style.display = "block"; // Garante que o histórico esteja visível
 }
-
-
 
 
 
