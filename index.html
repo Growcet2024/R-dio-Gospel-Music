@@ -22,7 +22,7 @@ body {
 }
 
 
-
+/* Conteiner principais */
 .container {
     width: 100%;
     max-width: 800px; /* Limita a largura máxima para que o conteúdo não fique esticado demais */
@@ -36,7 +36,8 @@ body {
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* Adiciona sombra */
 }
 
-        /* Botões principais registros */
+
+/* Botões principais registros */
 input,
 button {
     width: 80%; /* Garante que os inputs e botões ocupem 90% da largura do contêiner */
@@ -65,7 +66,7 @@ button:hover {
     margin-top: 20px;
     padding: 10px;
     background-color: #ffffff;
-    border-radius: 15px;
+    border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
@@ -73,7 +74,6 @@ button:hover {
     list-style-type: none;
     padding: 0;
 }
-
 
 #imcTable {
     width: 100%;
@@ -100,6 +100,7 @@ button:hover {
     font-size: 16px;
     margin-top: 10px;
 }
+
 
       /* Botão tabela IMC */
 #toggleButton {
@@ -147,7 +148,7 @@ button:hover {
         <input type="number" id="currentWeight" placeholder="Digite o peso atual" />
     
         <!-- Título "Data:" -->
-        <label for="dateInput">Data:</label>
+        <label for="dateInput"></label>
     
         <!-- Campo de data -->
         <input type="datetime-local" id="dateInput">
@@ -155,7 +156,7 @@ button:hover {
         <button onclick="addWeight()">Adicionar Registro</button>
     
         <!-- Botão para salvar a edição após edição de dados -->
-        <button onclick="saveEditedEntry()" style="width: 100%; padding: 8px; background-color: green; color: white; border: none; border-radius: 5px; cursor: pointer; margin-top: 10px;">
+        <button onclick="saveEditedEntry()" style="width: 80%; padding: 8px; background-color: green; color: white; border: none; border-radius: 15px; cursor: pointer; margin-top: 10px;">
         Salvar Edição
         </button>
     
@@ -170,8 +171,6 @@ button:hover {
 
 <!-- Tabela IMC -->
 <table id="imcTable" style="width: 100%; margin-top: 10px; border-collapse: collapse; text-align: left; display: none;">
-   
-   
     <thead>
         <tr style="background-color: #007bff; color: white;">
             <th style="padding: 8px; border: 1px solid #ddd;">Classificação</th>
@@ -206,10 +205,10 @@ button:hover {
     </tbody>
 </table>
 
-       <!-- Conteiner Histórico de Pesagem -->
-       <div id="historySection">   
-       <ul id="historyList"></ul>
-       </div>
+    <!--  Botão Histórico de Pesagem -->
+    <div id="historySection">
+    <ul id="historyList"></ul>
+    </div>
 
                 </tr>
             </tbody>
@@ -217,13 +216,9 @@ button:hover {
     </div>
     
 
-    
         <!-- Campo oculto para armazenar o índice do histórico -->
         <input type="hidden" id="historyIndex">
     </div>
-    
-
-
     
 
         <script>
@@ -599,3 +594,4 @@ function deleteEntry(index) {
     </script>
 </body>
 </html>
+
