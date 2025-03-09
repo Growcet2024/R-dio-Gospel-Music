@@ -42,7 +42,7 @@ input,
 button {
     width: 80%; /* Garante que os inputs e botões ocupem 90% da largura do contêiner */
     margin-bottom: 10px; /* Adiciona um pequeno espaçamento entre os campos */
-    padding: 10px;
+    padding: 12px;
     border-radius: 15px;
     border: 1px solid #ccc;
     box-sizing: border-box;
@@ -106,7 +106,7 @@ button:hover {
 #toggleButton {
     background-color: #007bff;
     color: white;
-    padding: 10px;
+    padding: 12px;
     border: none;
     border-radius: 15px;
     cursor: pointer;
@@ -236,15 +236,7 @@ button:hover {
 </table>
 
 
-
- 
-    
-
-
-
-
-
-
+ <!-- Bloco botão historicode pesagem -->
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -280,11 +272,6 @@ button:hover {
     </div>
 
 
-
-
-
-
-
     <!-- Script JavaScript -->
 <script>
     document.addEventListener("DOMContentLoaded", function() {
@@ -310,16 +297,6 @@ button:hover {
 </script>
 
 
-
-
-
-
-
-
-
-
-
-
                 </tr>
             </tbody>
         </table>
@@ -343,8 +320,7 @@ button:hover {
         }
     }
     
-
-            </script>
+        </script>
             
     <script>
 
@@ -361,7 +337,6 @@ function toggleTable() {
         button.textContent = "Mostrar Tabela IMC"; // Restaura o texto original do botão
     }
 }
-
 
         function formatNumber(value) {
             return value.replace(',', '.'); // Garante que números sejam armazenados corretamente
@@ -443,7 +418,6 @@ window.onload = function() {
     }
 };
 
-
         function saveUser() {
             userName = document.getElementById('userName').value.trim();
             height = document.getElementById('height').value.trim();
@@ -510,9 +484,6 @@ document.addEventListener("DOMContentLoaded", function() {
         toggleHistoryButton.style.fontSize = "16px";
         toggleHistoryButton.style.fontWeight = "bold";
 
-
-
-
         toggleHistoryButton.onclick = function() {
             // Alterna entre exibir e ocultar o histórico
             if (historyList.style.display === "none" || historyList.style.display === "") {
@@ -538,22 +509,6 @@ document.addEventListener("DOMContentLoaded", function() {
     } else {
         historyList.style.display = "none"; // Mantém oculto se não houver histórico
     }
-
-
-
-
-
-
-
-
-
-        
-
-
-
-
-
-
 
 
     // Atualiza a lista de histórico na tela
@@ -657,13 +612,17 @@ function addWeight() {
  function updateHistory() {
     let historyList = document.getElementById('historyList');
     historyList.innerHTML = ""; // Limpa o conteúdo da lista
-
     history.forEach((entry, index) => {
+
         let listItem = document.createElement('div');
+
         listItem.style.borderBottom = "1px solid #ccc";
         listItem.style.padding = "15px";
         listItem.style.marginBottom = "10px";
         listItem.style.backgroundColor = "#f9f9f9"; // Fundo levemente cinza para diferenciar os itens
+
+        listItem.style.marginLeft = "0px";  // Centraliza à esquerda
+        listItem.style.marginRight = "18px"; // Centraliza à direita
 
         listItem.innerHTML = `
             <div style="font-size: 16px; font-weight: bold; color: #333;">
@@ -685,10 +644,10 @@ function addWeight() {
             </div>
 
             <div style="margin-top: 10px;">
-                <button onclick="editEntry(${index})" style="width: 100%; padding: 10px; background-color: orange; color: white; border: none; border-radius: 15px; cursor: pointer;">
+                <button onclick="editEntry(${index})" style="width: 90%; padding: 10px; background-color: orange; color: white; border: none; border-radius: 15px; cursor: pointer;">
                     Editar
                 </button>
-                <button onclick="confirmDelete(${index})" style="width: 100%; padding: 10px; background-color: red; color: white; border: none; border-radius: 15px; cursor: pointer; margin-top: 8px;">
+                <button onclick="confirmDelete(${index})" style="width: 90%; padding: 10px; background-color: red; color: white; border: none; border-radius: 15px; cursor: pointer; margin-top: 8px;">
                     Apagar
                 </button>
             </div>
@@ -699,12 +658,6 @@ function addWeight() {
 
     historyList.style.display = "block"; // Garante que o histórico esteja visível
 }
-
-
-
-
-
-
 
 
 function confirmDelete(index) {
@@ -723,4 +676,3 @@ function deleteEntry(index) {
     </script>
 </body>
 </html>
-
