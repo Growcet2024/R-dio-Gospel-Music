@@ -6,6 +6,9 @@
     <title>Controle de Peso</title>
     <link rel="stylesheet" href="styles.css">
 </head>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <body>
 
     <style>
@@ -27,7 +30,7 @@ html, body {
     padding: 0;
     height: 100%; /* Garantir que o html e body ocupem toda a altura */
 }
-        
+
 /* Conteiner principais */
 .container {
     width: 100%;
@@ -243,7 +246,158 @@ button:hover {
 </table>
 
 
- <!-- Bloco botão historicode pesagem -->
+
+
+                            <!-- BLOCO GRAFICO / RELATORIO - INICIO-->
+
+<!-- Botão para exibir/esconder o Gráfico -->
+<button id="toggleGraphButton" onclick="toggleGraph()">Gráfico Evolutivo</button>
+<div id="graphSection" style="display: none;">
+    <canvas id="weightChart"></canvas> <!-- O gráfico será renderizado aqui -->
+</div>
+
+<!-- Botão para exibir/esconder o Gerador de Relatório -->
+<button id="toggleReportButton" onclick="toggleReport()">Gerar Relatório</button>
+<div id="reportSection" style="display: none;">
+    <p>Clique abaixo para gerar o PDF do histórico de pesagem.</p>
+    <button onclick="generatePDF()">Baixar PDF</button>
+</div>
+
+<script>
+
+<!-- BLOCO GRAFICO EVOLUTIVO -->
+
+<!-- BLOCO GRÁFICO EVOLUTIVO -->
+    function toggleGraph() {
+        var graphSection = document.getElementById("graphSection");
+        var button = document.getElementById("toggleGraphButton");
+
+        if (graphSection.style.display === "none" || graphSection.style.display === "") {
+            graphSection.style.display = "block";
+            button.textContent = "Fechar Gráfico";
+        } else {
+            graphSection.style.display = "none";
+            button.textContent = "Gráfico Evolutivo";
+        }
+    }
+    
+    <!-- Criar o gráfico com Peso e IMC -->
+    if (!window.myChart) {
+        const ctx = document.getElementById("weightChart").getContext("2d");
+        window.myChart = new Chart(ctx, {
+            type: "line",
+            data: {
+                labels: ["Jan", "Feb", "Mar", "Abr", "Mai", "Jun"], // Exemplo de meses
+                datasets: [
+                    {
+                        label: "Peso (kg)",
+                        data: [80, 78, 76, 74, 73, 72], // Exemplo de dados de peso
+                        borderColor: "blue",
+                        borderWidth: 2,
+                        fill: false
+                    },
+                    {
+                        label: "IMC",
+                        data: [25, 24.5, 24, 23.5, 23.2, 23], // Exemplo de dados de IMC
+                        borderColor: "red",
+                        borderWidth: 2,
+                        fill: false
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: false
+                    }
+                }
+            }
+        });
+    }
+
+
+
+
+
+
+
+<!-- fase 2 Criar um canva-->
+if (!window.myChart) {
+    const ctx = document.getElementById("weightChart").getContext("2d");
+    window.myChart = new Chart(ctx, {
+        type: "line",
+        data: {
+            labels: [], // Será preenchido dinamicamente
+            datasets: [{
+                label: "Peso (kg)",
+                data: [], // Será preenchido dinamicamente
+                borderColor: "blue",
+                borderWidth: 2,
+                fill: false
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: false
+                }
+            }
+        }
+    });
+}
+
+<!-- fase 3 Capturar os dados do localStorage-->
+function getWeightData() {
+    let records = JSON.parse(localStorage.getItem("weightRecords")) || [];
+    
+    // Ordena os registros por data
+    records.sort((a, b) => new Date(a.date) - new Date(b.date));
+    
+    // Extrai os dados necessários
+    let labels = records.map(record => record.date); // Datas
+    let data = records.map(record => record.weight); // Pesos
+    
+    return { labels, data };
+}
+
+<!-- fase 4 Capturar Configurar e exibir o gráfico-->
+function generateGraph() {
+    let { labels, data } = getWeightData();
+    
+    if (window.myChart) {
+        window.myChart.data.labels = labels;
+        window.myChart.data.datasets[0].data = data;
+        window.myChart.update(); // Atualiza o gráfico com novos dados
+    }
+}
+
+
+
+                                   <!-- BLOCO GERAR RELATORIO -->
+    function toggleReport() {
+        var reportSection = document.getElementById("reportSection");
+        var button = document.getElementById("toggleReportButton");
+
+        if (reportSection.style.display === "none" || reportSection.style.display === "") {
+            reportSection.style.display = "block";
+            button.textContent = "Fechar Relatório";
+        } else {
+            reportSection.style.display = "none";
+            button.textContent = "Gerar Relatório";
+        }
+    }
+
+
+
+</script>
+
+<!-- BLOCO GRAFICO/ RELATORIO FIM-->
+
+
+
+ <!-- Bloco botão historicode pesagem  inicio-->
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -302,19 +456,18 @@ button:hover {
         });
     });
 </script>
+<!-- Bloco botão historicode pesagem  fim-->
 
+ </div>
+    <!-- Campo oculto para armazenar o índice do histórico -->
+ <input type="hidden" id="historyIndex">
+ </div>
 
                 </tr>
             </tbody>
         </table>
-    </div>
-    
 
-        <!-- Campo oculto para armazenar o índice do histórico -->
-        <input type="hidden" id="historyIndex">
-    </div>
     
-
         <script>
 
         function toggleTable() {
