@@ -246,6 +246,36 @@ button:hover {
 </table>
 
 
+<script>
+
+    // ========================== BLOCO DE EXTRAÇÃO DOS DADOS inicio ==========================
+
+    // == BLOCO DE EXTRAÇÃO DOS DADOS ==
+function extractUserData() {
+    let userId = localStorage.getItem("userId") || "N/A";
+    let userName = localStorage.getItem("userName") || "N/A";
+    let height = localStorage.getItem("height") || "N/A";
+    let desiredWeight = localStorage.getItem("desiredWeight") || "N/A";
+    let history = JSON.parse(localStorage.getItem("history")) || [];
+
+    console.log("ID:", userId);
+    console.log("Nome:", userName);
+    console.log("Altura:", height);
+    console.log("Peso Desejado:", desiredWeight);
+    console.log("Histórico de Pesagem:", history);
+
+    return { userId, userName, height, desiredWeight, history };
+}
+
+// Chamar a função para testar
+extractUserData();
+
+     // ========================== BLOCO DE EXTRAÇÃO DOS DADOS fim ==========================
+
+
+
+</script>
+
 
 
                             <!-- BLOCO GRAFICO / RELATORIO - INICIO-->
@@ -256,19 +286,210 @@ button:hover {
     <canvas id="weightChart"></canvas> <!-- O gráfico será renderizado aqui -->
 </div>
 
-<!-- Botão para exibir/esconder o Gerador de Relatório -->
 <button id="toggleReportButton" onclick="toggleReport()">Gerar Relatório</button>
+
+
 <div id="reportSection" style="display: none;">
-    <p>Clique abaixo para gerar o PDF do histórico de pesagem.</p>
-    <button onclick="generatePDF()">Baixar PDF</button>
+    <div id="reportContent"></div>
+    <button onclick="generatePDF()">📥 Baixar PDF</button>
 </div>
 
 <script>
 
-<!-- BLOCO GRAFICO EVOLUTIVO -->
+<!-------------------------------- BLOCO GERAR RELATORIO ----------------->
+// BLOCO 00
 
-<!-- BLOCO GRÁFICO EVOLUTIVO -->
-    function toggleGraph() {
+function toggleReport() {
+    var reportSection = document.getElementById("reportSection");
+    var button = document.getElementById("toggleReportButton");
+    
+    if (reportSection.style.display === "none" || reportSection.style.display === "") {
+
+        // Adiciona o título
+        let content = `<h3 style="text-align: center;">Relatório: Aplicativo Controle de Peso</h3>`;
+        
+        let { userId, userName, desiredWeight, history } = extractUserData();
+        
+        content += `<p><strong>Nome:</strong> ${userName} | <strong>ID:</strong> ${userId}</p>`;
+        content += `<p><strong>Peso Desejado:</strong> ${desiredWeight} kg</p>`;
+        
+        content += `<h4>Histórico de Pesagem:</h4><ul>`;
+
+        history.forEach(entry => {
+            content += `<li><strong>Data:</strong> ${entry.timestamp.split(',')[0]
+
+}  | <strong>Peso Atual:</strong> ${entry.currentWeight} kg | <strong>Peso Saldo:</strong> ${entry.balanceSign} kg | <strong>IMC:</strong> ${entry.imc}</li>`;
+        });
+
+         // Adiciona data hora do relatório gerado tempo real
+        content += `<h4>Relatório gerado: Data/hora/segundo</h4><ul>`;
+
+        content += `</ul></div>`;
+
+    
+        content += `<div style="display: flex; justify-content: center; gap: 10px; margin-top: 10px;">`;
+content += `<button onclick="generatePDF()">Baixar PDF</button>`;
+content += `<button onclick="sendPDFWhatsApp()">Enviar pelo WhatsApp</button>`;
+content += `</div>`;
+
+        
+        reportSection.innerHTML = content;
+        reportSection.style.display = "block";
+        button.textContent = "Fechar Relatório";
+    } else {
+        reportSection.style.display = "none";
+        button.textContent = "Gerar Relatório";
+    }
+}
+
+
+function loadReportData() {
+    var reportContent = document.getElementById("reportContent");
+    reportContent.innerHTML = ""; // Limpa antes de adicionar novos dados
+
+    // Exemplo de dados carregados (substitua pela lógica real)
+    var userData = {
+        name: "Usuário Exemplo",
+        id: "12345",
+        pesoDesejado: "70kg",
+        historico: [
+            { data: "18/03/2025", peso: "65kg", saldo: "+5kg", imc: "22.5" },
+            { data: "17/03/2025", peso: "64kg", saldo: "+4kg", imc: "22.0" }
+        ]
+    };
+
+    // Monta o cabeçalho
+
+    var header = `<p><strong>Nome:</strong> ${userData.name} | <strong>ID:</strong> ${userData.id}</p>
+                   <p><strong>Peso Desejado:</strong> ${userData.pesoDesejado}</p>`;
+    reportContent.innerHTML += header;
+
+    // Monta a tabela de histórico
+    var table = `<table border='1' style='width:100%; text-align:left;'>
+                    <tr><th>Data</th><th>Peso Atual</th><th>Saldo</th><th>IMC</th></tr>`;
+    userData.historico.forEach(item => {
+        table += `<tr><td>${item.data}</td><td>${item.peso}</td><td>${item.saldo}</td><td>${item.imc}</td></tr>`;
+    });
+    table += "</table>";
+    reportContent.innerHTML += table;
+}
+
+
+// CSS = Adicionando borda e organização visual ao relatório
+document.addEventListener("DOMContentLoaded", function() {
+    var reportSection = document.getElementById("reportSection");
+    reportSection.style.border = "2px solid gray";
+    reportSection.style.padding = "10px";
+    reportSection.style.marginTop = "10px";
+    reportSection.style.borderRadius = "5px";
+    reportSection.style.width = "97%";
+    reportSection.style.backgroundColor = "#ffffff";
+});
+
+
+</script>
+
+
+
+<script>
+// BLOCO 1 – Captura de Dados
+function getUserReportData() {
+    // Captura os dados básicos do usuário
+    let userId = localStorage.getItem("userId") || "N/A";
+    let userName = localStorage.getItem("userName") || "N/A";
+    let desiredWeight = localStorage.getItem("desiredWeight") || "N/A";
+    
+    // Captura o histórico de pesagem
+    let history = JSON.parse(localStorage.getItem("history")) || [];
+    
+    // Garante que o histórico tenha a estrutura correta
+    if (!Array.isArray(history)) {
+        history = [];
+        console.warn("O histórico de pesagem está com formato inválido.");
+    }
+    
+    return { userId, userName, desiredWeight, history };
+}
+</script>
+
+<script>
+// BLOCO 2 - ORGANIZAR DADOS DO HISTÓRICO
+function getFormattedHistory() {
+    let history = JSON.parse(localStorage.getItem("history")) || [];
+
+    // Formatar os dados do histórico
+    let formattedHistory = history.map(entry => {
+        return `Data: ${entry.timestamp.split(',')[0]} | Peso Atual: ${entry.currentWeight} kg | IMC: ${entry.imc}`;
+    }).join("\n");
+
+    return formattedHistory;
+}
+</script>
+
+<script>
+// BLOCO 3 - GERAR RELATÓRIO COMPLETO
+function generateReportText() {
+    let userInfo = getUserInfo(); // Obtém as informações básicas
+    let historyData = getFormattedHistory(); // Obtém os dados formatados do histórico
+
+    let reportText = `${userInfo}\n\nHistórico de Pesagem:\n${historyData}`;
+    return reportText;
+}
+</script>
+
+
+<script>
+// BLOCO 4 - EXIBIR RELATÓRIO NA TELA
+function displayReport() {
+    let reportContent = generateReportText(); // Obtém o texto do relatório
+    let reportContainer = document.getElementById("reportDisplay"); // Elemento onde será exibido
+
+    reportContainer.textContent = reportContent; // Exibe o relatório na tela
+    reportContainer.style.whiteSpace = "pre-line"; // Mantém a formatação de quebras de linha
+}
+</script>
+
+<!-- RELATORIO 
+
+
+<!-- **📌 Função abrir botão Gerar relatório** -->
+<script>
+    // BLOCO 5 - Botão relatório
+    function showReport() {
+        var reportSection = document.getElementById("reportSection");
+        reportSection.style.display = "block";
+        document.getElementById("reportContent").innerHTML = generateReportContent();
+    }
+
+    function generateReportContent() {
+        let { userId, userName, desiredWeight, history } = extractUserData();
+
+         let content = `<h3>Relatório: Aplicativo controle de peso</h3>`;
+
+        content += `<p><strong>Nome:</strong> ${userName} | <strong>ID:</strong> ${userId}</p>`;
+        content += `<p><strong>Peso Desejado:</strong> ${desiredWeight} kg</p>`;
+
+        content += `<h4>Histórico de Pesagem:</h4><ul>`;
+
+        history.forEach(entry => {
+            let dateOnly = entry.timestamp.split(",")[0]; // Remove os minutos
+            content += `<li>${dateOnly} - Peso Atual: ${entry.currentWeight} kg - Peso Saldo: ${entry.balanceSign} kg - IMC: ${entry.imc}</li>`;
+        });
+
+        content += `</ul>`;
+        return content;
+    }
+</script>
+
+<!-- BLOCO RELATORIO FIM -->
+
+
+
+
+
+<!-- BLOCO GRAFICO EVOLUTIVO -->
+<script>
+function toggleGraph() {
         var graphSection = document.getElementById("graphSection");
         var button = document.getElementById("toggleGraphButton");
 
@@ -280,62 +501,32 @@ button:hover {
             button.textContent = "Gráfico Evolutivo";
         }
     }
-    
-    <!-- Criar o gráfico com Peso e IMC -->
-    if (!window.myChart) {
-        const ctx = document.getElementById("weightChart").getContext("2d");
-        window.myChart = new Chart(ctx, {
-            type: "line",
-            data: {
-                labels: ["Jan", "Feb", "Mar", "Abr", "Mai", "Jun"], // Exemplo de meses
-                datasets: [
-                    {
-                        label: "Peso (kg)",
-                        data: [80, 78, 76, 74, 73, 72], // Exemplo de dados de peso
-                        borderColor: "blue",
-                        borderWidth: 2,
-                        fill: false
-                    },
-                    {
-                        label: "IMC",
-                        data: [25, 24.5, 24, 23.5, 23.2, 23], // Exemplo de dados de IMC
-                        borderColor: "red",
-                        borderWidth: 2,
-                        fill: false
-                    }
-                ]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    y: {
-                        beginAtZero: false
-                    }
-                }
-            }
-        });
-    }
 
 
+<!-- BLOCO 2 = Criar um canva-->
 
-
-
-
-
-<!-- fase 2 Criar um canva-->
 if (!window.myChart) {
     const ctx = document.getElementById("weightChart").getContext("2d");
     window.myChart = new Chart(ctx, {
         type: "line",
         data: {
-            labels: [], // Será preenchido dinamicamente
-            datasets: [{
-                label: "Peso (kg)",
-                data: [], // Será preenchido dinamicamente
-                borderColor: "blue",
-                borderWidth: 2,
-                fill: false
-            }]
+            labels: [], // Datas serão preenchidas dinamicamente
+            datasets: [
+                {
+                    label: "Peso (kg)",
+                    data: [], // Pesos serão preenchidos
+                    borderColor: "blue",
+                    borderWidth: 2,
+                    fill: false
+                },
+                {
+                    label: "IMC",
+                    data: [], // IMC será preenchido
+                    borderColor: "red",
+                    borderWidth: 2,
+                    fill: false
+                }
+            ]
         },
         options: {
             responsive: true,
@@ -348,21 +539,80 @@ if (!window.myChart) {
     });
 }
 
-<!-- fase 3 Capturar os dados do localStorage-->
+
+
+
+<!-- BLOCO 3 = Capturar os dados do localStorage-->
+
+// Função para capturar os dados do localStorage e formatar corretamente
+
 function getWeightData() {
-    let records = JSON.parse(localStorage.getItem("weightRecords")) || [];
+    let userData = extractUserData();
+    let records = userData.history || [];
     
     // Ordena os registros por data
-    records.sort((a, b) => new Date(a.date) - new Date(b.date));
+    records.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
     
-    // Extrai os dados necessários
-    let labels = records.map(record => record.date); // Datas
-    let data = records.map(record => record.weight); // Pesos
+    // Extrai as datas (sem a hora), pesos e IMCs
+    let labels = records.map(record => record.timestamp.split(',')[0]);
+    let weights = records.map(record => parseFloat(record.currentWeight));
+    let imcValues = records.map(record => parseFloat(record.imc));
     
-    return { labels, data };
+    return { labels, weights, imcValues };
 }
 
-<!-- fase 4 Capturar Configurar e exibir o gráfico-->
+
+
+<!-- BLOCO 4 -->
+// Função para atualizar o gráfico com os dados reais
+function updateChart() {
+    let { labels, weights, imcValues } = getWeightData();
+    
+    // Verifica se o gráfico já existe e destrói para recriar
+    if (window.myChart) {
+        window.myChart.destroy();
+    }
+    
+    // Criando o gráfico
+    const ctx = document.getElementById("weightChart").getContext("2d");
+    window.myChart = new Chart(ctx, {
+        type: "line",
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: "Peso (kg)",
+                    data: weights,
+                    borderColor: "blue",
+                    borderWidth: 2,
+                    fill: false
+                },
+                {
+                    label: "IMC",
+                    data: imcValues,
+                    borderColor: "red",
+                    borderWidth: 2,
+                    fill: false
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: false
+                }
+            }
+        }
+    });
+}
+
+// Atualiza o gráfico ao carregar a página
+updateChart();
+
+
+<!-- <!-- BLOCO 5 = Capturar Configurar e exibir o gráfico-->
+
 function generateGraph() {
     let { labels, data } = getWeightData();
     
@@ -373,27 +623,198 @@ function generateGraph() {
     }
 }
 
-
-
-                                   <!-- BLOCO GERAR RELATORIO -->
-    function toggleReport() {
-        var reportSection = document.getElementById("reportSection");
-        var button = document.getElementById("toggleReportButton");
-
-        if (reportSection.style.display === "none" || reportSection.style.display === "") {
-            reportSection.style.display = "block";
-            button.textContent = "Fechar Relatório";
-        } else {
-            reportSection.style.display = "none";
-            button.textContent = "Gerar Relatório";
-        }
-    }
-
-
-
 </script>
 
-<!-- BLOCO GRAFICO/ RELATORIO FIM-->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- BLOCO CODIGO 1= tabela teste inicio-->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Controle de Peso</title>
+</head>
+<body>
+
+    <h2>Histórico de Pesagens  teste</h2>
+
+    <!-- Tabela para exibir os dados -->
+    <table id="historyTable" border="1">
+        <thead>
+            <tr>
+                <th>Data</th>
+                <th>Peso Atual</th>
+                <th>IMC</th>
+                <th>Saldo de Peso</th> <!-- Nova coluna -->
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Os dados serão preenchidos aqui -->
+        </tbody>
+    </table>
+
+    <script>
+        // Função para extrair os dados do localStorage
+        function extractUserData() {
+            // Extraindo o histórico de pesagem
+            let history = JSON.parse(localStorage.getItem("history")) || [];
+
+            // Garantindo que o histórico tenha a estrutura correta (em caso de dados inválidos)
+            if (Array.isArray(history) === false) {
+                history = [];
+                console.warn("O histórico de pesagem está com formato inválido.");
+            }
+
+            // Retorna os dados extraídos
+            return { history };
+        }
+
+        // Função para exibir os dados do histórico na tabela
+        function displayHistoryData(history) {
+            const tableBody = document.querySelector("#historyTable tbody");
+            tableBody.innerHTML = '';  // Limpar a tabela antes de adicionar os dados
+
+            history.forEach(entry => {
+                const row = document.createElement('tr');
+                
+                // Data formatada
+                const dateCell = document.createElement('td');
+
+                // Cinco linha que alteramos para aparecer a data certa //
+                const [day, month, yearTime] = entry.timestamp.split('/');
+                const [year, time] = yearTime.split(', ');
+                const formattedDate = `${year}-${month}-${day}T${time}`; // Converte para formato ISO
+                const date = new Date(formattedDate);
+                // Data sem minutos
+                dateCell.textContent = date.toLocaleDateString("pt-BR");
+
+
+// Parte da tabela
+
+// Peso Atual
+const weightCell = document.createElement('td');
+weightCell.textContent = entry.currentWeight + ' kg';
+
+// IMC
+const imcCell = document.createElement('td');
+imcCell.textContent = entry.imc;
+
+// Peso Saldo
+const balanceCell = document.createElement('td');
+balanceCell.textContent = entry.balanceSign + ' kg'; // Aqui adicionamos o saldo de peso
+
+row.appendChild(dateCell);
+row.appendChild(weightCell);
+row.appendChild(imcCell);
+row.appendChild(balanceCell); // Adicionando a célula de saldo de peso
+
+tableBody.appendChild(row);
+
+
+            });
+        }
+
+        // Função que chama a extração dos dados e exibe na tabela
+        function loadUserData() {
+            const { history } = extractUserData(); // Pega o histórico
+
+
+
+
+
+// Adicionei essa linha temporária
+console.log("Dados para o gráfico:");
+console.log(history);
+
+
+
+
+            displayHistoryData(history); // Exibe o histórico na tabela
+        }
+
+        // Chama a função para carregar os dados e exibi-los
+        loadUserData();
+    </script>
+
+</body>
+</html>
+
+
+  <!-- BLOCO CODIGO 2= tabela teste inicio-->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Controle de Peso</title>
+</head>
+<body>
+
+    <script>
+        // == BLOCO DE EXTRAÇÃO DOS DADOS ==
+        function extractUserData() {
+            // Extraindo os dados de usuário
+            let userId = localStorage.getItem("userId") || "N/A";
+            let userName = localStorage.getItem("userName") || "N/A";
+            let height = localStorage.getItem("height") || "N/A";
+            let desiredWeight = localStorage.getItem("desiredWeight") || "N/A";
+
+            // Extraindo o histórico de pesagem
+            let history = JSON.parse(localStorage.getItem("history")) || [];
+
+            // Garantindo que o histórico tenha a estrutura correta (em caso de dados inválidos)
+            if (Array.isArray(history) === false) {
+                history = [];
+                console.warn("O histórico de pesagem está com formato inválido.");
+            }
+
+            // Exibindo os dados no console (opcional, para depuração)
+            console.log("ID:", userId);
+            console.log("Nome:", userName);
+            console.log("Altura:", height);
+            console.log("Peso Desejado:", desiredWeight);
+            console.log("Histórico de Pesagem:", history);
+
+            // Retorna os dados extraídos como um objeto
+            return { userId, userName, height, desiredWeight, history };
+        }
+
+        // Chama a função para testar e ver os dados extraídos no console
+        extractUserData();
+    </script>
+
+  <!-- BLOCO 2 tabela teste fim -->
+</body>
+</html>
+
+
+
+
+
+
+
+
 
 
 
@@ -659,7 +1080,7 @@ document.addEventListener("DOMContentLoaded", function() {
         historySection.insertBefore(toggleHistoryButton, historyList);
     }
 
-    // Carregar o histórico do localStorage
+    // Carregar o histórico do localStorage = CHAVE STORAGE
     let history = JSON.parse(localStorage.getItem('history')) || [];
 
     // Se já houver histórico, exibe a lista (Mudei o nome Ocultar Histórico)
@@ -834,5 +1255,11 @@ function deleteEntry(index) {
 }
 
     </script>
+
+</script>
+
+
 </body>
 </html>
+
+
