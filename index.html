@@ -306,15 +306,17 @@ function toggleReport() {
     if (reportSection.style.display === "none" || reportSection.style.display === "") {
 
         // Adiciona o título
-        let content = `<h3 style="text-align: center;">Relatório: Aplicativo Controle de Peso</h3>`;
+        let content = `<h3 style="text-align: center;">Aplicativo Controle de Peso</h3>`;
         
         let { userId, userName, desiredWeight, history } = extractUserData();
         
         content += `<p><strong>Nome:</strong> ${userName} | <strong>ID:</strong> ${userId}</p>`;
         content += `<p><strong>Peso Desejado:</strong> ${desiredWeight} kg</p>`;
-        
+
+         // Relatório
         content += `<h4>Histórico de Pesagem:</h4><ul>`;
 
+           
         history.forEach(entry => {
             content += `<li><strong>Data:</strong> ${entry.timestamp.split(',')[0]
 
@@ -322,9 +324,13 @@ function toggleReport() {
         });
 
          // Adiciona data hora do relatório gerado tempo real
-        content += `<h4>Relatório gerado: Data/hora/segundo</h4><ul>`;
+         content += `<p><strong>Relatório gerado em:</strong> ${new Date().toLocaleString()}</p>`;
 
-        content += `</ul></div>`;
+         // Margem esquerda
+         content += `<div style="text-align: left;">`;
+
+
+         content += `</ul></div>`;
 
     
         content += `<div style="display: flex; justify-content: center; gap: 10px; margin-top: 10px;">`;
@@ -342,7 +348,7 @@ content += `</div>`;
     }
 }
 
-
+    
 function loadReportData() {
     var reportContent = document.getElementById("reportContent");
     reportContent.innerHTML = ""; // Limpa antes de adicionar novos dados
