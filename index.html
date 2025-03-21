@@ -313,19 +313,22 @@ function toggleReport() {
 
         content += `<table style="width: 100%; border-collapse: collapse; text-align: left; margin-left: 1px; margin-right: 10px; ">
                         <tr>
-                                  <th style="border: 1px solid #ccc; padding: 6px;">Data</th>
-                            <th style="border: 1px solid #ccc; padding: 6px;">Peso Atual</th>
-                            <th style="border: 1px solid #ccc; padding: 6px;">Peso Saldo</th>
-                            <th style="border: 1px solid #ccc; padding: 6px;">IMC</th>
+
+                        
+                            <th style="border: 1px solid #ccc; padding: 5px;">Data</th>
+                            <th style="border: 1px solid #ccc; padding: 5px;">Peso Atual</th>
+                            <th style="border: 1px solid #ccc; padding: 5px;">Peso Saldo</th>
+                            <th style="border: 1px solid #ccc; padding: 5px;">IMC</th>
                         </tr>`;
+        
         
         history.forEach(entry => {
             let dateOnly = entry.timestamp.split(",")[0]; // Remove os minutos
             content += `<tr>
-                            <td style="border: 1px solid #ccc; padding: 8px;">${dateOnly}</td>
-                            <td style="border: 1px solid #ccc; padding: 8px;">${entry.currentWeight} kg</td>
-                            <td style="border: 1px solid #ccc; padding: 8px;">${entry.balanceSign} kg</td>
-                            <td style="border: 1px solid #ccc; padding: 8px;">${entry.imc}</td>
+                            <td style="border: 1px solid #ccc; padding: 5px;">${dateOnly}</td>
+                            <td style="border: 1px solid #ccc; padding: 5px;">${entry.currentWeight} kg</td>
+                            <td style="border: 1px solid #ccc; padding: 5px;">${entry.balanceSign} kg</td>
+                            <td style="border: 1px solid #ccc; padding: 5px;">${entry.imc}</td>
                         </tr>`;
         });
 
