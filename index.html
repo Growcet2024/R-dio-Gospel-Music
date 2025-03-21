@@ -291,7 +291,7 @@ extractUserData();
 
 <div id="reportSection" style="display: none;">
     <div id="reportContent"></div>
-    // botão gerar pdf extra estava aqui
+    Baixar e enviar relatório pelo whatsapp
 </div>
 
 <script>
@@ -308,8 +308,8 @@ function toggleReport() {
 
         let { userId, userName, desiredWeight, history } = extractUserData();
         let content = `<h3>Aplicativo controle de peso</h3>`;
-        content += `<p><strong>Nome:</strong> ${userName} | <strong>ID:</strong> ${userId} | <strong>Peso Desejado:</strong> ${desiredWeight} kg</p>`;
-        
+
+        content += `<p><strong>Nome:</strong> ${userName} | <strong>ID:</strong> ${userId} <br> <strong>Peso Desejado:</strong> ${desiredWeight} kg</p>`;
 
         content += `<table style="width: 100%; border-collapse: collapse; text-align: left;">
                         <tr>
@@ -318,10 +318,6 @@ function toggleReport() {
                             <th style="border: 1px solid #ccc; padding: 8px;">Peso Saldo</th>
                             <th style="border: 1px solid #ccc; padding: 8px;">IMC</th>
                         </tr>`;
-
-   // Adiciona data hora do relatório gerado tempo real
-   content += `<p><strong>Relatório gerado em:</strong> ${new Date().toLocaleString()}</p>`;
-
         
         history.forEach(entry => {
             let dateOnly = entry.timestamp.split(",")[0]; // Remove os minutos
@@ -332,12 +328,18 @@ function toggleReport() {
                             <td style="border: 1px solid #ccc; padding: 8px;">${entry.imc}</td>
                         </tr>`;
         });
+
+        // Adiciona data hora do relatório gerado tempo real
+        content += `<p><strong>Relatório gerado em:</strong> ${new Date().toLocaleString()}</p>`;
         
+
         content += `</table>`;
-        content += `<div style="text-align: center; margin-top: 10px;">
-                        <button onclick="generatePDF()" style="margin-right: 10px;">Baixar PDF</button>
-                        <button onclick="sendPDFWhatsApp()">Enviar PDF</button>
-                    </div>`;
+content += `<div style="display: flex; justify-content: center; gap: 10px; margin-top: 10px;">
+                <button onclick="generatePDF()">Baixar PDF</button>
+                <button onclick="sendPDFWhatsApp()">Enviar PDF</button>
+            </div>`;
+
+
         
         document.getElementById("reportContent").innerHTML = content;
     } else {
@@ -1284,6 +1286,8 @@ function deleteEntry(index) {
 
 </body>
 </html>
+
+
 
 
 
