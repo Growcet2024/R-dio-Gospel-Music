@@ -291,62 +291,64 @@ extractUserData();
 
 <div id="reportSection" style="display: none;">
     <div id="reportContent"></div>
-    <button onclick="generatePDF()">📥 Baixar PDF</button>
+    // botão gerar pdf extra estava aqui
 </div>
 
 <script>
 
 <!-------------------------------- BLOCO GERAR RELATORIO ----------------->
 // BLOCO 00
-
 function toggleReport() {
     var reportSection = document.getElementById("reportSection");
     var button = document.getElementById("toggleReportButton");
-    
+
     if (reportSection.style.display === "none" || reportSection.style.display === "") {
-
-        // Adiciona o título
-        let content = `<h3 style="text-align: center;">Aplicativo Controle de Peso</h3>`;
-        
-        let { userId, userName, desiredWeight, history } = extractUserData();
-        
-        content += `<p><strong>Nome:</strong> ${userName} | <strong>ID:</strong> ${userId}</p>`;
-        content += `<p><strong>Peso Desejado:</strong> ${desiredWeight} kg</p>`;
-
-         // Relatório
-        content += `<h4>Histórico de Pesagem:</h4><ul>`;
-
-           
-        history.forEach(entry => {
-            content += `<li><strong>Data:</strong> ${entry.timestamp.split(',')[0]
-
-}  | <strong>Peso Atual:</strong> ${entry.currentWeight} kg | <strong>Peso Saldo:</strong> ${entry.balanceSign} kg | <strong>IMC:</strong> ${entry.imc}</li>`;
-        });
-
-         // Adiciona data hora do relatório gerado tempo real
-         content += `<p><strong>Relatório gerado em:</strong> ${new Date().toLocaleString()}</p>`;
-
-         // Margem esquerda
-         content += `<div style="text-align: left;">`;
-
-
-         content += `</ul></div>`;
-
-    
-        content += `<div style="display: flex; justify-content: center; gap: 10px; margin-top: 10px;">`;
-content += `<button onclick="generatePDF()">Baixar PDF</button>`;
-content += `<button onclick="sendPDFWhatsApp()">Enviar pelo WhatsApp</button>`;
-content += `</div>`;
-
-        
-        reportSection.innerHTML = content;
         reportSection.style.display = "block";
         button.textContent = "Fechar Relatório";
+
+        let { userId, userName, desiredWeight, history } = extractUserData();
+        let content = `<h3>Aplicativo controle de peso</h3>`;
+        content += `<p><strong>Nome:</strong> ${userName} | <strong>ID:</strong> ${userId} | <strong>Peso Desejado:</strong> ${desiredWeight} kg</p>`;
+        
+
+        content += `<table style="width: 100%; border-collapse: collapse; text-align: left;">
+                        <tr>
+                            <th style="border: 1px solid #ccc; padding: 8px;">Data</th>
+                            <th style="border: 1px solid #ccc; padding: 8px;">Peso Atual</th>
+                            <th style="border: 1px solid #ccc; padding: 8px;">Peso Saldo</th>
+                            <th style="border: 1px solid #ccc; padding: 8px;">IMC</th>
+                        </tr>`;
+
+   // Adiciona data hora do relatório gerado tempo real
+   content += `<p><strong>Relatório gerado em:</strong> ${new Date().toLocaleString()}</p>`;
+
+        
+        history.forEach(entry => {
+            let dateOnly = entry.timestamp.split(",")[0]; // Remove os minutos
+            content += `<tr>
+                            <td style="border: 1px solid #ccc; padding: 8px;">${dateOnly}</td>
+                            <td style="border: 1px solid #ccc; padding: 8px;">${entry.currentWeight} kg</td>
+                            <td style="border: 1px solid #ccc; padding: 8px;">${entry.balanceSign} kg</td>
+                            <td style="border: 1px solid #ccc; padding: 8px;">${entry.imc}</td>
+                        </tr>`;
+        });
+        
+        content += `</table>`;
+        content += `<div style="text-align: center; margin-top: 10px;">
+                        <button onclick="generatePDF()" style="margin-right: 10px;">Baixar PDF</button>
+                        <button onclick="sendPDFWhatsApp()">Enviar PDF</button>
+                    </div>`;
+        
+        document.getElementById("reportContent").innerHTML = content;
     } else {
         reportSection.style.display = "none";
         button.textContent = "Gerar Relatório";
     }
 }
+
+
+
+
 
 
 
@@ -479,10 +481,23 @@ function displayReport() {
 
         content += `<h4>Histórico de Pesagem:</h4><ul>`;
 
+
+         
         history.forEach(entry => {
-            let dateOnly = entry.timestamp.split(",")[0]; // Remove os minutos
-            content += `<li>${dateOnly} - Peso Atual: ${entry.currentWeight} kg - Peso Saldo: ${entry.balanceSign} kg - IMC: ${entry.imc}</li>`;
-        });
+    let dateOnly = entry.timestamp.split(",")[0]; // Remove os minutos
+    content += `<div style="border: 1px solid #ccc; padding: 10px; margin: 5px 0; border-radius: 5px;">
+                    <strong>Data:</strong> ${dateOnly} <br>
+                    <strong>Peso Atual:</strong> ${entry.currentWeight} kg <br>
+                    <strong>Peso Saldo:</strong> ${entry.balanceSign} kg <br>
+                    <strong>IMC:</strong> ${entry.imc}
+                </div>`;
+});
+
+
+
+
+
+
 
         content += `</ul>`;
         return content;
@@ -1269,6 +1284,8 @@ function deleteEntry(index) {
 
 </body>
 </html>
+
+
 
 
 
