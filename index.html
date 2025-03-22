@@ -6,11 +6,11 @@
     <title>Controle de Peso</title>
     <link rel="stylesheet" href="styles.css">
 </head>
+
 <!-- Biblioteca Gráfico -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <!-- Biblioteca PDF -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
 
 <body>
 
@@ -277,23 +277,32 @@ extractUserData();
 
 
 
-
-                            <!-- BLOCO GRAFICO / RELATORIO - INICIO-->
+<!-- BLOCO GRAFICO / RELATORIO - INICIO-->
 
 <!-- Botão para exibir/esconder o Gráfico -->
 <button id="toggleGraphButton" onclick="toggleGraph()">Gráfico Evolutivo</button>
 <div id="graphSection" style="display: none;">
-    <canvas id="weightChart"></canvas> <!-- O gráfico será renderizado aqui -->
+<canvas id="weightChart"></canvas> <!-- O gráfico será renderizado aqui -->
 </div>
+
 
 <!-- Botão para exibir/esconder o Gerar relatório -->
 <button id="toggleReportButton" onclick="toggleReport()">Gerar Relatório</button>
 <div id="reportSection" style="display: none;">
-    <div id="reportContent"></div>
+    <div id="reportContent"></div> <!-- histórico -->
+
+    <!-- Agora os botões ficam depois do conteúdo -->
+    <div style="display: flex; justify-content: center; gap: 10px; margin-top: 10px;">
+        <button onclick="generatePDF()">Baixar PDF</button>
+        <button onclick="sendPDFWhatsApp()">Enviar PDF</button>
+    </div>
+
 </div>
 
 
+                            
 <script>
+
 <!-------------------------------- BLOCO GERAR RELATORIO ----------------->
 // BLOCO 01
 function toggleReport() {
@@ -337,12 +346,8 @@ content += `<p><strong>Relatório gerado em:<br></strong> ${new Date().toLocaleS
 content += `</table>`;
 
 // Adiciona a frase abaixo da tabela e antes dos botões
-content += `<p style="text-align: center; margin-top: 10px; font-size: 13px; font-weight: bold; color: #333;">Esses são seus ${history.length} registros de pesagem, deseja baixar ou enviar pelo WhataApp?</p>`;
+content += `<p style="text-align: center; margin-top: 10px; font-size: 13px; font-weight: bold; color: #333;">Você tem ${history.length} registros de pesagem, deseja baixar ou enviar pelo WhataApp?</p>`;
 
-content += `<div style="display: flex; justify-content: center; gap: 10px; margin-top: 10px;">
-                <button onclick="generatePDF()">Baixar PDF</button>
-                <button onclick="sendPDFWhatsApp()">Enviar PDF</button>
-            </div>`;
 
 document.getElementById("reportContent").innerHTML = content;
 
@@ -464,13 +469,22 @@ function displayReport() {
 <script>
     function generatePDF() {
         const { jsPDF } = window.jspdf;
-        const doc = new jsPDF({ orientation: "portrait" });
+        const doc = new jsPDF("p", "mm", "a4");
+        doc.setFontSize(10); // Reduz o tamanho da fonte para caber melhor
+
+        
+        doc.setFont("helvetica", "bold"); // Define fonte em negrito
+doc.text("Relatório de Pesagem", 10, 15);
+doc.setFont("helvetica", "normal"); // Retorna a fonte ao normal para o restante do conteúdo
+
+
     
-        doc.text("Relatório de Pesagem", 10, 10); // Título no PDF
-    
-        let content = document.getElementById("reportContent").innerText; // Captura o texto visível
+let content = document.getElementById("reportContent").innerText; // Captura o texto visível
+
+
+
+
         doc.text(content, 10, 20); // Adiciona o conteúdo ao PDF
-    
         doc.save("Relatorio_Pesagem.pdf"); // Baixa o arquivo
     }
     </script>
@@ -1075,14 +1089,4 @@ function deleteEntry(index) {
 
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
 
