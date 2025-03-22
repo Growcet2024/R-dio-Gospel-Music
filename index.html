@@ -319,10 +319,10 @@ function toggleReport() {
         history.forEach(entry => {
             let dateOnly = entry.timestamp.split(",")[0]; // Remove os minutos
             content += `<tr>
-                            <td style="border: 1px solid #ccc; padding: 5px;">${dateOnly}</td>
-                            <td style="border: 1px solid #ccc; padding: 5px;">${entry.currentWeight} kg</td>
-                            <td style="border: 1px solid #ccc; padding: 5px;">${entry.balanceSign} kg</td>
-                            <td style="border: 1px solid #ccc; padding: 5px;">${entry.imc}</td>
+                            <td style="border: 1px solid #ccc; padding: 4px;">${dateOnly}</td>
+                            <td style="border: 1px solid #ccc; padding: 4px;">${entry.currentWeight} kg</td>
+                            <td style="border: 1px solid #ccc; padding: 4px;">${entry.balanceSign} kg</td>
+                            <td style="border: 1px solid #ccc; padding: 4px;">${entry.imc}</td>
                         </tr>`;
         });
 
@@ -386,12 +386,10 @@ document.addEventListener("DOMContentLoaded", function() {
     var reportSection = document.getElementById("reportSection");
     reportSection.style.border = "2px solid gray";
     reportSection.style.padding = "10px";
-
     reportSection.style.marginTop = "1px";
     reportSection.style.marginBottom = "10px";
-
     reportSection.style.borderRadius = "5px";
-    reportSection.style.width = "95%";
+    reportSection.style.width = "94%";
     reportSection.style.backgroundColor = "#ffffff";
 });
 
