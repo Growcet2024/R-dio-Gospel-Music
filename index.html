@@ -310,10 +310,10 @@ function toggleReport() {
         content += `<table style="width: 100%; border-collapse: collapse; text-align: left; margin-left: 0px; margin-right: 15px; ">
                         <tr>
 
-         <th style="border: 1px solid #ccc; padding: 6px; font-size: 14px;">Data</th>
-         <th style="border: 1px solid #ccc; padding: 6px; font-size: 14px;">Peso Atual</th>
-         <th style="border: 1px solid #ccc; padding: 6px; font-size: 14px;">Peso Saldo</th>
-         <th style="border: 1px solid #ccc; padding: 6px; font-size: 14px;">IMC</th>
+         <th style="border: 1px solid #ccc; padding: 4px; font-size: 15px;">Data</th>
+         <th style="border: 1px solid #ccc; padding: 4px; font-size: 15px;">Peso Atual</th>
+         <th style="border: 1px solid #ccc; padding: 4px; font-size: 15px;">Peso Saldo</th>
+         <th style="border: 1px solid #ccc; padding: 4px; font-size: 15px;">IMC</th>
          </tr>`;
 
          history.forEach(entry => {
@@ -335,8 +335,9 @@ content += `<p><strong>Relatório gerado em:<br></strong> ${new Date().toLocaleS
 content += `</table>`;
 
 // Adiciona a frase abaixo da tabela e antes dos botões
-content += `<p style="text-align: center; margin-top: 10px;">Esses são seus registros recentes de pesagem.</p>`;
+content += `<p style="text-align: center; margin-top: 10px; font-size: 14px; font-weight: bold; color: #333;">Esses são seus registros recentes de pesagem.</p>`;
 
+        
 content += `<div style="display: flex; justify-content: center; gap: 10px; margin-top: 10px;">
                 <button onclick="generatePDF()">Baixar PDF</button>
                 <button onclick="sendPDFWhatsApp()">Enviar PDF</button>
