@@ -295,6 +295,11 @@ extractUserData();
     <div style="display: flex; justify-content: center; gap: 10px; margin-top: 10px;">
         <button onclick="generatePDF()">Baixar PDF</button>
         <button onclick="sendPDFWhatsApp()">Enviar PDF</button>
+
+        <button onclick="sendPDFToWhatsApp()">Enviar Contato</button>
+        <button onclick="sendPDFToSpecificNumber()">Enviar PDF para Número</button>
+        <input type="text" id="whatsappNumber" placeholder="Digite o número com DDD">
+        
     </div>
 
 </div>
@@ -493,6 +498,70 @@ let content = document.getElementById("reportContent").innerText; // Captura o t
 
 
 <!--// BLOCO 07 - Função enviar PDF -->
+
+<!--// BLOCO 07 - Função enviar PDF pelo WhatsApp -->
+ <!--// BLOCO 07 - Primeira fase -->
+<!-- Botão 1: Enviar PDF para um contato salvo -->
+<button onclick="sendPDFToWhatsApp()">Enviar PDF para Contato do WhatsApp</button>
+
+<script>
+function sendPDFToWhatsApp() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF("p", "mm", "a4");
+
+    doc.setFontSize(10);
+    doc.rect(15, 15, 180, 267);
+
+    doc.setFont("helvetica", "bold");
+    doc.text("Relatório de Pesagem", 20, 22);
+    doc.setFont("helvetica", "normal");
+
+    let content = document.getElementById("reportContent").innerText;
+    doc.text(content, 20, 27);
+
+    doc.save("Relatorio_Pesagem.pdf"); // Baixa o arquivo
+
+    // Simulação de envio para WhatsApp (não é possível anexar diretamente pelo JavaScript)
+    alert("O PDF foi gerado. Agora, anexe manualmente no WhatsApp.");
+}
+</script>
+
+ <!--// BLOCO 07 - Segunda fase -->
+<!-- Botão 2: Enviar PDF para um número específico -->
+<input type="text" id="whatsappNumber" placeholder="Digite o número com DDD">
+
+<button onclick="sendPDFToSpecificNumber()">Enviar PDF para Número</button>
+
+<script>
+function sendPDFToSpecificNumber() {
+    let number = document.getElementById("whatsappNumber").value.trim();
+    
+    if (number === "") {
+        alert("Por favor, digite um número de telefone.");
+        return;
+    }
+
+    // Removendo espaços e caracteres não numéricos
+    number = number.replace(/\D/g, "");
+
+    // Verifica se o número tem pelo menos 11 dígitos (Brasil: DDD + 9 dígitos)
+    if (number.length < 11) {
+        alert("Número inválido! Certifique-se de incluir o DDD.");
+        return;
+    }
+
+    const pdfName = "Relatorio_Pesagem.pdf";
+
+    // Simulação de envio do PDF (precisaria de um servidor para anexar automaticamente)
+    const whatsappURL = `https://wa.me/${number}?text=Segue o relatório de pesagem em PDF: [anexe o arquivo manualmente]`;
+
+    window.open(whatsappURL, "_blank");
+}
+</script>
+
+
+
+<!-- BLOCO RELATORIO FIM -->
 
 
 
