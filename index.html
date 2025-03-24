@@ -517,11 +517,12 @@ function sendTextToWhatsApp() {
     content = encodeURIComponent(content);
 
     // Cria o link para o WhatsApp com o conteúdo como texto
-    const whatsappUrl = `whatsapp://send?text=${content}`;
+    const whatsappUrl = `https://wa.me/?text=${content}`;
 
     // Redireciona para o WhatsApp
     window.location.href = whatsappUrl;
 }
+
 
 
     </script>
