@@ -502,6 +502,10 @@ let content = document.getElementById("reportContent").innerText; // Captura o t
 <!--// BLOCO 07 - Função enviar PDF pelo WhatsApp -->
  <!--// BLOCO 07 - Primeira fase -->
 <!-- Botão 1: Enviar PDF para um contato salvo -->
+
+
+
+        
 <button onclick="sendPDFToWhatsApp()">Enviar PDF para Contato do WhatsApp</button>
 
 <script>
@@ -524,6 +528,11 @@ function sendPDFToWhatsApp() {
     // Simulação de envio para WhatsApp (não é possível anexar diretamente pelo JavaScript)
     alert("O PDF foi gerado. Agora, anexe manualmente no WhatsApp.");
 }
+
+
+
+
+    
 </script>
 
  <!--// BLOCO 07 - Segunda fase -->
@@ -570,6 +579,38 @@ function sendPDFToSpecificNumber() {
 
 
 
+    <!--// BLOCO 06 teste    Função baixar PDF -->
+<script>
+function generatePDF() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF("p", "mm", "a4");
+    doc.setFontSize(10);
+    doc.rect(15, 15, 180, 267);
+
+    doc.setFont("helvetica", "bold");
+    doc.text("Relatório de Pesagem", 20, 22);
+    doc.setFont("helvetica", "normal");
+
+    let content = document.getElementById("reportContent").innerText;
+    doc.text(content, 20, 27);
+    
+    // Salva o PDF em um Blob para enviar
+    doc.save("Relatorio_Pesagem.pdf", { returnPromise: true }).then(() => {
+        sendPDFWhatsApp(); // Chama a função de envio automático
+    });
+}
+
+function sendPDFWhatsApp() {
+    let phoneNumber = prompt("Digite o número do WhatsApp (com DDD, sem + ou -):", "");
+    if (!phoneNumber) return;
+    
+    let filePath = "Relatorio_Pesagem.pdf"; // Nome do arquivo
+    
+    let whatsappURL = `https://api.whatsapp.com/send?phone=${phoneNumber}&text=Segue o relatório de pesagem em anexo.`;
+    
+    window.open(whatsappURL, "_blank");
+}
+</script>
 
 
 
