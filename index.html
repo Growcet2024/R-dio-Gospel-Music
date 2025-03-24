@@ -489,33 +489,38 @@ function generatePDF() {
  <!--// BLOCO 07 - Função enviar PDF pelo WhatsApp -->
 
  <script>
- async function sendPDFToWhatsApp() {
-     const { jsPDF } = window.jspdf;
-     const doc = new jsPDF("p", "mm", "a4");
-     doc.setFontSize(10);
-     doc.rect(15, 15, 180, 267);
-     doc.setFont("helvetica", "bold");
-     doc.text("Relatório de Pesagem", 20, 22);
-     doc.setFont("helvetica", "normal");
-     let content = document.getElementById("reportContent").innerText;
-     doc.text(content, 20, 27);
+
+
      
-     // Converter para Blob
-     const pdfBlob = doc.output("blob");
-     const file = new File([pdfBlob], "Relatorio_Pesagem.pdf", { type: "application/pdf" });
+ function sendPDFToWhatsApp() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF("p", "mm", "a4");
+    doc.setFontSize(10);
+    doc.rect(15, 15, 180, 267);
+    doc.setFont("helvetica", "bold");
+    doc.text("Relatório de Pesagem", 20, 22);
+    doc.setFont("helvetica", "normal");
+    let content = document.getElementById("reportContent").innerText;
+    doc.text(content, 20, 27);
+    
+    // Criar o PDF como Blob
+    const pdfBlob = doc.output("blob");
+    const formData = new FormData();
+    formData.append("file", pdfBlob, "Relatorio_Pesagem.pdf");
+    
+    // Criar link para enviar no WhatsApp
+    const url = URL.createObjectURL(pdfBlob);
+    
+    // Abrir o WhatsApp com o arquivo anexo
+    const whatsappUrl = `https://api.whatsapp.com/send?text=Aqui%20est%C3%A1%20seu%20relat%C3%B3rio%20de%20pesagem:%20${encodeURIComponent(url)}`;
+    window.open(whatsappUrl, "_blank");
+}
+
+
+
+
+
      
-     // Criar um objeto FormData para envio
-     const formData = new FormData();
-     formData.append("file", file);
-     
-     try {
-         // Criar um link de download temporário (substituir por upload real se necessário)
-         const url = URL.createObjectURL(pdfBlob);
-         window.open(`https://wa.me/?text=Aqui%20est%C3%A1%20seu%20relat%C3%B3rio%20de%20pesagem:%20${url}`, "_blank");
-     } catch (error) {
-         alert("Erro ao enviar PDF para o WhatsApp");
-     }
- }
  </script>
  
 
