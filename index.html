@@ -473,24 +473,23 @@ function displayReport() {
 
 <!--// BLOCO 06 - Função baixar PDF -->
 <script>
-function generatePDF() {
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF("p", "mm", "a4");
-    doc.setFontSize(10);
-    doc.rect(15, 15, 180, 267);
-
-    doc.setFont("helvetica", "bold");
-    doc.text("Relatório de Pesagem", 20, 22);
-    doc.setFont("helvetica", "normal");
-
-    let content = document.getElementById("reportContent").innerText;
-    doc.text(content, 20, 27);
     
-    // Salva o PDF em um Blob para enviar
-    doc.save("Relatorio_Pesagem.pdf", { returnPromise: true }).then(() => {
-        sendPDFWhatsApp(); // Chama a função de envio automático
-    });
-}
+function generatePDF() {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF("p", "mm", "a4");
+        doc.setFontSize(10); // Reduz o tamanho da fonte para caber melhor
+        doc.rect(15, 15, 180, 267);  // Ajuste de margens (topo e esquerda com 10mm)
+
+        doc.setFont("helvetica", "bold"); // Define fonte em negrito
+        doc.text("Relatório de Pesagem", 20, 22);
+        doc.setFont("helvetica", "normal"); // Retorna a fonte ao normal para o restante do conteúdo
+
+        let content = document.getElementById("reportContent").innerText; // Captura o texto visível
+
+        doc.text(content, 20, 27); // Adiciona o conteúdo ao PDF
+        doc.save("Relatorio_Pesagem.pdf"); // Baixa o arquivo  
+     }
+    
 
 function sendPDFWhatsApp() {
     let phoneNumber = prompt("Digite o número do WhatsApp (com DDD, sem + ou -):", "");
