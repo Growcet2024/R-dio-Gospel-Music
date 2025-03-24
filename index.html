@@ -510,11 +510,14 @@ function sendTextToWhatsApp() {
     // Captura o conteúdo do relatório como texto
     let content = document.getElementById("reportContent").innerText;
 
+    // Adiciona o título em negrito (usando asteriscos)
+    content = "*Relatório de Pesagem*\n\n" + content;
+
     // Codifica o conteúdo para garantir que caracteres especiais sejam tratados corretamente
     content = encodeURIComponent(content);
 
     // Cria o link para o WhatsApp com o conteúdo como texto
-    const whatsappUrl = `whatsapp://send?text=Confira o relatório de pesagem:%0A%0A${content}`;
+    const whatsappUrl = `whatsapp://send?text=${content}`;
 
     // Redireciona para o WhatsApp
     window.location.href = whatsappUrl;
