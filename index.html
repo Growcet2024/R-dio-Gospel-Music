@@ -492,51 +492,59 @@ function displayReport() {
     buttons.forEach(button => button.style.display = "inline-block");
 }
 
-
-
-
-    
      </script>
     
 
 
 
- <!--// BLOCO 07 - Função enviar PDF pelo WhatsApp -->
 
-<script>
-async function sendPDFToWhatsApp() {
-    const { jsPDF } = window.jspdf;
+<!--// BLOCO 07 - Função enviar PDF pelo WhatsApp -->
+
+ <script>
+
+function sendPDFToWhatsApp() {
+    const { jsPDF } = window.jspdf;  // Acesso correto para jsPDF versão 2.x
     const doc = new jsPDF("p", "mm", "a4");
-    
-    // Criando o conteúdo do PDF
-    doc.setFontSize(10);
-    doc.setFont("helvetica", "bold");
+    doc.setFontSize(10); // Reduz o tamanho da fonte para caber melhor
+    doc.rect(15, 15, 180, 267);  // Ajuste de margens (topo e esquerda com 10mm)
+
+    doc.setFont("helvetica", "bold"); // Define fonte em negrito
     doc.text("Relatório de Pesagem", 20, 22);
-    doc.setFont("helvetica", "normal");
-    let content = document.getElementById("reportContent").innerText;
-    doc.text(content, 20, 30);
+    doc.setFont("helvetica", "normal"); // Retorna a fonte ao normal para o restante do conteúdo
 
-    // Converter PDF para Blob
-    const pdfBlob = doc.output("blob");
+    let content = document.getElementById("reportContent").innerText; // Captura o texto visível
+    doc.text(content, 20, 27); // Adiciona o conteúdo ao PDF
 
-    // Criar um objeto para armazenar o arquivo
-    const pdfFile = new File([pdfBlob], "Relatorio_Pesagem.pdf", { type: "application/pdf" });
+    // Salva o PDF no formato .pdf
+    const pdfBlob = doc.output('blob');
+    const pdfUrl = URL.createObjectURL(pdfBlob);
 
-    // Criar um link para o WhatsApp com mensagem personalizada
-    const formData = new FormData();
-    formData.append("file", pdfFile);
+    // Verifica se está em um dispositivo móvel (para usar a funcionalidade de compartilhamento)
+    if (navigator.userAgent.match(/Android|iPhone/i)) {
+        const shareData = {
+            files: [pdfBlob],
+            title: "Relatório de Pesagem",
+            text: "Confira o relatório de pesagem!",
+        };
 
-    try {
-        const blobUrl = URL.createObjectURL(pdfBlob); // Criando um link temporário
-        const whatsappUrl = `https://api.whatsapp.com/send?text=Aqui está seu relatório de pesagem: ${blobUrl}`;
-        
-        window.open(whatsappUrl, "_blank"); // Abre o WhatsApp com o link do PDF
-    } catch (error) {
-        alert("Erro ao enviar PDF para o WhatsApp.");
-        console.error(error);
+        // Se o dispositivo suportar o compartilhamento de arquivos, usa a API de compartilhamento
+        if (navigator.canShare && navigator.canShare({ files: [pdfBlob] })) {
+            navigator.share(shareData)
+                .then(() => console.log("PDF compartilhado com sucesso"))
+                .catch((error) => console.log("Erro ao compartilhar:", error));
+        } else {
+            // Se a API de compartilhamento não for suportada, abre o WhatsApp com a interface de envio
+            const whatsappUrl = `whatsapp://send?text=Confira o relatório de pesagem!`;
+            window.location.href = whatsappUrl;
+        }
+    } else {
+        // Se não for um dispositivo móvel, alerta o usuário
+        alert("Este recurso está disponível apenas em dispositivos móveis.");
     }
 }
-</script>
+
+    </script>
+    
 
 
 
