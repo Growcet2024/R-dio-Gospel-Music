@@ -9,7 +9,8 @@
 
 <!-- Biblioteca Gráfico -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<!-- Biblioteca PDF -->
+
+<!-- Biblioteca PDF --> 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <body>
@@ -290,20 +291,8 @@ extractUserData();
 <button id="toggleReportButton" onclick="toggleReport()">Gerar Relatório</button>
 <div id="reportSection" style="display: none;">
     <div id="reportContent"></div> <!-- histórico -->
-
-    <!-- Agora os botões ficam depois do conteúdo -->
-    <div style="display: flex; justify-content: center; gap: 10px; margin-top: 10px;">
-        <button onclick="generatePDF()">Baixar PDF</button>
-        <button onclick="sendPDFWhatsApp()">Enviar PDF</button>
-
-       
-        
-    </div>
-
 </div>
-
-
-                            
+                         
 <script>
 
 <!-------------------------------- BLOCO GERAR RELATORIO ----------------->
@@ -325,7 +314,7 @@ function toggleReport() {
         content += `<table style="width: 100%; border-collapse: collapse; text-align: left; margin-left: 0px; margin-right: 15px; ">
          <tr>
 
-         <th style="border: 1px solid #ccc; padding: 2px; font-size: 15px;">Data Peso</th>
+         <th style="border: 1px solid #ccc; padding: 2px; font-size: 15px;">Data:</th>
          <th style="border: 1px solid #ccc; padding: 2px; font-size: 15px;">Peso Atual</th>
          <th style="border: 1px solid #ccc; padding: 2px; font-size: 15px;">Peso Saldo</th>
          <th style="border: 1px solid #ccc; padding: 2px; font-size: 15px;">IMC</th>
@@ -352,8 +341,16 @@ content += `</table>`;
 content += `<p style="text-align: center; margin-top: 10px; font-size: 13px; font-weight: bold; color: #333;">Você tem ${history.length} registros de pesagem, deseja baixar ou enviar pelo WhataApp?</p>`;
 
 
-document.getElementById("reportContent").innerHTML = content;
+// Botões enviar PDF
+content += `</ul></div>`;
+        content += `<div style="text-align: center; margin-top: 10px;">`;
+        content += `<button onclick="generatePDF()" style="margin-right: 10px;">Baixar PDF</button>`;
+        content += `<button onclick="sendPDFToWhatsApp()">Enviar PDF para Contato do WhatsApp</button>`;
+        content += `<button onclick="sendPDFToSpecificNumber()">Enviar PDF para Número</button>`;
+        content += `</div>`;
 
+
+document.getElementById("reportContent").innerHTML = content;
 
     } else {
         reportSection.style.display = "none";
@@ -468,12 +465,7 @@ function displayReport() {
 
 
 <!--// BLOCO 06 - Função baixar PDF -->
-
-
-
-<!--// BLOCO 06 - Função baixar PDF -->
 <script>
-    
 function generatePDF() {
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF("p", "mm", "a4");
@@ -489,111 +481,50 @@ function generatePDF() {
         doc.text(content, 20, 27); // Adiciona o conteúdo ao PDF
         doc.save("Relatorio_Pesagem.pdf"); // Baixa o arquivo  
      }
-    
-
-function sendPDFWhatsApp() {
-    let phoneNumber = prompt("Digite o número do WhatsApp (com DDD, sem + ou -):", "");
-    if (!phoneNumber) return;
-    
-    let filePath = "Relatorio_Pesagem.pdf"; // Nome do arquivo
-    
-    let whatsappURL = `https://api.whatsapp.com/send?phone=${phoneNumber}&text=Segue o relatório de pesagem em anexo.`;
-    
-    window.open(whatsappURL, "_blank");
-}
-</script>
-
-        
-   
+     </script>
     
 
 
 
-<!--// BLOCO 07 - Função enviar PDF -->
+ <!--// BLOCO 07 - Função enviar PDF pelo WhatsApp -->
 
-<!--// BLOCO 07 - Função enviar PDF pelo WhatsApp -->
- <!--// BLOCO 07 - Primeira fase -->
-<!-- Botão 1: Enviar PDF para um contato salvo -->
-
-
-
-        
-<button onclick="sendPDFToWhatsApp()">Enviar PDF para Contato do WhatsApp</button>
-
-<script>
-function sendPDFToWhatsApp() {
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF("p", "mm", "a4");
-
-    doc.setFontSize(10);
-    doc.rect(15, 15, 180, 267);
-
-    doc.setFont("helvetica", "bold");
-    doc.text("Relatório de Pesagem", 20, 22);
-    doc.setFont("helvetica", "normal");
-
-    let content = document.getElementById("reportContent").innerText;
-    doc.text(content, 20, 27);
-
-    doc.save("Relatorio_Pesagem.pdf"); // Baixa o arquivo
-
-    // Simulação de envio para WhatsApp (não é possível anexar diretamente pelo JavaScript)
-    alert("O PDF foi gerado. Agora, anexe manualmente no WhatsApp.");
-}
-
-
-
-
-    
-</script>
-
- <!--// BLOCO 07 - Segunda fase -->
-<!-- Botão 2: Enviar PDF para um número específico -->
-<input type="text" id="whatsappNumber" placeholder="Digite o número com DDD">
-
-<button onclick="sendPDFToSpecificNumber()">Enviar PDF para Número</button>
-
-<script>
-function sendPDFToSpecificNumber() {
-    let number = document.getElementById("whatsappNumber").value.trim();
-    
-    if (number === "") {
-        alert("Por favor, digite um número de telefone.");
-        return;
-    }
-
-    // Removendo espaços e caracteres não numéricos
-    number = number.replace(/\D/g, "");
-
-    // Verifica se o número tem pelo menos 11 dígitos (Brasil: DDD + 9 dígitos)
-    if (number.length < 11) {
-        alert("Número inválido! Certifique-se de incluir o DDD.");
-        return;
-    }
-
-    const pdfName = "Relatorio_Pesagem.pdf";
-
-    // Simulação de envio do PDF (precisaria de um servidor para anexar automaticamente)
-    const whatsappURL = `https://wa.me/${number}?text=Segue o relatório de pesagem em PDF: [anexe o arquivo manualmente]`;
-
-    window.open(whatsappURL, "_blank");
-}
-</script>
-
-
-
-<!-- BLOCO RELATORIO FIM -->
-
-
-
-
-<!-- BLOCO RELATORIO FIM -->
-
-
-
+ <script>
+ async function sendPDFToWhatsApp() {
+     const { jsPDF } = window.jspdf;
+     const doc = new jsPDF("p", "mm", "a4");
+     doc.setFontSize(10);
+     doc.rect(15, 15, 180, 267);
+     doc.setFont("helvetica", "bold");
+     doc.text("Relatório de Pesagem", 20, 22);
+     doc.setFont("helvetica", "normal");
+     let content = document.getElementById("reportContent").innerText;
+     doc.text(content, 20, 27);
+     
+     // Converter para Blob
+     const pdfBlob = doc.output("blob");
+     const file = new File([pdfBlob], "Relatorio_Pesagem.pdf", { type: "application/pdf" });
+     
+     // Criar um objeto FormData para envio
+     const formData = new FormData();
+     formData.append("file", file);
+     
+     try {
+         // Criar um link de download temporário (substituir por upload real se necessário)
+         const url = URL.createObjectURL(pdfBlob);
+         window.open(`https://wa.me/?text=Aqui%20est%C3%A1%20seu%20relat%C3%B3rio%20de%20pesagem:%20${url}`, "_blank");
+     } catch (error) {
+         alert("Erro ao enviar PDF para o WhatsApp");
+     }
+ }
+ </script>
  
-    
-   
+
+
+
+<!-- BLOCO RELATORIO FIM -->
+
+
+
 
 
 
@@ -1182,4 +1113,6 @@ function deleteEntry(index) {
 
 </body>
 </html>
+
+
 
