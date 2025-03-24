@@ -502,46 +502,16 @@ function displayReport() {
 
  <script>
 
-function sendPDFToWhatsApp() {
-    const { jsPDF } = window.jspdf;  // Acesso correto para jsPDF versão 2.x
-    const doc = new jsPDF("p", "mm", "a4");
-    doc.setFontSize(10); // Reduz o tamanho da fonte para caber melhor
-    doc.rect(15, 15, 180, 267);  // Ajuste de margens (topo e esquerda com 10mm)
+function sendTextToWhatsApp() {
+    const content = document.getElementById("reportContent").innerText; // Captura o conteúdo como texto
 
-    doc.setFont("helvetica", "bold"); // Define fonte em negrito
-    doc.text("Relatório de Pesagem", 20, 22);
-    doc.setFont("helvetica", "normal"); // Retorna a fonte ao normal para o restante do conteúdo
+    // Cria a URL para o WhatsApp com o conteúdo como texto
+    const whatsappUrl = `whatsapp://send?text=Confira o relatório de pesagem:%0A%0A${encodeURIComponent(content)}`;
 
-    let content = document.getElementById("reportContent").innerText; // Captura o texto visível
-    doc.text(content, 20, 27); // Adiciona o conteúdo ao PDF
-
-    // Salva o PDF no formato .pdf
-    const pdfBlob = doc.output('blob');
-    const pdfUrl = URL.createObjectURL(pdfBlob);
-
-    // Verifica se está em um dispositivo móvel (para usar a funcionalidade de compartilhamento)
-    if (navigator.userAgent.match(/Android|iPhone/i)) {
-        const shareData = {
-            files: [pdfBlob],
-            title: "Relatório de Pesagem",
-            text: "Confira o relatório de pesagem!",
-        };
-
-        // Se o dispositivo suportar o compartilhamento de arquivos, usa a API de compartilhamento
-        if (navigator.canShare && navigator.canShare({ files: [pdfBlob] })) {
-            navigator.share(shareData)
-                .then(() => console.log("PDF compartilhado com sucesso"))
-                .catch((error) => console.log("Erro ao compartilhar:", error));
-        } else {
-            // Se a API de compartilhamento não for suportada, abre o WhatsApp com a interface de envio
-            const whatsappUrl = `whatsapp://send?text=Confira o relatório de pesagem!`;
-            window.location.href = whatsappUrl;
-        }
-    } else {
-        // Se não for um dispositivo móvel, alerta o usuário
-        alert("Este recurso está disponível apenas em dispositivos móveis.");
-    }
+    // Redireciona para o WhatsApp
+    window.location.href = whatsappUrl;
 }
+
 
     </script>
     
