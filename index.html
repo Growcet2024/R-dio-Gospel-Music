@@ -488,41 +488,40 @@ function generatePDF() {
 
  <!--// BLOCO 07 - Função enviar PDF pelo WhatsApp -->
 
- <script>
-
-
-     
- function sendPDFToWhatsApp() {
+<script>
+async function sendPDFToWhatsApp() {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF("p", "mm", "a4");
+    
+    // Criando o conteúdo do PDF
     doc.setFontSize(10);
-    doc.rect(15, 15, 180, 267);
     doc.setFont("helvetica", "bold");
     doc.text("Relatório de Pesagem", 20, 22);
     doc.setFont("helvetica", "normal");
     let content = document.getElementById("reportContent").innerText;
-    doc.text(content, 20, 27);
-    
-    // Criar o PDF como Blob
+    doc.text(content, 20, 30);
+
+    // Converter PDF para Blob
     const pdfBlob = doc.output("blob");
+
+    // Criar um objeto para armazenar o arquivo
+    const pdfFile = new File([pdfBlob], "Relatorio_Pesagem.pdf", { type: "application/pdf" });
+
+    // Criar um link para o WhatsApp com mensagem personalizada
     const formData = new FormData();
-    formData.append("file", pdfBlob, "Relatorio_Pesagem.pdf");
-    
-    // Criar link para enviar no WhatsApp
-    const url = URL.createObjectURL(pdfBlob);
-    
-    // Abrir o WhatsApp com o arquivo anexo
-    const whatsappUrl = `https://api.whatsapp.com/send?text=Aqui%20est%C3%A1%20seu%20relat%C3%B3rio%20de%20pesagem:%20${encodeURIComponent(url)}`;
-    window.open(whatsappUrl, "_blank");
+    formData.append("file", pdfFile);
+
+    try {
+        const blobUrl = URL.createObjectURL(pdfBlob); // Criando um link temporário
+        const whatsappUrl = `https://api.whatsapp.com/send?text=Aqui está seu relatório de pesagem: ${blobUrl}`;
+        
+        window.open(whatsappUrl, "_blank"); // Abre o WhatsApp com o link do PDF
+    } catch (error) {
+        alert("Erro ao enviar PDF para o WhatsApp.");
+        console.error(error);
+    }
 }
-
-
-
-
-
-     
- </script>
- 
+</script>
 
 
 
