@@ -345,7 +345,10 @@ content += `<p style="text-align: center; margin-top: 10px; font-size: 13px; fon
 content += `</ul></div>`;
         content += `<div style="text-align: center; margin-top: 10px;">`;
         content += `<button onclick="generatePDF()" style="margin-right: 10px;">Baixar PDF</button>`;
-        content += `<button onclick="sendPDFToWhatsApp()">Enviar PDF para Contato do WhatsApp</button>`;
+        
+        content += `<button onclick="sendTextToWhatsApp()">Enviar via WhatsApp</button>`;
+        
+        content += `<button onclick="sendPDFToWhatsApp()">Enviar PDF para Contato do WhatsApp</button>`
         content += `<button onclick="sendPDFToSpecificNumber()">Enviar PDF para Número</button>`;
         content += `</div>`;
 
@@ -502,11 +505,16 @@ function displayReport() {
 
  <script>
 
-function sendTextToWhatsApp() {
-    const content = document.getElementById("reportContent").innerText; // Captura o conteúdo como texto
 
-    // Cria a URL para o WhatsApp com o conteúdo como texto
-    const whatsappUrl = `whatsapp://send?text=Confira o relatório de pesagem:%0A%0A${encodeURIComponent(content)}`;
+function sendTextToWhatsApp() {
+    // Captura o conteúdo do relatório como texto
+    let content = document.getElementById("reportContent").innerText;
+
+    // Codifica o conteúdo para garantir que caracteres especiais sejam tratados corretamente
+    content = encodeURIComponent(content);
+
+    // Cria o link para o WhatsApp com o conteúdo como texto
+    const whatsappUrl = `whatsapp://send?text=Confira o relatório de pesagem:%0A%0A${content}`;
 
     // Redireciona para o WhatsApp
     window.location.href = whatsappUrl;
