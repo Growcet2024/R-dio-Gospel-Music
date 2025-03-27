@@ -292,11 +292,12 @@ extractUserData();
 <div id="reportSection" style="display: none;">
     <div id="reportContent"></div> <!-- histórico -->
 </div>
+
                          
 <script>
-
 <!-------------------------------- BLOCO GERAR RELATORIO ----------------->
 // BLOCO 01
+
 function toggleReport() {
     var reportSection = document.getElementById("reportSection");
     var button = document.getElementById("toggleReportButton");
@@ -306,61 +307,101 @@ function toggleReport() {
         button.textContent = "Fechar Relatório";
 
         let { userId, userName, desiredWeight, history } = extractUserData();
-        let content = `<h3>Aplicativo controle de peso</h3>`;
 
+        // Inicia o conteúdo com os dados do usuário
+        let content = `<h3>Aplicativo controle de peso</h3>`;
         content += `<p><strong>Nome:</strong> ${userName} | <strong>ID:</strong> ${userId} <br> <strong>Peso Desejado:</strong> ${desiredWeight} kg</p>`;
 
-        // Margem tabela relatório
-        content += `<table style="width: 100%; border-collapse: collapse; text-align: left; margin-left: 0px; margin-right: 15px; ">
+        // Tabela de Histórico de Pesagem
+        content += `<table style="width: 100%; border-collapse: collapse; text-align: left; margin-left: 0px; margin-right: 15px;">
          <tr>
-
          <th style="border: 1px solid #ccc; padding: 2px; font-size: 15px;">Data:</th>
          <th style="border: 1px solid #ccc; padding: 2px; font-size: 15px;">Peso Atual</th>
          <th style="border: 1px solid #ccc; padding: 2px; font-size: 15px;">Peso Saldo</th>
          <th style="border: 1px solid #ccc; padding: 2px; font-size: 15px;">IMC</th>
          </tr>`;
 
-         history.forEach(entry => {
+        history.forEach(entry => {
             let dateOnly = entry.timestamp.split(",")[0]; // Remove os minutos
             content += `<tr>
-
          <td style="border: 1px solid #ccc; padding: 6px; font-size: 14px;">${dateOnly}</td>
          <td style="border: 1px solid #ccc; padding: 6px; font-size: 14px;">${entry.currentWeight} kg</td>
          <td style="border: 1px solid #ccc; padding: 6px; font-size: 14px;">${entry.balanceSign} kg</td>
          <td style="border: 1px solid #ccc; padding: 6px; font-size: 14px;">${entry.imc}</td>
          </tr>`;
-
         });
 
-        // Adiciona data hora do relatório gerado tempo real
-content += `<p><strong>Relatório gerado em:<br></strong> ${new Date().toLocaleString()}</p>`;
+        // Adiciona data e hora do relatório gerado
+        content += `<p><strong>Relatório gerado em:<br></strong> ${new Date().toLocaleString()}</p>`;
+        content += `</table>`;
 
-content += `</table>`;
+        // Unificando as frases: Contagem de registros e diferença de peso
 
-// Adiciona a frase abaixo da tabela e antes dos botões
-content += `<p style="text-align: center; margin-top: 10px; font-size: 13px; font-weight: bold; color: #333;">Você tem ${history.length} registros de pesagem, deseja baixar ou enviar pelo WhataApp?</p>`;
+        let firstWeight = parseFloat(history[0].currentWeight); // Peso inicial (primeiro registro)
+let lastWeight = parseFloat(history[history.length - 1].currentWeight); // Peso final (último registro)
+
+// Calculando a diferença de peso
+let weightDifference = lastWeight - firstWeight;
+
+let weightChangeMessage = "";
+
+// Verifica se o peso aumentou ou diminuiu
+if (weightDifference > 0) {
+    if (weightDifference >= 1) {
+        // Se a diferença for maior ou igual a 1 kg
+        weightChangeMessage = `e perdeu ${weightDifference.toFixed(2)} kg.`;
+    } else {
+        // Se a diferença for menor que 1 kg, exibe em gramas
+        weightChangeMessage = `e perdeu ${(weightDifference * 1000).toFixed(0)} gramas.`;
+    }
+} else if (weightDifference < 0) {
+    if (Math.abs(weightDifference) >= 1) {
+        // Se a diferença for maior ou igual a 1 kg
+        weightChangeMessage = `e ganhou ${Math.abs(weightDifference).toFixed(2)} kg.`;
+    } else {
+        // Se a diferença for menor que 1 kg, exibe em gramas
+        weightChangeMessage = `e ganhou ${Math.abs(weightDifference * 1000).toFixed(0)} gramas.`;
+    }
+} else {
+    weightChangeMessage = "Seu peso se manteve igual."; // Se não houve alteração
+}
+
+// Unificando as frases: Contagem de registros e diferença de peso
+content += `<p style="text-align: center; margin-top: 10px; font-size: 13px; font-weight: bold; color: #333;">
+    Você tem ${history.length} registros de pesagem, ${weightChangeMessage}</p>`;
 
 
-// Botões enviar PDF
-content += `</ul></div>`;
+
+
+
+
+    
+
+        // PESO DESEJADO
+        content += `<p style="text-align: center; margin-top: 10px; font-size: 13px; font-weight: bold; color: #333;">
+            Seu peso desejado é ${desiredWeight} kg.</p>`;
+
+
+
+        // Botões para PDF, WhatsApp e enviar para número
+        content += `</ul></div>`;
         content += `<div style="text-align: center; margin-top: 10px;">`;
+
         content += `<button onclick="generatePDF()" style="margin-right: 10px;">Baixar PDF</button>`;
-        
         content += `<button onclick="sendTextToWhatsApp()">Enviar via WhatsApp</button>`;
-        
-        content += `<button onclick="sendPDFToWhatsApp()">Enviar PDF para Contato do WhatsApp</button>`
-        content += `<button onclick="sendPDFToSpecificNumber()">Enviar PDF para Número</button>`;
+        content += `<button onclick="openPhonePopup()">Enviar para Número</button>`;
+
+
         content += `</div>`;
 
-
-document.getElementById("reportContent").innerHTML = content;
+        // Exibe o conteúdo gerado no HTML
+        document.getElementById("reportContent").innerHTML = content;
 
     } else {
         reportSection.style.display = "none";
         button.textContent = "Gerar Relatório";
     }
 }
-
 
 
 function loadReportData() {
@@ -468,11 +509,8 @@ function displayReport() {
 
 
 <!--// BLOCO 06 - Função baixar PDF -->
-
-        
 <script>
-
-  function generatePDF() {
+function generatePDF() {
     // Oculta os botões temporariamente
     const buttons = document.querySelectorAll("#reportSection button");
     buttons.forEach(button => button.style.display = "none");
@@ -495,50 +533,107 @@ function displayReport() {
     buttons.forEach(button => button.style.display = "inline-block");
 }
 
-     </script>
+ </script>
     
-
-
-
 
 <!--// BLOCO 07 - Função enviar PDF pelo WhatsApp -->
-
- <script>
-
-
-function sendTextToWhatsApp() {
-    // Esconde os botões temporariamente
-    let buttons = document.querySelectorAll('button');
-    buttons.forEach(button => button.style.display = 'none');
-
-    // Captura o conteúdo do relatório, sem os botões
-    let reportContent = document.getElementById("reportContent").innerText;
-
-    // Adiciona o título em negrito (usando asteriscos)
-    let content = "*Relatório de Pesagem*\n\n" + reportContent;
-
-    // Codifica o conteúdo para garantir que caracteres especiais sejam tratados corretamente
-    content = encodeURIComponent(content);
-
-    // Cria o link para o WhatsApp com o conteúdo como texto
-    const whatsappUrl = `https://wa.me/?text=${content}`;
-
-    // Redireciona para o WhatsApp
-    window.location.href = whatsappUrl;
-
-    // Reexibe os botões após o envio
-    buttons.forEach(button => button.style.display = 'inline-block');
-}
-
-
-
-
-    </script>
+<script>
+    function sendTextToWhatsApp() {
+        // Esconde os botões temporariamente
+        let buttons = document.querySelectorAll('button');
+        buttons.forEach(button => button.style.display = 'none');
+    
+        // Captura o conteúdo do relatório, sem os botões
+        let reportContent = document.getElementById("reportContent").innerText;
+    
+        // Adiciona o título em negrito (usando asteriscos)
+        let content = "*Relatório de Pesagem*\n\n" + reportContent;
     
 
+        // Codifica o conteúdo para garantir que caracteres especiais sejam tratados corretamente
+        content = encodeURIComponent(content);
+    
+        // Cria o link para o WhatsApp com o conteúdo como texto
+        const whatsappUrl = `https://wa.me/?text=${content}`;
+    
+        // Redireciona para o WhatsApp
+        window.location.href = whatsappUrl;
+    
+        // Reexibe os botões após o envio
+        buttons.forEach(button => button.style.display = 'inline-block');
+    }
+        </script>
+    
 
+    
+<!--// BLOCO 08 - Função enviar numero pelo WhatsApp -->
+<script>
+    // Função para abrir o pop-up de inserção do número
+    function openPhonePopup() {
+        // Oculta os botões temporariamente
+        const buttons = document.querySelectorAll("#reportSection button");
+        buttons.forEach(button => button.style.display = "none");
+
+        // Exibe o pop-up para o usuário inserir o número de telefone
+        document.getElementById("phonePopup").style.display = "block";
+    }
+
+    // Função para fechar o pop-up sem fazer nada
+    function closePhonePopup() {
+        // Reexibe os botões após o fechamento do pop-up
+        const buttons = document.querySelectorAll("#reportSection button");
+        buttons.forEach(button => button.style.display = "inline-block");
+
+        document.getElementById("phonePopup").style.display = "none";
+    }
+
+    // Função que envia o conteúdo do relatório para o número de telefone inserido
+    function sendToSpecificNumber() {
+        // Captura o número de telefone inserido pelo usuário
+        let phoneNumber = document.getElementById("phoneNumber").value;
+
+        // Verifica se o número tem 10 ou 11 dígitos, considerando o DDD
+        if (phoneNumber && phoneNumber.match(/^\d{10,11}$/)) {
+            // Preenche automaticamente o código do país (Brasil, código 55)
+            let fullPhoneNumber = `55${phoneNumber}`;
+
+            // Captura o conteúdo do relatório
+            let reportContent = document.getElementById("reportContent").innerText;
+
+            // Adiciona o título em negrito
+            let content = "*Relatório de Pesagem*\n\n" + reportContent;
+
+            // Codifica o conteúdo para garantir que caracteres especiais sejam tratados corretamente
+            content = encodeURIComponent(content);
+
+            // Cria o link para o WhatsApp com o número e o conteúdo do relatório
+            const whatsappUrl = `https://wa.me/${fullPhoneNumber}?text=${content}`;
+
+            // Redireciona para o WhatsApp com o número inserido
+            window.location.href = whatsappUrl;
+
+            // Fecha o pop-up após o envio
+            closePhonePopup();
+        } else {
+            alert("Por favor, insira um número válido (DDD + número).");
+        }
+    }
+</script>
+
+<!-- Pop-up para inserir o número de telefone -->
+<div id="phonePopup" style="display:none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; border: 2px solid #ccc; padding: 20px; border-radius: 5px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);">
+    <h4>Digite o número de telefone (DDD + Número):</h4>
+    <input type="text" id="phoneNumber" placeholder="Ex: 11999999999" style="width: 100%; padding: 10px; font-size: 14px;">
+    <button onclick="sendToSpecificNumber()" style="margin-top: 10px; padding: 10px 20px; background-color: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer;">
+        Enviar
+    </button>
+    <button onclick="closePhonePopup()" style="margin-top: 10px; padding: 10px 20px; background-color: #f44336; color: white; border: none; border-radius: 5px; cursor: pointer;">
+        Cancelar
+    </button>
+</div>
 
 <!-- BLOCO RELATORIO FIM -->
+
 
 
 
@@ -1130,6 +1225,7 @@ function deleteEntry(index) {
 
 </body>
 </html>
+
 
 
 
