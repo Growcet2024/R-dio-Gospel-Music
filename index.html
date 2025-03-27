@@ -623,7 +623,7 @@ function generatePDF() {
 <!-- Pop-up para inserir o número de telefone -->
 <div id="phonePopup" style="display:none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; border: 2px solid #ccc; padding: 20px; border-radius: 5px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);">
     <h4>Digite o número de telefone (DDD + Número):</h4>
-    <input type="text" id="phoneNumber" placeholder="Ex: 11999999999" style="width: 100%; padding: 10px; font-size: 14px;">
+    <input type="tel" id="phoneNumber" placeholder="Ex: 11999999999" style="width: 100%; padding: 10px; font-size: 14px;">
     <button onclick="sendToSpecificNumber()" style="margin-top: 10px; padding: 10px 20px; background-color: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer;">
         Enviar
     </button>
