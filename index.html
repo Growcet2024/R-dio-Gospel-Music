@@ -291,6 +291,7 @@ extractUserData();
 <button id="toggleReportButton" onclick="toggleReport()">Gerar Relatório</button>
 <div id="reportSection" style="display: none;">
     <div id="reportContent"></div> <!-- histórico -->
+    Baixe o relatório ou envie-o pelo WhatsApp
 </div>
 
                          
@@ -338,7 +339,7 @@ function toggleReport() {
         // Unificando as frases: Contagem de registros e diferença de peso
 
         let firstWeight = parseFloat(history[0].currentWeight); // Peso inicial (primeiro registro)
-let lastWeight = parseFloat(history[history.length - 1].currentWeight); // Peso final (último registro)
+        let lastWeight = parseFloat(history[history.length - 1].currentWeight); // Peso final (último registro)
 
 // Calculando a diferença de peso
 let weightDifference = lastWeight - firstWeight;
@@ -349,18 +350,18 @@ let weightChangeMessage = "";
 if (weightDifference > 0) {
     if (weightDifference >= 1) {
         // Se a diferença for maior ou igual a 1 kg
-        weightChangeMessage = `e perdeu ${weightDifference.toFixed(2)} kg.`;
+        weightChangeMessage = `e perdeu ${weightDifference.toFixed(2)} kg desde a primeira pesagem.`;
     } else {
         // Se a diferença for menor que 1 kg, exibe em gramas
-        weightChangeMessage = `e perdeu ${(weightDifference * 1000).toFixed(0)} gramas.`;
+        weightChangeMessage = `e perdeu ${(weightDifference * 1000).toFixed(0)} gramas desde a primeira pesagem.`;
     }
 } else if (weightDifference < 0) {
     if (Math.abs(weightDifference) >= 1) {
         // Se a diferença for maior ou igual a 1 kg
-        weightChangeMessage = `e ganhou ${Math.abs(weightDifference).toFixed(2)} kg.`;
+        weightChangeMessage = `e ganhou ${Math.abs(weightDifference).toFixed(2)} kg desde a primeira pesagem.`;
     } else {
         // Se a diferença for menor que 1 kg, exibe em gramas
-        weightChangeMessage = `e ganhou ${Math.abs(weightDifference * 1000).toFixed(0)} gramas.`;
+        weightChangeMessage = `e ganhou ${Math.abs(weightDifference * 1000).toFixed(0)} gramas desde a primeira pesagem.`;
     }
 } else {
     weightChangeMessage = "Seu peso se manteve igual."; // Se não houve alteração
@@ -368,30 +369,92 @@ if (weightDifference > 0) {
 
 // Unificando as frases: Contagem de registros e diferença de peso
 content += `<p style="text-align: center; margin-top: 10px; font-size: 13px; font-weight: bold; color: #333;">
-    Você tem ${history.length} registros de pesagem, ${weightChangeMessage}</p>`;
+    Você tem ${history.length} registros, ${weightChangeMessage}</p>`;
+
+
+
+// FRASE MOTIVACIONAL
+// Agora, usamos essa variável para comparar com o peso desejado
+// Verifique se a lista `history` tem pelo menos um item
+
+
+    // FRASE MOTIVACIONAL
+if (history.length > 0) {
+    let firstWeight = parseFloat(history[0].currentWeight); // Peso inicial (primeiro registro)
+
+    let motivationalMessage = "";
+
+    let weightDifference = desiredWeight - firstWeight; // Diferença do peso desejado
+
+    // Tolerância para considerar que o objetivo foi alcançado (por exemplo, 0.1 kg)
+    const tolerance = 0.1;
+
+    // Quando o peso estiver suficientemente próximo do objetivo (considerando a tolerância)
+    if (Math.abs(weightDifference) <= tolerance) {
+        motivationalMessage = `<p style='text-align: center; font-size: 14px; color: green; font-weight: bold;'>🎉 Parabéns! Você atingiu seu peso desejado de ${desiredWeight} kg! Continue focado para manter esse peso saudável!</p>`;
+    } 
+    // Quando estiver muito perto de alcançar o objetivo
+    else if (weightDifference > 0 && weightDifference <= 2) {
+        motivationalMessage = `<p style='text-align: center; font-size: 14px; color: blue; font-weight: bold;'>Ótimo progresso! Você está muito perto de alcançar seu objetivo de ${desiredWeight} kg! Apenas ${weightDifference.toFixed(2)} kg para conquistar sua meta!</p>`;
+    } 
+    // Quando faltam alguns quilos, mas já progrediu bastante
+    else if (weightDifference > 2 && weightDifference <= 5) {
+        motivationalMessage = `<p style='text-align: center; font-size: 14px; color: blue; font-weight: bold;'>Incrível! Você está a um passo de alcançar seu objetivo. Faltam apenas ${weightDifference.toFixed(2)} kg para atingir ${desiredWeight} kg!</p>`;
+    } 
+    // Quando o peso já foi ultrapassado, acima do objetivo
+    else if (firstWeight > desiredWeight) {
+        let excessWeight = firstWeight - desiredWeight; // Peso que ultrapassou o objetivo
+
+        // Se ultrapassou o objetivo por uma diferença pequena (até 1 kg)
+        if (excessWeight > 0 && excessWeight <= 1) {
+            motivationalMessage = `<p style='text-align: center; font-size: 14px; color: orange; font-weight: bold;'>Você ultrapassou seu objetivo por apenas ${excessWeight.toFixed(2)} kg! Não se preocupe, apenas ajuste um pouco mais para alcançar o equilíbrio!</p>`;
+        }
+        // Se ultrapassou o objetivo por uma diferença média (entre 1 kg e 2 kg)
+        else if (excessWeight > 1 && excessWeight <= 2) {
+            motivationalMessage = `<p style='text-align: center; font-size: 14px; color: orange; font-weight: bold;'>Você ultrapassou seu objetivo por ${excessWeight.toFixed(2)} kg! Agora é hora de manter o foco e ajustar seu peso para um nível saudável!</p>`;
+        }
+        // Se ultrapassou o objetivo por uma diferença considerável (entre 2 kg e 5 kg)
+        else if (excessWeight > 2 && excessWeight <= 5) {
+            motivationalMessage = `<p style='text-align: center; font-size: 14px; color: orange; font-weight: bold;'>Você ultrapassou seu objetivo em ${excessWeight.toFixed(2)} kg! É importante focar em manter ou ajustar seu peso agora.</p>`;
+        }
+        // Se ultrapassou o objetivo por uma diferença significativa (acima de 5 kg)
+        else {
+            motivationalMessage = `<p style='text-align: center; font-size: 14px; color: red; font-weight: bold;'>Alerta! Você ultrapassou seu objetivo em ${excessWeight.toFixed(2)} kg. Agora é essencial ajustar seu peso para garantir uma saúde equilibrada.</p>`;
+        }
+    }
+    // Quando ainda está abaixo do peso desejado
+    else if (firstWeight < desiredWeight) {
+        let missingWeight = desiredWeight - firstWeight; // Peso que falta para o objetivo
+
+        motivationalMessage = `<p style='text-align: center; font-size: 14px; color: red; font-weight: bold;'>🚀 Quase lá! Você está apenas ${missingWeight.toFixed(2)} kg de alcançar seu objetivo de ${desiredWeight} kg. Continue o ótimo trabalho e logo você chega lá!</p>`;
+    }
+
+    // Exibe a frase motivacional
+    content += motivationalMessage;
+} else {
+    console.error("A lista de histórico está vazia. Não é possível calcular o peso inicial.");
+}
 
 
 
 
 
 
-    
 
-        // PESO DESEJADO
-        content += `<p style="text-align: center; margin-top: 10px; font-size: 13px; font-weight: bold; color: #333;">
-            Seu peso desejado é ${desiredWeight} kg.</p>`;
+
+
+
+
+
 
 
 
         // Botões para PDF, WhatsApp e enviar para número
         content += `</ul></div>`;
         content += `<div style="text-align: center; margin-top: 10px;">`;
-
         content += `<button onclick="generatePDF()" style="margin-right: 10px;">Baixar PDF</button>`;
-        content += `<button onclick="sendTextToWhatsApp()">Enviar via WhatsApp</button>`;
+        content += `<button onclick="sendTextToWhatsApp()">Enviar para os contatos</button>`;
         content += `<button onclick="openPhonePopup()">Enviar para Número</button>`;
-
-
         content += `</div>`;
 
         // Exibe o conteúdo gerado no HTML
@@ -402,7 +465,6 @@ content += `<p style="text-align: center; margin-top: 10px; font-size: 13px; fon
         button.textContent = "Gerar Relatório";
     }
 }
-
 
 function loadReportData() {
     var reportContent = document.getElementById("reportContent");
@@ -448,6 +510,12 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 </script>
+
+
+
+
+
+
 
 
 <script>
@@ -562,10 +630,11 @@ function generatePDF() {
         // Reexibe os botões após o envio
         buttons.forEach(button => button.style.display = 'inline-block');
     }
+
         </script>
     
 
-    
+
 <!--// BLOCO 08 - Função enviar numero pelo WhatsApp -->
 <script>
     // Função para abrir o pop-up de inserção do número
@@ -620,10 +689,12 @@ function generatePDF() {
     }
 </script>
 
-<!-- Pop-up para inserir o número de telefone -->    
+<!-- Pop-up para inserir o número de telefone -->
 <div id="phonePopup" style="display:none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; border: 2px solid #ccc; padding: 20px; border-radius: 5px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); width: 200px;">
     <h4>Digite o número de telefone (DDD + Número):</h4>
-    <input type="tel" id="phoneNumber" placeholder="Ex: 11999999999" style="width: 100%; padding: 10px; font-size: 14px;">
+
+    <input type="tel" id="phoneNumber" placeholder="Ex: 11999999999" style="width: 100%; padding: 10px; font-size: 14px;" pattern="[0-9]{10,11}" required>
+
     <button onclick="sendToSpecificNumber()" style="margin-top: 10px; padding: 10px 20px; background-color: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer;">
         Enviar
     </button>
@@ -1225,6 +1296,8 @@ function deleteEntry(index) {
 
 </body>
 </html>
+
+
 
 
 
