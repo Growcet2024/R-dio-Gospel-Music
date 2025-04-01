@@ -624,13 +624,7 @@ function generatePDF() {
     
       <!--// BLOCO 07 - Função enviar PDF pelo WhatsApp -->
 <script>
-// Função para formatar a data e pegar os dois últimos dígitos do ano
-function formatDate(date) {
-    let shortYear = date.getFullYear().toString().slice(-2); // Pega os dois últimos dígitos do ano
-    let month = (date.getMonth() + 1).toString().padStart(2, '0'); // Adiciona zero à frente se for menor que 10
-    let day = date.getDate().toString().padStart(2, '0'); // Adiciona zero à frente se for menor que 10
-    return `${day}/${month}/${shortYear}`; // Formato 'dd/mm/yy'
-}
+
 
 function sendTextToWhatsApp() {
     // Esconde os botões temporariamente
