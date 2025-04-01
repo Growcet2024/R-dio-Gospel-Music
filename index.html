@@ -322,16 +322,31 @@ function toggleReport() {
          <th style="border: 1px solid #ccc; padding: 2px; font-size: 15px;">IMC</th>
          </tr>`;
 
-        history.forEach(entry => {
-            let dateOnly = entry.timestamp.split(",")[0]; // Remove os minutos
-            content += `<tr>
-         <td style="border: 1px solid #ccc; padding: 6px; font-size: 14px;">${dateOnly}</td>
-         <td style="border: 1px solid #ccc; padding: 6px; font-size: 14px;">${entry.currentWeight} kg</td>
-         <td style="border: 1px solid #ccc; padding: 6px; font-size: 14px;">${entry.balanceSign} kg</td>
-         <td style="border: 1px solid #ccc; padding: 6px; font-size: 14px;">${entry.imc}</td>
-         </tr>`;
-        });
 
+
+        
+
+        
+         history.forEach(entry => {
+    let date = new Date(entry.timestamp); // Cria um objeto Date a partir do timestamp
+    let shortYear = date.getFullYear().toString().slice(-2); // Pega os dois últimos dígitos do ano
+    let formattedDate = `${shortYear}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`; // Formata a data como 'yy-MM-dd'
+
+    content += `<tr>
+        <td style="border: 1px solid #ccc; padding: 6px; font-size: 14px;">${formattedDate}</td>
+        <td style="border: 1px solid #ccc; padding: 6px; font-size: 14px;">${entry.currentWeight} kg</td>
+        <td style="border: 1px solid #ccc; padding: 6px; font-size: 14px;">${entry.balanceSign} kg</td>
+        <td style="border: 1px solid #ccc; padding: 6px; font-size: 14px;">${entry.imc}</td>
+    </tr>`;
+});
+
+
+
+
+
+
+
+        
         // Adiciona data e hora do relatório gerado
         content += `<p><strong>Relatório gerado em:<br></strong> ${new Date().toLocaleString()}</p>`;
         content += `</table>`;
@@ -601,38 +616,63 @@ function generatePDF() {
     buttons.forEach(button => button.style.display = "inline-block");
 }
 
- </script>
-    
 
-<!--// BLOCO 07 - Função enviar PDF pelo WhatsApp -->
+
+
+
+
+    
+      <!--// BLOCO 07 - Função enviar PDF pelo WhatsApp -->
 <script>
-    function sendTextToWhatsApp() {
-        // Esconde os botões temporariamente
-        let buttons = document.querySelectorAll('button');
-        buttons.forEach(button => button.style.display = 'none');
-    
-        // Captura o conteúdo do relatório, sem os botões
-        let reportContent = document.getElementById("reportContent").innerText;
-    
-        // Adiciona o título em negrito (usando asteriscos)
-        let content = "*Relatório de Pesagem*\n\n" + reportContent;
-    
+// Função para formatar a data e pegar os dois últimos dígitos do ano
+function formatDate(date) {
+    let shortYear = date.getFullYear().toString().slice(-2); // Pega os dois últimos dígitos do ano
+    let month = (date.getMonth() + 1).toString().padStart(2, '0'); // Adiciona zero à frente se for menor que 10
+    let day = date.getDate().toString().padStart(2, '0'); // Adiciona zero à frente se for menor que 10
+    return `${day}/${month}/${shortYear}`; // Formato 'dd/mm/yy'
+}
 
-        // Codifica o conteúdo para garantir que caracteres especiais sejam tratados corretamente
-        content = encodeURIComponent(content);
+function sendTextToWhatsApp() {
+    // Esconde os botões temporariamente
+    let buttons = document.querySelectorAll('button');
+    buttons.forEach(button => button.style.display = 'none');
     
-        // Cria o link para o WhatsApp com o conteúdo como texto
-        const whatsappUrl = `https://wa.me/?text=${content}`;
+    // Captura o conteúdo do relatório, sem os botões
+    let reportContent = document.getElementById("reportContent").innerText;
     
-        // Redireciona para o WhatsApp
-        window.location.href = whatsappUrl;
-    
-        // Reexibe os botões após o envio
-        buttons.forEach(button => button.style.display = 'inline-block');
-    }
+    // Adiciona o título em negrito (usando asteriscos)
+    let content = "*Relatório de Pesagem*\n\n" + reportContent;
 
-        </script>
-    
+    // Codifica o conteúdo para garantir que caracteres especiais sejam tratados corretamente
+    content = encodeURIComponent(content);
+
+    // Cria o link para o WhatsApp com o conteúdo como texto
+    const whatsappUrl = `https://wa.me/?text=${content}`;
+
+    // Redireciona para o WhatsApp
+    window.location.href = whatsappUrl;
+
+    // Reexibe os botões após o envio
+    buttons.forEach(button => button.style.display = 'inline-block');
+}
+
+// Exibição da data formatada
+let currentDate = new Date();
+let formattedDate = formatDate(currentDate); // Formata a data para 'dd/mm/yy'
+
+// Exibe a data formatada no conteúdo do relatório
+let reportContent = document.getElementById("reportContent");
+reportContent.innerHTML += `<p><strong>Relatório gerado em:<br></strong> ${formattedDate}</p>`;
+</script>
+
+
+
+
+
+
+
+
+        
 
 
 <!--// BLOCO 08 - Função enviar numero pelo WhatsApp -->
