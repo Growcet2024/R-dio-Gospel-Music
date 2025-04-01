@@ -299,10 +299,6 @@ extractUserData();
 <!-------------------------------- BLOCO GERAR RELATORIO ----------------->
 // BLOCO 01
 
-
-
-    // BLOCO 01
-
 function toggleReport() {
     var reportSection = document.getElementById("reportSection");
     var button = document.getElementById("toggleReportButton");
@@ -330,17 +326,14 @@ function toggleReport() {
 
 
          history.forEach(entry => {
-    let date = new Date(entry.timestamp); // Cria um objeto Date a partir do timestamp
-    let shortYear = date.getFullYear().toString().slice(-2); // Pega os dois últimos dígitos do ano
-    let formattedDate = `${shortYear}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`; // Formata a data como 'yy-MM-dd'
-
-    content += `<tr>
-        <td style="border: 1px solid #ccc; padding: 6px; font-size: 14px;">${formattedDate}</td>
-        <td style="border: 1px solid #ccc; padding: 6px; font-size: 14px;">${entry.currentWeight} kg</td>
-        <td style="border: 1px solid #ccc; padding: 6px; font-size: 14px;">${entry.balanceSign} kg</td>
-        <td style="border: 1px solid #ccc; padding: 6px; font-size: 14px;">${entry.imc}</td>
-    </tr>`;
-});
+            let dateOnly = entry.timestamp.split(",")[0]; // Remove os minutos
+            content += `<tr>
+         <td style="border: 1px solid #ccc; padding: 6px; font-size: 14px;">${dateOnly}</td>
+         <td style="border: 1px solid #ccc; padding: 6px; font-size: 14px;">${entry.currentWeight} kg</td>
+         <td style="border: 1px solid #ccc; padding: 6px; font-size: 14px;">${entry.balanceSign} kg</td>
+         <td style="border: 1px solid #ccc; padding: 6px; font-size: 14px;">${entry.imc}</td>
+         </tr>`;
+        });
 
 
 
