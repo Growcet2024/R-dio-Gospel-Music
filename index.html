@@ -299,6 +299,10 @@ extractUserData();
 <!-------------------------------- BLOCO GERAR RELATORIO ----------------->
 // BLOCO 01
 
+
+
+    // BLOCO 01
+
 function toggleReport() {
     var reportSection = document.getElementById("reportSection");
     var button = document.getElementById("toggleReportButton");
@@ -324,9 +328,7 @@ function toggleReport() {
 
 
 
-        
 
-        
          history.forEach(entry => {
     let date = new Date(entry.timestamp); // Cria um objeto Date a partir do timestamp
     let shortYear = date.getFullYear().toString().slice(-2); // Pega os dois últimos dígitos do ano
@@ -344,9 +346,6 @@ function toggleReport() {
 
 
 
-
-
-        
         // Adiciona data e hora do relatório gerado
         content += `<p><strong>Relatório gerado em:<br></strong> ${new Date().toLocaleString()}</p>`;
         content += `</table>`;
@@ -523,6 +522,30 @@ document.addEventListener("DOMContentLoaded", function() {
     reportSection.style.width = "94%";
     reportSection.style.backgroundColor = "#ffffff";
 });
+
+
+     
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 </script>
 
