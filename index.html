@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
@@ -322,10 +322,7 @@ function toggleReport() {
          <th style="border: 1px solid #ccc; padding: 2px; font-size: 15px;">IMC</th>
          </tr>`;
 
-
-
-
-         history.forEach(entry => {
+        history.forEach(entry => {
             let dateOnly = entry.timestamp.split(",")[0]; // Remove os minutos
             content += `<tr>
          <td style="border: 1px solid #ccc; padding: 6px; font-size: 14px;">${dateOnly}</td>
@@ -334,10 +331,6 @@ function toggleReport() {
          <td style="border: 1px solid #ccc; padding: 6px; font-size: 14px;">${entry.imc}</td>
          </tr>`;
         });
-
-
-
-
 
         // Adiciona data e hora do relatório gerado
         content += `<p><strong>Relatório gerado em:<br></strong> ${new Date().toLocaleString()}</p>`;
@@ -516,30 +509,6 @@ document.addEventListener("DOMContentLoaded", function() {
     reportSection.style.backgroundColor = "#ffffff";
 });
 
-
-     
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 </script>
 
 
@@ -632,14 +601,10 @@ function generatePDF() {
     buttons.forEach(button => button.style.display = "inline-block");
 }
 
-
-
-
-
-
+ </script>
     
-    
-   <!--// BLOCO 07 - Função enviar PDF pelo WhatsApp -->
+
+<!--// BLOCO 07 - Função enviar PDF pelo WhatsApp -->
 <script>
     function sendTextToWhatsApp() {
         // Esconde os botões temporariamente
@@ -668,15 +633,6 @@ function generatePDF() {
 
         </script>
     
-
-
-
-
-
-
-
-
-        
 
 
 <!--// BLOCO 08 - Função enviar numero pelo WhatsApp -->
@@ -1340,6 +1296,7 @@ function deleteEntry(index) {
 
 </body>
 </html>
+
 
 
 
