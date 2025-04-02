@@ -322,15 +322,28 @@ function toggleReport() {
          <th style="border: 1px solid #ccc; padding: 2px; font-size: 15px;">IMC</th>
          </tr>`;
 
-        history.forEach(entry => {
-            let dateOnly = entry.timestamp.split(",")[0]; // Remove os minutos
-            content += `<tr>
-         <td style="border: 1px solid #ccc; padding: 6px; font-size: 14px;">${dateOnly}</td>
-         <td style="border: 1px solid #ccc; padding: 6px; font-size: 14px;">${entry.currentWeight} kg</td>
-         <td style="border: 1px solid #ccc; padding: 6px; font-size: 14px;">${entry.balanceSign} kg</td>
-         <td style="border: 1px solid #ccc; padding: 6px; font-size: 14px;">${entry.imc}</td>
-         </tr>`;
-        });
+    // Data dia, mês, ano
+   history.forEach(entry => {
+    // Extrair a data sem a hora do timestamp
+    let dateOnly = entry.timestamp.split(",")[0]; 
+
+    // Dividir a data em partes (dia, mês, ano)
+    let [day, month, year] = dateOnly.split("/");
+
+    // Pegar apenas os dois últimos dígitos do ano
+    let shortYear = year.slice(-2);
+
+    // Formatar a data como dd/mm/aa
+    let formattedDate = `${day}/${month}/${shortYear}`;
+
+    // Adicionar a data formatada na tabela
+    content += `<tr>
+        <td style="border: 1px solid #ccc; padding: 6px; font-size: 14px;">${formattedDate}</td>
+        <td style="border: 1px solid #ccc; padding: 6px; font-size: 14px;">${entry.currentWeight} kg</td>
+        <td style="border: 1px solid #ccc; padding: 6px; font-size: 14px;">${entry.balanceSign} kg</td>
+        <td style="border: 1px solid #ccc; padding: 6px; font-size: 14px;">${entry.imc}</td>
+    </tr>`;
+});
 
         // Adiciona data e hora do relatório gerado
         content += `<p><strong>Relatório gerado em:<br></strong> ${new Date().toLocaleString()}</p>`;
@@ -436,19 +449,6 @@ if (history.length > 0) {
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
         // Botões para PDF, WhatsApp e enviar para número
         content += `</ul></div>`;
         content += `<div style="text-align: center; margin-top: 10px;">`;
@@ -510,12 +510,6 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 </script>
-
-
-
-
-
-
 
 
 <script>
@@ -634,7 +628,6 @@ function generatePDF() {
         </script>
     
 
-
 <!--// BLOCO 08 - Função enviar numero pelo WhatsApp -->
 <script>
     // Função para abrir o pop-up de inserção do número
@@ -702,7 +695,7 @@ function generatePDF() {
         Cancelar
     </button>
 </div>
-
+<!--// BLOCO 08 - fim- Função enviar numero pelo WhatsApp -->
 <!-- BLOCO RELATORIO FIM -->
 
 
@@ -1296,6 +1289,7 @@ function deleteEntry(index) {
 
 </body>
 </html>
+
 
 
 
