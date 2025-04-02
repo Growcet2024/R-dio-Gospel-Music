@@ -404,7 +404,7 @@ if (history.length > 0) {
 
     // Quando o peso estiver suficientemente próximo do objetivo (considerando a tolerância)
     if (Math.abs(weightDifference) <= tolerance) {
-        motivationalMessage = `<p style='text-align: center; font-size: 14px; color: green; font-weight: bold;'>🎉 Parabéns! Você atingiu seu peso desejado de ${desiredWeight} kg! Continue focado para manter esse peso saudável!</p>`;
+        motivationalMessage = `<p style='text-align: center; font-size: 14px; color: green; font-weight: bold;'>Parabéns! Você atingiu seu peso desejado de ${desiredWeight} kg! Continue focado para manter esse peso saudável!</p>`;
     } 
     // Quando estiver muito perto de alcançar o objetivo
     else if (weightDifference > 0 && weightDifference <= 2) {
@@ -439,7 +439,7 @@ if (history.length > 0) {
     else if (firstWeight < desiredWeight) {
         let missingWeight = desiredWeight - firstWeight; // Peso que falta para o objetivo
 
-        motivationalMessage = `<p style='text-align: center; font-size: 14px; color: red; font-weight: bold;'>🚀 Quase lá! Você está apenas ${missingWeight.toFixed(2)} kg de alcançar seu objetivo de ${desiredWeight} kg. Continue o ótimo trabalho e logo você chega lá!</p>`;
+        motivationalMessage = `<p style='text-align: center; font-size: 14px; color: red; font-weight: bold;'>Quase lá! Você está apenas ${missingWeight.toFixed(2)} kg de alcançar seu objetivo de ${desiredWeight} kg. Continue o ótimo trabalho e logo você chega lá!</p>`;
     }
 
     // Exibe a frase motivacional
