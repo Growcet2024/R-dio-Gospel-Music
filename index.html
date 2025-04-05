@@ -283,9 +283,13 @@ extractUserData();
 
 <!-- Botão para exibir/esconder o Gráfico -->
 <button id="toggleGraphButton" onclick="toggleGraph()">Gráfico Evolutivo</button>
-<div id="graphSection" style="display: none;">
-<canvas id="weightChart"></canvas> <!-- O gráfico será renderizado aqui -->
+        
+<div id="graphSection" style="display: none; overflow-x: auto;">
+  <div style="min-width: 800px;">
+    <canvas id="weightChart" width="1000"></canvas>
+  </div>
 </div>
+
 
 
 <!-- Botão para exibir/esconder o Gerar relatório -->
