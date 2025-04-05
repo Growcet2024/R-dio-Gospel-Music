@@ -285,8 +285,8 @@ extractUserData();
 <button id="toggleGraphButton" onclick="toggleGraph()">Gráfico Evolutivo</button>
         
 <div id="graphSection" style="display: none; overflow-x: auto;">
-  <div style="min-width: 600px;">
-    <canvas id="weightChart" width="800"></canvas>
+  <div style="min-width: 500px;">
+    <canvas id="weightChart" width="700"></canvas>
   </div>
 </div>
 
@@ -821,7 +821,7 @@ function updateChart() {
                     left: 5,   // Ajuste o espaço à esquerda
                     right: 5,  // Ajuste o espaço à direita
                     top: 5,    // Ajuste o espaço acima
-                    bottom: 5,  // Ajuste o espaço abaixo
+                    bottom: 15,  // Ajuste o espaço abaixo
                 }
             },
             scales: {
