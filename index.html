@@ -10,6 +10,9 @@
 <!-- Biblioteca Gráfico -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+
+
 <!-- Biblioteca PDF --> 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
@@ -276,9 +279,7 @@ extractUserData();
 // ========================== BLOCO DE EXTRAÇÃO DOS DADOS fim ==========================
 </script>
 
-
-
-<!-- BLOCO GRAFICO / RELATORIO - INICIO-->
+<!-- RELATORIO - INICIO-->
 
 <!-- Botão para exibir/esconder o Gráfico -->
 <button id="toggleGraphButton" onclick="toggleGraph()">Gráfico Evolutivo</button>
@@ -363,18 +364,18 @@ let weightChangeMessage = "";
 if (weightDifference > 0) {
     if (weightDifference >= 1) {
         // Se a diferença for maior ou igual a 1 kg
-        weightChangeMessage = `e perdeu ${weightDifference.toFixed(2)} kg desde a primeira pesagem.`;
+        weightChangeMessage = `houve uma perda de ${weightDifference.toFixed(2)} kg desde a primeira pesagem.`;
     } else {
         // Se a diferença for menor que 1 kg, exibe em gramas
-        weightChangeMessage = `e perdeu ${(weightDifference * 1000).toFixed(0)} gramas desde a primeira pesagem.`;
+        weightChangeMessage = `houve uma perda de ${(weightDifference * 1000).toFixed(0)} gramas desde a primeira pesagem.`;
     }
 } else if (weightDifference < 0) {
     if (Math.abs(weightDifference) >= 1) {
         // Se a diferença for maior ou igual a 1 kg
-        weightChangeMessage = `e ganhou ${Math.abs(weightDifference).toFixed(2)} kg desde a primeira pesagem.`;
+        weightChangeMessage = `houve um ganho de ${Math.abs(weightDifference).toFixed(2)} kg desde a primeira pesagem.`;
     } else {
         // Se a diferença for menor que 1 kg, exibe em gramas
-        weightChangeMessage = `e ganhou ${Math.abs(weightDifference * 1000).toFixed(0)} gramas desde a primeira pesagem.`;
+        weightChangeMessage = `houve um ganho de ${Math.abs(weightDifference * 1000).toFixed(0)} gramas desde a primeira pesagem.`;
     }
 } else {
     weightChangeMessage = "Seu peso se manteve igual."; // Se não houve alteração
@@ -382,7 +383,7 @@ if (weightDifference > 0) {
 
 // Unificando as frases: Contagem de registros e diferença de peso
 content += `<p style="text-align: center; margin-top: 10px; font-size: 13px; font-weight: bold; color: #333;">
-    Você tem ${history.length} registros, ${weightChangeMessage}</p>`;
+    Aqui tem ${history.length} registros, ${weightChangeMessage}</p>`;
 
 
 
@@ -404,15 +405,15 @@ if (history.length > 0) {
 
     // Quando o peso estiver suficientemente próximo do objetivo (considerando a tolerância)
     if (Math.abs(weightDifference) <= tolerance) {
-        motivationalMessage = `<p style='text-align: center; font-size: 14px; color: green; font-weight: bold;'>Parabéns! Você atingiu seu peso desejado de ${desiredWeight} kg! Continue focado para manter esse peso saudável!</p>`;
+        motivationalMessage = `<p style='text-align: center; font-size: 14px; color: green; font-weight: bold;'>Parabéns! Você alcançou os ${desiredWeight} kg! Mantenha o foco para manter esse peso saudável!</p>`;
     } 
     // Quando estiver muito perto de alcançar o objetivo
     else if (weightDifference > 0 && weightDifference <= 2) {
-        motivationalMessage = `<p style='text-align: center; font-size: 14px; color: blue; font-weight: bold;'>Ótimo progresso! Você está muito perto de alcançar seu objetivo de ${desiredWeight} kg! Apenas ${weightDifference.toFixed(2)} kg para conquistar sua meta!</p>`;
+        motivationalMessage = `<p style='text-align: center; font-size: 14px; color: blue; font-weight: bold;'>Ótimo progresso! Você está prestes a atingir ${desiredWeight} kg! Faltam só ${weightDifference.toFixed(2)} kg para alcançar sua meta!</p>`;
     } 
     // Quando faltam alguns quilos, mas já progrediu bastante
     else if (weightDifference > 2 && weightDifference <= 5) {
-        motivationalMessage = `<p style='text-align: center; font-size: 14px; color: blue; font-weight: bold;'>Incrível! Você está a um passo de alcançar seu objetivo. Faltam apenas ${weightDifference.toFixed(2)} kg para atingir ${desiredWeight} kg!</p>`;
+        motivationalMessage = `<p style='text-align: center; font-size: 14px; color: blue; font-weight: bold;'>Incrível! Você está a um passo de alcançar seu objetivo. Faltam só ${weightDifference.toFixed(2)} kg para os ${desiredWeight} kg!</p>`;
     } 
     // Quando o peso já foi ultrapassado, acima do objetivo
     else if (firstWeight > desiredWeight) {
@@ -420,11 +421,11 @@ if (history.length > 0) {
 
         // Se ultrapassou o objetivo por uma diferença pequena (até 1 kg)
         if (excessWeight > 0 && excessWeight <= 1) {
-            motivationalMessage = `<p style='text-align: center; font-size: 14px; color: orange; font-weight: bold;'>Você ultrapassou seu objetivo por apenas ${excessWeight.toFixed(2)} kg! Não se preocupe, apenas ajuste um pouco mais para alcançar o equilíbrio!</p>`;
+            motivationalMessage = `<p style='text-align: center; font-size: 14px; color: orange; font-weight: bold;'>Você ultrapassou seu objetivo por apenas ${excessWeight.toFixed(2)} kg! Ajuste um pouco mais para alcançar o equilíbrio!</p>`;
         }
         // Se ultrapassou o objetivo por uma diferença média (entre 1 kg e 2 kg)
         else if (excessWeight > 1 && excessWeight <= 2) {
-            motivationalMessage = `<p style='text-align: center; font-size: 14px; color: orange; font-weight: bold;'>Você ultrapassou seu objetivo por ${excessWeight.toFixed(2)} kg! Agora é hora de manter o foco e ajustar seu peso para um nível saudável!</p>`;
+            motivationalMessage = `<p style='text-align: center; font-size: 14px; color: orange; font-weight: bold;'>Você superou seu objetivo em ${excessWeight.toFixed(2)} kg! Mantenha o foco para alcançar um nível saudável.</p>`;
         }
         // Se ultrapassou o objetivo por uma diferença considerável (entre 2 kg e 5 kg)
         else if (excessWeight > 2 && excessWeight <= 5) {
@@ -432,14 +433,14 @@ if (history.length > 0) {
         }
         // Se ultrapassou o objetivo por uma diferença significativa (acima de 5 kg)
         else {
-            motivationalMessage = `<p style='text-align: center; font-size: 14px; color: red; font-weight: bold;'>Alerta! Você ultrapassou seu objetivo em ${excessWeight.toFixed(2)} kg. Agora é essencial ajustar seu peso para garantir uma saúde equilibrada.</p>`;
+            motivationalMessage = `<p style='text-align: center; font-size: 14px; color: red; font-weight: bold;'>Alerta! Você ultrapassou ${excessWeight.toFixed(2)} kg. do seu objetivo. Ajuste seu peso para um equilíbrio saudável.</p>`;
         }
     }
     // Quando ainda está abaixo do peso desejado
     else if (firstWeight < desiredWeight) {
         let missingWeight = desiredWeight - firstWeight; // Peso que falta para o objetivo
 
-        motivationalMessage = `<p style='text-align: center; font-size: 14px; color: red; font-weight: bold;'>Quase lá! Você está apenas ${missingWeight.toFixed(2)} kg de alcançar seu objetivo de ${desiredWeight} kg. Continue o ótimo trabalho e logo você chega lá!</p>`;
+        motivationalMessage = `<p style='text-align: center; font-size: 14px; color: red; font-weight: bold;'>Faltam ${missingWeight.toFixed(2)} kg para você atingir ${desiredWeight} kg. Alimente-se bem para alcançar sua meta com saúde!</p>`;
     }
 
     // Exibe a frase motivacional
@@ -701,65 +702,28 @@ function generatePDF() {
 
 
 
+<!-- GRAFICO EVOLUTIVO -->
 
-
-
-
-<!-- BLOCO GRAFICO EVOLUTIVO -->
 <script>
-function toggleGraph() {
-        var graphSection = document.getElementById("graphSection");
-        var button = document.getElementById("toggleGraphButton");
 
-        if (graphSection.style.display === "none" || graphSection.style.display === "") {
-            graphSection.style.display = "block";
-            button.textContent = "Fechar Gráfico";
-        } else {
-            graphSection.style.display = "none";
-            button.textContent = "Gráfico Evolutivo";
-        }
-    }
-
-
-<!-- BLOCO 2 = Criar um canva-->
-
-if (!window.myChart) {
-    const ctx = document.getElementById("weightChart").getContext("2d");
-    window.myChart = new Chart(ctx, {
-        type: "line",
-        data: {
-            labels: [], // Datas serão preenchidas dinamicamente
-            datasets: [
-                {
-                    label: "Peso (kg)",
-                    data: [], // Pesos serão preenchidos
-                    borderColor: "blue",
-                    borderWidth: 2,
-                    fill: false
-                },
-                {
-                    label: "IMC",
-                    data: [], // IMC será preenchido
-                    borderColor: "red",
-                    borderWidth: 2,
-                    fill: false
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            scales: {
-                y: {
-                    beginAtZero: false
-                }
+    <!-- BLOCO 01 -->
+    function toggleGraph() {
+            var graphSection = document.getElementById("graphSection");
+            var button = document.getElementById("toggleGraphButton");
+    
+            if (graphSection.style.display === "none" || graphSection.style.display === "") {
+                graphSection.style.display = "block";
+                button.textContent = "Fechar Gráfico";
+            } else {
+                graphSection.style.display = "none";
+                button.textContent = "Gráfico Evolutivo";
             }
         }
-    });
-}
+    
 
-<!-- BLOCO 3 = Capturar os dados do localStorage-->
-
-// Função para capturar os dados do localStorage e formatar corretamente
+    <!-- BLOCO 3 = Capturar os dados do localStorage-->
+   
+    // Função para capturar os dados do localStorage e formatar corretamente
 
 function getWeightData() {
     let userData = extractUserData();
@@ -776,17 +740,22 @@ function getWeightData() {
     return { labels, weights, imcValues };
 }
 
+
 <!-- BLOCO 4 -->
-// Função para atualizar o gráfico com os dados reais
+
+ // Função para atualizar o gráfico com os dados reais
 function updateChart() {
     let { labels, weights, imcValues } = getWeightData();
-    
+
     // Verifica se o gráfico já existe e destrói para recriar
     if (window.myChart) {
         window.myChart.destroy();
     }
-    
-    // Criando o gráfico
+
+    // Calcula as médias
+    const mediaPeso = (weights.reduce((a, b) => a + b, 0) / weights.length).toFixed(2);
+    const mediaIMC = (imcValues.reduce((a, b) => a + b, 0) / imcValues.length).toFixed(2);
+
     const ctx = document.getElementById("weightChart").getContext("2d");
     window.myChart = new Chart(ctx, {
         type: "line",
@@ -794,29 +763,70 @@ function updateChart() {
             labels: labels,
             datasets: [
                 {
-                    label: "Peso (kg)",
-                    data: weights,
-                    borderColor: "blue",
-                    borderWidth: 2,
-                    fill: false
+
+
+                    label: `Peso (média): ${mediaPeso}`,
+    data: weights,
+    borderColor: "blue",
+    borderWidth: 2,
+    fill: false,
+    pointBackgroundColor: "blue",
+    // Alterações adicionadas aqui:
+    pointRadius: 4, // Aumenta o tamanho das bolinhas
+    pointHoverRadius: 2, // Aumenta o tamanho das bolinhas quando em hover
+    pointBorderWidth: 2, // Aumenta a borda da bolinha
+
                 },
                 {
-                    label: "IMC",
-                    data: imcValues,
-                    borderColor: "red",
-                    borderWidth: 2,
-                    fill: false
+
+                    label: `IMC (média): ${mediaIMC}`,
+    data: imcValues,
+    borderColor: "green",
+    borderWidth: 2,
+    fill: false,
+    pointBackgroundColor: "green",
+    // Alterações adicionadas aqui:
+    pointRadius: 4, // Aumenta o tamanho das bolinhas
+    pointHoverRadius: 2, // Aumenta o tamanho das bolinhas quando em hover
+    pointBorderWidth: 2, // Aumenta a borda da bolinha
+
                 }
             ]
         },
-        options: {
+
+       
+    options: {
             responsive: true,
+            plugins: {
+                datalabels: {
+                    color: '#000',
+                    anchor: 'end',
+                    align: 'top',
+                    formatter: value => value.toFixed(2)
+                },
+                legend: {
+                    labels: {
+                        usePointStyle: true,
+                        pointStyle: 'circle'
+                    }
+                }
+            },
+            // Adicionando espaço nas margens internas
+            layout: {
+                padding: {
+                    left: 5,   // Ajuste o espaço à esquerda
+                    right: 5,  // Ajuste o espaço à direita
+                    top: 5,    // Ajuste o espaço acima
+                    bottom: 5,  // Ajuste o espaço abaixo
+                }
+            },
             scales: {
                 y: {
                     beginAtZero: false
                 }
             }
-        }
+        },
+        plugins: [ChartDataLabels]
     });
 }
 
@@ -824,18 +834,51 @@ function updateChart() {
 updateChart();
 
 
-<!-- <!-- BLOCO 5 = Capturar Configurar e exibir o gráfico-->
 
-function generateGraph() {
-    let { labels, data } = getWeightData();
-    
-    if (window.myChart) {
-        window.myChart.data.labels = labels;
-        window.myChart.data.datasets[0].data = data;
-        window.myChart.update(); // Atualiza o gráfico com novos dados
-    }
-}
 </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    
+
+
+
+
+
+
 
 
 
@@ -1284,13 +1327,87 @@ function deleteEntry(index) {
 
     </script>
 
+
+
+
+
+
+<script>
+    <-- // 3️⃣ CRIAÇÃO DO GRÁFICO (configuração do Chart.js) -->
+    
+  // CRIAÇÃO DO GRÁFICO
+let ctx = document.getElementById("weightChart").getContext("2d");
+let weightChart;
+
+function createChart(data) {
+    if (weightChart) {
+        weightChart.destroy(); // Garante que não existam múltiplos gráficos
+    }
+
+    let dates = data.map(entry => entry.date);
+    let weights = data.map(entry => entry.weight);
+    let imcValues = data.map(entry => entry.imc);
+
+    weightChart = new Chart(ctx, {
+        type: "line",
+        data: {
+            labels: dates,
+            datasets: [
+                {
+                    label: "Peso (kg)",
+                    data: weights,
+                    borderColor: "blue",
+                    backgroundColor: "rgba(0, 0, 255, 0.2)",
+                    borderWidth: 2
+                },
+                {
+                    label: "IMC",
+                    data: imcValues,
+                    borderColor: "green",
+                    backgroundColor: "rgba(0, 255, 0, 0.2)",
+                    borderWidth: 2
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: "Data"
+                    }
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: "Valores"
+                    }
+                }
+            }
+        }
+    });
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+    console.log("Script carregado! Criando gráfico...");
+    createChart([]); // Apenas um teste inicial, depois passamos os dados reais.
+});
+
+</script>
+
+
+
+<script>
+    function createChart(data) {
+        console.log("Criando gráfico com dados:", data);
+    }
 </script>
 
 
 </body>
 </html>
-
-
 
 
 
