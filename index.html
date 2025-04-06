@@ -166,6 +166,7 @@ button:hover {
     border-radius: 5px;
 }
 
+
   /* 🎨 CSS BARRA DE ROLAGEM - GRÁFICO */
 #graphSection {
   margin-bottom: 20px;              /* Espaço abaixo do gráfico */
@@ -190,7 +191,7 @@ button:hover {
 #graphSection::-webkit-scrollbar-thumb:hover {
   background: #FF8C00; /* Laranja mais escuro no hover */
 }
-        
+
 #graphSection {
   border: 2px solid #ccc; /* Laranja */
   border-radius: 12px;       /* Cantos arredondados, opcional */
@@ -198,11 +199,9 @@ button:hover {
   margin-bottom: 20px;       /* Espaço abaixo do gráfico */
   overflow-x: auto;          /* Manter a rolagem horizontal */
 }
-       
- 
 
-     
-        
+
+
 </style>
     
 
@@ -248,6 +247,25 @@ button:hover {
     
         <!-- Campo resultado peso saldo e IMC -->
         <p id="resultDisplay">Peso Saldo: - kg | IMC: -</p>
+
+
+
+<!-- Botão para exibir/esconder o Gráfico -->
+<button id="toggleGraphButton" onclick="toggleGraph()">Gráfico Evolutivo</button>
+
+<div id="graphSection" style="display: none; overflow-x: auto;">
+    <div style="min-width: 800px;">
+      <canvas id="weightChart" width="1000"></canvas>
+    </div>
+  </div>
+  
+<!-- Botão para exibir/esconder o Gerar relatório -->
+<button id="toggleReportButton" onclick="toggleReport()">Gerar Relatório</button>
+<div id="reportSection" style="display: none;">
+    <div id="reportContent"></div> <!-- histórico -->
+    Baixe o relatório ou envie-o pelo WhatsApp
+</div>
+
 
         <!-- Botão IMC -->
 <button id="toggleButton" onclick="toggleTable()">Mostrar Tabela IMC</button>
@@ -317,27 +335,8 @@ extractUserData();
 // ========================== BLOCO DE EXTRAÇÃO DOS DADOS fim ==========================
 </script>
 
-<!-- RELATORIO - INICIO-->
 
-<!-- Botão para exibir/esconder o Gráfico -->
-<button id="toggleGraphButton" onclick="toggleGraph()">Gráfico Evolutivo</button>
-        
-<div id="graphSection" style="display: none; overflow-x: auto;">
-  <div style="min-width: 500px;">
-    <canvas id="weightChart" width="700"></canvas>
-  </div>
-</div>
-
-
-
-<!-- Botão para exibir/esconder o Gerar relatório -->
-<button id="toggleReportButton" onclick="toggleReport()">Gerar Relatório</button>
-<div id="reportSection" style="display: none;">
-    <div id="reportContent"></div> <!-- histórico -->
-    Baixe o relatório ou envie-o pelo WhatsApp
-</div>
-
-                         
+<!-- RELATORIO - INICIO-->                        
 <script>
 <!-------------------------------- BLOCO GERAR RELATORIO ----------------->
 // BLOCO 01
@@ -747,7 +746,7 @@ function generatePDF() {
 <!-- GRAFICO EVOLUTIVO -->
 
 <script>
-
+<!-------------------------------- BLOCO GRAFICO EVOLUTIVO----------------->
     <!-- BLOCO 01 -->
     function toggleGraph() {
             var graphSection = document.getElementById("graphSection");
@@ -763,7 +762,7 @@ function generatePDF() {
         }
     
 
-    <!-- BLOCO 3 = Capturar os dados do localStorage-->
+    <!-- BLOCO 2 = Capturar os dados do localStorage-->
    
     // Função para capturar os dados do localStorage e formatar corretamente
 
@@ -783,7 +782,7 @@ function getWeightData() {
 }
 
 
-<!-- BLOCO 4 -->
+<!-- BLOCO 3 -->
 
  // Função para atualizar o gráfico com os dados reais
 function updateChart() {
@@ -837,7 +836,7 @@ function updateChart() {
         },
 
        
-    options: {
+        options: {
             responsive: true,
             plugins: {
                 datalabels: {
@@ -859,7 +858,7 @@ function updateChart() {
                     left: 5,   // Ajuste o espaço à esquerda
                     right: 5,  // Ajuste o espaço à direita
                     top: 5,    // Ajuste o espaço acima
-                    bottom: 15,  // Ajuste o espaço abaixo
+                    bottom: 5,  // Ajuste o espaço abaixo
                 }
             },
             scales: {
@@ -874,8 +873,6 @@ function updateChart() {
 
 // Atualiza o gráfico ao carregar a página
 updateChart();
-
-
 
 </script>
 
@@ -1450,6 +1447,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
 </body>
 </html>
+
+
 
 
 
