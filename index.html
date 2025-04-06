@@ -166,47 +166,35 @@ button:hover {
     border-radius: 5px;
 }
 
-  /* CSS BARRA DE ROLAGEM- GRAFICO  */
-  #graphSection {
-    scrollbar-width: thin;       /* Firefox */
-    scrollbar-color: #888 #eee;  /* Firefox */
-
-    /* Para navegadores baseados em WebKit (Chrome, Safari) */
-  }
-
-  #graphSection::-webkit-scrollbar {
-    height: 8px;
-  }
-
-  #graphSection::-webkit-scrollbar-thumb {
-    background-color: #888;
-    border-radius: 4px;
-  }
-
-  #graphSection::-webkit-scrollbar-track {
-    background-color: #eee;
-  }
-
-  #graphSection {
-  margin-bottom: 20px; /* ⬅️ Espaço entre o gráfico e o elemento abaixo */
+  /* 🎨 CSS BARRA DE ROLAGEM - GRÁFICO */
+#graphSection {
+  margin-bottom: 20px;              /* Espaço abaixo do gráfico */
+  scrollbar-width: thin;            /* Firefox */
+  scrollbar-color: #FFA500 #f0f0f0; /* Firefox */
 }
 
+/* Webkit browsers (Chrome, Edge, Safari) */
 #graphSection::-webkit-scrollbar {
-  height: 8px; /* altura da barra horizontal */
+  height: 10px; /* Altura da barra de rolagem horizontal */
 }
 
 #graphSection::-webkit-scrollbar-track {
-  background: #eee; /* fundo da trilha */
+  background: #f0f0f0; /* Fundo da barra */
 }
 
 #graphSection::-webkit-scrollbar-thumb {
-  background: #888; /* cor da barrinha */
-  border-radius: 4px;
+  background: #FFA500;   /* Cor laranja */
+  border-radius: 10px;   /* Cantos arredondados */
 }
 
 #graphSection::-webkit-scrollbar-thumb:hover {
-  background: #555; /* cor ao passar o mouse */
-}     
+  background: #FF8C00; /* Laranja mais escuro no hover */
+}
+
+       
+ 
+
+     
         
 </style>
     
