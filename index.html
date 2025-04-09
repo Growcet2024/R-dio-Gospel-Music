@@ -253,11 +253,25 @@ button:hover {
 <!-- Botão para exibir/esconder o Gráfico -->
 <button id="toggleGraphButton" onclick="toggleGraph()">Gráfico Evolutivo</button>
 
+
 <div id="graphSection" style="display: none; overflow-x: auto;">
     <div style="min-width: 400px;">
-      <canvas id="weightChart" width="800"></canvas>
+      <canvas id="weightChart" width="500"></canvas>
+      <div style="margin-top: 10px;">
+        <div>Aplicativo controle de peso</div>
+        <div>Nome: Edson | ID: C7Wp3ITE | Peso Desejado: 65 kg</div>
+        <div id="dataGerada"></div>
+      <div id="motivationalPhrase" style="font-weight: bold; color: #333;"></div> <!-- ESSA LINHA É FUNDAMENTAL -->
+      </div>
     </div>
   </div>
+  
+  
+  
+
+    
+  
+
   
 <!-- Botão para exibir/esconder o Gerar relatório -->
 <button id="toggleReportButton" onclick="toggleReport()">Gerar Relatório</button>
@@ -870,8 +884,56 @@ function updateChart() {
     });
 }
 
-// Atualiza o gráfico ao carregar a página
+
+function atualizarDataGerada() {
+  const agora = new Date();
+  const dataFormatada = agora.toLocaleString('pt-BR'); // ex: 09/04/2025, 15:03:22
+  const elementoData = document.getElementById("dataGerada");
+  if (elementoData) {
+    elementoData.textContent = `Gráfico gerado em: ${dataFormatada}`;
+  }
+}
+
 updateChart();
+atualizarFraseMotivacional();
+atualizarDataGerada(); // ← ESSA LINHA ATUALIZA A DATA/HORA
+
+
+
+
+// BLOCO 4 - Atualiza informações abaixo do gráfico
+
+<!-- BLOCO 4 - Frase motivacional -->
+function atualizarFraseMotivacional() {
+  let { imcValues } = getWeightData();
+  if (imcValues.length === 0) return;
+
+  const ultimoIMC = imcValues[imcValues.length - 1];
+  let frase = "";
+
+  if (ultimoIMC < 18.5) {
+    frase = "Você está abaixo do peso. Cuide-se bem!";
+  } else if (ultimoIMC >= 18.5 && ultimoIMC < 25) {
+    frase = "Parabéns! Seu peso está saudável.";
+  } else if (ultimoIMC >= 25 && ultimoIMC < 30) {
+    frase = "Atenção! Você está com sobrepeso.";
+  } else {
+    frase = "Cuidado! Seu IMC indica obesidade.";
+  }
+
+  document.getElementById("motivationalPhrase").textContent = frase;
+}
+
+
+
+
+
+
+
+
+
+
+
 
 </script>
 
@@ -1446,4 +1508,5 @@ document.addEventListener("DOMContentLoaded", function() {
 
 </body>
 </html>
+
 
