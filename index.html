@@ -1301,7 +1301,8 @@ function saveEditedEntry() {
 
     // Atualizar os dados no histórico
     history[index].currentWeight = newWeight;
-    history[index].timestamp = new Date(newDate).toLocaleString();  // Atualizar a data
+
+    history[index].timestamp = new Date(newDate).toLocaleDateString('pt-BR');  // Apenas a data
 
     // Atualizar o saldo e IMC
     history[index].balanceSign = (parseFloat(newWeight) - parseFloat(desiredWeight)).toFixed(2);
