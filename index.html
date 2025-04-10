@@ -1346,7 +1346,8 @@ function addWeight() {
     // **📌 Atualiza os valores na tela principal**
     document.getElementById('resultDisplay').innerText = `Peso Saldo: ${balanceSign} kg | IMC: ${imc}`;
 
-    let timestamp = new Date().toLocaleString();
+    let timestamp = new Date().toLocaleDateString('pt-BR');
+    
     let entry = {
         timestamp: timestamp,
         currentWeight: currentWeight,
