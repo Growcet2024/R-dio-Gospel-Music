@@ -785,17 +785,18 @@ function generatePDF() {
 function getWeightData() {
     let userData = extractUserData();
     let records = userData.history || [];
-    
-    // Ordena os registros por data
+
+    // Ordena os registros por data (do mais antigo para o mais recente)
     records.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
-    
+
     // Extrai as datas (sem a hora), pesos e IMCs
     let labels = records.map(record => record.timestamp.split(',')[0]);
     let weights = records.map(record => parseFloat(record.currentWeight));
     let imcValues = records.map(record => parseFloat(record.imc));
-    
+
     return { labels, weights, imcValues };
 }
+
 
 
 <!-- BLOCO 3 -->
