@@ -996,11 +996,22 @@ function atualizarFraseMotivacional() {
 
   <!-- BLOCO 6 – Função para Compartilhar no WhatsApp -->
 
+
 async function shareOnWhatsApp() {
   const canvas = document.getElementById("weightChart");
 
-  // Converte o canvas para blob (imagem real)
-  canvas.toBlob(async function(blob) {
+  // Criar um novo canvas com fundo branco
+  const whiteBgCanvas = document.createElement("canvas");
+  whiteBgCanvas.width = canvas.width;
+  whiteBgCanvas.height = canvas.height;
+
+  const ctx = whiteBgCanvas.getContext("2d");
+  ctx.fillStyle = "#ffffff"; // fundo branco
+  ctx.fillRect(0, 0, whiteBgCanvas.width, whiteBgCanvas.height);
+  ctx.drawImage(canvas, 0, 0); // desenha o gráfico original por cima
+
+  // Agora converte o novo canvas para blob
+  whiteBgCanvas.toBlob(async function(blob) {
     if (!blob) {
       alert("Erro ao gerar imagem.");
       return;
@@ -1008,7 +1019,6 @@ async function shareOnWhatsApp() {
 
     const file = new File([blob], "grafico_peso.png", { type: "image/png" });
 
-    // Verifica se o navegador suporta compartilhamento de arquivos
     if (navigator.canShare && navigator.canShare({ files: [file] })) {
       try {
         await navigator.share({
@@ -1025,6 +1035,9 @@ async function shareOnWhatsApp() {
     }
   }, "image/png");
 }
+
+
+
 
 
 
