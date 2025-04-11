@@ -10,6 +10,9 @@
 <!-- Biblioteca Gráfico -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
 
 <!-- Biblioteca PDF --> 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -998,43 +1001,34 @@ function atualizarFraseMotivacional() {
 
 
 async function shareOnWhatsApp() {
-  const canvas = document.getElementById("weightChart");
+  const section = document.getElementById("graphSection");
 
-  // Criar um novo canvas com fundo branco
-  const whiteBgCanvas = document.createElement("canvas");
-  whiteBgCanvas.width = canvas.width;
-  whiteBgCanvas.height = canvas.height;
+  try {
+    const canvas = await html2canvas(section, {
+      backgroundColor: "#ffffff", // Garante fundo branco
+      scale: 2 // Imagem com melhor qualidade
+    });
 
-  const ctx = whiteBgCanvas.getContext("2d");
-  ctx.fillStyle = "#ffffff"; // fundo branco
-  ctx.fillRect(0, 0, whiteBgCanvas.width, whiteBgCanvas.height);
-  ctx.drawImage(canvas, 0, 0); // desenha o gráfico original por cima
+    const imageDataUrl = canvas.toDataURL("image/png");
 
-  // Agora converte o novo canvas para blob
-  whiteBgCanvas.toBlob(async function(blob) {
-    if (!blob) {
-      alert("Erro ao gerar imagem.");
-      return;
-    }
-
+    const blob = await (await fetch(imageDataUrl)).blob();
     const file = new File([blob], "grafico_peso.png", { type: "image/png" });
 
     if (navigator.canShare && navigator.canShare({ files: [file] })) {
-      try {
-        await navigator.share({
-          files: [file],
-          title: "Meu Gráfico de Peso",
-          text: "Confira minha evolução no controle de peso!"
-        });
-      } catch (error) {
-        console.error("Erro ao compartilhar:", error);
-        alert("Compartilhamento cancelado ou falhou.");
-      }
+      await navigator.share({
+        files: [file],
+        title: "Gráfico de Peso e IMC",
+        text: "Veja meu progresso no controle de peso!"
+      });
     } else {
-      alert("O compartilhamento de imagem não é suportado neste dispositivo ou navegador.");
+      alert("O compartilhamento direto não é suportado neste dispositivo.");
     }
-  }, "image/png");
+  } catch (error) {
+    console.error("Erro ao compartilhar:", error);
+    alert("Não foi possível compartilhar. Tente novamente.");
+  }
 }
+
 
 
 
