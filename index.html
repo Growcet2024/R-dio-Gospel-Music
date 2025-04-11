@@ -996,24 +996,29 @@ function atualizarFraseMotivacional() {
 
   <!-- BLOCO 6 – Função para Compartilhar no WhatsApp -->
 
-
 async function shareOnWhatsApp() {
-  const section = document.getElementById("graphSection");
+  // Copia os dados para a área de exportação
+  document.getElementById("exportNomeInfo").innerText = document.getElementById("nomeInfo").innerText;
+  document.getElementById("exportPesoDesejado").innerText = document.getElementById("pesoDesejado").innerText;
+  document.getElementById("exportDataGerada").innerText = document.getElementById("dataGerada").innerText;
+  document.getElementById("exportMotivationalPhrase").innerText = document.getElementById("motivationalPhrase").innerText;
+
+  // Copia o gráfico para o novo canvas
+  const mainCanvas = document.getElementById("weightChart");
+  const exportCanvas = document.getElementById("exportChart");
+  const exportCtx = exportCanvas.getContext("2d");
+  exportCtx.clearRect(0, 0, exportCanvas.width, exportCanvas.height);
+  exportCtx.drawImage(mainCanvas, 0, 0, exportCanvas.width, exportCanvas.height);
+
+  // Aguarda o html2canvas renderizar a imagem da área limpa
+  const section = document.getElementById("exportSection");
 
   try {
-    // Expande temporariamente a altura total
-    section.style.height = "auto";
-    section.style.overflow = "visible";
-
     const canvas = await html2canvas(section, {
       backgroundColor: "#ffffff",
       scale: 2,
-      scrollY: -window.scrollY  // Corrige a posição de rolagem
+      scrollY: -window.scrollY
     });
-
-    // Restaura o estilo original
-    section.style.height = "";
-    section.style.overflow = "";
 
     const imageDataUrl = canvas.toDataURL("image/png");
     const blob = await (await fetch(imageDataUrl)).blob();
@@ -1026,13 +1031,15 @@ async function shareOnWhatsApp() {
         text: "Veja meu progresso no controle de peso!"
       });
     } else {
-      alert("O compartilhamento direto não é suportado neste dispositivo.");
+      alert("Compartilhamento não suportado neste dispositivo.");
     }
   } catch (error) {
     console.error("Erro ao compartilhar:", error);
-    alert("Não foi possível compartilhar. Tente novamente.");
+    alert("Erro ao tentar compartilhar.");
   }
 }
+
+
 
 
 
@@ -1620,6 +1627,17 @@ document.addEventListener("DOMContentLoaded", function() {
 </script>
 
 
+<!-- Área escondida só para exportação -->
+<div id="exportSection" style="display: none; background: white; padding: 10px; text-align: left; font-size: 10px; color: #333;">
+  <div>Aplicativo controle de peso</div>
+  <div id="exportNomeInfo"></div>
+  <div id="exportPesoDesejado"></div>
+  <div id="exportDataGerada"></div>
+  <div id="exportMotivationalPhrase" style="margin-top: 4px; font-weight: bold;"></div>
+  <canvas id="exportChart" width="500" height="250"></canvas>
+</div>
+
 </body>
 </html>
+
 
