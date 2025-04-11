@@ -996,30 +996,36 @@ function atualizarFraseMotivacional() {
 
   <!-- BLOCO 6 – Função para Compartilhar no WhatsApp -->
 
-  async function shareOnWhatsApp() {
+async function shareOnWhatsApp() {
   const canvas = document.getElementById("weightChart");
-  const chartImage = canvas.toDataURL("image/png");
 
-  // Abre a imagem em uma nova aba com instrução
-  const imageWindow = window.open();
-  imageWindow.document.write(`
-    <html>
-      <head>
-        <title>Gráfico - Salvar para Enviar</title>
-      </head>
-      <body style="text-align: center; font-family: Arial;">
-        <h3>📌 Toque e segure na imagem para salvar (ou clique com o botão direito)</h3>
-        <img src="${chartImage}" style="max-width: 90%; border: 1px solid #ccc; margin-top: 20px;">
-        <p style="font-size: 12px; color: #666;">Depois envie essa imagem no WhatsApp que será aberto.</p>
-      </body>
-    </html>
-  `);
+  // Converte o canvas para blob (imagem real)
+  canvas.toBlob(async function(blob) {
+    if (!blob) {
+      alert("Erro ao gerar imagem.");
+      return;
+    }
 
-  // Mensagem para WhatsApp
-  const message = encodeURIComponent("Segue meu gráfico de evolução de peso/IMC! Salvei a imagem e estou te enviando. 📈💪");
-  const whatsappLink = `https://wa.me/?text=${message}`;
-  window.open(whatsappLink, "_blank");
+    const file = new File([blob], "grafico_peso.png", { type: "image/png" });
+
+    // Verifica se o navegador suporta compartilhamento de arquivos
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      try {
+        await navigator.share({
+          files: [file],
+          title: "Meu Gráfico de Peso",
+          text: "Confira minha evolução no controle de peso!"
+        });
+      } catch (error) {
+        console.error("Erro ao compartilhar:", error);
+        alert("Compartilhamento cancelado ou falhou.");
+      }
+    } else {
+      alert("O compartilhamento de imagem não é suportado neste dispositivo ou navegador.");
+    }
+  }, "image/png");
 }
+
 
 
 
