@@ -254,30 +254,27 @@ button:hover {
 <!-- Botão para exibir/esconder o Gráfico -->
 <button id="toggleGraphButton" onclick="toggleGraph()">Gráfico Evolutivo</button>
 
-<div id="graphSection" style="display: none; overflow-x: auto;">
-    <div style="min-width: 400px;">
-      <canvas id="weightChart" width="500"></canvas>
-  
-      <div style="margin-top: 10px; text-align: left; font-size: 10px; color: #333;">
-        <div>Aplicativo controle de peso</div>
-
-        <div id="nomeInfo"></div>
-
-        <div id="dataGerada"></div>
-        <div id="motivationalPhrase" style="margin-top: 4px; font-weight: bold;"></div> <!-- ESSA LINHA É FUNDAMENTAL -->
-      </div>
-      
-      <!-- Botões para exportar -->
-      <div style="margin-top: 8px; margin-bottom: 10px;">
-        <button onclick="downloadPDF()">Baixar PDF</button>
-        <button onclick="shareOnWhatsApp()">Compartilhar no WhatsApp</button>
-      </div>
-      
-  
+<div id="graphSection" style="display: none;">
+  <div id="graphContainer" style="background: white; padding: 10px; min-width: 400px;">
+    <canvas id="weightChart" width="500"></canvas>
+    
+    <div style="margin-top: 10px; text-align: left; font-size: 10px; color: #333;">
+      <div>Aplicativo controle de peso</div>
+      <div id="nomeInfo"></div>
+      <div id="dataGerada"></div>
+      <div id="motivationalPhrase" style="margin-top: 4px; font-weight: bold;"></div>
+    </div>
+    
+    <div style="margin-top: 8px; margin-bottom: 10px;">
+      <button onclick="downloadPDF()">Baixar PDF</button>
+      <button onclick="shareOnWhatsApp()">Compartilhar no WhatsApp</button>
     </div>
   </div>
-  
+</div>
 
+
+
+        
 <!-- Botão para exibir/esconder o Gerar relatório -->
 <button id="toggleReportButton" onclick="toggleReport()">Gerar Relatório</button>
 <div id="reportSection" style="display: none;">
