@@ -1004,13 +1004,21 @@ async function shareOnWhatsApp() {
   const section = document.getElementById("graphSection");
 
   try {
+    // Expande temporariamente a altura total
+    section.style.height = "auto";
+    section.style.overflow = "visible";
+
     const canvas = await html2canvas(section, {
-      backgroundColor: "#ffffff", // Garante fundo branco
-      scale: 2 // Imagem com melhor qualidade
+      backgroundColor: "#ffffff",
+      scale: 2,
+      scrollY: -window.scrollY  // Corrige a posição de rolagem
     });
 
-    const imageDataUrl = canvas.toDataURL("image/png");
+    // Restaura o estilo original
+    section.style.height = "";
+    section.style.overflow = "";
 
+    const imageDataUrl = canvas.toDataURL("image/png");
     const blob = await (await fetch(imageDataUrl)).blob();
     const file = new File([blob], "grafico_peso.png", { type: "image/png" });
 
@@ -1028,6 +1036,7 @@ async function shareOnWhatsApp() {
     alert("Não foi possível compartilhar. Tente novamente.");
   }
 }
+
 
 
 
