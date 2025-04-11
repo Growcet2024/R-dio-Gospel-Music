@@ -9,9 +9,7 @@
 
 <!-- Biblioteca Gráfico -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
-
 
 <!-- Biblioteca PDF --> 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -253,28 +251,30 @@ button:hover {
 <!-- Botão para exibir/esconder o Gráfico -->
 <button id="toggleGraphButton" onclick="toggleGraph()">Gráfico Evolutivo</button>
 
-
 <div id="graphSection" style="display: none; overflow-x: auto;">
     <div style="min-width: 400px;">
       <canvas id="weightChart" width="500"></canvas>
   
       <div style="margin-top: 10px; text-align: left; font-size: 10px; color: #333;">
         <div>Aplicativo controle de peso</div>
-        <div>Nome: Edson | ID: C7Wp3ITE | Peso Desejado: 65 kg</div>
+
+        <div id="nomeInfo"></div>
+
         <div id="dataGerada"></div>
         <div id="motivationalPhrase" style="margin-top: 4px; font-weight: bold;"></div> <!-- ESSA LINHA É FUNDAMENTAL -->
       </div>
+      
+      <!-- Botões para exportar -->
+      <div style="margin-top: 8px; margin-bottom: 10px;">
+        <button onclick="downloadPDF()">Baixar PDF</button>
+        <button onclick="shareOnWhatsApp()">Compartilhar no WhatsApp</button>
+      </div>
+      
   
     </div>
   </div>
   
-  
-  
 
-    
-  
-
-  
 <!-- Botão para exibir/esconder o Gerar relatório -->
 <button id="toggleReportButton" onclick="toggleReport()">Gerar Relatório</button>
 <div id="reportSection" style="display: none;">
@@ -782,7 +782,7 @@ function generatePDF() {
    
     // Função para capturar os dados do localStorage e formatar corretamente
 
-function getWeightData() {
+    function getWeightData() {
     let userData = extractUserData();
     let records = userData.history || [];
 
@@ -812,6 +812,10 @@ function updateChart() {
     // Calcula as médias
     const mediaPeso = (weights.reduce((a, b) => a + b, 0) / weights.length).toFixed(2);
     const mediaIMC = (imcValues.reduce((a, b) => a + b, 0) / imcValues.length).toFixed(2);
+
+
+
+
 
     const ctx = document.getElementById("weightChart").getContext("2d");
     window.myChart = new Chart(ctx, {
@@ -896,10 +900,23 @@ function atualizarDataGerada() {
   }
 }
 
+function preencherNomeInfo() {
+    const userName = localStorage.getItem("userName") || "Usuário";
+    const userId = localStorage.getItem("userId") || "ID-desconhecido";
+    const desiredWeight = localStorage.getItem("desiredWeight") || "--";
+
+    const nomeInfoText = `Nome: ${userName} | ID: ${userId} | Peso Desejado: ${desiredWeight} kg`;
+    document.getElementById("nomeInfo").innerText = nomeInfoText;
+}
+
+updateChart();  // gráfico é desenhado
+preencherNomeInfo();  // exibe as infos corretamente
+
+
+
 updateChart();
 atualizarFraseMotivacional();
 atualizarDataGerada(); // ← ESSA LINHA ATUALIZA A DATA/HORA
-
 
 
 
@@ -929,8 +946,80 @@ function atualizarFraseMotivacional() {
 
 
 
+<!-- BLOCO 5 --> – Função para Baixar PDF
+
+  async function downloadPDF() {
+    const { jsPDF } = window.jspdf;
+    const canvas = document.getElementById("weightChart");
+
+    // Gera a imagem do gráfico
+    const chartImage = canvas.toDataURL("image/png", 1.0);
+
+    const doc = new jsPDF({
+      orientation: 'landscape',
+      unit: 'pt',
+      format: 'a4'
+    });
+
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const pageHeight = doc.internal.pageSize.getHeight();
+
+    const imgWidth = pageWidth - 80;  // Margem horizontal
+    const imgHeight = (canvas.height / canvas.width) * imgWidth;
+
+    // Título
+    doc.setFontSize(14);
+    doc.text("Relatório de Peso e IMC", 40, 40);
+
+    // Dados de identificação (puxados corretamente)
+    const userName = localStorage.getItem('userName') || "Usuário";
+    const userId = localStorage.getItem('userId') || "Sem ID";
+    const pesoDesejado = localStorage.getItem("desiredWeight") || "Não definido";
+    const dataGerada = document.getElementById("dataGerada").innerText;
+    const fraseMotivacional = document.getElementById("motivationalPhrase").innerText;
+
+    doc.setFontSize(10);
+    doc.text(`Nome: ${userName} | ID: ${userId} | Peso Desejado: ${pesoDesejado} kg`, 40, 60);
+    doc.text(dataGerada, 40, 75);
+    doc.setFont(undefined, "bold");
+    doc.text(fraseMotivacional, 40, 90);
+    doc.setFont(undefined, "normal");
+
+    // Adiciona imagem do gráfico
+    doc.addImage(chartImage, "PNG", 40, 110, imgWidth, imgHeight);
+
+    // Salvar
+    doc.save("grafico_peso_imc.pdf");
+  }
 
 
+
+  <!-- BLOCO 6 – Função para Compartilhar no WhatsApp -->
+
+  async function shareOnWhatsApp() {
+  const canvas = document.getElementById("weightChart");
+  const chartImage = canvas.toDataURL("image/png");
+
+  // Abre a imagem em uma nova aba com instrução
+  const imageWindow = window.open();
+  imageWindow.document.write(`
+    <html>
+      <head>
+        <title>Gráfico - Salvar para Enviar</title>
+      </head>
+      <body style="text-align: center; font-family: Arial;">
+        <h3>📌 Toque e segure na imagem para salvar (ou clique com o botão direito)</h3>
+        <img src="${chartImage}" style="max-width: 90%; border: 1px solid #ccc; margin-top: 20px;">
+        <p style="font-size: 12px; color: #666;">Depois envie essa imagem no WhatsApp que será aberto.</p>
+      </body>
+    </html>
+  `);
+
+  // Mensagem para WhatsApp
+  const message = encodeURIComponent("Segue meu gráfico de evolução de peso/IMC! Salvei a imagem e estou te enviando. 📈💪");
+  const whatsappLink = `https://wa.me/?text=${message}`;
+  window.open(whatsappLink, "_blank");
+}
 
 
 
@@ -1286,7 +1375,6 @@ function editEntry(index) {
     document.querySelector('button[onclick="addWeight()"]').style.display = 'none'; // Esconde o botão "Adicionar Registro"
 }
 
-
 // Função de salvar a edição
 function saveEditedEntry() {
     let index = document.getElementById('historyIndex').value;  // Pega o índice do histórico que foi editado
@@ -1346,7 +1434,7 @@ function addWeight() {
     document.getElementById('resultDisplay').innerText = `Peso Saldo: ${balanceSign} kg | IMC: ${imc}`;
 
     let timestamp = new Date().toLocaleDateString('pt-BR');
-    
+
     let entry = {
         timestamp: timestamp,
         currentWeight: currentWeight,
@@ -1358,6 +1446,9 @@ function addWeight() {
     localStorage.setItem('history', JSON.stringify(history));
 
     updateHistory(); // Atualiza a lista no histórico
+
+
+
 
     // **📌 Limpa o campo de peso após adicionar**
     document.getElementById('currentWeight').value = "";
@@ -1512,5 +1603,4 @@ document.addEventListener("DOMContentLoaded", function() {
 
 </body>
 </html>
-
 
