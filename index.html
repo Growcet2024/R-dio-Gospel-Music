@@ -996,48 +996,52 @@ function atualizarFraseMotivacional() {
 
   <!-- BLOCO 6 – Função para Compartilhar no WhatsApp -->
 
+
 async function shareOnWhatsApp() {
-  // Copia os dados para a área de exportação
+  // 1. Copiar dados para o gráfico oculto
+  const originalChart = Chart.getChart("weightChart");
+  const exportCanvas = document.getElementById("exportChart");
+
+  // Destroi gráfico anterior, se existir
+  if (Chart.getChart("exportChart")) {
+    Chart.getChart("exportChart").destroy();
+  }
+
+  // Cria novo gráfico com os mesmos dados
+  new Chart(exportCanvas, {
+    type: 'line',
+    data: originalChart.data,
+    options: originalChart.options
+  });
+
+  // 2. Atualiza os textos na área oculta
   document.getElementById("exportNomeInfo").innerText = document.getElementById("nomeInfo").innerText;
   document.getElementById("exportPesoDesejado").innerText = document.getElementById("pesoDesejado").innerText;
   document.getElementById("exportDataGerada").innerText = document.getElementById("dataGerada").innerText;
   document.getElementById("exportMotivationalPhrase").innerText = document.getElementById("motivationalPhrase").innerText;
 
-  // Copia o gráfico para o novo canvas
-  const mainCanvas = document.getElementById("weightChart");
-  const exportCanvas = document.getElementById("exportChart");
-  const exportCtx = exportCanvas.getContext("2d");
-  exportCtx.clearRect(0, 0, exportCanvas.width, exportCanvas.height);
-  exportCtx.drawImage(mainCanvas, 0, 0, exportCanvas.width, exportCanvas.height);
+  // 3. Gera imagem da área oculta
+  const exportSection = document.getElementById("exportSection");
 
-  // Aguarda o html2canvas renderizar a imagem da área limpa
-  const section = document.getElementById("exportSection");
-
-  try {
-    const canvas = await html2canvas(section, {
-      backgroundColor: "#ffffff",
-      scale: 2,
-      scrollY: -window.scrollY
-    });
-
-    const imageDataUrl = canvas.toDataURL("image/png");
-    const blob = await (await fetch(imageDataUrl)).blob();
-    const file = new File([blob], "grafico_peso.png", { type: "image/png" });
-
-    if (navigator.canShare && navigator.canShare({ files: [file] })) {
-      await navigator.share({
+  html2canvas(exportSection).then(canvas => {
+    canvas.toBlob(blob => {
+      const file = new File([blob], "grafico.png", { type: "image/png" });
+      const shareData = {
         files: [file],
-        title: "Gráfico de Peso e IMC",
-        text: "Veja meu progresso no controle de peso!"
-      });
-    } else {
-      alert("Compartilhamento não suportado neste dispositivo.");
-    }
-  } catch (error) {
-    console.error("Erro ao compartilhar:", error);
-    alert("Erro ao tentar compartilhar.");
-  }
+        title: "Relatório de Peso",
+        text: "Veja meu gráfico de evolução!"
+      };
+
+      if (navigator.canShare && navigator.canShare(shareData)) {
+        navigator.share(shareData)
+          .catch(error => console.error("Erro ao compartilhar:", error));
+      } else {
+        alert("Este navegador não suporta compartilhamento de arquivos.");
+      }
+    });
+  });
 }
+
 
 
 
