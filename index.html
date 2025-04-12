@@ -273,10 +273,11 @@ button:hover {
 </div>
 
 
-<!-- Container para o visualizador de PDF -->
+<!-- Container para visualização do PDF -->
 <div id="pdfViewerContainer" style="display:none; width:100%; height:100vh;">
   <iframe id="pdfViewer" style="width:100%; height:100%; border:none;"></iframe>
 </div>
+
 
       
 <!-- Botão para exibir/esconder o Gerar relatório -->
@@ -954,7 +955,7 @@ function atualizarFraseMotivacional() {
 
   
 
- async function downloadPDF() {
+async function downloadPDF() {
   const { jsPDF } = window.jspdf;
   const canvas = document.getElementById("weightChart");
 
@@ -997,20 +998,26 @@ function atualizarFraseMotivacional() {
   // Detecta se o dispositivo é mobile
   const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
-  // Gera o PDF como Data URI (para visualização)
-  const pdfDataUrl = doc.output('datauristring');
+  // Gera o PDF como Blob
+  const pdfBlob = await doc.output("blob");
+  const pdfUrl = URL.createObjectURL(pdfBlob);
 
   if (isMobile) {
-    // No celular, abrir o PDF diretamente na mesma janela ou nova aba
-    const pdfWindow = window.open(pdfDataUrl, '_blank');
-    if (!pdfWindow) {
-      alert("O PDF não pôde ser aberto. Verifique se o navegador está bloqueando pop-ups.");
-    }
+    // No celular, exibe o PDF dentro de um iframe
+    const container = document.getElementById("pdfViewerContainer");
+    const iframe = document.getElementById("pdfViewer");
+
+    iframe.src = pdfUrl;
+    container.style.display = "block";
+
+    // Esconde o resto da página enquanto visualiza o PDF (opcional)
+    document.body.style.overflow = "hidden";
   } else {
     // No desktop, baixar diretamente
     doc.save("grafico_peso_imc.pdf");
   }
 }
+
 
 
 
