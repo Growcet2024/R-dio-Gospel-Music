@@ -265,17 +265,16 @@ button:hover {
       <div id="dataGerada"></div>
       <div id="motivationalPhrase" style="margin-top: 4px; font-weight: bold;"></div>
     </div>
-
     <div style="margin-top: 8px; margin-bottom: 10px;">
-      <button onclick="downloadPDF()">Baixar PDF</button>
+        
+      <!-- Botão para exibir o PDF com opções -->
+<button id="downloadPDFButton" onclick="openPDF()">Baixar PDF</button>
+        
     </div>
   </div>
 </div>
 
-
-
-
-      
+     
 <!-- Botão para exibir/esconder o Gerar relatório -->
 <button id="toggleReportButton" onclick="toggleReport()">Gerar Relatório</button>
 <div id="reportSection" style="display: none;">
@@ -947,13 +946,14 @@ function atualizarFraseMotivacional() {
 
 
 
-<!-- BLOCO 5 --> – Função para Baixar PDF
 
-async function downloadPDF() {
+    <!-- BLOCO 5 --> – Função para Baixar PDF
+
+    async function openPDF() {
   const { jsPDF } = window.jspdf;
-  const canvas = document.getElementById("weightChart");
 
-  // Gera a imagem do gráfico
+  // Gera o PDF com o gráfico e outros dados
+  const canvas = document.getElementById("weightChart");
   const chartImage = canvas.toDataURL("image/png", 1.0);
 
   const doc = new jsPDF({
@@ -963,55 +963,28 @@ async function downloadPDF() {
   });
 
   const pageWidth = doc.internal.pageSize.getWidth();
-  const pageHeight = doc.internal.pageSize.getHeight();
-
-  const imgWidth = pageWidth - 80;  // Margem horizontal
+  const imgWidth = pageWidth - 80;
   const imgHeight = (canvas.height / canvas.width) * imgWidth;
 
-  // Título
+  // Título e outros textos
   doc.setFontSize(14);
   doc.text("Relatório de Peso e IMC", 40, 40);
+  // Outros dados (exemplo)
+  doc.text(`Nome: ${localStorage.getItem('userName')}`, 40, 60);
 
-  // Dados de identificação
-  const userName = localStorage.getItem('userName') || "Usuário";
-  const userId = localStorage.getItem('userId') || "Sem ID";
-  const pesoDesejado = localStorage.getItem("desiredWeight") || "Não definido";
-  const dataGerada = document.getElementById("dataGerada").innerText;
-  const fraseMotivacional = document.getElementById("motivationalPhrase").innerText;
-
-  doc.setFontSize(10);
-  doc.text(`Nome: ${userName} | ID: ${userId} | Peso Desejado: ${pesoDesejado} kg`, 40, 60);
-  doc.text(dataGerada, 40, 75);
-  doc.setFont(undefined, "bold");
-  doc.text(fraseMotivacional, 40, 90);
-  doc.setFont(undefined, "normal");
-
-  // Adiciona imagem do gráfico
+  // Adiciona a imagem do gráfico
   doc.addImage(chartImage, "PNG", 40, 110, imgWidth, imgHeight);
 
-  // Gera o PDF como Blob
-  const pdfBlob = await doc.output("blob");
-  
-  // Cria um URL para o Blob
+  // Gerar o PDF como uma URL
+  const pdfBlob = doc.output("blob");
   const pdfUrl = URL.createObjectURL(pdfBlob);
 
-  // Detecta se o dispositivo é mobile
-  const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+  // Abrir o PDF em uma nova aba
+  const pdfWindow = window.open(pdfUrl, '_blank');
 
-  if (isMobile) {
-    // No celular, abrir o PDF diretamente na nova aba
-    const pdfWindow = window.open(pdfUrl, '_blank');
-    
-    if (!pdfWindow) {
-      alert("O PDF não pôde ser aberto. Verifique se o navegador está bloqueando pop-ups.");
-    }
-  } else {
-    // No desktop, abrir o PDF diretamente (não forçar download)
-    const pdfWindow = window.open(pdfUrl, '_blank');
-    
-    if (!pdfWindow) {
-      alert("O PDF não pôde ser aberto. Verifique se o navegador está bloqueando pop-ups.");
-    }
+  // Verifica se a janela foi aberta corretamente
+  if (!pdfWindow) {
+    alert("Por favor, permita pop-ups no seu navegador.");
   }
 }
 
