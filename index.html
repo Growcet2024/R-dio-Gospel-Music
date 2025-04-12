@@ -945,52 +945,61 @@ function atualizarFraseMotivacional() {
 
 <!-- BLOCO 5 --> – Função para Baixar PDF
 
-  async function downloadPDF() {
-    const { jsPDF } = window.jspdf;
-    const canvas = document.getElementById("weightChart");
+  
+async function downloadPDF() {
+  const { jsPDF } = window.jspdf;
+  const canvas = document.getElementById("weightChart");
 
-    // Gera a imagem do gráfico
-    const chartImage = canvas.toDataURL("image/png", 1.0);
+  // Gera a imagem do gráfico
+  const chartImage = canvas.toDataURL("image/png", 1.0);
 
-    const doc = new jsPDF({
-      orientation: 'landscape',
-      unit: 'pt',
-      format: 'a4'
-    });
+  const doc = new jsPDF({
+    orientation: 'landscape',
+    unit: 'pt',
+    format: 'a4'
+  });
 
-    const pageWidth = doc.internal.pageSize.getWidth();
-    const pageHeight = doc.internal.pageSize.getHeight();
+  const pageWidth = doc.internal.pageSize.getWidth();
+  const pageHeight = doc.internal.pageSize.getHeight();
 
-    const imgWidth = pageWidth - 80;  // Margem horizontal
-    const imgHeight = (canvas.height / canvas.width) * imgWidth;
+  const imgWidth = pageWidth - 80;
+  const imgHeight = (canvas.height / canvas.width) * imgWidth;
 
-    // Título
-    doc.setFontSize(14);
-    doc.text("Relatório de Peso e IMC", 40, 40);
+  // Título
+  doc.setFontSize(14);
+  doc.text("Relatório de Peso e IMC", 40, 40);
 
-    // Dados de identificação (puxados corretamente)
-    const userName = localStorage.getItem('userName') || "Usuário";
-    const userId = localStorage.getItem('userId') || "Sem ID";
-    const pesoDesejado = localStorage.getItem("desiredWeight") || "Não definido";
-    const dataGerada = document.getElementById("dataGerada").innerText;
-    const fraseMotivacional = document.getElementById("motivationalPhrase").innerText;
+  // Dados
+  const userName = localStorage.getItem('userName') || "Usuário";
+  const userId = localStorage.getItem('userId') || "Sem ID";
+  const pesoDesejado = localStorage.getItem("desiredWeight") || "Não definido";
+  const dataGerada = document.getElementById("dataGerada").innerText;
+  const fraseMotivacional = document.getElementById("motivationalPhrase").innerText;
 
-    doc.setFontSize(10);
-    doc.text(`Nome: ${userName} | ID: ${userId} | Peso Desejado: ${pesoDesejado} kg`, 40, 60);
-    doc.text(dataGerada, 40, 75);
-    doc.setFont(undefined, "bold");
-    doc.text(fraseMotivacional, 40, 90);
-    doc.setFont(undefined, "normal");
+  doc.setFontSize(10);
+  doc.text(`Nome: ${userName} | ID: ${userId} | Peso Desejado: ${pesoDesejado} kg`, 40, 60);
+  doc.text(dataGerada, 40, 75);
+  doc.setFont(undefined, "bold");
+  doc.text(fraseMotivacional, 40, 90);
+  doc.setFont(undefined, "normal");
 
-    // Adiciona imagem do gráfico
-    doc.addImage(chartImage, "PNG", 40, 110, imgWidth, imgHeight);
+  // Gráfico
+  doc.addImage(chartImage, "PNG", 40, 110, imgWidth, imgHeight);
 
-    // Salvar
+  // Detecta se é mobile
+  const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+  if (isMobile) {
+    // Mobile: abrir o PDF em nova aba
+    const blob = await doc.output("blob");
+    const blobUrl = URL.createObjectURL(blob);
+    window.open(blobUrl, '_blank');
+  } else {
+    // Desktop: baixar direto
     doc.save("grafico_peso_imc.pdf");
-
-
-      
   }
+}
+
 
 
 
