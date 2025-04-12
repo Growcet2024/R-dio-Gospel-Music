@@ -949,7 +949,7 @@ function atualizarFraseMotivacional() {
 
 <!-- BLOCO 5 --> – Função para Baixar PDF
 
- async function downloadPDF() {
+async function downloadPDF() {
   const { jsPDF } = window.jspdf;
   const canvas = document.getElementById("weightChart");
 
@@ -989,26 +989,32 @@ function atualizarFraseMotivacional() {
   // Adiciona imagem do gráfico
   doc.addImage(chartImage, "PNG", 40, 110, imgWidth, imgHeight);
 
-  // Gera o PDF como Data URI
-  const pdfDataUrl = doc.output('datauristring');
+  // Gera o PDF como Blob
+  const pdfBlob = await doc.output("blob");
+  
+  // Cria um URL para o Blob
+  const pdfUrl = URL.createObjectURL(pdfBlob);
 
   // Detecta se o dispositivo é mobile
   const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
   if (isMobile) {
-    // No celular, abrir o PDF diretamente na aba do navegador
-    const pdfWindow = window.open(pdfDataUrl, '_blank');
+    // No celular, abrir o PDF diretamente na nova aba
+    const pdfWindow = window.open(pdfUrl, '_blank');
     
-    // Verifica se o pop-up foi bloqueado
     if (!pdfWindow) {
       alert("O PDF não pôde ser aberto. Verifique se o navegador está bloqueando pop-ups.");
     }
   } else {
-    // No desktop, faz o download do PDF
-    doc.save("grafico_peso_imc.pdf");
+    // No desktop, abrir o PDF diretamente (não forçar download)
+    const pdfWindow = window.open(pdfUrl, '_blank');
+    
+    if (!pdfWindow) {
+      alert("O PDF não pôde ser aberto. Verifique se o navegador está bloqueando pop-ups.");
+    }
   }
 }
- 
+
 
 
 
