@@ -272,6 +272,13 @@ button:hover {
   </div>
 </div>
 
+
+<!-- Container para o visualizador de PDF -->
+<div id="pdfViewerContainer" style="display:none; width:100%; height:100vh;">
+  <iframe id="pdfViewer" style="width:100%; height:100%; border:none;"></iframe>
+</div>
+
+      
 <!-- Botão para exibir/esconder o Gerar relatório -->
 <button id="toggleReportButton" onclick="toggleReport()">Gerar Relatório</button>
 <div id="reportSection" style="display: none;">
@@ -946,7 +953,8 @@ function atualizarFraseMotivacional() {
 <!-- BLOCO 5 --> – Função para Baixar PDF
 
   
-async function downloadPDF() {
+
+  async function downloadPDF() {
   const { jsPDF } = window.jspdf;
   const canvas = document.getElementById("weightChart");
 
@@ -969,7 +977,7 @@ async function downloadPDF() {
   doc.setFontSize(14);
   doc.text("Relatório de Peso e IMC", 40, 40);
 
-  // Dados
+  // Dados de identificação
   const userName = localStorage.getItem('userName') || "Usuário";
   const userId = localStorage.getItem('userId') || "Sem ID";
   const pesoDesejado = localStorage.getItem("desiredWeight") || "Não definido";
@@ -983,22 +991,31 @@ async function downloadPDF() {
   doc.text(fraseMotivacional, 40, 90);
   doc.setFont(undefined, "normal");
 
-  // Gráfico
+  // Adiciona a imagem do gráfico
   doc.addImage(chartImage, "PNG", 40, 110, imgWidth, imgHeight);
 
-  // Detecta se é mobile
+  // Detecta se o dispositivo é mobile
   const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
   if (isMobile) {
-    // Mobile: abrir o PDF em nova aba
-    const blob = await doc.output("blob");
-    const blobUrl = URL.createObjectURL(blob);
-    window.open(blobUrl, '_blank');
+    // Mobile: exibe o PDF no próprio navegador dentro do iframe
+    const pdfDataUrl = doc.output('datauristring');
+
+    // Exibe o PDF no iframe
+    const container = document.getElementById("pdfViewerContainer");
+    const iframe = document.getElementById("pdfViewer");
+
+    iframe.src = pdfDataUrl;
+    container.style.display = "block";
+
+    // Esconde o resto da página enquanto visualiza o PDF (opcional)
+    document.body.style.overflow = "hidden";
   } else {
-    // Desktop: baixar direto
+    // Desktop: faz o download do PDF
     doc.save("grafico_peso_imc.pdf");
   }
 }
+
 
 
 
