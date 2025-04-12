@@ -268,7 +268,7 @@ button:hover {
     <div style="margin-top: 8px; margin-bottom: 10px;">
         
       <!-- Botão para exibir o PDF com opções -->
-<button id="downloadPDFButton" onclick="openPDF()">Baixar PDF</button>
+<button onclick="downloadPDF()">Baixar PDF</button>
         
     </div>
   </div>
@@ -947,47 +947,53 @@ function atualizarFraseMotivacional() {
 
 
 
-    <!-- BLOCO 5 --> – Função para Baixar PDF
+ 
 
-    async function openPDF() {
-  const { jsPDF } = window.jspdf;
+ <!-- BLOCO 5 --> – Função para Baixar PDF
 
-  // Gera o PDF com o gráfico e outros dados
-  const canvas = document.getElementById("weightChart");
-  const chartImage = canvas.toDataURL("image/png", 1.0);
+  async function downloadPDF() {
+    const { jsPDF } = window.jspdf;
+    const canvas = document.getElementById("weightChart");
 
-  const doc = new jsPDF({
-    orientation: 'landscape',
-    unit: 'pt',
-    format: 'a4'
-  });
+    // Gera a imagem do gráfico
+    const chartImage = canvas.toDataURL("image/png", 1.0);
 
-  const pageWidth = doc.internal.pageSize.getWidth();
-  const imgWidth = pageWidth - 80;
-  const imgHeight = (canvas.height / canvas.width) * imgWidth;
+    const doc = new jsPDF({
+      orientation: 'landscape',
+      unit: 'pt',
+      format: 'a4'
+    });
 
-  // Título e outros textos
-  doc.setFontSize(14);
-  doc.text("Relatório de Peso e IMC", 40, 40);
-  // Outros dados (exemplo)
-  doc.text(`Nome: ${localStorage.getItem('userName')}`, 40, 60);
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const pageHeight = doc.internal.pageSize.getHeight();
 
-  // Adiciona a imagem do gráfico
-  doc.addImage(chartImage, "PNG", 40, 110, imgWidth, imgHeight);
+    const imgWidth = pageWidth - 80;  // Margem horizontal
+    const imgHeight = (canvas.height / canvas.width) * imgWidth;
 
-  // Gerar o PDF como uma URL
-  const pdfBlob = doc.output("blob");
-  const pdfUrl = URL.createObjectURL(pdfBlob);
+    // Título
+    doc.setFontSize(14);
+    doc.text("Relatório de Peso e IMC", 40, 40);
 
-  // Abrir o PDF em uma nova aba
-  const pdfWindow = window.open(pdfUrl, '_blank');
+    // Dados de identificação (puxados corretamente)
+    const userName = localStorage.getItem('userName') || "Usuário";
+    const userId = localStorage.getItem('userId') || "Sem ID";
+    const pesoDesejado = localStorage.getItem("desiredWeight") || "Não definido";
+    const dataGerada = document.getElementById("dataGerada").innerText;
+    const fraseMotivacional = document.getElementById("motivationalPhrase").innerText;
 
-  // Verifica se a janela foi aberta corretamente
-  if (!pdfWindow) {
-    alert("Por favor, permita pop-ups no seu navegador.");
+    doc.setFontSize(10);
+    doc.text(`Nome: ${userName} | ID: ${userId} | Peso Desejado: ${pesoDesejado} kg`, 40, 60);
+    doc.text(dataGerada, 40, 75);
+    doc.setFont(undefined, "bold");
+    doc.text(fraseMotivacional, 40, 90);
+    doc.setFont(undefined, "normal");
+
+    // Adiciona imagem do gráfico
+    doc.addImage(chartImage, "PNG", 40, 110, imgWidth, imgHeight);
+
+    // Salvar
+    doc.save("grafico_peso_imc.pdf");
   }
-}
-
 
 
 
