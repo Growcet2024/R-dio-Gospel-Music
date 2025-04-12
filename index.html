@@ -970,7 +970,7 @@ function atualizarFraseMotivacional() {
   const pageWidth = doc.internal.pageSize.getWidth();
   const pageHeight = doc.internal.pageSize.getHeight();
 
-  const imgWidth = pageWidth - 80;
+  const imgWidth = pageWidth - 80;  // Margem horizontal
   const imgHeight = (canvas.height / canvas.width) * imgWidth;
 
   // Título
@@ -991,31 +991,27 @@ function atualizarFraseMotivacional() {
   doc.text(fraseMotivacional, 40, 90);
   doc.setFont(undefined, "normal");
 
-  // Adiciona a imagem do gráfico
+  // Adiciona imagem do gráfico
   doc.addImage(chartImage, "PNG", 40, 110, imgWidth, imgHeight);
 
   // Detecta se o dispositivo é mobile
   const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
+  // Gera o PDF como Blob
+  const pdfBlob = await doc.output("blob");
+  const pdfUrl = URL.createObjectURL(pdfBlob);
+
   if (isMobile) {
-    // Mobile: exibe o PDF no próprio navegador dentro do iframe
-    const pdfDataUrl = doc.output('datauristring');
-
-    // Exibe o PDF no iframe
-    const container = document.getElementById("pdfViewerContainer");
-    const iframe = document.getElementById("pdfViewer");
-
-    iframe.src = pdfDataUrl;
-    container.style.display = "block";
-
-    // Esconde o resto da página enquanto visualiza o PDF (opcional)
-    document.body.style.overflow = "hidden";
+    // No celular, abrir o PDF na mesma janela ou em uma nova aba
+    const pdfWindow = window.open(pdfUrl, "_blank");
+    if (!pdfWindow) {
+      alert("O PDF não pôde ser aberto. Verifique se o navegador está bloqueando pop-ups.");
+    }
   } else {
-    // Desktop: faz o download do PDF
+    // No desktop, baixar diretamente
     doc.save("grafico_peso_imc.pdf");
   }
 }
-
 
 
 
