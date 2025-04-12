@@ -10,8 +10,9 @@
 <!-- Biblioteca Gráfico -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
-    
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
 
 
 <!-- Biblioteca PDF --> 
@@ -254,29 +255,22 @@ button:hover {
 <!-- Botão para exibir/esconder o Gráfico -->
 <button id="toggleGraphButton" onclick="toggleGraph()">Gráfico Evolutivo</button>
 
-<div id="graphSection" style="display: none; overflow-x: auto;">
-    <div style="min-width: 400px;">
-      <canvas id="weightChart" width="500"></canvas>
-  
-      <div style="margin-top: 10px; text-align: left; font-size: 10px; color: #333;">
-        <div>Aplicativo controle de peso</div>
+<div id="graphSection" style="display: none;">
+  <div id="graphContainer" style="background: white; padding: 10px; min-width: 400px;">
+    <canvas id="weightChart" width="500"></canvas>
 
-        <div id="nomeInfo"></div>
+    <div style="margin-top: 10px; text-align: left; font-size: 10px; color: #333;">
+      <div>Aplicativo controle de peso</div>
+      <div id="nomeInfo"></div>
+      <div id="dataGerada"></div>
+      <div id="motivationalPhrase" style="margin-top: 4px; font-weight: bold;"></div>
+    </div>
 
-        <div id="dataGerada"></div>
-        <div id="motivationalPhrase" style="margin-top: 4px; font-weight: bold;"></div> <!-- ESSA LINHA É FUNDAMENTAL -->
-      </div>
-      
-      <!-- Botões para exportar -->
-      <div style="margin-top: 8px; margin-bottom: 10px;">
-        <button onclick="downloadPDF()">Baixar PDF</button>
-        <button onclick="shareOnWhatsApp()">Compartilhar no WhatsApp</button>
-      </div>
-      
-  
+    <div style="margin-top: 8px; margin-bottom: 10px;">
+      <button onclick="downloadPDF()">Baixar PDF</button>
     </div>
   </div>
-  
+</div>
 
 <!-- Botão para exibir/esconder o Gerar relatório -->
 <button id="toggleReportButton" onclick="toggleReport()">Gerar Relatório</button>
@@ -285,17 +279,6 @@ button:hover {
     Baixe o relatório ou envie-o pelo WhatsApp
 </div>
 
-
-
-
-
-        
-
-
-
-
-
-        
 
         <!-- Botão IMC -->
 <button id="toggleButton" onclick="toggleTable()">Mostrar Tabela IMC</button>
@@ -1008,61 +991,8 @@ function atualizarFraseMotivacional() {
 
 
 
-  <!-- BLOCO 6 – Função para Compartilhar no WhatsApp -->
 
-
-
-
-async function shareOnWhatsApp() {
-  const canvas = document.getElementById("weightChart");
-
-  // Criar um novo canvas com fundo branco
-  const whiteBgCanvas = document.createElement("canvas");
-  whiteBgCanvas.width = canvas.width;
-  whiteBgCanvas.height = canvas.height;
-
-  const ctx = whiteBgCanvas.getContext("2d");
-  ctx.fillStyle = "#ffffff"; // fundo branco
-  ctx.fillRect(0, 0, whiteBgCanvas.width, whiteBgCanvas.height);
-  ctx.drawImage(canvas, 0, 0); // desenha o gráfico original por cima
-
-  // Agora converte o novo canvas para blob
-  whiteBgCanvas.toBlob(async function(blob) {
-    if (!blob) {
-      alert("Erro ao gerar imagem.");
-      return;
-    }
-
-    const file = new File([blob], "grafico_peso.png", { type: "image/png" });
-
-    if (navigator.canShare && navigator.canShare({ files: [file] })) {
-      try {
-        await navigator.share({
-          files: [file],
-          title: "Meu Gráfico de Peso",
-          text: "Confira minha evolução no controle de peso!"
-        });
-      } catch (error) {
-        console.error("Erro ao compartilhar:", error);
-        alert("Compartilhamento cancelado ou falhou.");
-      }
-    } else {
-      alert("O compartilhamento de imagem não é suportado neste dispositivo ou navegador.");
-    }
-  }, "image/png");
-}
-
-
-
-
-
-
-
-
-
-
-
-
+  
 
 
 
@@ -1641,18 +1571,6 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 </script>
 
-
-<!-- Área escondida só para exportação -->
-<div id="exportSection" style="display: none; background: white; padding: 10px; text-align: left; font-size: 10px; color: #333;">
-  <div>Aplicativo controle de peso</div>
-  <div id="exportNomeInfo"></div>
-  <div id="exportPesoDesejado"></div>
-  <div id="exportDataGerada"></div>
-  <div id="exportMotivationalPhrase" style="margin-top: 4px; font-weight: bold;"></div>
-  <canvas id="exportChart" width="500" height="250"></canvas>
-</div>
-
-</body>
-</html>
-
-
+  </body>
+  </html>
+  
