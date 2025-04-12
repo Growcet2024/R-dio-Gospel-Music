@@ -273,10 +273,6 @@ button:hover {
 </div>
 
 
-<!-- Container para visualização do PDF -->
-<div id="pdfViewerContainer" style="display:none; width:100%; height:100vh;">
-  <iframe id="pdfViewer" style="width:100%; height:100%; border:none;"></iframe>
-</div>
 
 
       
@@ -953,9 +949,7 @@ function atualizarFraseMotivacional() {
 
 <!-- BLOCO 5 --> – Função para Baixar PDF
 
-  
-
-async function downloadPDF() {
+ async function downloadPDF() {
   const { jsPDF } = window.jspdf;
   const canvas = document.getElementById("weightChart");
 
@@ -995,28 +989,26 @@ async function downloadPDF() {
   // Adiciona imagem do gráfico
   doc.addImage(chartImage, "PNG", 40, 110, imgWidth, imgHeight);
 
+  // Gera o PDF como Data URI
+  const pdfDataUrl = doc.output('datauristring');
+
   // Detecta se o dispositivo é mobile
   const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
-  // Gera o PDF como Blob
-  const pdfBlob = await doc.output("blob");
-  const pdfUrl = URL.createObjectURL(pdfBlob);
-
   if (isMobile) {
-    // No celular, exibe o PDF dentro de um iframe
-    const container = document.getElementById("pdfViewerContainer");
-    const iframe = document.getElementById("pdfViewer");
-
-    iframe.src = pdfUrl;
-    container.style.display = "block";
-
-    // Esconde o resto da página enquanto visualiza o PDF (opcional)
-    document.body.style.overflow = "hidden";
+    // No celular, abrir o PDF diretamente na aba do navegador
+    const pdfWindow = window.open(pdfDataUrl, '_blank');
+    
+    // Verifica se o pop-up foi bloqueado
+    if (!pdfWindow) {
+      alert("O PDF não pôde ser aberto. Verifique se o navegador está bloqueando pop-ups.");
+    }
   } else {
-    // No desktop, baixar diretamente
+    // No desktop, faz o download do PDF
     doc.save("grafico_peso_imc.pdf");
   }
 }
+ 
 
 
 
