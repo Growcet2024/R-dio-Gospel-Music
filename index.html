@@ -988,11 +988,9 @@ function atualizarFraseMotivacional() {
     doc.addImage(chartImage, "PNG", 40, 110, imgWidth, imgHeight);
 
     // Salvar
-    const pdfUrl = doc.output("bloburl");
+  // Abrir visualização do PDF (evita download automático em alguns navegadores)
+const pdfUrl = doc.output("bloburl");
 window.open(pdfUrl, "_blank");
-
-alert("PDF gerado com sucesso!\n\nPara compartilhar no WhatsApp:\n1. Toque nos 3 pontinhos no canto superior direito.\n2. Escolha 'Compartilhar'.\n3. Selecione WhatsApp ou outro app desejado.");
-
 
       
   }
