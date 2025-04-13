@@ -199,8 +199,6 @@ button:hover {
   overflow-x: auto;          /* Manter a rolagem horizontal */
 }
 
-
-
 </style>
     
 
@@ -254,7 +252,6 @@ button:hover {
 
 <div id="graphSection" style="display: none;">
     <div id="graphContainer" style="background: white; padding: 10px; min-width: 400px;">
-  
       <canvas id="weightChart" width="500"></canvas>
   
       <div style="margin-top: 10px; text-align: left; font-size: 10px; color: #333;">
@@ -263,13 +260,12 @@ button:hover {
         <div id="dataGerada"></div>
         <div id="motivationalPhrase" style="margin-top: 4px; font-weight: bold;"></div>
       </div>
-  
-      <!-- Botão + Frase, tudo dentro do graphContainer -->
-      <div style="margin-top: 8px; margin-bottom: 12px; text-align: left;">
-        <button onclick="downloadPDF()" style="width: 275px;">Baixar Gráfico</button>
 
-       
-        <div style="font-size: 10px; color: #555; margin-top: 4px;">
+<!-- Botão + Frase, tudo dentro do graphContainer -->
+    <div style="margin-top: 8px; margin-bottom: 10px; text-align: left; padding-left: 30px;">
+      <button onclick="downloadPDF()" style="width: 330px;">Baixar Gráfico</button>
+
+        <div style="font-size: 12px; color: #555; margin-top: 4px;">
             Após abrir o PDF, toque nos três pontinhos e escolha <br>
             compartilhar no WhatsApp, imprimir ou salvar novamente.
           </div>
@@ -278,14 +274,18 @@ button:hover {
     </div>
   </div>
   
-      
-
 <!-- Botão para exibir/esconder o Gerar relatório -->
 <button id="toggleReportButton" onclick="toggleReport()">Gerar Relatório</button>
+
 <div id="reportSection" style="display: none;">
-    <div id="reportContent"></div> <!-- histórico -->
-    Após abrir o PDF, toque nos três pontihos e secolha compartilhar no whatsapp, imprimir ou salvar novamente.
+  <div id="reportContent"></div> <!-- histórico -->
+
+  <!-- Frase final com tamanho menor e fora do graphContainer -->
+  <div style="font-size: 12px; color: #555; margin-top: 6px; padding: 0 10px;">
+    Após abrir o PDF, toque nos três pontinhos e escolha compartilhar no WhatsApp, imprimir ou salvar novamente.
+  </div>
 </div>
+
 
 
         <!-- Botão IMC -->
@@ -444,9 +444,9 @@ if (weightDifference > 0) {
 }
 
 // Unificando as frases: Contagem de registros e diferença de peso
-content += `<p style="text-align: center; margin-top: 10px; font-size: 13px; font-weight: bold; color: #333;">
-    Aqui tem ${history.length} registros, ${weightChangeMessage}</p>`;
 
+content += `<p style="text-align: center; margin-top: 10px; font-size: 12px; color: #333;">
+  Aqui tem ${history.length} registros, ${weightChangeMessage}</p>`;
 
 
 // FRASE MOTIVACIONAL
@@ -467,15 +467,15 @@ if (history.length > 0) {
 
     // Quando o peso estiver suficientemente próximo do objetivo (considerando a tolerância)
     if (Math.abs(weightDifference) <= tolerance) {
-        motivationalMessage = `<p style='text-align: center; font-size: 14px; color: green; font-weight: bold;'>Parabéns! Você alcançou os ${desiredWeight} kg! Mantenha o foco para manter esse peso saudável!</p>`;
+        motivationalMessage = `<p style='text-align: center; font-size: 12px; color: green;'>Parabéns! Você alcançou os ${desiredWeight} kg! Mantenha o foco para manter esse peso saudável!</p>`;
     } 
     // Quando estiver muito perto de alcançar o objetivo
     else if (weightDifference > 0 && weightDifference <= 2) {
-        motivationalMessage = `<p style='text-align: center; font-size: 14px; color: blue; font-weight: bold;'>Ótimo progresso! Você está prestes a atingir ${desiredWeight} kg! Faltam só ${weightDifference.toFixed(2)} kg para alcançar sua meta!</p>`;
+        motivationalMessage = `<p style='text-align: center; font-size: 12px; color: blue;'>Ótimo progresso! Você está prestes a atingir ${desiredWeight} kg! Faltam só ${weightDifference.toFixed(2)} kg para alcançar sua meta!</p>`;
     } 
     // Quando faltam alguns quilos, mas já progrediu bastante
     else if (weightDifference > 2 && weightDifference <= 5) {
-        motivationalMessage = `<p style='text-align: center; font-size: 14px; color: blue; font-weight: bold;'>Incrível! Você está a um passo de alcançar seu objetivo. Faltam só ${weightDifference.toFixed(2)} kg para os ${desiredWeight} kg!</p>`;
+        motivationalMessage = `<p style='text-align: center; font-size: 12px; color: blue;'>Incrível! Você está a um passo de alcançar seu objetivo. Faltam só ${weightDifference.toFixed(2)} kg para os ${desiredWeight} kg!</p>`;
     } 
     // Quando o peso já foi ultrapassado, acima do objetivo
     else if (firstWeight > desiredWeight) {
@@ -483,26 +483,26 @@ if (history.length > 0) {
 
         // Se ultrapassou o objetivo por uma diferença pequena (até 1 kg)
         if (excessWeight > 0 && excessWeight <= 1) {
-            motivationalMessage = `<p style='text-align: center; font-size: 14px; color: orange; font-weight: bold;'>Você ultrapassou seu objetivo por apenas ${excessWeight.toFixed(2)} kg! Ajuste um pouco mais para alcançar o equilíbrio!</p>`;
+            motivationalMessage = `<p style='text-align: center; font-size: 12px; color: orange;'>Você ultrapassou seu objetivo por apenas ${excessWeight.toFixed(2)} kg! Ajuste um pouco mais para alcançar o equilíbrio!</p>`;
         }
         // Se ultrapassou o objetivo por uma diferença média (entre 1 kg e 2 kg)
         else if (excessWeight > 1 && excessWeight <= 2) {
-            motivationalMessage = `<p style='text-align: center; font-size: 14px; color: orange; font-weight: bold;'>Você superou seu objetivo em ${excessWeight.toFixed(2)} kg! Mantenha o foco para alcançar um nível saudável.</p>`;
+            motivationalMessage = `<p style='text-align: center; font-size: 12px; color: orange;'>Você superou seu objetivo em ${excessWeight.toFixed(2)} kg! Mantenha o foco para alcançar um nível saudável.</p>`;
         }
         // Se ultrapassou o objetivo por uma diferença considerável (entre 2 kg e 5 kg)
         else if (excessWeight > 2 && excessWeight <= 5) {
-            motivationalMessage = `<p style='text-align: center; font-size: 14px; color: orange; font-weight: bold;'>Você ultrapassou seu objetivo em ${excessWeight.toFixed(2)} kg! É importante focar em manter ou ajustar seu peso agora.</p>`;
+            motivationalMessage = `<p style='text-align: center; font-size: 12px; color: orange;'>Você ultrapassou seu objetivo em ${excessWeight.toFixed(2)} kg! É importante focar em manter ou ajustar seu peso agora.</p>`;
         }
         // Se ultrapassou o objetivo por uma diferença significativa (acima de 5 kg)
         else {
-            motivationalMessage = `<p style='text-align: center; font-size: 14px; color: red; font-weight: bold;'>Alerta! Você ultrapassou ${excessWeight.toFixed(2)} kg. do seu objetivo. Ajuste seu peso para um equilíbrio saudável.</p>`;
+            motivationalMessage = `<p style='text-align: center; font-size: 12px; color: red;'>Alerta! Você ultrapassou ${excessWeight.toFixed(2)} kg. do seu objetivo. Ajuste seu peso para um equilíbrio saudável.</p>`;
         }
     }
     // Quando ainda está abaixo do peso desejado
     else if (firstWeight < desiredWeight) {
         let missingWeight = desiredWeight - firstWeight; // Peso que falta para o objetivo
 
-        motivationalMessage = `<p style='text-align: center; font-size: 14px; color: red; font-weight: bold;'>Faltam ${missingWeight.toFixed(2)} kg para você atingir ${desiredWeight} kg. Alimente-se bem para alcançar sua meta com saúde!</p>`;
+        motivationalMessage = `<p style='text-align: center; font-size: 14px; color: red;'>Faltam ${missingWeight.toFixed(2)} kg para você atingir ${desiredWeight} kg. Alimente-se bem para alcançar sua meta com saúde!</p>`;
     }
 
     // Exibe a frase motivacional
@@ -510,6 +510,10 @@ if (history.length > 0) {
 } else {
     console.error("A lista de histórico está vazia. Não é possível calcular o peso inicial.");
 }
+
+
+
+
 
 
         // Botões para PDF, WhatsApp e enviar para número
@@ -1481,6 +1485,4 @@ document.addEventListener("DOMContentLoaded", function() {
 
   </body>
   </html>
-  
-
   
