@@ -519,7 +519,7 @@ if (history.length > 0) {
         // Botões para PDF, WhatsApp e enviar para número
         content += `</ul></div>`;
         content += `<div style="text-align: center; margin-top: 10px;">`;
-        content += `<button onclick="generatePDF()" style="margin-right: 10px;">Baixar relatorio</button>`;
+        content += `<button onclick="generatePDF()" style="margin-right: 10px;">Baixar relatório</button>`;
         
         content += `</div>`;
 
@@ -877,7 +877,7 @@ function atualizarFraseMotivacional() {
 
     // Título
     doc.setFontSize(14);
-    doc.text("Relatório de Peso e IMC", 40, 40);
+    doc.text("Gráfico de Peso e IMC", 40, 40);
 
     // Dados de identificação (puxados corretamente)
     const userName = localStorage.getItem('userName') || "Usuário";
