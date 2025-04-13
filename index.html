@@ -813,10 +813,6 @@ function updateChart() {
     const mediaPeso = (weights.reduce((a, b) => a + b, 0) / weights.length).toFixed(2);
     const mediaIMC = (imcValues.reduce((a, b) => a + b, 0) / imcValues.length).toFixed(2);
 
-
-
-
-
     const ctx = document.getElementById("weightChart").getContext("2d");
     window.myChart = new Chart(ctx, {
         type: "line",
@@ -992,7 +988,13 @@ function atualizarFraseMotivacional() {
     doc.addImage(chartImage, "PNG", 40, 110, imgWidth, imgHeight);
 
     // Salvar
-    doc.save("grafico_peso_imc.pdf");
+    const pdfUrl = doc.output("bloburl");
+window.open(pdfUrl, "_blank");
+
+alert("PDF gerado com sucesso!\n\nPara compartilhar no WhatsApp:\n1. Toque nos 3 pontinhos no canto superior direito.\n2. Escolha 'Compartilhar'.\n3. Selecione WhatsApp ou outro app desejado.");
+
+
+      
   }
 
 
