@@ -992,10 +992,7 @@ function atualizarFraseMotivacional() {
     doc.addImage(chartImage, "PNG", 40, 110, imgWidth, imgHeight);
 
     // Salvar
-  // Abrir visualização do PDF (evita download automático em alguns navegadores)
-const pdfUrl = doc.output("bloburl");
-window.open(pdfUrl, "_blank");
-
+ doc.save("grafico_peso_imc.pdf");
       
   }
 
