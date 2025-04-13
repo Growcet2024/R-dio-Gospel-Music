@@ -11,9 +11,6 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-
-
 
 <!-- Biblioteca PDF --> 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -256,33 +253,38 @@ button:hover {
 <button id="toggleGraphButton" onclick="toggleGraph()">Gráfico Evolutivo</button>
 
 <div id="graphSection" style="display: none;">
-  <div id="graphContainer" style="background: white; padding: 10px; min-width: 400px;">
-    <canvas id="weightChart" width="500"></canvas>
+    <div id="graphContainer" style="background: white; padding: 10px; min-width: 400px;">
+  
+      <canvas id="weightChart" width="500"></canvas>
+  
+      <div style="margin-top: 10px; text-align: left; font-size: 10px; color: #333;">
+        <div>Aplicativo controle de peso</div>
+        <div id="nomeInfo"></div>
+        <div id="dataGerada"></div>
+        <div id="motivationalPhrase" style="margin-top: 4px; font-weight: bold;"></div>
+      </div>
+  
+      <!-- Botão + Frase, tudo dentro do graphContainer -->
+      <div style="margin-top: 8px; margin-bottom: 10px; text-align: left;">
+        <button onclick="downloadPDF()" style="width: 350px;">Baixar Gráfico</button>
 
-    <div style="margin-top: 10px; text-align: left; font-size: 10px; color: #333;">
-      <div>Aplicativo controle de peso</div>
-      <div id="nomeInfo"></div>
-      <div id="dataGerada"></div>
-      <div id="motivationalPhrase" style="margin-top: 4px; font-weight: bold;"></div>
-    </div>
-    <div style="margin-top: 8px; margin-bottom: 10px;">
-        
-      <!-- Botão para exibir o PDF com opções -->
-<button onclick="downloadPDF()">Baixar PDF</button>
-       <p style="font-size: 10px; color: #555; margin-top: 4px;">
-  Após abrir o PDF, toque nos três pontinhos e, se desejar, envie para o WhatsApp, imprima ou salve novamente.
-</p>
-        
+       
+        <div style="font-size: 12px; color: #555; margin-top: 4px;">
+            Após abrir o PDF, toque nos três pontinhos e escolha <br>
+            compartilhar no WhatsApp, imprimir ou salvar novamente.
+          </div>
+      </div>
+  
     </div>
   </div>
-</div>
+  
+      
 
-     
 <!-- Botão para exibir/esconder o Gerar relatório -->
 <button id="toggleReportButton" onclick="toggleReport()">Gerar Relatório</button>
 <div id="reportSection" style="display: none;">
     <div id="reportContent"></div> <!-- histórico -->
-    Baixe o relatório ou envie-o pelo WhatsApp
+    Após abrir o PDF, toque nos três pontihos e secolha <br> compartilhar no whatsapp, imprimir ou salvar novamente.
 </div>
 
 
@@ -513,9 +515,8 @@ if (history.length > 0) {
         // Botões para PDF, WhatsApp e enviar para número
         content += `</ul></div>`;
         content += `<div style="text-align: center; margin-top: 10px;">`;
-        content += `<button onclick="generatePDF()" style="margin-right: 10px;">Baixar PDF</button>`;
-        content += `<button onclick="sendTextToWhatsApp()">Enviar para os contatos</button>`;
-        content += `<button onclick="openPhonePopup()">Enviar para Número</button>`;
+        content += `<button onclick="generatePDF()" style="margin-right: 10px;">Baixar relatorio</button>`;
+        
         content += `</div>`;
 
         // Exibe o conteúdo gerado no HTML
@@ -655,109 +656,9 @@ function generatePDF() {
     // Restaura a exibição dos botões
     buttons.forEach(button => button.style.display = "inline-block");
 }
-
  </script>
     
 
-<!--// BLOCO 07 - Função enviar PDF pelo WhatsApp -->
-<script>
-    function sendTextToWhatsApp() {
-        // Esconde os botões temporariamente
-        let buttons = document.querySelectorAll('button');
-        buttons.forEach(button => button.style.display = 'none');
-    
-        // Captura o conteúdo do relatório, sem os botões
-        let reportContent = document.getElementById("reportContent").innerText;
-    
-        // Adiciona o título em negrito (usando asteriscos)
-        let content = "*Relatório de Pesagem*\n\n" + reportContent;
-    
-
-        // Codifica o conteúdo para garantir que caracteres especiais sejam tratados corretamente
-        content = encodeURIComponent(content);
-    
-        // Cria o link para o WhatsApp com o conteúdo como texto
-        const whatsappUrl = `https://wa.me/?text=${content}`;
-    
-        // Redireciona para o WhatsApp
-        window.location.href = whatsappUrl;
-    
-        // Reexibe os botões após o envio
-        buttons.forEach(button => button.style.display = 'inline-block');
-    }
-
-        </script>
-    
-
-<!--// BLOCO 08 - Função enviar numero pelo WhatsApp -->
-<script>
-    // Função para abrir o pop-up de inserção do número
-    function openPhonePopup() {
-        // Oculta os botões temporariamente
-        const buttons = document.querySelectorAll("#reportSection button");
-        buttons.forEach(button => button.style.display = "none");
-
-        // Exibe o pop-up para o usuário inserir o número de telefone
-        document.getElementById("phonePopup").style.display = "block";
-    }
-
-    // Função para fechar o pop-up sem fazer nada
-    function closePhonePopup() {
-        // Reexibe os botões após o fechamento do pop-up
-        const buttons = document.querySelectorAll("#reportSection button");
-        buttons.forEach(button => button.style.display = "inline-block");
-
-        document.getElementById("phonePopup").style.display = "none";
-    }
-
-    // Função que envia o conteúdo do relatório para o número de telefone inserido
-    function sendToSpecificNumber() {
-        // Captura o número de telefone inserido pelo usuário
-        let phoneNumber = document.getElementById("phoneNumber").value;
-
-        // Verifica se o número tem 10 ou 11 dígitos, considerando o DDD
-        if (phoneNumber && phoneNumber.match(/^\d{10,11}$/)) {
-            // Preenche automaticamente o código do país (Brasil, código 55)
-            let fullPhoneNumber = `55${phoneNumber}`;
-
-            // Captura o conteúdo do relatório
-            let reportContent = document.getElementById("reportContent").innerText;
-
-            // Adiciona o título em negrito
-            let content = "*Relatório de Pesagem*\n\n" + reportContent;
-
-            // Codifica o conteúdo para garantir que caracteres especiais sejam tratados corretamente
-            content = encodeURIComponent(content);
-
-            // Cria o link para o WhatsApp com o número e o conteúdo do relatório
-            const whatsappUrl = `https://wa.me/${fullPhoneNumber}?text=${content}`;
-
-            // Redireciona para o WhatsApp com o número inserido
-            window.location.href = whatsappUrl;
-
-            // Fecha o pop-up após o envio
-            closePhonePopup();
-        } else {
-            alert("Por favor, insira um número válido (DDD + número).");
-        }
-    }
-</script>
-
-<!-- Pop-up para inserir o número de telefone -->
-<div id="phonePopup" style="display:none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; border: 2px solid #ccc; padding: 20px; border-radius: 5px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); width: 200px;">
-    <h4>Digite o número de telefone (DDD + Número):</h4>
-
-    <input type="tel" id="phoneNumber" placeholder="Ex: 11999999999" style="width: 100%; padding: 10px; font-size: 14px;" pattern="[0-9]{10,11}" required>
-
-    <button onclick="sendToSpecificNumber()" style="margin-top: 10px; padding: 10px 20px; background-color: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer;">
-        Enviar
-    </button>
-    <button onclick="closePhonePopup()" style="margin-top: 10px; padding: 10px 20px; background-color: #f44336; color: white; border: none; border-radius: 5px; cursor: pointer;">
-        Cancelar
-    </button>
-</div>
-<!--// BLOCO 08 - fim- Função enviar numero pelo WhatsApp -->
-<!-- BLOCO RELATORIO FIM -->
 
 
 
@@ -815,6 +716,10 @@ function updateChart() {
     // Calcula as médias
     const mediaPeso = (weights.reduce((a, b) => a + b, 0) / weights.length).toFixed(2);
     const mediaIMC = (imcValues.reduce((a, b) => a + b, 0) / imcValues.length).toFixed(2);
+
+
+
+
 
     const ctx = document.getElementById("weightChart").getContext("2d");
     window.myChart = new Chart(ctx, {
@@ -945,10 +850,7 @@ function atualizarFraseMotivacional() {
 
 
 
-
- 
-
- <!-- BLOCO 5 --> – Função para Baixar PDF
+<!-- BLOCO 5 --> – Função para Baixar PDF
 
   async function downloadPDF() {
     const { jsPDF } = window.jspdf;
@@ -991,12 +893,9 @@ function atualizarFraseMotivacional() {
     doc.addImage(chartImage, "PNG", 40, 110, imgWidth, imgHeight);
 
     // Salvar
- doc.save("grafico_peso_imc.pdf");
-      
+    doc.save("grafico_peso_imc.pdf");
+
   }
-
-
-
 
 
 
@@ -1582,4 +1481,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
   </body>
   </html>
+  
+
   
