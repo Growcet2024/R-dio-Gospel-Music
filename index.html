@@ -511,7 +511,6 @@ if (history.length > 0) {
     console.error("A lista de histórico está vazia. Não é possível calcular o peso inicial.");
 }
 
-
         // Botões para PDF, WhatsApp e enviar para número
         content += `</ul></div>`;
         content += `<div style="text-align: center; margin-top: 10px;">`;
@@ -658,9 +657,6 @@ function generatePDF() {
 }
  </script>
     
-
-
-
 
 
 <!-- GRAFICO EVOLUTIVO -->
@@ -831,24 +827,21 @@ function atualizarFraseMotivacional() {
   let { imcValues } = getWeightData();
   if (imcValues.length === 0) return;
 
-  const ultimoIMC = imcValues[imcValues.length - 1];
+  const primeiroIMC = imcValues[0]; // Pegando o primeiro valor
   let frase = "";
 
-  if (ultimoIMC < 18.5) {
-    frase = "Você está abaixo do peso. Cuide-se bem!";
-  } else if (ultimoIMC >= 18.5 && ultimoIMC < 25) {
-    frase = "Parabéns! Seu peso está saudável.";
-  } else if (ultimoIMC >= 25 && ultimoIMC < 30) {
-    frase = "Atenção! Você está com sobrepeso.";
+  if (primeiroIMC < 18.5) {
+    frase = "Seu IMC indica que você está abaixo do peso. Mantenha-se atento à sua saúde! ";
+  } else if (primeiroIMC >= 18.5 && primeiroIMC < 25) {
+    frase = "Parabéns! Seu IMC está dentro do peso ideal. Continue assim!";
+  } else if (primeiroIMC >= 25 && primeiroIMC < 30) {
+    frase = "Seu IMC está acima do ideal. Com pequenas mudanças, é possível alcançar uma saúde melhor!";
   } else {
-    frase = "Cuidado! Seu IMC indica obesidade.";
+    frase = "Seu IMC sugere obesidade. Cuidar da sua saúde é um passo valioso rumo ao bem-estar.";
   }
 
   document.getElementById("motivationalPhrase").textContent = frase;
 }
-
-
-
 
 <!-- BLOCO 5 --> – Função para Baixar PDF
 
@@ -896,65 +889,7 @@ function atualizarFraseMotivacional() {
     doc.save("grafico_peso_imc.pdf");
 
   }
-
-
-
-
-  
-
-
-
-
 </script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-    
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -1404,8 +1339,6 @@ function deleteEntry(index) {
 
 
 
-
-
 <script>
     <-- // 3️⃣ CRIAÇÃO DO GRÁFICO (configuração do Chart.js) -->
     
@@ -1482,3 +1415,4 @@ document.addEventListener("DOMContentLoaded", function() {
   </body>
   </html>
   
+
