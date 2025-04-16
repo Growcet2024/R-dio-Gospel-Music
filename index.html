@@ -82,17 +82,25 @@ button:hover {
     padding: 0;
 }
 
+
+
+
+
 #imcTable {
     width: 100%;
     margin-top: 20px;
-    border-collapse: collapse;
+    border-collapse: separate; /* Mude de collapse para separate */
+    border-spacing: 0; /* Tira o espaçamento extra */
+    border-radius: 8px;
+    overflow: hidden; /* Faz o arredondamento funcionar visualmente */
     display: none;
 }
+
 
 #imcTable th,
 #imcTable td {
     padding: 14px;
-    border: 1px solid #ddd;
+    border: 1px solid #ddd;  /* Cor da borda IMC */
     text-align: left;
 }
 
@@ -192,15 +200,92 @@ button:hover {
 }
 
 #graphSection {
-  border: 2px solid #333; /* Laranja */
-  border-radius: 5px;       /* Cantos arredondados, opcional */
+  border: 2px solid #ddd;   /* Cor da borda Gráfico */
+  border-radius: 8px;       /* Cantos arredondados, opcional */
   padding: 10px;             /* Espaço interno para a borda não colar no gráfico */
   margin-bottom: 20px;       /* Espaço abaixo do gráfico */
   overflow-x: auto;          /* Manter a rolagem horizontal */
 }
 
+/* 🎨 CSS MENU LATERAL */
+/* Ícone do Menu Hambúrguer */
+.menu-hamburguer {
+    font-size: 30px;
+    cursor: pointer;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 101;
+    color: #000000;
+    background: white;
+    border-radius: 5px;
+    padding: 5px 10px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Menu Deslizante */
+.menu-lateral {
+    width: 250px;
+    height: 100%;
+    background: linear-gradient(to right, #0357cd, #2196f3);
+    color: white;
+    position: fixed;
+    top: 0;
+    right: -250px;
+    transition: right 0.3s ease;
+    z-index: 100;
+    padding-top: 60px;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Lista do Menu */
+.menu-lateral ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.menu-lateral ul li {
+    padding: 15px;
+    border-bottom: 1px solid #444;
+}
+
+.menu-lateral ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    display: block;
+}
+
+.menu-lateral ul li a:hover {
+    background: #444;
+}
+
+
 </style>
     
+
+
+ <!-- ✅ Parte 2: Menu hamburguer + menu lateral Gera conteine a esquerda-->
+<span class="menu-hamburguer">☰</span>
+<div class="menu-lateral">
+    <ul>
+        <li><a href="index.html">Voltar à tela inicial</a></li>
+        <li><a href="sobre.html">Sobre</a></li>
+        <li><a href="informações.html">Informações importantes</a></li>
+    </ul>
+</div>
+
+<!-- 👇 Aqui começa o seu app -->
+<div class="container">
+  <!-- Tudo que já estava no app (gráfico, botões, frases, etc) -->
+</div>
+
+
+
+
+
+
 
     <div class="container">
         <h2>Controle de Peso</h2>
@@ -287,7 +372,6 @@ button:hover {
 </div>
 
 
-
         <!-- Botão IMC -->
 <button id="toggleButton" onclick="toggleTable()">Mostrar Tabela IMC</button>
 
@@ -325,12 +409,23 @@ button:hover {
             <td style="padding: 8px; border: 1px solid #ddd;">Obesidade Grau 3</td>
             <td style="padding: 8px; border: 1px solid #ddd;">40 ou mais</td>
         </tr>
+
     </tbody>
 </table>
 
 
-<script>
+<!-- Botão para exibir/esconder o Histórico -->
+<button id="toggleHistoryButton" onclick="toggleHistory()" class="historyButton">
+    Histórico de Pesagem
+  </button>
+  
+  <!-- Seção do Histórico -->
+  <div id="historySection" style="display: none;">
+    <ul id="historyList"></ul>
+  </div>
 
+
+<script>
     // ========================== BLOCO DE EXTRAÇÃO DOS DADOS inicio ==========================
 
     // == BLOCO DE EXTRAÇÃO DOS DADOS ==
@@ -561,7 +656,7 @@ function loadReportData() {
 // CSS = Adicionando borda e organização visual ao relatório
 document.addEventListener("DOMContentLoaded", function() {
     var reportSection = document.getElementById("reportSection");
-    reportSection.style.border = "2px solid gray";
+    reportSection.style.border = "2px solid #ddd"; // cor da borta Relatório
     reportSection.style.padding = "10px";
     reportSection.style.marginTop = "1px";
     reportSection.style.marginBottom = "10px";
@@ -686,8 +781,6 @@ function generatePDF() {
     let userData = extractUserData();
     let records = userData.history || [];
 
-   
-
     // Extrai as datas (sem a hora), pesos e IMCs
     let labels = records.map(record => record.timestamp.split(',')[0]);
     let weights = records.map(record => parseFloat(record.currentWeight));
@@ -695,8 +788,6 @@ function generatePDF() {
 
     return { labels, weights, imcValues };
 }
-
-
 
 <!-- BLOCO 3 -->
 
@@ -712,10 +803,6 @@ function updateChart() {
     // Calcula as médias
     const mediaPeso = (weights.reduce((a, b) => a + b, 0) / weights.length).toFixed(2);
     const mediaIMC = (imcValues.reduce((a, b) => a + b, 0) / imcValues.length).toFixed(2);
-
-
-
-
 
     const ctx = document.getElementById("weightChart").getContext("2d");
     window.myChart = new Chart(ctx, {
@@ -812,12 +899,9 @@ function preencherNomeInfo() {
 updateChart();  // gráfico é desenhado
 preencherNomeInfo();  // exibe as infos corretamente
 
-
-
 updateChart();
 atualizarFraseMotivacional();
 atualizarDataGerada(); // ← ESSA LINHA ATUALIZA A DATA/HORA
-
 
 
 // BLOCO 4 - Atualiza informações abaixo do gráfico
@@ -893,8 +977,7 @@ function atualizarFraseMotivacional() {
 
 
 
-
- <!-- Bloco botão historicode pesagem  inicio-->
+ <!-- Bloco botão historico de pesagem  inicio-->
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -909,12 +992,13 @@ function atualizarFraseMotivacional() {
     </style>
 </head>
 <body>
+
     <!-- Contêiner Principal -->
     <div id="mainContainer">
         <!-- Outros elementos do contêiner principal -->
 
         <!-- Botão para alternar a visibilidade do histórico -->
-        <button id="toggleHistoryButton">Histórico de Pesagem</button>
+       
 
         <!-- Seção do histórico -->
         <div id="historySection">
@@ -953,6 +1037,7 @@ function atualizarFraseMotivacional() {
         });
     });
 </script>
+
 <!-- Bloco botão historicode pesagem  fim-->
 
  </div>
@@ -1333,86 +1418,34 @@ function deleteEntry(index) {
     localStorage.setItem('history', JSON.stringify(history));
     updateHistory();
 }
-
     </script>
 
 
 
 
-<script>
-    <-- // 3️⃣ CRIAÇÃO DO GRÁFICO (configuração do Chart.js) -->
-    
-  // CRIAÇÃO DO GRÁFICO
-let ctx = document.getElementById("weightChart").getContext("2d");
-let weightChart;
+ <script>
+ // Seleciona o ícone do menu e o menu lateral
+    const menuIcon = document.querySelector(".menu-hamburguer");
+    const menuLateral = document.querySelector(".menu-lateral");
 
-function createChart(data) {
-    if (weightChart) {
-        weightChart.destroy(); // Garante que não existam múltiplos gráficos
-    }
-
-    let dates = data.map(entry => entry.date);
-    let weights = data.map(entry => entry.weight);
-    let imcValues = data.map(entry => entry.imc);
-
-    weightChart = new Chart(ctx, {
-        type: "line",
-        data: {
-            labels: dates,
-            datasets: [
-                {
-                    label: "Peso (kg)",
-                    data: weights,
-                    borderColor: "blue",
-                    backgroundColor: "rgba(0, 0, 255, 0.2)",
-                    borderWidth: 2
-                },
-                {
-                    label: "IMC",
-                    data: imcValues,
-                    borderColor: "green",
-                    backgroundColor: "rgba(0, 255, 0, 0.2)",
-                    borderWidth: 2
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                x: {
-                    title: {
-                        display: true,
-                        text: "Data"
-                    }
-                },
-                y: {
-                    title: {
-                        display: true,
-                        text: "Valores"
-                    }
-                }
-            }
+    // Alterna o menu lateral
+    menuIcon.addEventListener("click", () => {
+        if (menuLateral.style.right === "0px") {
+            menuLateral.style.right = "-250px"; // Fecha o menu
+        } else {
+            menuLateral.style.right = "0px"; // Abre o menu
         }
-    });
-}
-
-document.addEventListener("DOMContentLoaded", function() {
-    console.log("Script carregado! Criando gráfico...");
-    createChart([]); // Apenas um teste inicial, depois passamos os dados reais.
-});
-
+    });   
 </script>
 
 
 
-<script>
-    function createChart(data) {
-        console.log("Criando gráfico com dados:", data);
-    }
+
+
 </script>
 
   </body>
   </html>
   
+
 
