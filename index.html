@@ -82,10 +82,6 @@ button:hover {
     padding: 0;
 }
 
-
-
-
-
 #imcTable {
     width: 100%;
     margin-top: 20px;
@@ -134,11 +130,11 @@ button:hover {
 
 /* Conteiner Histórico de Pesagem */
 #historySection {
-    margin-top: 20px;
+    margin-top: 1px;
     padding: 13px;
     background-color: #ffffff;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    box-shadow: 0 2px 5px #ccc;
 }
 
 /* Estilo do botão de Histórico de Pesagem */
@@ -158,20 +154,35 @@ button:hover {
     background-color: #45a049;
 }
 
+
+/* Estilo do botão de Histórico de Pesagem */
+.historyButton {
+  padding: 13px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  background-color: #007BFF; /* Azul elegante */
+  color: white;
+  border: none;
+  border-radius: 20px; /* Bordas mais arredondadas */
+  margin-top: 10px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.historyButton:hover {
+  background-color: #218838; /* Azul mais escuro no hover */
+  transform: scale(1.03); /* Efeito leve de zoom no hover */
+}
+
 /* Estilo da lista de histórico */
 #historyList {
-    margin-top: 20px;
-    padding-left: 20px;
+    margin-top: 1px;
+    padding-left: 5px;
     display: none; /* Inicialmente escondido */
     list-style-type: none;
 }
 
-#historyList li {
-    background-color: #f2f2f2;
-    margin: 5px 0;
-    padding: 10px;
-    border-radius: 5px;
-}
+
+
 
 
   /* 🎨 CSS BARRA DE ROLAGEM - GRÁFICO */
@@ -261,10 +272,8 @@ button:hover {
     background: #444;
 }
 
-
 </style>
     
-
 
  <!-- ✅ Parte 2: Menu hamburguer + menu lateral Gera conteine a esquerda-->
 <span class="menu-hamburguer">☰</span>
@@ -275,6 +284,7 @@ button:hover {
         <li><a href="informações.html">Informações importantes</a></li>
     </ul>
 </div>
+
 
 
 
@@ -416,6 +426,7 @@ button:hover {
   </div>
 
 
+
 <script>
     // ========================== BLOCO DE EXTRAÇÃO DOS DADOS inicio ==========================
 
@@ -503,8 +514,12 @@ function toggleReport() {
         let firstWeight = parseFloat(history[0].currentWeight); // Peso inicial (primeiro registro)
         let lastWeight = parseFloat(history[history.length - 1].currentWeight); // Peso final (último registro)
 
-// Calculando a diferença de peso
-let weightDifference = lastWeight - firstWeight;
+        
+
+      // Calculando a diferença de peso rever isso
+      let weightDifference = lastWeight - firstWeight;
+
+
 
 let weightChangeMessage = "";
 
@@ -697,7 +712,14 @@ function getFormattedHistory() {
 <script>
 // BLOCO 04 - GERAR RELATÓRIO COMPLETO
 function generateReportText() {
-    let userInfo = getUserInfo(); // Obtém as informações básicas
+
+
+    // Obtém as informações básicas
+    let { userId, userName, desiredWeight } = getUserReportData();
+let userInfo = `Nome: ${userName} | ID: ${userId} | Peso desejado: ${desiredWeight} kg`;
+
+
+
     let historyData = getFormattedHistory(); // Obtém os dados formatados do histórico
 
     let reportText = `${userInfo}\n\nHistórico de Pesagem:\n${historyData}`;
@@ -717,7 +739,7 @@ function displayReport() {
 </script>
 
 
-<!--// BLOCO 06 - Função baixar PDF -->
+<!-- BLOCO 06 - Função baixar PDF -->
 <script>
 function generatePDF() {
     // Oculta os botões temporariamente
@@ -743,8 +765,6 @@ function generatePDF() {
 }
  </script>
     
-
-
 <!-- GRAFICO EVOLUTIVO -->
 
 <script>
@@ -965,7 +985,6 @@ function atualizarFraseMotivacional() {
 
   }
 </script>
-
 
 
  <!-- Bloco botão historico de pesagem  inicio-->
@@ -1338,8 +1357,6 @@ function addWeight() {
     updateHistory(); // Atualiza a lista no histórico
 
 
-
-
     // **📌 Limpa o campo de peso após adicionar**
     document.getElementById('currentWeight').value = "";
 }
@@ -1347,6 +1364,7 @@ function addWeight() {
  // 3º bloco
  function updateHistory() {
     let historyList = document.getElementById('historyList');
+
     historyList.innerHTML = ""; // Limpa o conteúdo da lista
     history.forEach((entry, index) => {
 
@@ -1412,8 +1430,6 @@ function deleteEntry(index) {
     </script>
 
 
-
-
  <script>
  // Seleciona o ícone do menu e o menu lateral
     const menuIcon = document.querySelector(".menu-hamburguer");
@@ -1431,12 +1447,8 @@ function deleteEntry(index) {
 
 
 
-
-
 </script>
 
   </body>
   </html>
   
-
-
