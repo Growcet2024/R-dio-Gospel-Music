@@ -181,6 +181,8 @@ button:hover {
     list-style-type: none;
 }
 
+
+
   /* 🎨 CSS BARRA DE ROLAGEM - GRÁFICO */
 #graphSection {
   margin-bottom: 20px;              /* Espaço abaixo do gráfico */
@@ -419,22 +421,84 @@ button:hover {
 
 
 <!-- Botões- /* 🎨 CRIAR PERFIL*/ -->
-        <button id="registerButton" onclick="registerUser()">Registrar perfil</button>
+        
 
-        <button id="editButton" onclick="editUser()" style="display: none;">Editar perfil</button>
+        
 
 <!-- Botão para salvar a edição após edição de dados -->
         <button onclick="saveEditedEntry()" style="width: 80%; padding: 14px; background-color: green; color: white; border: none; border-radius: 15px; cursor: pointer; margin-top: 10px;">
         Salvar Edição
         </button>
 
-<!-- Formulário de informações do usuário -->
 
+
+        
+        <!-- Botão único que muda conforme o estado -->
+<button id="actionButton" onclick="toggleForm()">Cadastrar</button>
+
+<!-- Botão de registrar (inicialmente oculto) -->
+<button id="registerButton" onclick="registerUser()" style="display: none;">Registrar</button>
+
+<!-- Formulário de informações do usuário (inicialmente oculto) -->
 <div id="userForm" style="display: none;">
-            <input type="text" id="userName" placeholder="Digite seu nome">
-            <input type="number" id="height" placeholder="Digite sua altura">
-            <input type="number" id="desiredWeight" placeholder="Digite seu peso desejado">
-        </div>
+  <input type="text" id="userName" placeholder="Digite seu nome">
+  <input type="number" id="height" placeholder="Digite sua altura">
+  <input type="number" id="desiredWeight" placeholder="Digite seu peso desejado">
+</div>
+
+<script>
+  // Simulando que não há cadastro salvo
+  let userIsRegistered = false;
+
+  function toggleForm() {
+    // Se o usuário já tiver cadastro, entra no modo de edição
+    if (userIsRegistered) {
+      loadUserData();
+    } else {
+      // Se não tiver cadastro, entra no modo de cadastro
+      document.getElementById("userForm").style.display = "block";
+      document.getElementById("registerButton").style.display = "inline-block";
+    }
+
+    // Alterna o botão entre "Cadastrar" e "Editar Cadastro"
+    document.getElementById("actionButton").innerText = userIsRegistered ? "Editar Cadastro" : "Cadastrar";
+  }
+
+  function loadUserData() {
+    // Carrega os dados do usuário (aqui simula-se um preenchimento)
+    document.getElementById("userName").value = "João"; // Exemplo de dado salvo
+    document.getElementById("height").value = 1.75; // Exemplo de dado salvo
+    document.getElementById("desiredWeight").value = 70; // Exemplo de dado salvo
+
+    // Exibe o formulário e o botão "Registrar"
+    document.getElementById("userForm").style.display = "block";
+    document.getElementById("registerButton").style.display = "inline-block";
+  }
+
+  function registerUser() {
+    const name = document.getElementById("userName").value;
+    const height = document.getElementById("height").value;
+    const desiredWeight = document.getElementById("desiredWeight").value;
+
+    alert(`Usuário ${name} registrado com altura ${height} e peso desejado ${desiredWeight}.`);
+
+    // Após registrar, alterna o estado
+    userIsRegistered = true;
+
+    // Oculta o formulário e o botão de registrar
+    document.getElementById("userForm").style.display = "none";
+    document.getElementById("registerButton").style.display = "none";
+
+    // Atualiza o texto do botão de ação
+    document.getElementById("actionButton").innerText = "Editar Cadastro";
+  }
+</script>
+
+        
+
+
+
+
 
 
 
