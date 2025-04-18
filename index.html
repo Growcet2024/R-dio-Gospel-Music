@@ -181,10 +181,6 @@ button:hover {
     list-style-type: none;
 }
 
-
-
-
-
   /* 🎨 CSS BARRA DE ROLAGEM - GRÁFICO */
 #graphSection {
   margin-bottom: 20px;              /* Espaço abaixo do gráfico */
@@ -272,6 +268,15 @@ button:hover {
     background: #444;
 }
 
+/* 🎨 CSS PERFIL */
+#userForm {
+  border: 2px solid #ddd;
+  padding: 20px;
+  margin-top: 5px;
+  border-radius: 10px;
+  background-color: #ffffff;
+}
+
 </style>
     
 
@@ -287,23 +292,11 @@ button:hover {
 
 
 
-
     <div class="container">
         <h2>Controle de Peso</h2>
-    
-        <!-- Formulário de informações do usuário -->
-        <div id="userForm">
-            <input type="text" id="userName" placeholder="Digite seu nome">
-            <input type="number" id="height" placeholder="Digite sua altura">
-            <input type="number" id="desiredWeight" placeholder="Digite seu peso desejado">
-        </div>
-    
+
         <!-- Exibe o nome e ID após cadastro -->
         <p id="userInfo" style="font-weight: bold;"></p>
-    
-        <!-- Botões -->
-        <button id="registerButton" onclick="registerUser()">Registrar</button>
-        <button id="editButton" onclick="editUser()" style="display: none;">Editar</button>
     
         <!-- Campo nome e ID -->
         <p id="userNameDisplay"></p>
@@ -323,16 +316,13 @@ button:hover {
     
         <button onclick="addWeight()">Adicionar Registro</button>
     
-        <!-- Botão para salvar a edição após edição de dados -->
-        <button onclick="saveEditedEntry()" style="width: 80%; padding: 14px; background-color: green; color: white; border: none; border-radius: 15px; cursor: pointer; margin-top: 10px;">
-        Salvar Edição
-        </button>
-    
+        
         <!-- Campo resultado peso saldo e IMC -->
         <p id="resultDisplay">Peso Saldo: - kg | IMC: -</p>
 
 
 
+<!-- /* 🎨 BOTÕES PRINCIPAIS*/-->
 <!-- Botão para exibir/esconder o Gráfico -->
 <button id="toggleGraphButton" onclick="toggleGraph()">Gráfico Evolutivo</button>
 
@@ -424,6 +414,27 @@ button:hover {
   <div id="historySection" style="display: none;">
     <ul id="historyList"></ul>
   </div>
+
+
+
+
+<!-- Botões- /* 🎨 CRIAR PERFIL*/ -->
+        <button id="registerButton" onclick="registerUser()">Registrar perfil</button>
+
+        <button id="editButton" onclick="editUser()" style="display: none;">Editar perfil</button>
+
+<!-- Botão para salvar a edição após edição de dados -->
+        <button onclick="saveEditedEntry()" style="width: 80%; padding: 14px; background-color: green; color: white; border: none; border-radius: 15px; cursor: pointer; margin-top: 10px;">
+        Salvar Edição
+        </button>
+
+<!-- Formulário de informações do usuário -->
+
+<div id="userForm" style="display: none;">
+            <input type="text" id="userName" placeholder="Digite seu nome">
+            <input type="number" id="height" placeholder="Digite sua altura">
+            <input type="number" id="desiredWeight" placeholder="Digite seu peso desejado">
+        </div>
 
 
 
