@@ -113,6 +113,15 @@ button:hover {
 }
 
 
+/* Estilo para resultado Peso e IMC */
+#resultDisplay {
+  margin-top: 1px; /* Distância de 10px do elemento acima */
+  font-size: 16px;
+  font-weight: bold;
+  color: #333; /* Cor escura para o texto */
+}
+
+
       /* Botão tabela IMC */
 #toggleButton {
     background-color: #007bff;
@@ -121,15 +130,12 @@ button:hover {
     border: none;
     border-radius: 20px;
     cursor: pointer;
-    margin-top: 10px;
+    margin-top: 1px;
 }
 
 #toggleButton:hover {
     background-color: #218838;
 }
-
-
-
 
 /* Conteiner Histórico de Pesagem */
 #historySection {
@@ -167,9 +173,10 @@ button:hover {
   color: white;
   border: none;
   border-radius: 20px; /* Bordas mais arredondadas */
-  margin-top: 10px;
+  margin-top: 1px;
   transition: background-color 0.3s ease, transform 0.2s ease;
 }
+
 
 .historyButton:hover {
   background-color: #218838; /* Azul mais escuro no hover */
@@ -183,10 +190,6 @@ button:hover {
     display: none; /* Inicialmente escondido */
     list-style-type: none;
 }
-
-
-
-
 
   /* 🎨 CSS BARRA DE ROLAGEM - GRÁFICO */
 #graphSection {
@@ -275,6 +278,7 @@ button:hover {
     background: #444;
 }
 
+
 /* 🎨 CSS PERFIL */
 #userForm {
   border: 2px solid #ddd;
@@ -283,6 +287,40 @@ button:hover {
   border-radius: 10px;
   background-color: #ffffff;
 }
+
+/* Estilo do botão Perfil */
+#editButton {
+  margin-top: 1px; /* Distância de 10px do elemento acima */
+  padding: 10px 20px; /* Adicionei um padding simples, pode ajustar como preferir */
+  font-size: 16px;
+  cursor: pointer;
+  background-color: #007BFF; /* Verde */
+  color: white;
+  border: none;
+  border-radius: 20px; /* Bordas arredondadas */
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+#editButton:hover {
+  background-color: #218838; /* Verde mais escuro no hover */
+}
+
+  /* CSS para centralizar o botão "Salvar" */
+  #registerButton {
+    display: block;
+    margin: 10px auto; /* Centraliza o botão com um espaçamento de 20px */
+    padding: 10px 20px; /* Adiciona espaçamento interno para o botão */
+    font-size: 16px; /* Ajusta o tamanho da fonte do botão */
+    background-color: #007BFF; /* Cor de fundo do botão */
+    color: white; /* Cor do texto */
+    border: none; /* Remove bordas */
+    border-radius: 20px; /* Bordas arredondadas */
+    cursor: pointer; /* Aparece um cursor de mão ao passar sobre o botão */
+  }
+
+  #registerButton:hover {
+    background-color: #45a049; /* Muda a cor ao passar o mouse */
+  }
 
 </style>
     
@@ -427,8 +465,8 @@ button:hover {
 <!--  /* 🎨 BOTÕES PERFIL */ -->
 
 <!-- Botões -->
-<button id="editButton" onclick="toggleEdit()">Editar</button>
-<button id="registerButton" onclick="registerUser()" style="display: none;">Registrar</button>
+<button id="editButton" onclick="toggleEdit()">Perfil</button>
+<button id="registerButton" onclick="registerUser()" style="display: none;">Salvar</button>
 
 <!-- Formulário de informações do usuário -->
 <div id="userForm" style="display: none;">
@@ -439,9 +477,9 @@ button:hover {
 </div>
 
 <script>
-  // Função que alterna entre Editar e Registrar
+  // Função que alterna entre Perfil e Salvar
   function toggleEdit() {
-    // Esconder o botão "Editar" e mostrar o botão "Registrar"
+    // Esconder o botão "Perfil" e mostrar o botão "Salvar"
     document.getElementById('editButton').style.display = 'none';
     document.getElementById('registerButton').style.display = 'block';
     
@@ -454,51 +492,22 @@ button:hover {
     // Simulando o processo de registro (você pode adicionar lógica real aqui)
     console.log("Perfil registrado!");
 
-    // Após o clique em "Registrar", esconder o botão "Registrar" e o formulário
+    // Após o clique em "Salvar", esconder o botão "Salvar" e o formulário
     document.getElementById('registerButton').style.display = 'none';
     document.getElementById('userForm').style.display = 'none';
 
-    // Mostrar novamente o botão "Editar"
+    // Mostrar novamente o botão "Perfil"
     document.getElementById('editButton').style.display = 'block';
   }
 
   // Função para inicializar o estado da página
   window.onload = function() {
-    // Inicialmente, o botão "Editar" está visível e o restante está oculto
+    // Inicialmente, o botão "Perfil" está visível e o restante está oculto
     document.getElementById('editButton').style.display = 'block';
     document.getElementById('registerButton').style.display = 'none';
     document.getElementById('userForm').style.display = 'none'; // Formulário inicialmente oculto
   };
 </script>
-
-<style>
-  /* CSS para centralizar o botão "Registrar" */
-  #registerButton {
-    display: block;
-    margin: 20px auto; /* Centraliza o botão com um espaçamento de 20px */
-    padding: 10px 20px; /* Adiciona espaçamento interno para o botão */
-    font-size: 16px; /* Ajusta o tamanho da fonte do botão */
-    background-color: #007BFF; /* Cor de fundo do botão */
-    color: white; /* Cor do texto */
-    border: none; /* Remove bordas */
-    border-radius: 20px; /* Bordas arredondadas */
-    cursor: pointer; /* Aparece um cursor de mão ao passar sobre o botão */
-  }
-
-  #registerButton:hover {
-    background-color: #45a049; /* Muda a cor ao passar o mouse */
-  }
-</style>
-
-
-
-
-
-
-
-
-
-
 
 
 <script>
@@ -1526,5 +1535,3 @@ function deleteEntry(index) {
   </body>
   </html>
   
-
-
