@@ -422,22 +422,11 @@ button:hover {
 
 <!-- Botões- /* 🎨 CRIAR PERFIL*/ -->
         
-
-        
-
-<!-- Botão para salvar a edição após edição de dados -->
-        <button onclick="saveEditedEntry()" style="width: 80%; padding: 14px; background-color: green; color: white; border: none; border-radius: 15px; cursor: pointer; margin-top: 10px;">
-        Salvar Edição
-        </button>
-
-
-<!-- Botão fixo para mostrar o formulário -->
-<button id="actionButton" onclick="showForm()">Cadastrar</button>
-
-<!-- Botão de registrar (inicialmente oculto) -->
+<!-- Botões -->
+<button id="editButton" onclick="toggleEdit()">Editar</button>
 <button id="registerButton" onclick="registerUser()" style="display: none;">Registrar</button>
 
-<!-- Formulário de informações do usuário (inicialmente oculto) -->
+<!-- Formulário de informações do usuário -->
 <div id="userForm" style="display: none;">
   <input type="text" id="userName" placeholder="Digite seu nome">
   <input type="number" id="height" placeholder="Digite sua altura">
@@ -445,27 +434,60 @@ button:hover {
 </div>
 
 <script>
-  function showForm() {
-    document.getElementById("userForm").style.display = "block";
-    document.getElementById("registerButton").style.display = "inline-block";
-    document.getElementById("actionButton").style.display = "none";
+  // Função que alterna entre Editar e Registrar
+  function toggleEdit() {
+    // Esconder o botão "Editar" e mostrar o botão "Registrar"
+    document.getElementById('editButton').style.display = 'none';
+    document.getElementById('registerButton').style.display = 'block';
+    
+    // Exibir o formulário de cadastro
+    document.getElementById('userForm').style.display = 'block';
   }
 
+  // Função de registro (simula o registro de dados)
   function registerUser() {
-    const name = document.getElementById("userName").value;
-    const height = document.getElementById("height").value;
-    const desiredWeight = document.getElementById("desiredWeight").value;
+    // Simulando o processo de registro (você pode adicionar lógica real aqui)
+    console.log("Perfil registrado!");
 
-    alert(`Usuário ${name} registrado com altura ${height} e peso desejado ${desiredWeight}.`);
+    // Após o clique em "Registrar", esconder o botão "Registrar" e o formulário
+    document.getElementById('registerButton').style.display = 'none';
+    document.getElementById('userForm').style.display = 'none';
 
-    // Oculta o formulário e o botão registrar
-    document.getElementById("userForm").style.display = "none";
-    document.getElementById("registerButton").style.display = "none";
-
-    // Volta a exibir o botão "Cadastrar"
-    document.getElementById("actionButton").style.display = "inline-block";
+    // Mostrar novamente o botão "Editar"
+    document.getElementById('editButton').style.display = 'block';
   }
+
+  // Função para inicializar o estado da página
+  window.onload = function() {
+    // Inicialmente, o botão "Editar" está visível e o restante está oculto
+    document.getElementById('editButton').style.display = 'block';
+    document.getElementById('registerButton').style.display = 'none';
+    document.getElementById('userForm').style.display = 'none'; // Formulário inicialmente oculto
+  };
 </script>
+
+
+<style>
+  /* CSS para centralizar o botão "Registrar" */
+  #registerButton {
+    display: block;
+    margin: 20px auto; /* Centraliza o botão com um espaçamento de 20px */
+    padding: 10px 20px; /* Adiciona espaçamento interno para o botão */
+    font-size: 16px; /* Ajusta o tamanho da fonte do botão */
+    background-color: #007BFF; /* Cor de fundo do botão */
+    color: white; /* Cor do texto */
+    border: none; /* Remove bordas */
+    border-radius: 20px; /* Bordas arredondadas */
+    cursor: pointer; /* Aparece um cursor de mão ao passar sobre o botão */
+  }
+
+  #registerButton:hover {
+    background-color: #45a049; /* Muda a cor ao passar o mouse */
+  }
+</style>
+
+
+        
 
 
 
