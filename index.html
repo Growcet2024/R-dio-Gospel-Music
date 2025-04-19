@@ -431,10 +431,8 @@ button:hover {
         </button>
 
 
-
-        
-        <!-- Botão único que muda conforme o estado -->
-<button id="actionButton" onclick="toggleForm()">Cadastrar</button>
+<!-- Botão fixo para mostrar o formulário -->
+<button id="actionButton" onclick="showForm()">Cadastrar</button>
 
 <!-- Botão de registrar (inicialmente oculto) -->
 <button id="registerButton" onclick="registerUser()" style="display: none;">Registrar</button>
@@ -447,32 +445,10 @@ button:hover {
 </div>
 
 <script>
-  // Simulando que não há cadastro salvo
-  let userIsRegistered = false;
-
-  function toggleForm() {
-    // Se o usuário já tiver cadastro, entra no modo de edição
-    if (userIsRegistered) {
-      loadUserData();
-    } else {
-      // Se não tiver cadastro, entra no modo de cadastro
-      document.getElementById("userForm").style.display = "block";
-      document.getElementById("registerButton").style.display = "inline-block";
-    }
-
-    // Alterna o botão entre "Cadastrar" e "Editar Cadastro"
-    document.getElementById("actionButton").innerText = userIsRegistered ? "Editar Cadastro" : "Cadastrar";
-  }
-
-  function loadUserData() {
-    // Carrega os dados do usuário (aqui simula-se um preenchimento)
-    document.getElementById("userName").value = "João"; // Exemplo de dado salvo
-    document.getElementById("height").value = 1.75; // Exemplo de dado salvo
-    document.getElementById("desiredWeight").value = 70; // Exemplo de dado salvo
-
-    // Exibe o formulário e o botão "Registrar"
+  function showForm() {
     document.getElementById("userForm").style.display = "block";
     document.getElementById("registerButton").style.display = "inline-block";
+    document.getElementById("actionButton").style.display = "none";
   }
 
   function registerUser() {
@@ -482,17 +458,29 @@ button:hover {
 
     alert(`Usuário ${name} registrado com altura ${height} e peso desejado ${desiredWeight}.`);
 
-    // Após registrar, alterna o estado
-    userIsRegistered = true;
-
-    // Oculta o formulário e o botão de registrar
+    // Oculta o formulário e o botão registrar
     document.getElementById("userForm").style.display = "none";
     document.getElementById("registerButton").style.display = "none";
 
-    // Atualiza o texto do botão de ação
-    document.getElementById("actionButton").innerText = "Editar Cadastro";
+    // Volta a exibir o botão "Cadastrar"
+    document.getElementById("actionButton").style.display = "inline-block";
   }
 </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         
 
@@ -1527,3 +1515,4 @@ function deleteEntry(index) {
   </body>
   </html>
   
+
