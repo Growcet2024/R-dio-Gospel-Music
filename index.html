@@ -429,50 +429,57 @@ button:hover {
 
 <!--  /* 🎨 BOTÕES PERFIL */ -->
 
+
+
 <!-- Botões -->
 <button id="editButton" onclick="toggleEdit()">Editar</button>
-<button id="registerButton" onclick="registerUser()" style="display: none;">Registrar</button>
+<button id="registerButton" onclick="registerUser()" style="display: none; margin: 0 auto; display: block;">Registrar</button>
 
 <!-- Formulário de informações do usuário -->
 <div id="userForm" style="display: none;">
-  <h3>Criar perfil ou editar</h3> <!-- Frase acima dos campos -->
-  <input type="text" id="userName" placeholder="Digite seu nome">
-  <input type="number" id="height" placeholder="Digite sua altura">
-  <input type="number" id="desiredWeight" placeholder="Digite seu peso desejado">
-</div>
+    <h3>Criar perfil ou editar</h3> <!-- Frase acima dos campos -->
+    <input type="text" id="userName" placeholder="Digite seu nome">
+    <input type="number" id="height" placeholder="Digite sua altura">
+    <input type="number" id="desiredWeight" placeholder="Digite seu peso desejado">
+  </div>
+
 
 <script>
   // Função que alterna entre Editar e Registrar
   function toggleEdit() {
-    // Esconder o botão "Editar" e mostrar o botão "Registrar"
+    // Ao clicar em "Editar", esconder o botão "Editar" e mostrar o "Registrar"
     document.getElementById('editButton').style.display = 'none';
     document.getElementById('registerButton').style.display = 'block';
-    
-    // Exibir o formulário de cadastro
+
+    // Exibir o formulário de edição
     document.getElementById('userForm').style.display = 'block';
   }
 
   // Função de registro (simula o registro de dados)
   function registerUser() {
-    // Simulando o processo de registro (você pode adicionar lógica real aqui)
+    // Aqui você pode adicionar o código para registrar os dados
+    // Por enquanto, vamos apenas esconder o botão "Registrar" após o clique
+
     console.log("Perfil registrado!");
 
-    // Após o clique em "Registrar", esconder o botão "Registrar" e o formulário
+    // Após o clique, esconder o botão "Registrar" e mostrar novamente o "Editar"
     document.getElementById('registerButton').style.display = 'none';
-    document.getElementById('userForm').style.display = 'none';
-
-    // Mostrar novamente o botão "Editar"
     document.getElementById('editButton').style.display = 'block';
+
+    // Após o registro, talvez você queira ocultar o formulário, ou deixá-lo visível
+    document.getElementById('userForm').style.display = 'none'; // Ocultar o formulário após o registro
   }
 
   // Função para inicializar o estado da página
   window.onload = function() {
-    // Inicialmente, o botão "Editar" está visível e o restante está oculto
+    // Inicialmente, o botão "Editar" está visível e "Registrar" está oculto
     document.getElementById('editButton').style.display = 'block';
     document.getElementById('registerButton').style.display = 'none';
     document.getElementById('userForm').style.display = 'none'; // Formulário inicialmente oculto
   };
 </script>
+
+
 
 <style>
   /* CSS para centralizar o botão "Registrar" */
