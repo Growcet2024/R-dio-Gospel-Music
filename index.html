@@ -865,17 +865,24 @@ function generatePDF() {
    
     // Função para capturar os dados do localStorage e formatar corretamente
 
-    function getWeightData() {
+    function getWeightData() { 
     let userData = extractUserData();
     let records = userData.history || [];
 
-    // Extrai as datas (sem a hora), pesos e IMCs
-    let labels = records.map(record => record.timestamp.split(',')[0]);
+    // Formata a data para exibir o ano com apenas dois dígitos
+    let labels = records.map(record => {
+        let [data] = record.timestamp.split(',');
+        let [dia, mes, ano] = data.trim().split('/').map(str => str.trim());
+        ano = ano.substring(2); // ou .slice(-2)
+        return `${dia}/${mes}/${ano}`;
+    });
+
     let weights = records.map(record => parseFloat(record.currentWeight));
     let imcValues = records.map(record => parseFloat(record.imc));
 
     return { labels, weights, imcValues };
 }
+
 
 
 
