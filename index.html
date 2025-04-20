@@ -907,26 +907,36 @@ function updateChart() {
             labels: labels,
             datasets: [
                 {
-                    label: `Peso (média): ${mediaPeso}`,
-                    data: weights,
-                    backgroundColor: "rgba(0, 123, 255, 0.7)",
-                    borderColor: "blue",
-                    borderWidth: 1
-                },
-                {
-                    label: `IMC (média): ${mediaIMC}`,
-                    data: imcValues,
-                    backgroundColor: "rgba(40, 167, 69, 0.7)",
-                    borderColor: "green",
-                    borderWidth: 1
-                }
+    label: `Peso (média): ${mediaPeso}`,
+    data: weights,
+    borderColor: "#007bff",
+    backgroundColor: "#007bff40",  // ← cor azul com transparência
+    borderWidth: 2,
+    fill: true,
+    pointBackgroundColor: "#007bff",
+    pointRadius: 2,
+    pointHoverRadius: 2,
+    pointBorderWidth: 2,
+  },
+  {
+    label: `IMC (média): ${mediaIMC}`,
+    data: imcValues,
+    borderColor: "#28a745",
+    backgroundColor: "#28a74540",  // ← cor verde com transparência
+    borderWidth: 2,
+    fill: true,
+    pointBackgroundColor: "#28a745",
+    pointRadius: 2,
+    pointHoverRadius: 2,
+    pointBorderWidth: 2,
+     }
             ]
         },
         options: {
             responsive: true,
             plugins: {
                 datalabels: {
-                    color: ctx => ctx.dataset.label.includes("Peso") ? "blue" : "green",
+                    color: ctx => ctx.dataset.label.includes("Peso") ? "#000000" : "#000000",
                     anchor: 'end',
                     align: 'start',
                     formatter: value => value.toFixed(2)
