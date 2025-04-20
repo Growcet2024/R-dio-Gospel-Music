@@ -939,6 +939,7 @@ function updateChart() {
                     color: ctx => ctx.dataset.label.includes("Peso") ? "#000000" : "#000000",
                     anchor: 'end',
                     align: 'start',
+                    rotation: 90, // Inclina os valores dos dados
                     formatter: value => value.toFixed(2)
                 },
                 legend: {
