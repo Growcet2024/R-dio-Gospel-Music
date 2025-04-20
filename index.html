@@ -887,8 +887,7 @@ function generatePDF() {
 
 
 <!-- BLOCO 3 -->
-
- // Função para atualizar o gráfico com os dados reais
+// BLOCO 3 - Gráfico em Barras Verticais
 function updateChart() {
     let { labels, weights, imcValues } = getWeightData();
 
@@ -900,114 +899,72 @@ function updateChart() {
     // Calcula as médias
     const mediaPeso = (weights.reduce((a, b) => a + b, 0) / weights.length).toFixed(2);
     const mediaIMC = (imcValues.reduce((a, b) => a + b, 0) / imcValues.length).toFixed(2);
-    
+
     const ctx = document.getElementById("weightChart").getContext("2d");
     window.myChart = new Chart(ctx, {
-        type: "line",
+        type: "bar",
         data: {
             labels: labels,
             datasets: [
                 {
                     label: `Peso (média): ${mediaPeso}`,
                     data: weights,
+                    backgroundColor: "rgba(0, 123, 255, 0.7)",
                     borderColor: "blue",
-                    borderWidth: 2,
-                    fill: false,
-                    pointBackgroundColor: "blue",
-                    pointRadius: 2, // Tamanho das bolinhas
-                    pointHoverRadius: 2, // Tamanho ao passar o mouse
-                    pointBorderWidth: 2, // Borda da bolinha
+                    borderWidth: 1
                 },
                 {
                     label: `IMC (média): ${mediaIMC}`,
                     data: imcValues,
+                    backgroundColor: "rgba(40, 167, 69, 0.7)",
                     borderColor: "green",
-                    borderWidth: 2,
-                    fill: false,
-                    pointBackgroundColor: "green",
-                    pointRadius: 2, // Tamanho das bolinhas
-                    pointHoverRadius: 2, // Tamanho ao passar o mouse
-                    pointBorderWidth: 2, // Borda da bolinha
+                    borderWidth: 1
                 }
             ]
         },
-
-
-options: {
-    responsive: true,
-    plugins: {
-
-        datalabels: {
-        color: function(context) {
-        return context.dataset.label.includes("Peso") ? "blue" : "green";
-    },
-    anchor: 'start',   // ← muda de 'end' para 'start'
-    align: 'bottom',   // ← adiciona essa linha para alinhar abaixo
-    rotation: 80, // Inclina os valores dos dados
-    formatter: value => value.toFixed(2)
-        },
-
-        legend: {
-            labels: {
-                usePointStyle: true,
-                pointStyle: 'circle'
+        options: {
+            responsive: true,
+            plugins: {
+                datalabels: {
+                    color: ctx => ctx.dataset.label.includes("Peso") ? "blue" : "green",
+                    anchor: 'end',
+                    align: 'start',
+                    formatter: value => value.toFixed(2)
+                },
+                legend: {
+                    labels: {
+                        usePointStyle: true,
+                        pointStyle: 'rect'
+                    }
+                }
+            },
+            layout: {
+                padding: {
+                    left: 0,
+                    right: 0,
+                    top: 10,
+                    bottom: 10
+                }
+            },
+            scales: {
+                x: {
+                    ticks: {
+                        minRotation: 45,
+                        maxRotation: 45
+                    },
+                    stacked: false
+                },
+                y: {
+                    beginAtZero: true
+                }
             }
-        }
-    },
-
-    layout: {
-        padding: {
-            left: 1,   // Ajuste o espaço à esquerda
-            right: 1,  // Ajuste o espaço à direita
-            top: 1,    // Ajuste o espaço acima
-            bottom: 1  // Ajuste o espaço abaixo
-        }
-    },
-
-    scales: {
-  x: {
-    ticks: {
-      padding: 35, // ← Aqui você dá espaço entre as datas e os valores dos dados
-      minRotation: 80, // Ajuste inclinação da data
-      maxRotation: 60
-    }
-  },
-  y: {
-    ticks: {
-      minRotation: 15,   // ← Aqui aumenta as linhas os valores do Y (peso e IMC)
-      maxRotation: 45
-    },
-    beginAtZero: false
-  }
-}
-},
-plugins: [ChartDataLabels]
-});
+        },
+        plugins: [ChartDataLabels]
+    });
 }
 
 
-
-
-
-
-
-
     
-
-
-  
-   
-
-
-
-
-
-
-
-
-
-    
-
 function atualizarDataGerada() {
   const agora = new Date();
   const dataFormatada = agora.toLocaleString('pt-BR'); // ex: 09/04/2025, 15:03:22
