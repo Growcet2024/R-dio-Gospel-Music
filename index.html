@@ -926,24 +926,20 @@ function updateChart() {
         },
 
 
-        options: {
+options: {
     responsive: true,
     plugins: {
 
-
-        
         datalabels: {
         color: function(context) {
         return context.dataset.label.includes("Peso") ? "blue" : "green";
     },
     anchor: 'start',   // ← muda de 'end' para 'start'
     align: 'bottom',   // ← adiciona essa linha para alinhar abaixo
-    rotation: 70, // Inclina os valores dos dados
+    rotation: 80, // Inclina os valores dos dados
     formatter: value => value.toFixed(2)
         },
 
-
-        
         legend: {
             labels: {
                 usePointStyle: true,
@@ -951,6 +947,7 @@ function updateChart() {
             }
         }
     },
+
     layout: {
         padding: {
             left: 1,   // Ajuste o espaço à esquerda
@@ -960,17 +957,17 @@ function updateChart() {
         }
     },
 
-
     scales: {
   x: {
     ticks: {
-      minRotation: 10,
+      padding: 30, // ← Aqui você dá espaço entre as datas e os valores dos dados
+      minRotation: 80, // Ajuste inclinação da data
       maxRotation: 60
     }
   },
   y: {
     ticks: {
-      minRotation: 5,   // ← Aqui você gira os valores do Y (peso e IMC)
+      minRotation: 15,   // ← Aqui aumenta as linhas os valores do Y (peso e IMC)
       maxRotation: 45
     },
     beginAtZero: false
@@ -980,8 +977,6 @@ function updateChart() {
 plugins: [ChartDataLabels]
 });
 }
-
-
 
 
 
