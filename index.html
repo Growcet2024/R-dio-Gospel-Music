@@ -87,7 +87,7 @@ button:hover {
     margin-top: 20px;
     border-collapse: separate; /* Mude de collapse para separate */
     border-spacing: 0; /* Tira o espaçamento extra */
-    border-radius: 8px;
+    border-radius: 10px;
     overflow: hidden; /* Faz o arredondamento funcionar visualmente */
     display: none;
 }
@@ -179,10 +179,22 @@ button:hover {
 
 /* Estilo da lista de histórico */
 #historyList {
-    margin-top: 1px;
-    padding-left: 5px;
-    display: none; /* Inicialmente escondido */
+    margin-top: 5px;    /* Margem de 10px na parte superior */
+    margin-bottom: 5px; /* Margem de 10px na parte inferior */
+    padding-left: 20px; */← Novo padding à esquerda */
+    padding-right: 1px; /* ← Novo padding à direita */
+    display: none;      /* Inicialmente escondido */
     list-style-type: none;
+    
+    /* 👇 Aqui está a borda */
+    border: 2px solid #ddd; /* Cor cinza clara, você pode trocar */
+    border-radius: 10px;      /* Cantos arredondados */
+    background-color: #ffffff; /* Fundo claro */
+}
+
+.historyButton:hover {
+  background-color: #007BFF;
+  color: white;
 }
 
   /* 🎨 CSS BARRA DE ROLAGEM - GRÁFICO */
@@ -212,7 +224,7 @@ button:hover {
 
 #graphSection {
   border: 2px solid #ddd;   /* Cor da borda Gráfico */
-  border-radius: 8px;       /* Cantos arredondados, opcional */
+  border-radius: 10px;       /* Cantos arredondados, opcional */
   padding: 10px;             /* Espaço interno para a borda não colar no gráfico */
   margin-bottom: 20px;       /* Espaço abaixo do gráfico */
   overflow-x: auto;          /* Manter a rolagem horizontal */
@@ -316,6 +328,9 @@ button:hover {
     background-color: #45a049; /* Muda a cor ao passar o mouse */
   }
 
+ 
+
+
 </style>
     
 
@@ -367,8 +382,9 @@ button:hover {
 
 <div id="graphSection" style="display: none;">
     <div id="graphContainer" style="background: white; padding: 10px; min-width: 400px;">
-      <canvas id="weightChart" width="500"></canvas>
-  
+      <canvas id="weightChart" width="600"></canvas>
+
+
       <div style="margin-top: 10px; text-align: left; font-size: 10px; color: #333;">
         <div>Aplicativo controle de peso</div>
         <div id="nomeInfo"></div>
@@ -468,7 +484,15 @@ button:hover {
   <input type="text" id="userName" placeholder="Digite seu nome">
   <input type="number" id="height" placeholder="Digite sua altura">
   <input type="number" id="desiredWeight" placeholder="Digite seu peso desejado">
+
+  <h6 style="margin-top: 1px;">Após criar seu perfil reinicie o app</h6>
+
 </div>
+
+  <div id="saveMessage" style="display: none; color: green; margin-top: 10px;">
+    Perfil salvo com sucesso!
+  </div>
+  
 
 <script>
   // Função que alterna entre Perfil e Salvar
@@ -501,6 +525,8 @@ button:hover {
     document.getElementById('registerButton').style.display = 'none';
     document.getElementById('userForm').style.display = 'none'; // Formulário inicialmente oculto
   };
+
+
 </script>
 
 
@@ -739,11 +765,11 @@ function loadReportData() {
 // CSS = Adicionando borda e organização visual ao relatório
 document.addEventListener("DOMContentLoaded", function() {
     var reportSection = document.getElementById("reportSection");
-    reportSection.style.border = "2px solid #ddd"; // cor da borta Relatório
-    reportSection.style.padding = "10px";
+    reportSection.style.border = "1px solid #ddd"; // cor da borta Relatório
+    reportSection.style.padding = "20px";
     reportSection.style.marginTop = "1px";
     reportSection.style.marginBottom = "10px";
-    reportSection.style.borderRadius = "5px";
+    reportSection.style.borderRadius = "10px";
     reportSection.style.width = "94%";
     reportSection.style.backgroundColor = "#ffffff";
 });
@@ -884,9 +910,8 @@ function generatePDF() {
 }
 
 
-
-
 <!-- BLOCO 3 -->
+ 
 // BLOCO 3 - Gráfico em Barras Verticais
 function updateChart() {
     let { labels, weights, imcValues } = getWeightData();
@@ -905,32 +930,35 @@ function updateChart() {
         type: "bar",
         data: {
             labels: labels,
+
+
             datasets: [
-                {
-    label: `Peso (média): ${mediaPeso}`,
-    data: weights,
-    borderColor: "#007bff",
-    backgroundColor: "#007bff40",  // ← cor azul com transparência
-    borderWidth: 1,
-    fill: true,
-    pointBackgroundColor: "#007bff",
-    pointRadius: 2,
-    pointHoverRadius: 2,
-    pointBorderWidth: 2,
+  {
+    label: `Peso (média): ${mediaPeso}`, // ← Legenda da linha
+    data: weights,                    // ← Dados reais do peso
+    borderColor: "#007bff",           // ← Cor da linha ou borda da barra
+    backgroundColor: "#007bff40",     // ← cor azul com transparência
+    borderWidth: 1, // ← Borda barra  // ← Espessura da linha/borda
+    fill: true,                       // ← Preenche a área abaixo da linha
+    pointBackgroundColor: "#007bff",  // ← Cor das bolinhas dos pontos
+    pointRadius: 2,                   // ← Tamanho das bolinhas
+    pointHoverRadius: 2,              // ← Tamanho no hover
+    pointBorderWidth: 2,              // ← Espessura da borda das bolinhas
   },
   {
     label: `IMC (média): ${mediaIMC}`,
     data: imcValues,
     borderColor: "#28a745",
     backgroundColor: "#28a74540",  // ← cor verde com transparência
-    borderWidth: 1,
+    borderWidth: 1, // ← Borda barra 
     fill: true,
     pointBackgroundColor: "#28a745",
     pointRadius: 2,
     pointHoverRadius: 2,
-    pointBorderWidth: 2,
-     }
-            ]
+    pointBorderWidth: 2,  
+  }
+]
+
         },
         options: {
             responsive: true,
@@ -975,7 +1003,7 @@ function updateChart() {
 }
 
 
-    
+// Função para atualizar a data e hora da geração do gráfico
 function atualizarDataGerada() {
   const agora = new Date();
   const dataFormatada = agora.toLocaleString('pt-BR'); // ex: 09/04/2025, 15:03:22
@@ -985,6 +1013,7 @@ function atualizarDataGerada() {
   }
 }
 
+// Função para preencher as informações do usuário
 function preencherNomeInfo() {
     const userName = localStorage.getItem("userName") || "Usuário";
     const userId = localStorage.getItem("userId") || "ID-desconhecido";
@@ -994,12 +1023,13 @@ function preencherNomeInfo() {
     document.getElementById("nomeInfo").innerText = nomeInfoText;
 }
 
+// Chamadas para renderizar o gráfico e as informações
 updateChart();  // gráfico é desenhado
 preencherNomeInfo();  // exibe as infos corretamente
 
-updateChart();
-atualizarFraseMotivacional();
-atualizarDataGerada(); // ← ESSA LINHA ATUALIZA A DATA/HORA
+updateChart(); // Atualiza o gráfico
+atualizarFraseMotivacional(); // Atualiza a frase motivacional
+atualizarDataGerada(); // Atualiza a data/hora do gráfico
 
 
 // BLOCO 4 - Atualiza informações abaixo do gráfico
@@ -1200,7 +1230,7 @@ function toggleTable() {
         document.getElementById('height').value = height ? parseFloat(height) : "";
         document.getElementById('desiredWeight').value = desiredWeight ? parseFloat(desiredWeight) : "";
     
-        
+
         function registerUser() {
     let userName = document.getElementById('userName').value.trim();
     let height = document.getElementById('height').value.trim();
@@ -1230,7 +1260,18 @@ function toggleTable() {
     // Ajusta os botões
     document.getElementById('registerButton').style.display = 'none';
     document.getElementById('editButton').style.display = 'inline';
+
+
+    document.getElementById('saveMessage').style.display = 'block'; // Exibe a mensagem de sucesso
+
+// Esconde após 3 segundos
+setTimeout(function () {
+  document.getElementById('saveMessage').style.display = 'none';  // Esconde a mensagem de sucesso
+}, 3000);
+
 }
+
+
 
 function editUser() {
     // Mostra os campos para edição
@@ -1240,6 +1281,9 @@ function editUser() {
     document.getElementById('registerButton').style.display = 'inline';
     document.getElementById('editButton').style.display = 'none';
 }
+
+
+
 
 // Mantém os dados na tela ao recarregar a página
 window.onload = function() {
@@ -1254,8 +1298,17 @@ window.onload = function() {
         document.getElementById('userForm').style.display = 'none';
         document.getElementById('registerButton').style.display = 'none';
         document.getElementById('editButton').style.display = 'inline';
-    }
+
+
+        window.onload = function() {
+  // Outros códigos de inicialização, se necessário= Mensagem Perfil salco com sucesso
+  document.getElementById('saveMessage').style.display = 'none';  // Garantir que a mensagem esteja oculta
 };
+
+
+}  // Importante não apagar
+}; // Importante não apagar
+
 
         function saveUser() {
             userName = document.getElementById('userName').value.trim();
@@ -1278,7 +1331,7 @@ window.onload = function() {
             document.getElementById('editButton').style.display = 'inline';
 
             document.getElementById("userName").innerText = "Usuário: João"; // Troque "João" pelo nome salvo
-
+  
         }
 
    
