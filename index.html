@@ -1263,13 +1263,19 @@ function toggleTable() {
     document.getElementById('registerButton').style.display = 'none';
     document.getElementById('editButton').style.display = 'inline';
 
-
+// Frase perfil salvo com sucesso
     document.getElementById('saveMessage').style.display = 'block'; // Exibe a mensagem de sucesso
 
 // Esconde após 3 segundos
 setTimeout(function () {
   document.getElementById('saveMessage').style.display = 'none';  // Esconde a mensagem de sucesso
 }, 3000);
+
+            // Atualizar app automático
+// Atualizar a página após 3.2 segundos
+setTimeout(function () {
+  location.reload();
+}, 3200);
 
 }
 
