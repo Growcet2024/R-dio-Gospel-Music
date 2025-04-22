@@ -987,18 +987,18 @@ function updateChart() {
                     bottom: 10
                 }
             },
-            scales: {
-                x: {
-                    ticks: {
-                        minRotation: 45,
-                        maxRotation: 45
-                    },
-                    stacked: false
-                },
-                y: {
-                    beginAtZero: true
-                }
-            }
+
+            
+             scales: {
+  y: {
+    beginAtZero: false,
+    suggestedMax: 100  // ← Isso sugere ao Chart.js que vá até 100 Kg
+  }
+}
+
+
+
+            
         },
         plugins: [ChartDataLabels]
     });
