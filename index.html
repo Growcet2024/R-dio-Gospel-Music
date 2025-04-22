@@ -1472,7 +1472,6 @@ function saveEditedEntry() {
     document.querySelector('button[onclick="addWeight()"]').style.display = 'inline'; // Garante que o botão de adicionar registro volte a ser visível
 }
 
-
 function addWeight() {
     let currentWeight = formatNumber(document.getElementById('currentWeight').value.trim());
 
@@ -1484,8 +1483,6 @@ function addWeight() {
     let weightBalance = (parseFloat(currentWeight) - parseFloat(desiredWeight)).toFixed(2);
     let balanceSign = weightBalance > 0 ? `+${weightBalance}` : weightBalance;
     let imc = (parseFloat(currentWeight) / (parseFloat(height) * parseFloat(height))).toFixed(2);
-
-
 
     // **📌 Atualiza os valores na tela principal**
     document.getElementById('resultDisplay').innerText = `Peso Saldo: ${balanceSign} kg | IMC: ${imc}`;
@@ -1504,11 +1501,15 @@ function addWeight() {
 
     updateHistory(); // Atualiza a lista no histórico
 
-
     // **📌 Limpa o campo de peso após adicionar**
     document.getElementById('currentWeight').value = "";
-}
 
+    // **📌 Atualiza o gráfico imediatamente após adicionar o registro**
+    updateChart();  // CHAME AQUI
+
+    console.log("Chamando updateChart() após adicionar peso.");
+}
+    
  // 3º bloco
  function updateHistory() {
     let historyList = document.getElementById('historyList');
