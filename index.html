@@ -766,7 +766,7 @@ function loadReportData() {
 document.addEventListener("DOMContentLoaded", function() {
     var reportSection = document.getElementById("reportSection");
     reportSection.style.border = "1px solid #ddd"; // cor da borta Relatório
-    reportSection.style.padding = "20px";
+    reportSection.style.padding = "10px";
     reportSection.style.marginTop = "1px";
     reportSection.style.marginBottom = "10px";
     reportSection.style.borderRadius = "10px";
@@ -944,6 +944,7 @@ function updateChart() {
     pointRadius: 2,                   // ← Tamanho das bolinhas
     pointHoverRadius: 2,              // ← Tamanho no hover
     pointBorderWidth: 2,              // ← Espessura da borda das bolinhas
+    borderWidth: 0                    // ← Isso define a espessura da linha
   },
   {
     label: `IMC (média): ${mediaIMC}`,
@@ -955,7 +956,8 @@ function updateChart() {
     pointBackgroundColor: "#28a745",
     pointRadius: 2,
     pointHoverRadius: 2,
-    pointBorderWidth: 2,  
+    pointBorderWidth: 2,
+     borderWidth: 0                    // ← Isso define a espessura da linha
   }
 ]
 
