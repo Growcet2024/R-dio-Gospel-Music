@@ -977,7 +977,7 @@ function updateChart() {
     const largura = ctx.chart.width;
 
     // Lógica: quanto mais barras ou menor a largura, menor a fonte
-    const tamanhoBase = 12;
+    const tamanhoBase = 10;
     const ajuste = Math.max(8, Math.min(tamanhoBase, largura / totalBarras / 2));
 
     return {
