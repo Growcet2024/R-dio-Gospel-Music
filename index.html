@@ -912,7 +912,8 @@ function generatePDF() {
 
 <!-- BLOCO 3 -->
  
-  // BLOCO 3 - Gráfico em Barras Verticais
+  
+     // BLOCO 3 - Gráfico em Barras Verticais
 function updateChart() {
     let { labels, weights, imcValues } = getWeightData();
 
@@ -969,9 +970,23 @@ function updateChart() {
                     color: ctx => "#000000",
                     anchor: 'end',
                     align: 'start',
-                    rotation: 90,
+                    rotation: 90,  // Inclinação dados peso e imc
                     offset: -20,
-                    formatter: value => value.toFixed(2)
+                    font: ctx => {
+    const totalBarras = ctx.chart.data.labels.length;
+    const largura = ctx.chart.width;
+
+    // Lógica: quanto mais barras ou menor a largura, menor a fonte
+    const tamanhoBase = 12;
+    const ajuste = Math.max(8, Math.min(tamanhoBase, largura / totalBarras / 2));
+
+    return {
+        size: ajuste,
+        weight: 'normal'
+    };
+},
+formatter: value => value.toFixed(2)
+
                 },
                 legend: {
                     labels: {
@@ -995,7 +1010,7 @@ function updateChart() {
                 },
                 x: {
                     ticks: {
-                        minRotation: 90,
+                        minRotation: 45, // Inclinação da data
                         maxRotation: 90
                     }
                 }
