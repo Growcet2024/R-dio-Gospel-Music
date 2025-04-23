@@ -929,7 +929,7 @@ function updateChart() {
     // Cálculo do valor máximo com folga
     const maxPeso = Math.max(...weights);
     const maxIMC = Math.max(...imcValues);
-    const maxValue = Math.max(maxPeso, maxIMC) + 5;  // folga no topo
+    const maxValue = Math.max(maxPeso, maxIMC) + 15;  // folga no topo
 
     const ctx = document.getElementById("weightChart").getContext("2d");
     window.myChart = new Chart(ctx, {
