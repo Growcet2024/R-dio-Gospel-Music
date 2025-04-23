@@ -931,7 +931,7 @@ function generatePDF() {
     const maxPeso = Math.max(...weights);
     const maxIMC = Math.max(...imcValues);
 
-    const minValue = Math.min(minPeso, minIMC) - 5; // espaço extra abaixo
+    const minValue = Math.min(minPeso, minIMC) - 15; // espaço extra abaixo
     const maxValue = Math.max(maxPeso, maxIMC) + 5; // espaço extra acima
 
     const ctx = document.getElementById("weightChart").getContext("2d");
@@ -994,7 +994,7 @@ function generatePDF() {
             },
             scales: {
                 y: {
-                    beginAtZero: false,
+                    beginAtZero: true,
                     min: minValue,
                     suggestedMax: maxValue
                 },
