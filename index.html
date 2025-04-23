@@ -912,8 +912,8 @@ function generatePDF() {
 
 <!-- BLOCO 3 -->
  
-  
-  function updateChart() {
+  // BLOCO 3 - Gráfico em Barras Verticais
+function updateChart() {
     let { labels, weights, imcValues } = getWeightData();
 
     // Verifica se o gráfico já existe e destrói para recriar
@@ -925,14 +925,10 @@ function generatePDF() {
     const mediaPeso = (weights.reduce((a, b) => a + b, 0) / weights.length).toFixed(2);
     const mediaIMC = (imcValues.reduce((a, b) => a + b, 0) / imcValues.length).toFixed(2);
 
-    // Calcula os limites mínimo e máximo com "folga"
-    const minPeso = Math.min(...weights);
-    const minIMC = Math.min(...imcValues);
+    // Cálculo do valor máximo com folga
     const maxPeso = Math.max(...weights);
     const maxIMC = Math.max(...imcValues);
-
-    const minValue = Math.min(minPeso, minIMC) - 15; // espaço extra abaixo
-    const maxValue = Math.max(maxPeso, maxIMC) + 5; // espaço extra acima
+    const maxValue = Math.max(maxPeso, maxIMC) + 5;  // folga no topo
 
     const ctx = document.getElementById("weightChart").getContext("2d");
     window.myChart = new Chart(ctx, {
@@ -945,7 +941,7 @@ function generatePDF() {
                     data: weights,
                     borderColor: "#007bff",
                     backgroundColor: "#007bff40",
-                    borderWidth: 0, // ← barra sem borda visível
+                    borderWidth: 0,
                     fill: true,
                     pointBackgroundColor: "#007bff",
                     pointRadius: 2,
@@ -957,7 +953,7 @@ function generatePDF() {
                     data: imcValues,
                     borderColor: "#28a745",
                     backgroundColor: "#28a74540",
-                    borderWidth: 0, // ← barra sem borda visível
+                    borderWidth: 0,
                     fill: true,
                     pointBackgroundColor: "#28a745",
                     pointRadius: 2,
@@ -970,11 +966,11 @@ function generatePDF() {
             responsive: true,
             plugins: {
                 datalabels: {
-                    color: ctx => ctx.dataset.label.includes("Peso") ? "#000000" : "#000000",
+                    color: ctx => "#000000",
                     anchor: 'end',
                     align: 'start',
                     rotation: 90,
-                    offset: -20, // ← valor ajustado para subir os números
+                    offset: -20,
                     formatter: value => value.toFixed(2)
                 },
                 legend: {
@@ -995,7 +991,6 @@ function generatePDF() {
             scales: {
                 y: {
                     beginAtZero: true,
-                    min: minValue,
                     suggestedMax: maxValue
                 },
                 x: {
