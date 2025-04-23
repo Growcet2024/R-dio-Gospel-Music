@@ -913,23 +913,21 @@ function generatePDF() {
 <!-- BLOCO 3 -->
  
   
-     // BLOCO 3 - Gráfico em Barras Verticais
+ 
+       // BLOCO 3 - Gráfico em Barras Verticais
 function updateChart() {
     let { labels, weights, imcValues } = getWeightData();
 
-    // Verifica se o gráfico já existe e destrói para recriar
     if (window.myChart) {
         window.myChart.destroy();
     }
 
-    // Calcula as médias
     const mediaPeso = (weights.reduce((a, b) => a + b, 0) / weights.length).toFixed(2);
     const mediaIMC = (imcValues.reduce((a, b) => a + b, 0) / imcValues.length).toFixed(2);
 
-    // Cálculo do valor máximo com folga
     const maxPeso = Math.max(...weights);
     const maxIMC = Math.max(...imcValues);
-    const maxValue = Math.max(maxPeso, maxIMC) + 10;  // folga no topo
+    const maxValue = Math.max(maxPeso, maxIMC) + 10;
 
     const ctx = document.getElementById("weightChart").getContext("2d");
     window.myChart = new Chart(ctx, {
@@ -967,26 +965,22 @@ function updateChart() {
             responsive: true,
             plugins: {
                 datalabels: {
-                    color: ctx => "#000000",
+                    color: "#000000",
                     anchor: 'end',
                     align: 'start',
-                    rotation: 90,  // Inclinação dados peso e imc
+                    rotation: 90,
                     offset: -20,
                     font: ctx => {
-    const totalBarras = ctx.chart.data.labels.length;
-    const largura = ctx.chart.width;
-
-    // Lógica: quanto mais barras ou menor a largura, menor a fonte
-    const tamanhoBase = 8;
-    const ajuste = Math.max(8, Math.min(tamanhoBase, largura / totalBarras / 2));
-
-    return {
-        size: ajuste,
-        weight: 'normal'
-    };
-},
-formatter: value => value.toFixed(2)
-
+                        const totalBarras = ctx.chart.data.labels.length;
+                        const largura = ctx.chart.width;
+                        const baseSize = 8;
+                        const ajuste = Math.max(6, Math.min(baseSize, largura / totalBarras / 2));
+                        return {
+                            size: ajuste,
+                            weight: 'normal'
+                        };
+                    },
+                    formatter: value => value.toFixed(2)
                 },
                 legend: {
                     labels: {
@@ -1010,8 +1004,11 @@ formatter: value => value.toFixed(2)
                 },
                 x: {
                     ticks: {
-                        minRotation: 45, // Inclinação da data
-                        maxRotation: 90
+                        minRotation: 45,
+                        maxRotation: 45,
+                        font: {
+                            size: 12
+                        }
                     }
                 }
             }
@@ -1019,6 +1016,7 @@ formatter: value => value.toFixed(2)
         plugins: [ChartDataLabels]
     });
 }
+
 
 
 
