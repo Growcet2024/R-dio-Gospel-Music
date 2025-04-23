@@ -929,7 +929,7 @@ function updateChart() {
     // Cálculo do valor máximo com folga
     const maxPeso = Math.max(...weights);
     const maxIMC = Math.max(...imcValues);
-    const maxValue = Math.max(maxPeso, maxIMC) + 15;  // folga no topo
+    const maxValue = Math.max(maxPeso, maxIMC) + 10;  // folga no topo
 
     const ctx = document.getElementById("weightChart").getContext("2d");
     window.myChart = new Chart(ctx, {
@@ -977,7 +977,7 @@ function updateChart() {
     const largura = ctx.chart.width;
 
     // Lógica: quanto mais barras ou menor a largura, menor a fonte
-    const tamanhoBase = 10;
+    const tamanhoBase = 8;
     const ajuste = Math.max(8, Math.min(tamanhoBase, largura / totalBarras / 2));
 
     return {
