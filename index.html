@@ -912,8 +912,8 @@ function generatePDF() {
 
 <!-- BLOCO 3 -->
  
-// BLOCO 3 - Gráfico em Barras Verticais
-function updateChart() {
+  
+  function updateChart() {
     let { labels, weights, imcValues } = getWeightData();
 
     // Verifica se o gráfico já existe e destrói para recriar
@@ -925,42 +925,46 @@ function updateChart() {
     const mediaPeso = (weights.reduce((a, b) => a + b, 0) / weights.length).toFixed(2);
     const mediaIMC = (imcValues.reduce((a, b) => a + b, 0) / imcValues.length).toFixed(2);
 
+    // Calcula os limites mínimo e máximo com "folga"
+    const minPeso = Math.min(...weights);
+    const minIMC = Math.min(...imcValues);
+    const maxPeso = Math.max(...weights);
+    const maxIMC = Math.max(...imcValues);
+
+    const minValue = Math.min(minPeso, minIMC) - 5; // espaço extra abaixo
+    const maxValue = Math.max(maxPeso, maxIMC) + 5; // espaço extra acima
+
     const ctx = document.getElementById("weightChart").getContext("2d");
     window.myChart = new Chart(ctx, {
         type: "bar",
         data: {
             labels: labels,
-
-
             datasets: [
-  {
-    label: `Peso (média): ${mediaPeso}`, // ← Legenda da linha
-    data: weights,                    // ← Dados reais do peso
-    borderColor: "#007bff",           // ← Cor da linha ou borda da barra
-    backgroundColor: "#007bff40",     // ← cor azul com transparência
-    borderWidth: 1, // ← Borda barra  // ← Espessura da linha/borda
-    fill: true,                       // ← Preenche a área abaixo da linha
-    pointBackgroundColor: "#007bff",  // ← Cor das bolinhas dos pontos
-    pointRadius: 2,                   // ← Tamanho das bolinhas
-    pointHoverRadius: 2,              // ← Tamanho no hover
-    pointBorderWidth: 2,              // ← Espessura da borda das bolinhas
-    borderWidth: 0                    // ← Isso define a espessura da linha
-  },
-  {
-    label: `IMC (média): ${mediaIMC}`,
-    data: imcValues,
-    borderColor: "#28a745",
-    backgroundColor: "#28a74540",  // ← cor verde com transparência
-    borderWidth: 1, // ← Borda barra 
-    fill: true,
-    pointBackgroundColor: "#28a745",
-    pointRadius: 2,
-    pointHoverRadius: 2,
-    pointBorderWidth: 2,
-     borderWidth: 0                    // ← Isso define a espessura da linha
-  }
-]
-
+                {
+                    label: `Peso (média): ${mediaPeso}`,
+                    data: weights,
+                    borderColor: "#007bff",
+                    backgroundColor: "#007bff40",
+                    borderWidth: 0, // ← barra sem borda visível
+                    fill: true,
+                    pointBackgroundColor: "#007bff",
+                    pointRadius: 2,
+                    pointHoverRadius: 2,
+                    pointBorderWidth: 2
+                },
+                {
+                    label: `IMC (média): ${mediaIMC}`,
+                    data: imcValues,
+                    borderColor: "#28a745",
+                    backgroundColor: "#28a74540",
+                    borderWidth: 0, // ← barra sem borda visível
+                    fill: true,
+                    pointBackgroundColor: "#28a745",
+                    pointRadius: 2,
+                    pointHoverRadius: 2,
+                    pointBorderWidth: 2
+                }
+            ]
         },
         options: {
             responsive: true,
@@ -969,7 +973,8 @@ function updateChart() {
                     color: ctx => ctx.dataset.label.includes("Peso") ? "#000000" : "#000000",
                     anchor: 'end',
                     align: 'start',
-                    rotation: 90, // Inclina os valores dos dados
+                    rotation: 90,
+                    offset: -20, // ← valor ajustado para subir os números
                     formatter: value => value.toFixed(2)
                 },
                 legend: {
@@ -987,23 +992,33 @@ function updateChart() {
                     bottom: 10
                 }
             },
-
-            
-             scales: {
-  y: {
-    beginAtZero: false,
-    suggestedMax: 100  // ← Isso sugere ao Chart.js que vá até 100 Kg
-  }
-}
-
-
-
-            
+            scales: {
+                y: {
+                    beginAtZero: false,
+                    min: minValue,
+                    suggestedMax: maxValue
+                },
+                x: {
+                    ticks: {
+                        minRotation: 90,
+                        maxRotation: 90
+                    }
+                }
+            }
         },
         plugins: [ChartDataLabels]
     });
 }
 
+
+
+
+
+
+
+
+
+    
 
 // Função para atualizar a data e hora da geração do gráfico
 function atualizarDataGerada() {
