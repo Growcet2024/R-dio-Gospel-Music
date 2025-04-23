@@ -964,6 +964,9 @@ function updateChart() {
         options: {
             responsive: true,
             plugins: {
+                tooltip: {
+    enabled: false // ← Isso desativa os pop-ups nas barras
+  },
                 datalabels: {
                     color: "#000000",
                     anchor: 'end',
