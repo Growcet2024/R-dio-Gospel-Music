@@ -329,8 +329,6 @@ button:hover {
   }
 
  
-
-
 </style>
     
 
@@ -391,6 +389,11 @@ button:hover {
         <div id="dataGerada"></div>
         <div id="motivationalPhrase" style="margin-top: 4px; font-weight: bold;"></div>
       </div>
+      <p id="registroCount" style="margin-top: 5px; font-size: 13px; color: #444; text-align: left;"></p>
+
+
+
+
 
 <!-- Botão + Frase, tudo dentro do graphContainer -->
     <div style="margin-top: 8px; margin-bottom: 10px; text-align: left; padding-left: 12px;">
@@ -484,15 +487,72 @@ button:hover {
   <input type="text" id="userName" placeholder="Digite seu nome">
   <input type="number" id="height" placeholder="Digite sua altura">
   <input type="number" id="desiredWeight" placeholder="Digite seu peso desejado">
-
-  <h6 style="margin-top: 1px;">Após criar seu perfil reinicie o app</h6>
-
+  <h6 style="margin-top: 1px;">Aplicativo controle de peso</h6>
 </div>
 
   <div id="saveMessage" style="display: none; color: green; margin-top: 10px;">
     Perfil salvo com sucesso!
   </div>
   
+  
+  <!-- 🎨 BOTÕES imagem de tela -->
+<button onclick="openImageSettings()">Imagem do App</button>
+
+<div id="imageInputContainer" style="display: none; margin-top: 10px;">
+  <!-- Agora vazio, apenas controle visual -->
+</div>
+
+
+<!-- 🎯 Botão para abrir as opções -->
+<button onclick="openImageSettings()">Imagem do App</button>
+
+<!-- 📸 Campo escondido para selecionar imagem (galeria ou câmera) -->
+<div id="imageFileInputContainer" style="display: none; margin-top: 10px;">
+  <input 
+    type="file" 
+    id="imageFileInput" 
+    accept="image/*" 
+    capture="environment" 
+    style="padding: 8px;"
+  >
+  <button onclick="handleImageUpload()">Salvar essa imagem</button>
+</div>
+
+<!-- 🧠 Scripts -->
+<script>
+  // Abre o campo para escolher a imagem
+  function openImageSettings() {
+    document.getElementById('imageFileInputContainer').style.display = 'block';
+  }
+
+  // Lida com o upload e salva a imagem
+  function handleImageUpload() {
+    const fileInput = document.getElementById('imageFileInput');
+    const file = fileInput.files[0];
+
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const imageUrl = e.target.result;
+        document.body.style.backgroundImage = `url('${imageUrl}')`;
+        localStorage.setItem('appBackground', imageUrl);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      alert("Por favor, selecione uma imagem.");
+    }
+  }
+
+  // Carrega a imagem salva ao abrir a página
+  window.onload = function() {
+    const savedBackground = localStorage.getItem('appBackground');
+    if (savedBackground) {
+      document.body.style.backgroundImage = `url('${savedBackground}')`;
+    }
+  };
+</script>
+
+
 
 <script>
   // Função que alterna entre Perfil e Salvar
@@ -525,6 +585,8 @@ button:hover {
     document.getElementById('registerButton').style.display = 'none';
     document.getElementById('userForm').style.display = 'none'; // Formulário inicialmente oculto
   };
+
+
 
 
 </script>
@@ -885,8 +947,8 @@ function generatePDF() {
                 button.textContent = "Gráfico Evolutivo";
             }
         }
-    
-
+      
+        
     <!-- BLOCO 2 = Capturar os dados do localStorage-->
    
     // Função para capturar os dados do localStorage e formatar corretamente
@@ -911,8 +973,8 @@ function generatePDF() {
 
 
 <!-- BLOCO 3 -->
- 
- // BLOCO 3 - Gráfico em Barras Verticais
+
+// BLOCO 3 - Gráfico em Barras Verticais
 function updateChart() {
     let { labels, weights, imcValues } = getWeightData();
 
@@ -1014,23 +1076,15 @@ function updateChart() {
                 }
             }
         },
+
         plugins: [ChartDataLabels]
-    });
+  });
+
+  // 👇 Atualiza o total de registros dinamicamente
+  document.getElementById("registroCount").textContent = `Total de registros: ${labels.length}`;
 }
 
- 
- 
-        
 
-
-
-
-
-
-
-
-
-    
 
 // Função para atualizar a data e hora da geração do gráfico
 function atualizarDataGerada() {
@@ -1061,18 +1115,24 @@ atualizarFraseMotivacional(); // Atualiza a frase motivacional
 atualizarDataGerada(); // Atualiza a data/hora do gráfico
 
 
+// 👇 Atualizar Adiciona aqui o total de registros
+atualizarFraseMotivacional();
+
+
 // BLOCO 4 - Atualiza informações abaixo do gráfico
 
 <!-- BLOCO 4 - Frase motivacional -->
+ 
 function atualizarFraseMotivacional() {
-  let { imcValues } = getWeightData();
+  let { imcValues, labels } = getWeightData(); // ← TEM que ser assim!
+
   if (imcValues.length === 0) return;
 
-  const primeiroIMC = imcValues[0]; // Pegando o primeiro valor
+  const primeiroIMC = imcValues[0];
   let frase = "";
 
   if (primeiroIMC < 18.5) {
-    frase = "Seu IMC indica que você está abaixo do peso. Mantenha-se atento à sua saúde! ";
+    frase = "Seu IMC indica que você está abaixo do peso. Mantenha-se atento à sua saúde!";
   } else if (primeiroIMC >= 18.5 && primeiroIMC < 25) {
     frase = "Parabéns! Seu IMC está dentro do peso ideal. Continue assim!";
   } else if (primeiroIMC >= 25 && primeiroIMC < 30) {
@@ -1082,13 +1142,21 @@ function atualizarFraseMotivacional() {
   }
 
   document.getElementById("motivationalPhrase").textContent = frase;
+
+  // 👇 Adiciona aqui o total de registros
+  document.getElementById("registroCount").textContent = `Total de registros: ${labels.length}`;
 }
+
+
 
 <!-- BLOCO 5 --> – Função para Baixar PDF
 
   async function downloadPDF() {
     const { jsPDF } = window.jspdf;
     const canvas = document.getElementById("weightChart");
+
+     // 👇 Recupera os dados
+     const { labels } = getWeightData();
 
     // Gera a imagem do gráfico
     const chartImage = canvas.toDataURL("image/png", 1.0);
@@ -1123,13 +1191,22 @@ function atualizarFraseMotivacional() {
     doc.text(fraseMotivacional, 40, 90);
     doc.setFont(undefined, "normal");
 
+    // 👇 Adiciona o total de registros
+    doc.text(`Total de registros: ${labels.length}`, 40, 105); // <- essa linha é nova!
+
     // Adiciona imagem do gráfico
-    doc.addImage(chartImage, "PNG", 40, 110, imgWidth, imgHeight);
+    doc.addImage(chartImage, "PNG", 40, 120, imgWidth, imgHeight);
 
     // Salvar
     doc.save("grafico_peso_imc.pdf");
 
+
+        //  👇 Adiciona o total de registros
+        const totalRegistros = labels.length; // Pega a quantidade de registros
+    doc.text(`Total de Registros: ${totalRegistros}`, 40, pageHeight - 30);  // Exibe no rodapé do PDF
+
   }
+
 </script>
 
 
@@ -1290,6 +1367,7 @@ function toggleTable() {
     document.getElementById('registerButton').style.display = 'none';
     document.getElementById('editButton').style.display = 'inline';
 
+
 // Frase perfil salvo com sucesso
     document.getElementById('saveMessage').style.display = 'block'; // Exibe a mensagem de sucesso
 
@@ -1298,15 +1376,13 @@ setTimeout(function () {
   document.getElementById('saveMessage').style.display = 'none';  // Esconde a mensagem de sucesso
 }, 3000);
 
-            // Atualizar app automático
+// Atualizar app automático
 // Atualizar a página após 3.2 segundos
 setTimeout(function () {
   location.reload();
 }, 3200);
 
 }
-
-
 
 function editUser() {
     // Mostra os campos para edição
@@ -1318,31 +1394,37 @@ function editUser() {
 }
 
 
+  // Mantém os dados na tela ao recarregar a página
+window.onload = function () {
+  // Ajusta o tamanho da fonte do botão de histórico
+  toggleHistoryButton.style.fontSize = "14px"; // Ajuste conforme necessário
 
+  // Verifica se existe perfil salvo
+  let userId = localStorage.getItem('userId');
+  let userName = localStorage.getItem('userName');
+  const tituloPerfil = document.querySelector('#userForm h3');
+  tituloPerfil.style.fontSize = "12px"; // ⬅️ Aqui ajusta o tamanho da fonte
 
-// Mantém os dados na tela ao recarregar a página
-window.onload = function() {
-    // Garantir que a fonte do botão tenha o tamanho correto logo que a página carregar
-    toggleHistoryButton.style.fontSize = "14px"; // Ajuste conforme necessário
+  if (userId && userName) {
+    document.getElementById('userInfo').innerText = `Usuário: ${userName} | ID: ${userId}`;
+    document.getElementById('userForm').style.display = 'none';
+    document.getElementById('registerButton').style.display = 'none';
+    document.getElementById('editButton').style.display = 'inline';
 
-    let userId = localStorage.getItem('userId');
-    let userName = localStorage.getItem('userName');
+    // Atualiza a mensagem do título dinamicamente
+    if (tituloPerfil) {
+      tituloPerfil.textContent = "Você pode editar seu perfil a qualquer momento.";
+    }
+  } else {
+    // Se não houver perfil salvo
+    if (tituloPerfil) {
+      tituloPerfil.textContent = "Vamos começar? Preencha seu perfil para iniciarmos sua jornada!";
+    }
+  }
 
-    if (userId && userName) {
-        document.getElementById('userInfo').innerText = `Usuário: ${userName} | ID: ${userId}`;
-        document.getElementById('userForm').style.display = 'none';
-        document.getElementById('registerButton').style.display = 'none';
-        document.getElementById('editButton').style.display = 'inline';
-
-
-        window.onload = function() {
-  // Outros códigos de inicialização, se necessário= Mensagem Perfil salco com sucesso
-  document.getElementById('saveMessage').style.display = 'none';  // Garantir que a mensagem esteja oculta
+  // Oculta a mensagem de sucesso de perfil salvo
+  document.getElementById('saveMessage').style.display = 'none';
 };
-
-
-}  // Importante não apagar
-}; // Importante não apagar
 
 
         function saveUser() {
@@ -1499,6 +1581,7 @@ function saveEditedEntry() {
     document.querySelector('button[onclick="addWeight()"]').style.display = 'inline'; // Garante que o botão de adicionar registro volte a ser visível
 }
 
+ // **📌 Atualiza os valores no gráfico**
 function addWeight() {
     let currentWeight = formatNumber(document.getElementById('currentWeight').value.trim());
 
@@ -1536,7 +1619,10 @@ function addWeight() {
 
     console.log("Chamando updateChart() após adicionar peso.");
 }
-    
+
+
+
+
  // 3º bloco
  function updateHistory() {
     let historyList = document.getElementById('historyList');
@@ -1623,8 +1709,53 @@ function deleteEntry(index) {
 
 
 
-</script>
 
+
+
+<!-- 📌 IMAGEM PERFIL Abaixo -->
+
+<script>
+    function openImageSettings() {
+      document.getElementById('imageInputContainer').style.display = 'block';
+      document.getElementById('imageFileInputContainer').style.display = 'block'; // Mostra o seletor de arquivo
+    }
+  
+    function salvarImagemFundo() {
+      const fileInput = document.getElementById('imageFileInput');
+      const file = fileInput.files[0];
+  
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const imageData = e.target.result;
+  
+          // Aplica como fundo e salva no localStorage
+          document.body.style.backgroundImage = `url('${imageData}')`;
+          localStorage.setItem('appBackground', imageData);
+  
+          // Oculta os campos após salvar
+          document.getElementById('imageInputContainer').style.display = 'none';
+          document.getElementById('imageFileInputContainer').style.display = 'none';
+        };
+        reader.readAsDataURL(file); // Converte imagem em base64
+      } else {
+        alert("Por favor, selecione uma imagem.");
+      }
+    }
+  
+    function handleImageUpload() {
+      salvarImagemFundo(); // Só chama salvar direto, tudo centralizado
+    }
+  
+    // Aplica imagem salva automaticamente ao carregar a página
+    window.onload = function() {
+      const imagemSalva = localStorage.getItem('appBackground');
+      if (imagemSalva) {
+        document.body.style.backgroundImage = `url('${imagemSalva}')`;
+      }
+    };
+  </script>
+  
   </body>
   </html>
   
