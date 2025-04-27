@@ -46,7 +46,7 @@ html, body {
     box-sizing: border-box;
     text-align: center; /* Centraliza o conteúdo */
     overflow: hidden; /* Evita que o conteúdo ultrapasse o contêiner */
-    background: white; /* Fundo branco */
+    background: #ffffffE6; /* Fundo branco */
     border-radius: 20px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* Adiciona sombra */
     min-height: 100vh; /* Garante que o contêiner preencha a altura total da tela */
@@ -328,6 +328,25 @@ button:hover {
     background-color: #45a049; /* Muda a cor ao passar o mouse */
   }
 
+
+
+/* 🎨 IMAGEM DA TELA */
+   
+#imageFileInputContainer {
+  border: 2px solid #ddd;
+  padding: 20px;
+  margin-top: 10px;
+  border-radius: 10px;
+  background-color: #ffffff;
+}
+
+#dynamicMessage {
+  font-size: 10px; /* Ajuste para o tamanho que desejar */
+  font-family: Arial, sans-serif; /* Pode definir uma fonte específica, se necessário */
+  text-align: center;
+}
+
+
  
 </style>
     
@@ -390,9 +409,6 @@ button:hover {
         <div id="motivationalPhrase" style="margin-top: 4px; font-weight: bold;"></div>
       </div>
       <p id="registroCount" style="margin-top: 5px; font-size: 13px; color: #444; text-align: left;"></p>
-
-
-
 
 
 <!-- Botão + Frase, tudo dentro do graphContainer -->
@@ -474,7 +490,6 @@ button:hover {
   </div>
 
 
- 
 <!--  /* 🎨 BOTÕES PERFIL */ -->
 
 <!-- Botões -->
@@ -494,14 +509,13 @@ button:hover {
     Perfil salvo com sucesso!
   </div>
   
-
-        <!-- 🎨 BOTÕES imagem de tela -->
+  <!-- 🎨 BOTÕES imagem de tela -->
 <div id="imageInputContainer" style="display: none; margin-top: 10px;">
   <!-- Agora vazio, apenas controle visual -->
 </div>
 
 <!-- 🎯 Botão para abrir as opções -->
-<button onclick="openImageSettings()">Imagem do App</button>
+<button onclick="openImageSettings()">Imagem tela da inicial</button>
 
 <!-- 📸 Campo escondido para selecionar imagem (galeria ou câmera) -->
 <div id="imageFileInputContainer" style="display: none; margin-top: 10px;">
@@ -510,9 +524,54 @@ button:hover {
     id="imageFileInput" 
     accept="image/*"
     style="padding: 8px;"
-  >
-  <button onclick="handleImageUpload()">Salvar essa imagem</button>
+    onchange="previewImage()"  <!-- Comentário correto fora do atributo -->
+
+<!-- 📸 Imagem pré-vizualização -->
+
+ <!-- Container de pré-visualização com borda, margem e tamanho ajustável -->
+<div id="previewContainer" style="display: none; margin-top: 10px; margin-bottom: 20px; border: 2px solid #ddd; padding: 10px; border-radius: 10px; background-color: #fff; max-width: 80%; overflow: hidden; margin-left: auto; margin-right: auto;">
+  <img id="previewImage" src="" alt="Pré-visualização" style="max-width: 100%; height: auto; object-fit: contain; border-radius: 8px; margin: auto; display: block;">
 </div>
+
+ <!-- Container para a frase dinâmica -->
+ <p id="dynamicMessage" style="text-align: center; width: 100%; font-size: 12px; margin-bottom: 20px;">
+  Escolha uma imagem da galeria ou câmera para a tela inicial
+</p>
+
+<!-- Container para os botões -->
+<div id="buttonContainer" style="display: none; justify-content: center; gap: 10px; margin-top: 10px; width: 100%;">
+
+  <!-- Botão "Escolher outra imagem" -->
+  <button 
+    id="chooseAnotherButton" 
+    onclick="chooseAnotherImage()" 
+    style="display: none; width: 300px; margin-left: 5px; margin-right: 5px;"
+  >
+    Escolher outra imagem
+  </button>
+
+  <!-- Botão "Salvar essa imagem" -->
+  <button 
+    id="saveImageButton" 
+    onclick="handleImageUpload()" 
+    style="display: none; width: 300px; margin-left: 5px; margin-right: 5px;"
+  >
+    Salvar essa imagem
+  </button>
+
+</div>
+
+<!-- 📸 Campo escondido para selecionar imagem (galeria ou câmera) -->
+<div id="imageFileInputContainer" style="display: none; margin-top: 10px;">
+    <input 
+      type="file" 
+      id="imageFileInput" 
+      accept="image/*"
+      style="padding: 8px;"
+      onchange="previewImage()"  <!-- Chama a função de pré-visualização -->
+    >
+    <button onclick="handleImageUpload()">Salvar essa imagem</button>
+  </div>
 
 <!-- 🧠 Scripts -->
 <script>
@@ -547,14 +606,9 @@ button:hover {
     }
   };
 </script>
-
-    
-
+<!-- 🧠 Fim imamem de tela -->
 
 
-
-
-        
 
 <script>
   // Função que alterna entre Perfil e Salvar
@@ -1711,9 +1765,6 @@ function deleteEntry(index) {
 
 
 
-
-
-
 <!-- 📌 IMAGEM PERFIL Abaixo -->
 
 <script>
@@ -1756,6 +1807,62 @@ function deleteEntry(index) {
         document.body.style.backgroundImage = `url('${imagemSalva}')`;
       }
     };
+
+
+    <!-- 📌 img pré-visualização 2 -->
+   
+    function previewImage() {
+  const fileInput = document.getElementById('imageFileInput');
+  const file = fileInput.files[0];
+
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const imageUrl = e.target.result;
+
+      // Mostra o container de pré-visualização com a imagem
+      document.getElementById('previewContainer').style.display = 'block';
+      document.getElementById('previewImage').src = imageUrl;
+
+      // Esconde o botão "Escolher arquivo"
+      fileInput.style.display = 'none';
+
+      // Exibe os botões após a imagem ser carregada
+      document.getElementById('buttonContainer').style.display = 'flex'; // Exibe os botões
+      document.getElementById('chooseAnotherButton').style.display = 'inline-block';
+      document.getElementById('saveImageButton').style.display = 'inline-block';
+
+      // **Aqui está a alteração da frase**
+      document.getElementById('dynamicMessage').innerText = "Imagem carregada. Você pode escolher outra ou salvar essa imagem.";
+
+// Ajustando o tamanho da fonte da frase dinamicamente
+document.getElementById('dynamicMessage').style.fontSize = "12px"; // Ajuste o valor conforme necessário
+
+    };
+
+    // Certifique-se de que a imagem será lida
+    reader.readAsDataURL(file);
+  } else {
+    alert('Por favor, selecione uma imagem.');
+  }
+}
+
+// Função para escolher outra imagem e recarregar a pré-visualização
+
+function chooseAnotherImage() {
+  document.getElementById('previewImage').src = '';
+  document.getElementById('previewContainer').style.display = 'none';
+  document.getElementById('imageFileInputContainer').style.display = 'block';
+  document.getElementById('chooseAnotherButton').style.display = 'none';
+  document.getElementById('imageFileInput').value = '';
+  document.getElementById('imageInputContainer').style.display = 'block';
+
+  // 👇 Esta linha aqui é a chave!
+  document.getElementById('imageFileInput').style.display = 'block';
+
+  document.getElementById('imageFileInput').addEventListener('change', previewImage);
+}
+
   </script>
   
   </body>
