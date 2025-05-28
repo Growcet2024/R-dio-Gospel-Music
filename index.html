@@ -1,1870 +1,332 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Controle de Peso</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-
-<!-- Biblioteca Gráfico -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
-
-
-<!-- Biblioteca PDF --> 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
-<body>
-
-    <style>
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start; /* Em vez de center, coloca flex-start */
-    min-height: 100vh; /* Usa min-height para evitar corte */
-    padding-top: 20px; /* Dá um pequeno espaço extra no topo */
-}
-
-/* Resetando margem e padding do body e html */
-html, body {
-    margin: 0;
-    padding: 0;
-    height: 100%; /* Garantir que o html e body ocupem toda a altura */
-}
-
-/* Conteiner principais */
-.container {
-    width: 100%;
-    max-width: 800px; /* Limita a largura máxima para que o conteúdo não fique esticado demais */
-    margin: 0 auto; /* Centraliza o contêiner */
-    padding: 20px;
-    box-sizing: border-box;
-    text-align: center; /* Centraliza o conteúdo */
-    overflow: hidden; /* Evita que o conteúdo ultrapasse o contêiner */
-    background: #ffffffE6; /* Fundo branco */
-    border-radius: 20px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* Adiciona sombra */
-    min-height: 100vh; /* Garante que o contêiner preencha a altura total da tela */
-}
-
-
-/* Botões principais registros */
-input,
-button {
-    width: 80%; /* Garante que os inputs e botões ocupem 90% da largura do contêiner */
-    margin-bottom: 20px; /* Adiciona um pequeno espaçamento entre os campos */
-    padding: 14px;
-    border-radius: 20px;
-    border: 1px solid #ccc;
-    box-sizing: border-box;
-}
-
-/* Estilizando os botões */
-button {
-    background-color: #007bff;
-    color: white;
-    cursor: pointer;
-    border: none;
-}
-
-button:hover {
-    background-color: #218838;
-}
-
-
-#historyList {
-    list-style-type: none;
-    padding: 0;
-}
-
-#imcTable {
-    width: 100%;
-    margin-top: 20px;
-    border-collapse: separate; /* Mude de collapse para separate */
-    border-spacing: 0; /* Tira o espaçamento extra */
-    border-radius: 10px;
-    overflow: hidden; /* Faz o arredondamento funcionar visualmente */
-    display: none;
-}
-
-
-#imcTable th,
-#imcTable td {
-    padding: 14px;
-    border: 1px solid #ddd;  /* Cor da borda IMC */
-    text-align: left;
-}
-
-#imcTable th {
-    background-color: #007bff;
-    color: white;
-}
-
-/* Resultados e outros textos */
-#resultDisplay {
-    font-weight: bold;
-    font-size: 16px;
-    margin-top: 10px;
-}
-
-
-/* Estilo para resultado Peso e IMC */
-#resultDisplay {
-  margin-top: 1px; /* Distância de 10px do elemento acima */
-  font-size: 16px;
-  font-weight: bold;
-  color: #333; /* Cor escura para o texto */
-}
-
-
-      /* Botão tabela IMC */
-#toggleButton {
-    background-color: #007bff;
-    color: white;
-    padding: 14px;
-    border: none;
-    border-radius: 20px;
-    cursor: pointer;
-    margin-top: 1px;
-}
-
-#toggleButton:hover {
-    background-color: #218838;
-}
-
-/* Conteiner Histórico de Pesagem */
-
-
-/* Estilo do botão de Histórico de Pesagem */
-.historyButton {
-    padding: 13px 20px;
-    font-size: 16px;
-    cursor: pointer;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    margin-top: 10px;
-    transition: background-color 0.3s ease;
-}
-
-.historyButton:hover {
-    background-color: #45a049;
-}
-
-
-/* Estilo do botão de Histórico de Pesagem */
-.historyButton {
-  padding: 13px 20px;
-  font-size: 16px;
-  cursor: pointer;
-  background-color: #007BFF; /* Azul elegante */
-  color: white;
-  border: none;
-  border-radius: 20px; /* Bordas mais arredondadas */
-  margin-top: 1px;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-}
-
-
-.historyButton:hover {
-  background-color: #218838; /* Azul mais escuro no hover */
-  transform: scale(1.03); /* Efeito leve de zoom no hover */
-}
-
-/* Estilo da lista de histórico */
-#historyList {
-    margin-top: 5px;    /* Margem de 10px na parte superior */
-    margin-bottom: 5px; /* Margem de 10px na parte inferior */
-    padding-left: 20px; */← Novo padding à esquerda */
-    padding-right: 1px; /* ← Novo padding à direita */
-    display: none;      /* Inicialmente escondido */
-    list-style-type: none;
-    
-    /* 👇 Aqui está a borda */
-    border: 2px solid #ddd; /* Cor cinza clara, você pode trocar */
-    border-radius: 10px;      /* Cantos arredondados */
-    background-color: #ffffff; /* Fundo claro */
-}
-
-.historyButton:hover {
-  background-color: #007BFF;
-  color: white;
-}
-
-  /* 🎨 CSS BARRA DE ROLAGEM - GRÁFICO */
-#graphSection {
-  margin-bottom: 20px;              /* Espaço abaixo do gráfico */
-  scrollbar-width: thin;            /* Firefox */
-  scrollbar-color: #FFA500 #f0f0f0; /* Firefox */
-}
-
-/* Webkit browsers (Chrome, Edge, Safari) */
-#graphSection::-webkit-scrollbar {
-  height: 10px; /* Altura da barra de rolagem horizontal */
-}
-
-#graphSection::-webkit-scrollbar-track {
-  background: #f0f0f0; /* Fundo da barra */
-}
-
-#graphSection::-webkit-scrollbar-thumb {
-  background: #FFA500;   /* Cor laranja */
-  border-radius: 10px;   /* Cantos arredondados */
-}
-
-#graphSection::-webkit-scrollbar-thumb:hover {
-  background: #FF8C00; /* Laranja mais escuro no hover */
-}
-
-#graphSection {
-  border: 2px solid #ddd;   /* Cor da borda Gráfico */
-  border-radius: 10px;       /* Cantos arredondados, opcional */
-  padding: 10px;             /* Espaço interno para a borda não colar no gráfico */
-  margin-bottom: 20px;       /* Espaço abaixo do gráfico */
-  overflow-x: auto;          /* Manter a rolagem horizontal */
-}
-
-/* 🎨 CSS MENU LATERAL */
-/* Ícone do Menu Hambúrguer */
-.menu-hamburguer {
-    font-size: 30px;
-    cursor: pointer;
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    z-index: 101;
-    color: #000000;
-    background: white;
-    border-radius: 5px;
-    padding: 5px 10px;
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
-}
-
-/* Menu Deslizante */
-.menu-lateral {
-    width: 250px;
-    height: 100%;
-    background: linear-gradient(to right, #0357cd, #2196f3);
-    color: white;
-    position: fixed;
-    top: 0;
-    right: -250px;
-    transition: right 0.3s ease;
-    z-index: 100;
-    padding-top: 60px;
-    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
-}
-
-/* Lista do Menu */
-.menu-lateral ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.menu-lateral ul li {
-    padding: 15px;
-    border-bottom: 1px solid #444;
-}
-
-.menu-lateral ul li a {
-    color: white;
-    text-decoration: none;
-    font-size: 18px;
-    display: block;
-}
-
-.menu-lateral ul li a:hover {
-    background: #444;
-}
-
-
-/* 🎨 CSS PERFIL */
-#userForm {
-  border: 2px solid #ddd;
-  padding: 20px;
-  margin-top: 5px;
-  border-radius: 10px;
-  background-color: #ffffff;
-}
-
-/* Estilo do botão Perfil */
-#editButton {
-  margin-top: 1px; /* Distância de 10px do elemento acima */
-  padding: 10px 20px; /* Adicionei um padding simples, pode ajustar como preferir */
-  font-size: 16px;
-  cursor: pointer;
-  background-color: #007BFF; /* Verde */
-  color: white;
-  border: none;
-  border-radius: 20px; /* Bordas arredondadas */
-  transition: background-color 0.3s ease, transform 0.2s ease;
-}
-
-#editButton:hover {
-  background-color: #218838; /* Verde mais escuro no hover */
-}
-
-  /* CSS para centralizar o botão "Salvar" */
-  #registerButton {
-    display: block;
-    margin: 10px auto; /* Centraliza o botão com um espaçamento de 20px */
-    padding: 10px 20px; /* Adiciona espaçamento interno para o botão */
-    font-size: 16px; /* Ajusta o tamanho da fonte do botão */
-    background-color: #007BFF; /* Cor de fundo do botão */
-    color: white; /* Cor do texto */
-    border: none; /* Remove bordas */
-    border-radius: 20px; /* Bordas arredondadas */
-    cursor: pointer; /* Aparece um cursor de mão ao passar sobre o botão */
-  }
-
-  #registerButton:hover {
-    background-color: #45a049; /* Muda a cor ao passar o mouse */
-  }
-
-
-
-/* 🎨 IMAGEM DA TELA */
-   
-#imageFileInputContainer {
-  border: 2px solid #ddd;
-  padding: 20px;
-  margin-top: 10px;
-  border-radius: 10px;
-  background-color: #ffffff;
-}
-
-#dynamicMessage {
-  font-size: 10px; /* Ajuste para o tamanho que desejar */
-  font-family: Arial, sans-serif; /* Pode definir uma fonte específica, se necessário */
-  text-align: center;
-}
-
-
- 
-</style>
-    
-
- <!-- ✅ Parte 2: Menu hamburguer + menu lateral Gera conteine a esquerda-->
-<span class="menu-hamburguer">☰</span>
-<div class="menu-lateral">
-    <ul>
-        <li><a href="index.html">Voltar à tela inicial</a></li>
-        <li><a href="sobre.html">Sobre</a></li>
-        <li><a href="informações.html">Informações importantes</a></li>
-    </ul>
-</div>
-
-    <div class="container">
-        <h2>Controle de Peso</h2>
-    
-        <!-- Exibe o nome e ID após cadastro -->
-        <p id="userInfo" style="font-weight: bold;"></p>
-    
-        <!-- Campo nome e ID -->
-        <p id="userNameDisplay"></p>
-    
-        <p id="userInfo" style="font-weight: bold; font-size: 16px; margin-bottom: 5px;"></p>
-    
-        <p id="userId" style="display: none;"></p>
-    
-        <!-- Campos de peso e data -->
-        <input type="number" id="currentWeight" placeholder="Digite o peso atual" />
-    
-        <!-- Título "Data:" -->
-        <label for="dateInput"></label>
-    
-        <!-- Campo de data -->
-        <input type="datetime-local" id="dateInput">
-    
-        <button onclick="addWeight()">Adicionar Registro</button>
-    
-        <!-- Botão para salvar a edição após edição de dados -->
-        <button onclick="saveEditedEntry()" style="width: 80%; padding: 14px; background-color: green; color: white; border: none; border-radius: 15px; cursor: pointer; margin-top: 10px;">
-        Salvar Edição
-        </button>
-    
-        <!-- Campo resultado peso saldo e IMC -->
-        <p id="resultDisplay">Peso Saldo: - kg | IMC: -</p>
-
-
-<!-- Botão para exibir/esconder o Gráfico -->
-<button id="toggleGraphButton" onclick="toggleGraph()">Gráfico Evolutivo</button>
-
-<div id="graphSection" style="display: none;">
-    <div id="graphContainer" style="background: white; padding: 10px; min-width: 400px;">
-      <canvas id="weightChart" width="600"></canvas>
-
-
-      <div style="margin-top: 10px; text-align: left; font-size: 10px; color: #333;">
-        <div>Aplicativo controle de peso</div>
-        <div id="nomeInfo"></div>
-        <div id="dataGerada"></div>
-        <div id="motivationalPhrase" style="margin-top: 4px; font-weight: bold;"></div>
-      </div>
-      <p id="registroCount" style="margin-top: 5px; font-size: 13px; color: #444; text-align: left;"></p>
-
-
-<!-- Botão + Frase, tudo dentro do graphContainer -->
-    <div style="margin-top: 8px; margin-bottom: 10px; text-align: left; padding-left: 12px;">
-      <button onclick="downloadPDF()" style="width: 255px;">Baixar Gráfico</button>
-
-        <div style="font-size: 12px; color: #555; margin-top: 4px;">
-            Após abrir o PDF, toque nos três pontinhos e escolha <br>
-            compartilhar no WhatsApp, imprimir ou salvar novamente.
-          </div>
-      </div>
-  
-    </div>
-  </div>
-  
-<!-- Botão para exibir/esconder o Gerar relatório -->
-<button id="toggleReportButton" onclick="toggleReport()">Gerar Relatório</button>
-
-<div id="reportSection" style="display: none;">
-  <div id="reportContent"></div> <!-- histórico -->
-
-  <!-- Frase final com tamanho menor e fora do graphContainer -->
-  <div style="font-size: 12px; color: #555; margin-top: 6px; padding: 0 10px;">
-    Após abrir o PDF, toque nos três pontinhos e escolha compartilhar no WhatsApp, imprimir ou salvar novamente.
-  </div>
-</div>
-
-
-        <!-- Botão IMC -->
-<button id="toggleButton" onclick="toggleTable()">Mostrar Tabela IMC</button>
-
-<!-- Tabela IMC -->
-<table id="imcTable" style="width: 100%; margin-top: 1px; margin-bottom: 10px; border-collapse: collapse; text-align: left; display: none;">
-
-    <thead>
-        <tr style="background-color: #007bff; color: white;">
-            <th style="padding: 8px; border: 1px solid #ddd;">Classificação</th>
-            <th style="padding: 8px; border: 1px solid #ddd;">IMC</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td style="padding: 8px; border: 1px solid #ddd;">Abaixo do peso</td>
-            <td style="padding: 8px; border: 1px solid #ddd;">Menos de 18,5</td>
-        </tr>
-        <tr>
-            <td style="padding: 8px; border: 1px solid #ddd;">Peso normal</td>
-            <td style="padding: 8px; border: 1px solid #ddd;">18,5 - 24,9</td>
-        </tr>
-        <tr>
-            <td style="padding: 8px; border: 1px solid #ddd;">Sobrepeso</td>
-            <td style="padding: 8px; border: 1px solid #ddd;">25 - 29,9</td>
-        </tr>
-        <tr>
-            <td style="padding: 8px; border: 1px solid #ddd;">Obesidade Grau 1</td>
-            <td style="padding: 8px; border: 1px solid #ddd;">30 - 34,9</td>
-        </tr>
-        <tr>
-            <td style="padding: 8px; border: 1px solid #ddd;">Obesidade Grau 2</td>
-            <td style="padding: 8px; border: 1px solid #ddd;">35 - 39,9</td>
-        </tr>
-        <tr>
-            <td style="padding: 8px; border: 1px solid #ddd;">Obesidade Grau 3</td>
-            <td style="padding: 8px; border: 1px solid #ddd;">40 ou mais</td>
-        </tr>
-
-    </tbody>
-</table>
-
-
-<!-- Botão para exibir/esconder o Histórico -->
-<button id="toggleHistoryButton" onclick="toggleHistory()" class="historyButton">
-    Histórico de Pesagem
-  </button>
-  
-  <!-- Seção do Histórico -->
-  <div id="historySection" style="display: none;">
-    <ul id="historyList"></ul>
-  </div>
-
-
-<!--  /* 🎨 BOTÕES PERFIL */ -->
-
-<!-- Botões -->
-<button id="editButton" onclick="toggleEdit()">Perfil</button>
-<button id="registerButton" onclick="registerUser()" style="display: none;">Salvar</button>
-
-<!-- Formulário de informações do usuário -->
-<div id="userForm" style="display: none;">
-  <h3>Criar perfil ou editar</h3> <!-- Frase acima dos campos -->
-  <input type="text" id="userName" placeholder="Digite seu nome">
-  <input type="number" id="height" placeholder="Digite sua altura">
-  <input type="number" id="desiredWeight" placeholder="Digite seu peso desejado">
-  <h6 style="margin-top: 1px;">Aplicativo controle de peso</h6>
-</div>
-
-  <div id="saveMessage" style="display: none; color: green; margin-top: 10px;">
-    Perfil salvo com sucesso!
-  </div>
-  
-  <!-- 🎨 BOTÕES imagem de tela -->
-<div id="imageInputContainer" style="display: none; margin-top: 10px;">
-  <!-- Agora vazio, apenas controle visual -->
-</div>
-
-<!-- 🎯 Botão para abrir as opções -->
-<button onclick="openImageSettings()">Imagem tela da inicial</button>
-
-<!-- 📸 Campo escondido para selecionar imagem (galeria ou câmera) -->
-<div id="imageFileInputContainer" style="display: none; margin-top: 10px;">
-    <input 
-    type="file" 
-    id="imageFileInput" 
-    accept="image/*"
-    style="padding: 8px;"
-    onchange="previewImage()"  <!-- Comentário correto fora do atributo -->
-
-<!-- 📸 Imagem pré-vizualização -->
-
- <!-- Container de pré-visualização com borda, margem e tamanho ajustável -->
-<div id="previewContainer" style="display: none; margin-top: 10px; margin-bottom: 20px; border: 2px solid #ddd; padding: 10px; border-radius: 10px; background-color: #fff; max-width: 80%; overflow: hidden; margin-left: auto; margin-right: auto;">
-  <img id="previewImage" src="" alt="Pré-visualização" style="max-width: 100%; height: auto; object-fit: contain; border-radius: 8px; margin: auto; display: block;">
-</div>
-
- <!-- Container para a frase dinâmica -->
- <p id="dynamicMessage" style="text-align: center; width: 100%; font-size: 12px; margin-bottom: 20px;">
-  Escolha uma imagem da galeria ou câmera para a tela inicial
-</p>
-
-<!-- Container para os botões -->
-<div id="buttonContainer" style="display: none; justify-content: center; gap: 10px; margin-top: 10px; width: 100%;">
-
-  <!-- Botão "Escolher outra imagem" -->
-  <button 
-    id="chooseAnotherButton" 
-    onclick="chooseAnotherImage()" 
-    style="display: none; width: 300px; margin-left: 5px; margin-right: 5px;"
-  >
-    Escolher outra imagem
-  </button>
-
-  <!-- Botão "Salvar essa imagem" -->
-  <button 
-    id="saveImageButton" 
-    onclick="handleImageUpload()" 
-    style="display: none; width: 300px; margin-left: 5px; margin-right: 5px;"
-  >
-    Salvar essa imagem
-  </button>
-
-</div>
-
-<!-- 📸 Campo escondido para selecionar imagem (galeria ou câmera) -->
-<div id="imageFileInputContainer" style="display: none; margin-top: 10px;">
-    <input 
-      type="file" 
-      id="imageFileInput" 
-      accept="image/*"
-      style="padding: 8px;"
-      onchange="previewImage()"  <!-- Chama a função de pré-visualização -->
-    >
-    <button onclick="handleImageUpload()">Salvar essa imagem</button>
-  </div>
-
-<!-- 🧠 Scripts -->
-<script>
-  // Abre o campo para escolher a imagem
-  function openImageSettings() {
-    document.getElementById('imageFileInputContainer').style.display = 'block';
-  }
-
-  // Lida com o upload e salva a imagem
-  function handleImageUpload() {
-    const fileInput = document.getElementById('imageFileInput');
-    const file = fileInput.files[0];
-
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        const imageUrl = e.target.result;
-        document.body.style.backgroundImage = `url('${imageUrl}')`;
-        localStorage.setItem('appBackground', imageUrl);
-      };
-      reader.readAsDataURL(file);
-    } else {
-      alert("Por favor, selecione uma imagem.");
-    }
-  }
-
-  // Carrega a imagem salva ao abrir a página
-  window.onload = function() {
-    const savedBackground = localStorage.getItem('appBackground');
-    if (savedBackground) {
-      document.body.style.backgroundImage = `url('${savedBackground}')`;
-    }
-  };
-</script>
-<!-- 🧠 Fim imamem de tela -->
-
-
-
-<script>
-  // Função que alterna entre Perfil e Salvar
-  function toggleEdit() {
-    // Esconder o botão "Perfil" e mostrar o botão "Salvar"
-    document.getElementById('editButton').style.display = 'none';
-    document.getElementById('registerButton').style.display = 'block';
-    
-    // Exibir o formulário de cadastro
-    document.getElementById('userForm').style.display = 'block';
-  }
-
-  // Função de registro (simula o registro de dados)
-  function registerUser() {
-    // Simulando o processo de registro (você pode adicionar lógica real aqui)
-    console.log("Perfil registrado!");
-
-    // Após o clique em "Salvar", esconder o botão "Salvar" e o formulário
-    document.getElementById('registerButton').style.display = 'none';
-    document.getElementById('userForm').style.display = 'none';
-
-    // Mostrar novamente o botão "Perfil"
-    document.getElementById('editButton').style.display = 'block';
-  }
-
-  // Função para inicializar o estado da página
-  window.onload = function() {
-    // Inicialmente, o botão "Perfil" está visível e o restante está oculto
-    document.getElementById('editButton').style.display = 'block';
-    document.getElementById('registerButton').style.display = 'none';
-    document.getElementById('userForm').style.display = 'none'; // Formulário inicialmente oculto
-  };
-
-
-
-
-</script>
-
-
-<script>
-    // ========================== BLOCO DE EXTRAÇÃO DOS DADOS inicio ==========================
-
-    // == BLOCO DE EXTRAÇÃO DOS DADOS ==
-function extractUserData() {
-    let userId = localStorage.getItem("userId") || "N/A";
-    let userName = localStorage.getItem("userName") || "N/A";
-    let height = localStorage.getItem("height") || "N/A";
-    let desiredWeight = localStorage.getItem("desiredWeight") || "N/A";
-    let history = JSON.parse(localStorage.getItem("history")) || [];
-
-    console.log("ID:", userId);
-    console.log("Nome:", userName);
-    console.log("Altura:", height);
-    console.log("Peso Desejado:", desiredWeight);
-    console.log("Histórico de Pesagem:", history);
-
-    return { userId, userName, height, desiredWeight, history };
-}
-
-// Chamar a função para testar
-extractUserData();
-
-// ========================== BLOCO DE EXTRAÇÃO DOS DADOS fim ==========================
-</script>
-
-
-<!-- RELATORIO - INICIO-->                        
-<script>
-<!-------------------------------- BLOCO GERAR RELATORIO ----------------->
-// BLOCO 01
-
-function toggleReport() {
-    var reportSection = document.getElementById("reportSection");
-    var button = document.getElementById("toggleReportButton");
-
-    if (reportSection.style.display === "none" || reportSection.style.display === "") {
-        reportSection.style.display = "block";
-        button.textContent = "Fechar Relatório";
-
-        let { userId, userName, desiredWeight, history } = extractUserData();
-
-        // Inicia o conteúdo com os dados do usuário
-        let content = `<h3>Aplicativo controle de peso</h3>`;
-        content += `<p><strong>Nome:</strong> ${userName} | <strong>ID:</strong> ${userId} <br> <strong>Peso Desejado:</strong> ${desiredWeight} kg</p>`;
-
-        // Tabela de Histórico de Pesagem
-        content += `<table style="width: 100%; border-collapse: collapse; text-align: left; margin-left: 0px; margin-right: 15px;">
-         <tr>
-         <th style="border: 1px solid #ccc; padding: 2px; font-size: 15px;">Data:</th>
-         <th style="border: 1px solid #ccc; padding: 2px; font-size: 15px;">Peso Atual</th>
-         <th style="border: 1px solid #ccc; padding: 2px; font-size: 15px;">Peso Saldo</th>
-         <th style="border: 1px solid #ccc; padding: 2px; font-size: 15px;">IMC</th>
-         </tr>`;
-
-    // Data dia, mês, ano
-   history.forEach(entry => {
-    // Extrair a data sem a hora do timestamp
-    let dateOnly = entry.timestamp.split(",")[0]; 
-
-    // Dividir a data em partes (dia, mês, ano)
-    let [day, month, year] = dateOnly.split("/");
-
-    // Pegar apenas os dois últimos dígitos do ano
-    let shortYear = year.slice(-2);
-
-    // Formatar a data como dd/mm/aa
-    let formattedDate = `${day}/${month}/${shortYear}`;
-
-    // Adicionar a data formatada na tabela
-    content += `<tr>
-        <td style="border: 1px solid #ccc; padding: 6px; font-size: 14px;">${formattedDate}</td>
-        <td style="border: 1px solid #ccc; padding: 6px; font-size: 14px;">${entry.currentWeight} kg</td>
-        <td style="border: 1px solid #ccc; padding: 6px; font-size: 14px;">${entry.balanceSign} kg</td>
-        <td style="border: 1px solid #ccc; padding: 6px; font-size: 14px;">${entry.imc}</td>
-    </tr>`;
-});
-
-        // Adiciona data e hora do relatório gerado
-        content += `<p><strong>Relatório gerado em:<br></strong> ${new Date().toLocaleString()}</p>`;
-        content += `</table>`;
-
-        // Unificando as frases: Contagem de registros e diferença de peso
-
-        let firstWeight = parseFloat(history[0].currentWeight); // Peso inicial (primeiro registro)
-        let lastWeight = parseFloat(history[history.length - 1].currentWeight); // Peso final (último registro)
-
-        
-
-      // Calculando a diferença de peso rever isso
-      let weightDifference = lastWeight - firstWeight;
-
-
-
-let weightChangeMessage = "";
-
-// Verifica se o peso aumentou ou diminuiu
-if (weightDifference > 0) {
-    if (weightDifference >= 1) {
-        // Se a diferença for maior ou igual a 1 kg
-        weightChangeMessage = `houve uma perda de ${weightDifference.toFixed(2)} kg desde a primeira pesagem.`;
-    } else {
-        // Se a diferença for menor que 1 kg, exibe em gramas
-        weightChangeMessage = `houve uma perda de ${(weightDifference * 1000).toFixed(0)} gramas desde a primeira pesagem.`;
-    }
-} else if (weightDifference < 0) {
-    if (Math.abs(weightDifference) >= 1) {
-        // Se a diferença for maior ou igual a 1 kg
-        weightChangeMessage = `houve um ganho de ${Math.abs(weightDifference).toFixed(2)} kg desde a primeira pesagem.`;
-    } else {
-        // Se a diferença for menor que 1 kg, exibe em gramas
-        weightChangeMessage = `houve um ganho de ${Math.abs(weightDifference * 1000).toFixed(0)} gramas desde a primeira pesagem.`;
-    }
-} else {
-    weightChangeMessage = "Seu peso se manteve igual."; // Se não houve alteração
-}
-
-// Unificando as frases: Contagem de registros e diferença de peso
-
-content += `<p style="text-align: center; margin-top: 10px; font-size: 12px; color: #333;">
-  Aqui tem ${history.length} registros, ${weightChangeMessage}</p>`;
-
-
-// FRASE MOTIVACIONAL
-// Agora, usamos essa variável para comparar com o peso desejado
-// Verifique se a lista `history` tem pelo menos um item
-
-
-    // FRASE MOTIVACIONAL
-if (history.length > 0) {
-    let firstWeight = parseFloat(history[0].currentWeight); // Peso inicial (primeiro registro)
-
-    let motivationalMessage = "";
-
-    let weightDifference = desiredWeight - firstWeight; // Diferença do peso desejado
-
-    // Tolerância para considerar que o objetivo foi alcançado (por exemplo, 0.1 kg)
-    const tolerance = 0.1;
-
-    // Quando o peso estiver suficientemente próximo do objetivo (considerando a tolerância)
-    if (Math.abs(weightDifference) <= tolerance) {
-        motivationalMessage = `<p style='text-align: center; font-size: 12px; color: green;'>Parabéns! Você alcançou os ${desiredWeight} kg! Mantenha o foco para manter esse peso saudável!</p>`;
-    } 
-    // Quando estiver muito perto de alcançar o objetivo
-    else if (weightDifference > 0 && weightDifference <= 2) {
-        motivationalMessage = `<p style='text-align: center; font-size: 12px; color: blue;'>Ótimo progresso! Você está prestes a atingir ${desiredWeight} kg! Faltam só ${weightDifference.toFixed(2)} kg para alcançar sua meta!</p>`;
-    } 
-    // Quando faltam alguns quilos, mas já progrediu bastante
-    else if (weightDifference > 2 && weightDifference <= 5) {
-        motivationalMessage = `<p style='text-align: center; font-size: 12px; color: blue;'>Incrível! Você está a um passo de alcançar seu objetivo. Faltam só ${weightDifference.toFixed(2)} kg para os ${desiredWeight} kg!</p>`;
-    } 
-    // Quando o peso já foi ultrapassado, acima do objetivo
-    else if (firstWeight > desiredWeight) {
-        let excessWeight = firstWeight - desiredWeight; // Peso que ultrapassou o objetivo
-
-        // Se ultrapassou o objetivo por uma diferença pequena (até 1 kg)
-        if (excessWeight > 0 && excessWeight <= 1) {
-            motivationalMessage = `<p style='text-align: center; font-size: 12px; color: orange;'>Você ultrapassou seu objetivo por apenas ${excessWeight.toFixed(2)} kg! Ajuste um pouco mais para alcançar o equilíbrio!</p>`;
-        }
-        // Se ultrapassou o objetivo por uma diferença média (entre 1 kg e 2 kg)
-        else if (excessWeight > 1 && excessWeight <= 2) {
-            motivationalMessage = `<p style='text-align: center; font-size: 12px; color: orange;'>Você superou seu objetivo em ${excessWeight.toFixed(2)} kg! Mantenha o foco para alcançar um nível saudável.</p>`;
-        }
-        // Se ultrapassou o objetivo por uma diferença considerável (entre 2 kg e 5 kg)
-        else if (excessWeight > 2 && excessWeight <= 5) {
-            motivationalMessage = `<p style='text-align: center; font-size: 12px; color: orange;'>Você ultrapassou seu objetivo em ${excessWeight.toFixed(2)} kg! É importante focar em manter ou ajustar seu peso agora.</p>`;
-        }
-        // Se ultrapassou o objetivo por uma diferença significativa (acima de 5 kg)
-        else {
-            motivationalMessage = `<p style='text-align: center; font-size: 12px; color: red;'>Alerta! Você ultrapassou ${excessWeight.toFixed(2)} kg. do seu objetivo. Ajuste seu peso para um equilíbrio saudável.</p>`;
-        }
-    }
-    // Quando ainda está abaixo do peso desejado
-    else if (firstWeight < desiredWeight) {
-        let missingWeight = desiredWeight - firstWeight; // Peso que falta para o objetivo
-
-        motivationalMessage = `<p style='text-align: center; font-size: 12px; color: red;'>Faltam ${missingWeight.toFixed(2)} kg para você atingir ${desiredWeight} kg. Alimente-se bem para alcançar sua meta com saúde!</p>`;
-    }
-
-    // Exibe a frase motivacional
-    content += motivationalMessage;
-} else {
-    console.error("A lista de histórico está vazia. Não é possível calcular o peso inicial.");
-}
-
-        // Botões para PDF, WhatsApp e enviar para número
-        content += `</ul></div>`;
-        content += `<div style="text-align: center; margin-top: 10px;">`;
-        content += `<button onclick="generatePDF()" style="margin-right: 10px;">Baixar Relatório</button>`;
-        
-        content += `</div>`;
-
-        // Exibe o conteúdo gerado no HTML
-        document.getElementById("reportContent").innerHTML = content;
-
-    } else {
-        reportSection.style.display = "none";
-        button.textContent = "Gerar Relatório";
-    }
-}
-
-function loadReportData() {
-    var reportContent = document.getElementById("reportContent");
-    reportContent.innerHTML = ""; // Limpa antes de adicionar novos dados
-
-    // Exemplo de dados carregados (substitua pela lógica real)
-    var userData = {
-        name: "Usuário Exemplo",
-        id: "12345",
-        pesoDesejado: "70kg",
-        historico: [
-            { data: "18/03/2025", peso: "65kg", saldo: "+5kg", imc: "22.5" },
-            { data: "17/03/2025", peso: "64kg", saldo: "+4kg", imc: "22.0" }
-        ]
-    };
-
-    // Monta o cabeçalho
-
-    var header = `<p><strong>Nome:</strong> ${userData.name} | <strong>ID:</strong> ${userData.id}</p>
-                   <p><strong>Peso Desejado:</strong> ${userData.pesoDesejado}</p>`;
-    reportContent.innerHTML += header;
-
-    // Monta a tabela de histórico
-    var table = `<table border='1' style='width:100%; text-align:left;'>
-                    <tr><th>Data</th><th>Peso Atual</th><th>Saldo</th><th>IMC</th></tr>`;
-    userData.historico.forEach(item => {
-        table += `<tr><td>${item.data}</td><td>${item.peso}</td><td>${item.saldo}</td><td>${item.imc}</td></tr>`;
-    });
-    table += "</table>";
-    reportContent.innerHTML += table;
-}
-
-// CSS = Adicionando borda e organização visual ao relatório
-document.addEventListener("DOMContentLoaded", function() {
-    var reportSection = document.getElementById("reportSection");
-    reportSection.style.border = "1px solid #ddd"; // cor da borta Relatório
-    reportSection.style.padding = "10px";
-    reportSection.style.marginTop = "1px";
-    reportSection.style.marginBottom = "10px";
-    reportSection.style.borderRadius = "10px";
-    reportSection.style.width = "94%";
-    reportSection.style.backgroundColor = "#ffffff";
-});
-
-</script>
-
-
-<script>
-// BLOCO 02 = Captura de Dados
-function getUserReportData() {
-    // Captura os dados básicos do usuário
-    let userId = localStorage.getItem("userId") || "N/A";
-    let userName = localStorage.getItem("userName") || "N/A";
-    let desiredWeight = localStorage.getItem("desiredWeight") || "N/A";
-    
-    // Captura o histórico de pesagem
-    let history = JSON.parse(localStorage.getItem("history")) || [];
-    
-    // Garante que o histórico tenha a estrutura correta
-    if (!Array.isArray(history)) {
-        history = [];
-        console.warn("O histórico de pesagem está com formato inválido.");
-    }
-    
-    return { userId, userName, desiredWeight, history };
-}
-</script>
-
-<script>
-// BLOCO 03 - ORGANIZAR DADOS DO HISTÓRICO
-function getFormattedHistory() {
-    let history = JSON.parse(localStorage.getItem("history")) || [];
-
-    // Formatar os dados do histórico
-    let formattedHistory = history.map(entry => {
-        return `Data: ${entry.timestamp.split(',')[0]} | Peso Atual: ${entry.currentWeight} kg | IMC: ${entry.imc}`;
-    }).join("\n");
-
-    return formattedHistory;
-}
-</script>
-
-<script>
-// BLOCO 04 - GERAR RELATÓRIO COMPLETO
-function generateReportText() {
-
-
-    // Obtém as informações básicas
-    let { userId, userName, desiredWeight } = getUserReportData();
-let userInfo = `Nome: ${userName} | ID: ${userId} | Peso desejado: ${desiredWeight} kg`;
-
-
-
-    let historyData = getFormattedHistory(); // Obtém os dados formatados do histórico
-
-    let reportText = `${userInfo}\n\nHistórico de Pesagem:\n${historyData}`;
-    return reportText;
-}
-</script>
-
-<script>
-// BLOCO 05 - EXIBIR RELATÓRIO NA TELA
-function displayReport() {
-    let reportContent = generateReportText(); // Obtém o texto do relatório
-    let reportContainer = document.getElementById("reportDisplay"); // Elemento onde será exibido
-
-    reportContainer.textContent = reportContent; // Exibe o relatório na tela
-    reportContainer.style.whiteSpace = "pre-line"; // Mantém a formatação de quebras de linha
-}
-</script>
-
-
-<!-- BLOCO 06 - Função baixar PDF -->
-<script>
-function generatePDF() {
-    // Oculta os botões temporariamente
-    const buttons = document.querySelectorAll("#reportSection button");
-    buttons.forEach(button => button.style.display = "none");
-
-    const { jsPDF } = window.jspdf;  // Acesso correto para jsPDF versão 2.x
-    const doc = new jsPDF("p", "mm", "a4");
-    doc.setFontSize(10); // Reduz o tamanho da fonte para caber melhor
-    doc.rect(15, 15, 180, 267);  // Ajuste de margens (topo e esquerda com 10mm)
-
-    doc.setFont("helvetica", "bold"); // Define fonte em negrito
-    doc.text("Relatório de Pesagem", 20, 22);
-    doc.setFont("helvetica", "normal"); // Retorna a fonte ao normal para o restante do conteúdo
-
-    let content = document.getElementById("reportContent").innerText; // Captura o texto visível
-
-    doc.text(content, 20, 27); // Adiciona o conteúdo ao PDF
-    doc.save("Relatorio_Pesagem.pdf"); // Baixa o arquivo  
-
-    // Restaura a exibição dos botões
-    buttons.forEach(button => button.style.display = "inline-block");
-}
- </script>
-    
-<!-- GRAFICO EVOLUTIVO -->
-
-<script>
-<!-------------------------------- BLOCO GRAFICO EVOLUTIVO----------------->
-    <!-- BLOCO 01 -->
-    function toggleGraph() {
-            var graphSection = document.getElementById("graphSection");
-            var button = document.getElementById("toggleGraphButton");
-    
-            if (graphSection.style.display === "none" || graphSection.style.display === "") {
-                graphSection.style.display = "block";
-                button.textContent = "Fechar Gráfico";
-            } else {
-                graphSection.style.display = "none";
-                button.textContent = "Gráfico Evolutivo";
-            }
-        }
-      
-        
-    <!-- BLOCO 2 = Capturar os dados do localStorage-->
-   
-    // Função para capturar os dados do localStorage e formatar corretamente
-
-    function getWeightData() { 
-    let userData = extractUserData();
-    let records = userData.history || [];
-
-    // Formata a data para exibir o ano com apenas dois dígitos
-    let labels = records.map(record => {
-        let [data] = record.timestamp.split(',');
-        let [dia, mes, ano] = data.trim().split('/').map(str => str.trim());
-        ano = ano.substring(2); // ou .slice(-2)
-        return `${dia}/${mes}/${ano}`;
-    });
-
-    let weights = records.map(record => parseFloat(record.currentWeight));
-    let imcValues = records.map(record => parseFloat(record.imc));
-
-    return { labels, weights, imcValues };
-}
-
-
-<!-- BLOCO 3 -->
-
-// BLOCO 3 - Gráfico em Barras Verticais
-function updateChart() {
-    let { labels, weights, imcValues } = getWeightData();
-
-    if (window.myChart) {
-        window.myChart.destroy();
-    }
-
-    const mediaPeso = (weights.reduce((a, b) => a + b, 0) / weights.length).toFixed(2);
-    const mediaIMC = (imcValues.reduce((a, b) => a + b, 0) / imcValues.length).toFixed(2);
-
-    const maxPeso = Math.max(...weights);
-    const maxIMC = Math.max(...imcValues);
-    const maxValue = Math.max(maxPeso, maxIMC) + 10;  // Escala sobrando acima
-
-    const ctx = document.getElementById("weightChart").getContext("2d");
-    window.myChart = new Chart(ctx, {
-        type: "bar",
-        data: {
-            labels: labels,
-            datasets: [
-                {
-                    label: `Peso (média): ${mediaPeso}`,
-                    data: weights,
-                    borderColor: "#007bff",
-                    backgroundColor: "#007bff40",
-                    borderWidth: 0,
-                    fill: true,
-                    pointBackgroundColor: "#007bff",
-                    pointRadius: 2,
-                    pointHoverRadius: 2,
-                    pointBorderWidth: 2
-                },
-                {
-                    label: `IMC (média): ${mediaIMC}`,
-                    data: imcValues,
-                    borderColor: "#28a745",
-                    backgroundColor: "#28a74540",
-                    borderWidth: 0,
-                    fill: true,
-                    pointBackgroundColor: "#28a745",
-                    pointRadius: 2,
-                    pointHoverRadius: 2,
-                    pointBorderWidth: 2
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                tooltip: {
-    enabled: false // ← Isso desativa os pop-ups nas barras
-  },
-                datalabels: {
-                    color: "#000000",
-                    anchor: 'end',
-                    align: 'start',
-                    rotation: 90,  // Inclinação dos dados peso imc
-                    offset: -20,
-                    font: ctx => {
-                        const totalBarras = ctx.chart.data.labels.length;
-                        const largura = ctx.chart.width;
-                        const baseSize = 8; // Fonte dos dados peso imc
-                        const ajuste = Math.max(6, Math.min(baseSize, largura / totalBarras / 2));
-                        return {
-                            size: ajuste,
-                            weight: 'normal'
-                        };
-                    },
-                    formatter: value => value.toFixed(2)
-                },
-                legend: {
-                    labels: {
-                        usePointStyle: true,
-                        pointStyle: 'rect'
-                    }
-                }
-            },
-            layout: {
-                padding: {
-                    left: 0,
-                    right: 0,
-                    top: 10,
-                    bottom: 10
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    suggestedMax: maxValue
-                },
-                x: {
-                    ticks: {
-                        minRotation: 45, // Inclinação das datas
-                        maxRotation: 45,
-                        font: {
-                            size: 10  // Fonte das datas
-                        }
-                    }
-                }
-            }
-        },
-
-        plugins: [ChartDataLabels]
-  });
-
-  // 👇 Atualiza o total de registros dinamicamente
-  document.getElementById("registroCount").textContent = `Total de registros: ${labels.length}`;
-}
-
-
-
-// Função para atualizar a data e hora da geração do gráfico
-function atualizarDataGerada() {
-  const agora = new Date();
-  const dataFormatada = agora.toLocaleString('pt-BR'); // ex: 09/04/2025, 15:03:22
-  const elementoData = document.getElementById("dataGerada");
-  if (elementoData) {
-    elementoData.textContent = `Gráfico gerado em: ${dataFormatada}`;
-  }
-}
-
-// Função para preencher as informações do usuário
-function preencherNomeInfo() {
-    const userName = localStorage.getItem("userName") || "Usuário";
-    const userId = localStorage.getItem("userId") || "ID-desconhecido";
-    const desiredWeight = localStorage.getItem("desiredWeight") || "--";
-
-    const nomeInfoText = `Nome: ${userName} | ID: ${userId} | Peso Desejado: ${desiredWeight} kg`;
-    document.getElementById("nomeInfo").innerText = nomeInfoText;
-}
-
-// Chamadas para renderizar o gráfico e as informações
-updateChart();  // gráfico é desenhado
-preencherNomeInfo();  // exibe as infos corretamente
-
-updateChart(); // Atualiza o gráfico
-atualizarFraseMotivacional(); // Atualiza a frase motivacional
-atualizarDataGerada(); // Atualiza a data/hora do gráfico
-
-
-// 👇 Atualizar Adiciona aqui o total de registros
-atualizarFraseMotivacional();
-
-
-// BLOCO 4 - Atualiza informações abaixo do gráfico
-
-<!-- BLOCO 4 - Frase motivacional -->
- 
-function atualizarFraseMotivacional() {
-  let { imcValues, labels } = getWeightData(); // ← TEM que ser assim!
-
-  if (imcValues.length === 0) return;
-
-  const primeiroIMC = imcValues[0];
-  let frase = "";
-
-  if (primeiroIMC < 18.5) {
-    frase = "Seu IMC indica que você está abaixo do peso. Mantenha-se atento à sua saúde!";
-  } else if (primeiroIMC >= 18.5 && primeiroIMC < 25) {
-    frase = "Parabéns! Seu IMC está dentro do peso ideal. Continue assim!";
-  } else if (primeiroIMC >= 25 && primeiroIMC < 30) {
-    frase = "Seu IMC está acima do ideal. Com pequenas mudanças, é possível alcançar uma saúde melhor!";
-  } else {
-    frase = "Seu IMC sugere obesidade. Cuidar da sua saúde é um passo valioso rumo ao bem-estar.";
-  }
-
-  document.getElementById("motivationalPhrase").textContent = frase;
-
-  // 👇 Adiciona aqui o total de registros
-  document.getElementById("registroCount").textContent = `Total de registros: ${labels.length}`;
-}
-
-
-
-<!-- BLOCO 5 --> – Função para Baixar PDF
-
-  async function downloadPDF() {
-    const { jsPDF } = window.jspdf;
-    const canvas = document.getElementById("weightChart");
-
-     // 👇 Recupera os dados
-     const { labels } = getWeightData();
-
-    // Gera a imagem do gráfico
-    const chartImage = canvas.toDataURL("image/png", 1.0);
-
-    const doc = new jsPDF({
-      orientation: 'landscape',
-      unit: 'pt',
-      format: 'a4'
-    });
-
-    const pageWidth = doc.internal.pageSize.getWidth();
-    const pageHeight = doc.internal.pageSize.getHeight();
-
-    const imgWidth = pageWidth - 80;  // Margem horizontal
-    const imgHeight = (canvas.height / canvas.width) * imgWidth;
-
-    // Título
-    doc.setFontSize(14);
-    doc.text("Gráfico de Peso e IMC", 40, 40);
-
-    // Dados de identificação (puxados corretamente)
-    const userName = localStorage.getItem('userName') || "Usuário";
-    const userId = localStorage.getItem('userId') || "Sem ID";
-    const pesoDesejado = localStorage.getItem("desiredWeight") || "Não definido";
-    const dataGerada = document.getElementById("dataGerada").innerText;
-    const fraseMotivacional = document.getElementById("motivationalPhrase").innerText;
-
-    doc.setFontSize(10);
-    doc.text(`Nome: ${userName} | ID: ${userId} | Peso Desejado: ${pesoDesejado} kg`, 40, 60);
-    doc.text(dataGerada, 40, 75);
-    doc.setFont(undefined, "bold");
-    doc.text(fraseMotivacional, 40, 90);
-    doc.setFont(undefined, "normal");
-
-    // 👇 Adiciona o total de registros
-    doc.text(`Total de registros: ${labels.length}`, 40, 105); // <- essa linha é nova!
-
-    // Adiciona imagem do gráfico
-    doc.addImage(chartImage, "PNG", 40, 120, imgWidth, imgHeight);
-
-    // Salvar
-    doc.save("grafico_peso_imc.pdf");
-
-
-        //  👇 Adiciona o total de registros
-        const totalRegistros = labels.length; // Pega a quantidade de registros
-    doc.text(`Total de Registros: ${totalRegistros}`, 40, pageHeight - 30);  // Exibe no rodapé do PDF
-
-  }
-
-</script>
-
-
- <!-- Bloco botão historico de pesagem  inicio-->
-<!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Página de Histórico de Pesagem</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>seproteger</title>
     <style>
-        /* Estilo para a seção do histórico inicialmente escondido */
-        #historySection {
-            display: none;
+        /* ============================ Estilo geral ============================ */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f7f8;
         }
+
+        /* ============================ Estilo do cabeçalho ============================ */
+        header {
+            text-align: left;
+            background-color: #ffffff;
+            padding: 20px;
+            margin-bottom: 0;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 35px;
+            color: #52467e; //cor do título barra superioe
+        }
+
+        hr.separator {
+            margin: 0;
+            border: 0;
+            border-top: 3px solid #ffffff;
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+
+        /* ============================ Container de Conteúdo ============================ */
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* ============================ Estilo para os títulos das seções ============================ */
+        .title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+            margin-top: 30px;
+        }
+
+        /* ============================ Estilo para parágrafos ============================ */
+        .text-area {
+            background-color: #e0f7fa;
+            border-radius: 5px;
+            padding: 15px 20px;
+            font-size: 16px;
+            color: #333;
+            box-sizing: border-box;
+            margin-bottom: 15px;
+            white-space: pre-line;
+        }
+
+        /* ============================ Listas ============================ */
+        ul {
+            padding-left: 20px;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+
+        /* CSS texto conteudo */
+.section-divider {
+    border: 0;
+    border-top: 2px solid #ccc;
+    margin: 40px 0;
+}
+
+.highlight-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #3a3a66; /* tom parecido com seu título principal */
+    margin-top: 50px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #52467e; /* linha destacada abaixo do título */
+    padding-bottom: 8px;
+}
+
+.highlight-text {
+    font-size: 18px;
+    line-height: 1.6;
+    color: #444;
+    background-color: #e8f4fa;
+    padding: 20px 25px;
+    border-radius: 8px;
+    margin-bottom: 40px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+.section-divider {
+    border: 0;
+    border-top: 1px solid #b0b0d0; /* linha separadora */
+    margin: 50px 0;
+}
+
+.highlight-text {
+    padding-left: 30px; /* espaço para os números ficarem dentro */
+    margin-left: 0;     /* evita recuo extra do container */
+    list-style-position: inside; /* mantém o número dentro da área do texto */
+}
+.highlight-text {
+    list-style-position: inside;
+    padding-left: 30px;
+}
+
+
+
+
     </style>
 </head>
 <body>
+    <!-- ============================ Cabeçalho ============================ -->
+    <header>
+        <h1>seproteger</h1>
+    </header>
 
-    <!-- Contêiner Principal -->
-    <div id="mainContainer">
-        <!-- Outros elementos do contêiner principal -->
+    <hr class="separator" />
 
-        <!-- Botão para alternar a visibilidade do histórico -->
-       
 
-        <!-- Seção do histórico -->
-        <div id="historySection">
-            <ul id="historyList">
-                <!-- Os registros de pesagem serão inseridos aqui -->
-                <li>Registro 1</li>
-                <li>Registro 2</li>
-                <li>Registro 3</li>
+
+
+
+
+
+    <!-- ============================ Conteúdo principal ============================ -->
+<div class="container">
+
+    <h1>Guia Prático de Proteção Digital</h1>
+    <span style="font-size: 18px; color: #999;"></span>
+    
+
+    <div class="title">📘 Guia Prático: Como se Proteger de Golpes de Sequestro de Linha e Invasão Remota de Dados do celular</div>
+
+    <div class="title">📲 Parte 1: O que é esse golpe?</div>
+    <div class="text-area">
+Golpistas estão ligando para pessoas se passando por operadoras, bancos ou empresas conhecidas. Eles pedem para você digitar um número (como "2") durante a chamada. Quando você faz isso, está autorizando sem saber o redirecionamento da sua linha para outro aparelho. Isso permite ao golpista:
+    </div>
+    <ul>
+        <li>Receber seus códigos SMS (como WhatsApp, banco, e-mail);</li>
+        <li>Entrar nas suas contas e aplicativos;</li>
+        <li>Restaurar seus dados pessoais em outro celular;</li>
+        <li>Resetar o seu celular à distância;</li>
+        <li>Usar sua identidade para enganar seus contatos.</li>
+    </ul>
+
+    <div class="title">🚨 Parte 2: Sinais de Alerta</div>
+    <ul>
+        <li>Ligações dizendo para "digitar um número para confirmar identidade".</li>
+        <li>Seu celular para de receber chamadas ou SMS de repente.</li>
+        <li>Aparece "Sem serviço" mesmo em locais com sinal normalmente.</li>
+        <li>Alguém diz que está recebendo mensagens suas que você não enviou.</li>
+        <li>Apps como WhatsApp pedem verificação repentina.</li>
+    </ul>
+
+    <div class="title">🛡️ Parte 3: Como se Proteger</div>
+    <ul>
+        <li>Nunca digite nada durante chamadas automáticas que você não iniciou.</li>
+        <li>Desative qualquer redirecionamento de chamada agora mesmo:
+            <ul>
+                <li>Abra o telefone e digite: <strong>##002#</strong> + tecla de chamada.</li>
+                <li>Isso cancela qualquer desvio ativo da sua linha.</li>
             </ul>
-        </div>
+        </li>
+        <li>Ative a verificação em duas etapas em todos os aplicativos importantes:
+            <ul>
+                <li>WhatsApp: Ajustes > Conta > Verificação em duas etapas</li>
+                <li>Google: myaccount.google.com/security</li>
+                <li>Apple ID: Ajustes > Seu nome > Senha e segurança</li>
+            </ul>
+        </li>
+        <li>Use senhas fortes e diferentes para cada serviço.</li>
+        <li>Evite usar apenas o SMS como forma de verificação. Prefira apps como Google Authenticator, Microsoft Authenticator, ou senhas de aplicativo.</li>
+        <li>Desconfie de qualquer pessoa pedindo acesso ao seu celular, mesmo "só por um minuto".</li>
+    </ul>
 
-        <!-- Outros elementos do contêiner principal -->
+    <div class="title">🆘 Parte 4: O que fazer se você caiu no golpe</div>
+    <ul>
+        <li>Entre em contato com sua operadora IMEDIATAMENTE. Peça para bloquear qualquer redirecionamento e recuperar sua linha.</li>
+        <li>Acesse suas contas e troque as senhas com urgência.</li>
+        <li>Ative a verificação em duas etapas, se ainda não tiver feito.</li>
+        <li>Verifique o histórico de acessos de contas importantes (Google, Apple, e-mails, bancos).</li>
+        <li>Avise amigos e familiares sobre o golpe. Os golpistas podem tentar enganar outros usando seu nome.</li>
+        <li>Registre um boletim de ocorrência na polícia civil (delegacia virtual se houver).</li>
+    </ul>
+
+    <!-- Linha divisória para separar visualmente a nova seção -->
+<hr class="section-divider" />
+
+<!-- Novo conteúdo -->
+<div class="title">🔐 Parte 5: Como Proteger o Chip e a Linha Telefônica do seu Celular</div>
+
+<div class="text-area">
+Por que isso é importante?
+Sua linha de telefone é usada como "chave" para acessar vários serviços: WhatsApp, contas bancárias, redes sociais, e-mails e muito mais. Se um golpista conseguir assumir o controle da sua linha (chip), ele pode roubar suas informações, aplicar golpes em seus contatos e causar prejuízos graves.
+</div>
+
+<div class="title">Entendendo o Risco: Como os criminosos agem</div>
+<ul>
+    <li><strong>Clonagem de chip (SIM swap):</strong> O golpista finge ser você e pede à operadora para transferir seu número para outro chip.</li>
+    <li><strong>Redirecionamento de chamadas/SMS:</strong> Através de códigos como <strong>**21*</strong>, eles desviam suas chamadas para outro telefone.</li>
+    <li><strong>Engenharia social por telefone:</strong> Pedem para você "confirmar identidade" digitando um número e ativam um redirecionamento remoto.</li>
+    <li><strong>Acesso físico ao seu chip:</strong> Se alguém pegar seu celular ou chip, pode colocá-lo em outro aparelho e acessar seus serviços.</li>
+</ul>
+
+<div class="title">🛠️ Como se proteger: Passo a Passo</div>
+<ul>
+    <li><strong>Coloque senha no chip (PIN do SIM)</strong>
+        <ul>
+            <li><strong>Android:</strong> Ajustes > Segurança > Bloqueio do chip SIM > Ativar e definir um PIN.</li>
+            <li><strong>iPhone:</strong> Ajustes > Celular > PIN do SIM > Ativar.</li>
+            <li><em>Dica:</em> Use um PIN diferente de senhas óbvias como 1234 ou 0000.</li>
+        </ul>
+    </li>
+    <li><strong>Desative redirecionamentos e desvios de chamadas</strong><br>
+    Digite no discador: <strong>##002#</strong> e pressione chamada.</li>
+
+    <li><strong>Cadastre uma senha com sua operadora</strong>
+        <ul>
+            <li>Solicite o cadastro de uma senha de atendimento.</li>
+            <li>Peça que nenhuma alteração na linha seja feita sem essa senha.</li>
+        </ul>
+    </li>
+
+    <li><strong>Evite compartilhar dados pessoais na internet</strong>
+        <ul>
+            <li>Não exponha número de telefone, CPF ou data de nascimento publicamente.</li>
+            <li>Essas informações são usadas em golpes de clonagem de chip.</li>
+        </ul>
+    </li>
+
+    <li><strong>Ative a verificação em duas etapas em todos os aplicativos</strong>
+        <ul>
+            <li>WhatsApp, Instagram, Facebook, Google, Apple, bancos, etc.</li>
+            <li>Sempre use um e-mail seguro e senha forte como segunda camada.</li>
+        </ul>
+    </li>
+
+    <li><strong>Acompanhe o uso da sua linha</strong>
+        <ul>
+            <li>Instale o app da sua operadora para monitorar sua linha.</li>
+            <li>Qualquer mudança ou notificação suspeita deve ser investigada.</li>
+        </ul>
+    </li>
+</ul>
+
+<div class="title">🚫 Nunca faça isso:</div>
+<ul>
+    <li>Não digite números durante ligações que você não tenha iniciado.</li>
+    <li>Não entregue seu celular destravado a terceiros.</li>
+    <li>Não ignore sinais como perda de sinal repentina ou apps pedindo nova verificação.</li>
+</ul>
+
+<div class="title">✅ Conclusão</div>
+<div class="text-area">
+Seu chip é mais do que um cartão de ligação: é uma chave mestra da sua vida digital. Com essas medidas simples, você aumenta muito sua segurança e dificulta a vida dos golpistas. Proteja-se e compartilhe este guia com quem você ama!
+</div>
+
+    <div class="title">💡 Dica final</div>
+    <div class="text-area">
+Esse tipo de golpe está crescendo porque é simples e eficaz. A melhor defesa é a informação. Compartilhe este guia com familiares e amigos, especialmente os que não são acostumados com tecnologia.
     </div>
 
 
-    <!-- Script JavaScript -->
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        var historySection = document.getElementById("historySection");
-        var toggleButton = document.getElementById("toggleHistoryButton");
 
-        // Definindo o estado inicial do histórico como oculto
-        historySection.style.display = "none";
-        toggleButton.textContent = "Histórico de Pesagem";  // Texto inicial do botão
+    <hr class="section-divider" />
 
-        // Evento de clique no botão
-        toggleButton.addEventListener("click", function() {
-            // Verifica se o histórico está visível ou não
-            if (historySection.style.display === "none") {
-                historySection.style.display = "block";  // Exibe o histórico
-                this.textContent = "Ocultar Histórico de Pesagem";  // Altera o texto do botão
-            } else {
-                historySection.style.display = "none";  // Oculta o histórico
-                this.textContent = "Histórico de Pesagem";  // Restaura o texto do botão
-            }
-        });
-    });
-</script>
-
-<!-- Bloco botão historicode pesagem  fim-->
-
- </div>
-    <!-- Campo oculto para armazenar o índice do histórico -->
- <input type="hidden" id="historyIndex">
- </div>
-
-                </tr>
-            </tbody>
-        </table>
-
+    <div class="highlight-title">✅ Checklist de Proteção do Chip e Linha Telefônica</div>
     
-        <script>
-
-        function toggleTable() {
-        var table = document.getElementById("imcTable");
-        // Verifica se a tabela está visível ou não
-        if (table.style.display === "none" || table.style.display === "") {
-            table.style.display = "table";  // Torna a tabela visível
-        } else {
-            table.style.display = "none";  // Oculta a tabela
-        }
-    }
+    <ul class="highlight-text" style="list-style-type: decimal; padding-left: 20px;">
+        <li><strong>Ative o PIN do chip (senha do SIM card)</strong>
+            <ul>
+                <li>Android: Ajustes &gt; Segurança &gt; Bloqueio do chip SIM</li>
+                <li>iPhone: Ajustes &gt; Celular &gt; PIN do SIM</li>
+                <li><em>Dica:</em> Altere o PIN padrão (0000 ou 1234) para algo seguro.</li>
+            </ul>
+        </li>
     
-        </script>
-            
-    <script>
-
-function toggleTable() {
-    var table = document.getElementById("imcTable");
-    var button = document.getElementById("toggleButton");
+        <li><strong>Desative redirecionamentos de chamadas e SMS</strong>
+            <ul>
+                <li>No discador, digite: <strong>##002#</strong> e toque em chamada.</li>
+                <li>Isso cancela todos os desvios que podem ter sido ativados sem sua permissão.</li>
+            </ul>
+        </li>
     
-    // Verifica se a tabela está visível
-    if (table.style.display === "none" || table.style.display === "") {
-        table.style.display = "table"; // Torna a tabela visível
-        button.textContent = "Fechar Tabela IMC"; // Altera o texto do botão
-    } else {
-        table.style.display = "none"; // Torna a tabela invisível
-        button.textContent = "Mostrar Tabela IMC"; // Restaura o texto original do botão
-    }
-}
-
-        function formatNumber(value) {
-            return value.replace(',', '.'); // Garante que números sejam armazenados corretamente
-        }
+        <li><strong>Cadastre uma senha de atendimento com a operadora</strong>
+            <ul>
+                <li>Ligue para sua operadora e peça para:</li>
+                <li>- Cadastrar uma senha de atendimento</li>
+                <li>- Bloquear alterações na linha sem essa senha</li>
+            </ul>
+        </li>
     
-        function generateUserId() {
-            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-            let userId = '';
-            for (let i = 0; i < 8; i++) {
-                userId += chars.charAt(Math.floor(Math.random() * chars.length));
-            }
-            return userId;
-        }
+        <li><strong>Monitore sua linha no app da operadora</strong>
+            <ul>
+                <li>Baixe o aplicativo oficial (Meu Vivo, Claro, TIM, Oi, etc.)</li>
+                <li>Verifique tentativas de troca de chip ou alteração na linha.</li>
+            </ul>
+        </li>
+    </ul>
     
-        let userId = localStorage.getItem('userId') || null;
-        let userName = localStorage.getItem('userName') || "";
-        let height = localStorage.getItem('height') || "";
-        let desiredWeight = localStorage.getItem('desiredWeight') || "";
-        let history = JSON.parse(localStorage.getItem('history')) || [];
-    
-        document.getElementById('userName').value = userName;
-        document.getElementById('height').value = height ? parseFloat(height) : "";
-        document.getElementById('desiredWeight').value = desiredWeight ? parseFloat(desiredWeight) : "";
+    <div class="highlight-text" style="margin-top: 20px;">
+        <strong>Dica final:</strong><br />
+        Realize essas ações hoje mesmo. São simples, rápidas e aumentam muito sua segurança digital.
+    </div>
     
 
-        function registerUser() {
-    let userName = document.getElementById('userName').value.trim();
-    let height = document.getElementById('height').value.trim();
-    let desiredWeight = document.getElementById('desiredWeight').value.trim();
+    <div class="title">🔁 E se eu quiser ativar redirecionamentos novamente?</div> <div class="text-area"> Caso você realmente precise ativar um redirecionamento de chamadas (por exemplo, para um número fixo ou secundário), basta usar os seguintes códigos no discador do celular: <ul> <li><strong>Encaminhar todas as chamadas:</strong> <code>**21*+5521XXXXXXX#</code> e pressione chamada</li> <li><strong>Quando não atender:</strong> <code>**61*+5521XXXXXXX#</code></li> <li><strong>Quando estiver fora de área/desligado:</strong> <code>**62*+5521XXXXXXX#</code></li> <li><strong>Quando estiver ocupado:</strong> <code>**67*+5521XXXXXXX#</code></li> </ul>
+        🔒 <strong>Atenção:</strong> Use esses códigos apenas quando tiver certeza de que está seguro. Sempre verifique se o número inserido é seu ou confiável.
+        
+        </div>
 
-    if (!userName || !height || !desiredWeight) {
-        alert("Por favor, preencha todos os campos corretamente.");
-        return;
-    }
-
-    let userId = localStorage.getItem('userId');
-    if (!userId) {
-        userId = generateUserId();
-        localStorage.setItem('userId', userId);
-    }
-
-    localStorage.setItem('userName', userName);
-    localStorage.setItem('height', height);
-    localStorage.setItem('desiredWeight', desiredWeight);
-
-    // Atualiza exibição do nome e ID sem mudar o ID
-    document.getElementById('userInfo').innerText = `Usuário: ${userName} | ID: ${userId}`;
-
-    // Esconde os campos após o cadastro
-    document.getElementById('userForm').style.display = 'none';
-
-    // Ajusta os botões
-    document.getElementById('registerButton').style.display = 'none';
-    document.getElementById('editButton').style.display = 'inline';
-
-
-// Frase perfil salvo com sucesso
-    document.getElementById('saveMessage').style.display = 'block'; // Exibe a mensagem de sucesso
-
-// Esconde após 3 segundos
-setTimeout(function () {
-  document.getElementById('saveMessage').style.display = 'none';  // Esconde a mensagem de sucesso
-}, 3000);
-
-// Atualizar app automático
-// Atualizar a página após 3.2 segundos
-setTimeout(function () {
-  location.reload();
-}, 3200);
-
-}
-
-function editUser() {
-    // Mostra os campos para edição
-    document.getElementById('userForm').style.display = 'block';
-
-    // Ajusta os botões
-    document.getElementById('registerButton').style.display = 'inline';
-    document.getElementById('editButton').style.display = 'none';
-}
-
-
-  // Mantém os dados na tela ao recarregar a página
-window.onload = function () {
-  // Ajusta o tamanho da fonte do botão de histórico
-  toggleHistoryButton.style.fontSize = "14px"; // Ajuste conforme necessário
-
-  // Verifica se existe perfil salvo
-  let userId = localStorage.getItem('userId');
-  let userName = localStorage.getItem('userName');
-  const tituloPerfil = document.querySelector('#userForm h3');
-  tituloPerfil.style.fontSize = "12px"; // ⬅️ Aqui ajusta o tamanho da fonte
-
-  if (userId && userName) {
-    document.getElementById('userInfo').innerText = `Usuário: ${userName} | ID: ${userId}`;
-    document.getElementById('userForm').style.display = 'none';
-    document.getElementById('registerButton').style.display = 'none';
-    document.getElementById('editButton').style.display = 'inline';
-
-    // Atualiza a mensagem do título dinamicamente
-    if (tituloPerfil) {
-      tituloPerfil.textContent = "Você pode editar seu perfil a qualquer momento.";
-    }
-  } else {
-    // Se não houver perfil salvo
-    if (tituloPerfil) {
-      tituloPerfil.textContent = "Vamos começar? Preencha seu perfil para iniciarmos sua jornada!";
-    }
-  }
-
-  // Oculta a mensagem de sucesso de perfil salvo
-  document.getElementById('saveMessage').style.display = 'none';
-};
-
-
-        function saveUser() {
-            userName = document.getElementById('userName').value.trim();
-            height = document.getElementById('height').value.trim();
-            desiredWeight = document.getElementById('desiredWeight').value.trim();
-    
-            if (!userName || !height || !desiredWeight) {
-                alert("Por favor, preencha todos os campos corretamente.");
-                return;
-            }
-    
-            localStorage.setItem('userName', userName);
-            localStorage.setItem('height', height);
-            localStorage.setItem('desiredWeight', desiredWeight);
-    
-            document.getElementById('userName').disabled = true;
-            document.getElementById('height').disabled = true;
-            document.getElementById('desiredWeight').disabled = true;
-            document.getElementById('saveButton').style.display = 'none';
-            document.getElementById('editButton').style.display = 'inline';
-
-            document.getElementById("userName").innerText = "Usuário: João"; // Troque "João" pelo nome salvo
-  
-        }
-
-   
-// Garante que números sejam armazenados corretamente, fim do bloco //
-
-
-document.addEventListener("DOMContentLoaded", function() {
-    // O campo "Peso atual" ficará visível desde o início
-    document.getElementById('currentWeight').style.display = 'inline';  // Exibe o campo de peso atual
-    
-    // Inicialmente, escondemos o título "Data:", o campo "Data" e o botão "Salvar Edição"
-    document.querySelector('label[for="dateInput"]').style.display = 'none';  // Esconde o título "Data:"
-    document.getElementById('dateInput').style.display = 'none';  // Esconde o campo de data
-    document.querySelector('button[onclick="saveEditedEntry()"]').style.display = 'none';  // Esconde o botão "Salvar Edição"
-    
-    // Garante que o botão "Adicionar Registro" esteja visível
-    document.querySelector('button[onclick="addWeight()"]').style.display = 'inline';
-
-    let historySection = document.getElementById('historySection');
-    let historyList = document.getElementById('historyList');
-    let toggleHistoryButton = document.getElementById('toggleHistoryButton');
-
-    if (!historySection || !historyList) {
-        console.error("Erro: Elementos de histórico não encontrados.");
-        return;
-    }
-
-    // Verifica se o botão de alternância já existe. Se não, cria-o.
-    if (!toggleHistoryButton) {
-        toggleHistoryButton = document.createElement('button');
-        toggleHistoryButton.innerText = "Histórico de Pesagem";
-        toggleHistoryButton.id = "toggleHistoryButton";
-        toggleHistoryButton.style.display = "block";
-        toggleHistoryButton.style.margin = "10px 0";
-        toggleHistoryButton.style.padding = "10px";
-        toggleHistoryButton.style.width = "100%";
-        toggleHistoryButton.style.background = "#007bff";
-        toggleHistoryButton.style.color = "white";
-        toggleHistoryButton.style.border = "none";
-        toggleHistoryButton.style.borderRadius = "5px";
-        toggleHistoryButton.style.cursor = "pointer";
-        toggleHistoryButton.style.fontSize = "16px";
-        toggleHistoryButton.style.fontWeight = "bold";
-
-        toggleHistoryButton.onclick = function() {
-            // Alterna entre exibir e ocultar o histórico
-            if (historyList.style.display === "none" || historyList.style.display === "") {
-                historyList.style.display = "block";
-                toggleHistoryButton.innerText = "Ocultar Histórico";
-            } else {
-                historyList.style.display = "none";
-                toggleHistoryButton.innerText = "Histórico de Pesagem";
-            }
-        };
-
-        // Inserir o botão antes da lista de histórico
-        historySection.insertBefore(toggleHistoryButton, historyList);
-    }
-
-    // Carregar o histórico do localStorage = CHAVE STORAGE
-    let history = JSON.parse(localStorage.getItem('history')) || [];
-
-    // Se já houver histórico, exibe a lista (Mudei o nome Ocultar Histórico)
-    if (history.length > 0) {
-        historyList.style.display = "block"; // Exibe o histórico automaticamente
-        toggleHistoryButton.innerText = "Histórico de pesagem"; // Atualiza o texto do botão
-    } else {
-        historyList.style.display = "none"; // Mantém oculto se não houver histórico
-    }
-
-
-    // Atualiza a lista de histórico na tela
-    updateHistory();
-});
-
-// Função de editar os dados
-function editEntry(index) {
-    let entry = history[index];
-
-    // Carregar as informações do histórico nos campos de entrada
-    document.getElementById('currentWeight').value = entry.currentWeight;  // Preenche o peso atual
-    document.getElementById('historyIndex').value = index;  // Guarda o índice do item para atualizar depois
-    document.getElementById('dateInput').value = entry.timestamp;  // Preenche o campo de data
-    document.getElementById('currentWeight').focus();  // Dá foco no campo de peso atual
-
-    // Exibe os campos de edição e o botão "Salvar Edição"
-    document.querySelector('label[for="dateInput"]').style.display = 'inline'; // Exibe a palavra "Data:"
-    document.getElementById('dateInput').style.display = 'inline'; // Exibe o campo de data
-    document.querySelector('button[onclick="saveEditedEntry()"]').style.display = 'inline'; // Exibe o botão "Salvar Edição"
-    document.querySelector('button[onclick="addWeight()"]').style.display = 'none'; // Esconde o botão "Adicionar Registro"
-}
-
-// Função de salvar a edição
-function saveEditedEntry() {
-    let index = document.getElementById('historyIndex').value;  // Pega o índice do histórico que foi editado
-    let newWeight = document.getElementById('currentWeight').value.trim();  // Novo peso atual
-    let newDate = document.getElementById('dateInput').value;  // Nova data
-
-    if (!newWeight || !newDate) {
-        alert("Por favor, insira todos os dados.");
-        return;
-    }
-
-    // Atualizar os dados no histórico
-    history[index].currentWeight = newWeight;
-
-    history[index].timestamp = new Date(newDate).toLocaleDateString('pt-BR');  // Apenas a data
-
-    // Atualizar o saldo e IMC
-    history[index].balanceSign = (parseFloat(newWeight) - parseFloat(desiredWeight)).toFixed(2);
-    history[index].imc = (parseFloat(newWeight) / (parseFloat(height) * parseFloat(height))).toFixed(2);
-
-    // Salvar no localStorage
-    localStorage.setItem('history', JSON.stringify(history));
-
-    // Atualiza o histórico na tela
-    updateHistory();
-
-    // Limpa os campos de edição
-    document.getElementById('currentWeight').value = '';
-    document.getElementById('dateInput').value = '';
-    document.getElementById('historyIndex').value = '';
-
-    // Esconde os campos de edição após salvar
-    document.querySelector('label[for="dateInput"]').style.display = 'none';  // Esconde o título "Data:"
-    document.getElementById('dateInput').style.display = 'none';  // Esconde o campo de data
-    document.querySelector('button[onclick="saveEditedEntry()"]').style.display = 'none';  // Esconde o botão "Salvar Edição"
-    
-    // Mostra o botão "Adicionar Registro"
-    document.querySelector('button[onclick="addWeight()"]').style.display = 'inline'; // Garante que o botão de adicionar registro volte a ser visível
-}
-
- // **📌 Atualiza os valores no gráfico**
-function addWeight() {
-    let currentWeight = formatNumber(document.getElementById('currentWeight').value.trim());
-
-    if (!currentWeight) {
-        alert("Por favor, insira seu peso atual.");
-        return;
-    }
-
-    let weightBalance = (parseFloat(currentWeight) - parseFloat(desiredWeight)).toFixed(2);
-    let balanceSign = weightBalance > 0 ? `+${weightBalance}` : weightBalance;
-    let imc = (parseFloat(currentWeight) / (parseFloat(height) * parseFloat(height))).toFixed(2);
-
-    // **📌 Atualiza os valores na tela principal**
-    document.getElementById('resultDisplay').innerText = `Peso Saldo: ${balanceSign} kg | IMC: ${imc}`;
-
-    let timestamp = new Date().toLocaleDateString('pt-BR');
-
-    let entry = {
-        timestamp: timestamp,
-        currentWeight: currentWeight,
-        balanceSign: balanceSign,
-        imc: imc
-    };
-
-    history.unshift(entry);
-    localStorage.setItem('history', JSON.stringify(history));
-
-    updateHistory(); // Atualiza a lista no histórico
-
-    // **📌 Limpa o campo de peso após adicionar**
-    document.getElementById('currentWeight').value = "";
-
-    // **📌 Atualiza o gráfico imediatamente após adicionar o registro**
-    updateChart();  // CHAME AQUI
-
-    console.log("Chamando updateChart() após adicionar peso.");
-}
-
-
-
-
- // 3º bloco
- function updateHistory() {
-    let historyList = document.getElementById('historyList');
-
-    historyList.innerHTML = ""; // Limpa o conteúdo da lista
-    history.forEach((entry, index) => {
-
-        let listItem = document.createElement('div');
-
-        listItem.style.borderBottom = "1px solid #ccc";
-        listItem.style.padding = "15px";
-        listItem.style.marginBottom = "10px";
-        listItem.style.backgroundColor = "#f9f9f9"; // Fundo levemente cinza para diferenciar os itens
-
-        listItem.style.marginLeft = "0px";  // Centraliza à esquerda
-        listItem.style.marginRight = "18px"; // Centraliza à direita
-
-        listItem.innerHTML = `
-            <div style="font-size: 16px; font-weight: bold; color: #333;">
-                ${entry.timestamp}
-            </div>
-            <div style="display: flex; justify-content: space-between; margin-top: 10px;">
-                <div>
-                    <strong>Peso Atual:</strong><br>
-                    <span>${entry.currentWeight} kg</span>
-                </div>
-                <div>
-                    <strong>Peso Saldo:</strong><br>
-                    <span>${entry.balanceSign} kg</span> <!-- Aqui mostramos o Peso Saldo -->
-                </div>
-                <div>
-                    <strong>IMC:</strong><br>
-                    <span>${entry.imc}</span> <!-- Aqui mostramos o IMC -->
-                </div>
-            </div>
-            
-<div style="margin-top: 8px; display: flex; gap: 10px;">
-    <button onclick="editEntry(${index})" style="flex: 1; padding: 10px; background-color: orange; color: white; border: none; border-radius: 15px; cursor: pointer;">
-        Editar
-    </button>
-    <button onclick="confirmDelete(${index})" style="flex: 1; padding: 10px; background-color: red; color: white; border: none; border-radius: 15px; cursor: pointer;">
-        Apagar
-    </button>
 </div>
 
-        `;
 
-        historyList.appendChild(listItem);
-    });
-
-    historyList.style.display = "block"; // Garante que o histórico esteja visível
-}
-
-
-function confirmDelete(index) {
-    let confirmation = confirm("Tem certeza que deseja apagar este registro?");
-    if (confirmation) {
-        deleteEntry(index);
-    }
-}
-
-function deleteEntry(index) {
-    history.splice(index, 1);
-    localStorage.setItem('history', JSON.stringify(history));
-    updateHistory();
-}
-    </script>
-
-
- <script>
- // Seleciona o ícone do menu e o menu lateral
-    const menuIcon = document.querySelector(".menu-hamburguer");
-    const menuLateral = document.querySelector(".menu-lateral");
-
-    // Alterna o menu lateral
-    menuIcon.addEventListener("click", () => {
-        if (menuLateral.style.right === "0px") {
-            menuLateral.style.right = "-250px"; // Fecha o menu
-        } else {
-            menuLateral.style.right = "0px"; // Abre o menu
-        }
-    });   
-</script>
-
-
-
-<!-- 📌 IMAGEM PERFIL Abaixo -->
-
-<script>
-    function openImageSettings() {
-      document.getElementById('imageInputContainer').style.display = 'block';
-      document.getElementById('imageFileInputContainer').style.display = 'block'; // Mostra o seletor de arquivo
-    }
-  
-    function salvarImagemFundo() {
-      const fileInput = document.getElementById('imageFileInput');
-      const file = fileInput.files[0];
-  
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          const imageData = e.target.result;
-  
-          // Aplica como fundo e salva no localStorage
-          document.body.style.backgroundImage = `url('${imageData}')`;
-          localStorage.setItem('appBackground', imageData);
-  
-          // Oculta os campos após salvar
-          document.getElementById('imageInputContainer').style.display = 'none';
-          document.getElementById('imageFileInputContainer').style.display = 'none';
-        };
-        reader.readAsDataURL(file); // Converte imagem em base64
-      } else {
-        alert("Por favor, selecione uma imagem.");
-      }
-    }
-  
-    function handleImageUpload() {
-      salvarImagemFundo(); // Só chama salvar direto, tudo centralizado
-    }
-  
-    // Aplica imagem salva automaticamente ao carregar a página
-    window.onload = function() {
-      const imagemSalva = localStorage.getItem('appBackground');
-      if (imagemSalva) {
-        document.body.style.backgroundImage = `url('${imagemSalva}')`;
-      }
-    };
-
-
-    <!-- 📌 img pré-visualização 2 -->
-   
-    function previewImage() {
-  const fileInput = document.getElementById('imageFileInput');
-  const file = fileInput.files[0];
-
-  if (file) {
-    const reader = new FileReader();
-    reader.onload = function(e) {
-      const imageUrl = e.target.result;
-
-      // Mostra o container de pré-visualização com a imagem
-      document.getElementById('previewContainer').style.display = 'block';
-      document.getElementById('previewImage').src = imageUrl;
-
-      // Esconde o botão "Escolher arquivo"
-      fileInput.style.display = 'none';
-
-      // Exibe os botões após a imagem ser carregada
-      document.getElementById('buttonContainer').style.display = 'flex'; // Exibe os botões
-      document.getElementById('chooseAnotherButton').style.display = 'inline-block';
-      document.getElementById('saveImageButton').style.display = 'inline-block';
-
-      // **Aqui está a alteração da frase**
-      document.getElementById('dynamicMessage').innerText = "Imagem carregada. Você pode escolher outra ou salvar essa imagem.";
-
-// Ajustando o tamanho da fonte da frase dinamicamente
-document.getElementById('dynamicMessage').style.fontSize = "12px"; // Ajuste o valor conforme necessário
-
-    };
-
-    // Certifique-se de que a imagem será lida
-    reader.readAsDataURL(file);
-  } else {
-    alert('Por favor, selecione uma imagem.');
-  }
-}
-
-// Função para escolher outra imagem e recarregar a pré-visualização
-
-function chooseAnotherImage() {
-  document.getElementById('previewImage').src = '';
-  document.getElementById('previewContainer').style.display = 'none';
-  document.getElementById('imageFileInputContainer').style.display = 'block';
-  document.getElementById('chooseAnotherButton').style.display = 'none';
-  document.getElementById('imageFileInput').value = '';
-  document.getElementById('imageInputContainer').style.display = 'block';
-
-  // 👇 Esta linha aqui é a chave!
-  document.getElementById('imageFileInput').style.display = 'block';
-
-  document.getElementById('imageFileInput').addEventListener('change', previewImage);
-}
-
-  </script>
-  
-  </body>
-  </html>
-  
+</body>
+</html>
