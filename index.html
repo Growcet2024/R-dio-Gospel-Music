@@ -25,7 +25,7 @@
         header h1 {
             margin: 0;
             font-size: 30px;  /* Títuli topo barra  */
-            color: #52467e; //cor do título barra superioe
+            color: #52467e; /*cor do título barra superior*/
         }
 
         hr.separator {
@@ -64,7 +64,7 @@
 
         /* ============================ Estilo para parágrafos ============================ */
         .text-area {
-            background-color: #e0f7fa66; /* Cor destaque dicas */
+            background-color: #f8f9fa; /* Cor destaque dicas */
             border-radius: 5px;
             padding: 15px 20px;
             font-size: 16px;
@@ -126,6 +126,47 @@
     padding-left: 30px;
 }
 
+/* CSS Cheklist 3 passos */
+.checklist-container {
+  background-color: #f8f9fa; /* leve cinza de fundo Destaque */
+  padding: 20px;
+  border-radius: 8px;
+  margin-top: 30px;
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  color: #222;
+}
+
+.checklist-container .title {
+  font-size: 1.4rem;
+  font-weight: bold;
+  margin-bottom: 15px;
+  color: #0d6efd; /* azul destaque */
+}
+
+.checklist {
+  list-style-type: decimal;
+  padding-left: 25px;
+  font-size: 1.05rem;
+  line-height: 1.6;
+}
+
+.checklist li {
+  margin-bottom: 12px;
+}
+
+.checklist ul {
+  list-style-type: disc;
+  padding-left: 20px;
+  margin-top: 5px;
+}
+
+.checklist li strong {
+  color: #0c4128; /* verde escuro para os títulos dos passos */
+}
+
+.checklist li em {
+  color: #6c757d;
+}
 
 
 
@@ -161,29 +202,25 @@ Golpistas estão ligando para pessoas se passando por operadoras, bancos ou empr
     </ul>
 
     <div class="title">🚨 Parte 2: Sinais de Alerta</div>
-    <ul>
-        <li>Ligações dizendo para "digitar um número para confirmar identidade".</li>
-        <li>Seu celular para de receber chamadas ou SMS de repente.</li>
-        <li>Aparece "Sem serviço" mesmo em locais com sinal normalmente.</li>
-        <li>Alguém diz que está recebendo mensagens suas que você não enviou.</li>
-        <li>Apps como WhatsApp pedem verificação repentina.</li>
-    </ul>
+<ul>
+    <li>Você recebe uma ligação suspeita pedindo para <strong>"digitar um número para confirmar sua identidade"</strong>. Esse tipo de pedido é um sinal claro de golpe — nunca digite nada.</li>
+    
+    <li>Seu celular <strong>para de receber chamadas ou SMS de forma repentina</strong>, sem você ter feito nenhuma mudança. Isso pode indicar que sua linha foi clonada ou transferida sem autorização.</li>
+    
+    <li>Aplicativos como o <strong>WhatsApp pedem uma nova verificação</strong> do número, mesmo sem você ter feito nada. Isso pode significar que alguém está tentando acessar sua conta.</li>
+</ul>
+
+
+
+
 
     <div class="title">🛡️ Parte 3: Como se Proteger</div>
     <ul>
         <li>Nunca digite nada durante chamadas automáticas que você não iniciou.</li>
-        <li>Desative qualquer redirecionamento de chamada agora mesmo:
-            <ul>
-                <li>Abra o telefone e digite: <strong>##002#</strong> + tecla de chamada.</li>
-                <li>Isso cancela qualquer desvio ativo da sua linha.</li>
-            </ul>
-        </li>
-        <li>Ative a verificação em duas etapas em todos os aplicativos importantes:
-            <ul>
-                <li>WhatsApp: Ajustes > Conta > Verificação em duas etapas</li>
-                <li>Google: myaccount.google.com/security</li>
-                <li>Apple ID: Ajustes > Seu nome > Senha e segurança</li>
-            </ul>
+        <li>Desative o redirecionamento de chamada do ceu telefone.
+           
+          
+        
         </li>
         <li>Use senhas fortes e diferentes para cada serviço.</li>
         <li>Evite usar apenas o SMS como forma de verificação. Prefira apps como Google Authenticator, Microsoft Authenticator, ou senhas de aplicativo.</li>
@@ -203,11 +240,12 @@ Golpistas estão ligando para pessoas se passando por operadoras, bancos ou empr
     <!-- Linha divisória para separar visualmente a nova seção -->
 <hr class="section-divider" />
 
+
 <!-- Novo conteúdo -->
 <div class="title">🔐 Parte 5: Como Proteger o Chip e a Linha Telefônica do seu Celular</div>
+<div class="title">Lembre-se sua linha é a CHAVE digital que abre suas portas</div>
 
 <div class="text-area">
-Por que isso é importante?
 Sua linha de telefone é usada como "chave" para acessar vários serviços: WhatsApp, contas bancárias, redes sociais, e-mails e muito mais. Se um golpista conseguir assumir o controle da sua linha (chip), ele pode roubar suas informações, aplicar golpes em seus contatos e causar prejuízos graves.
 </div>
 
@@ -219,25 +257,14 @@ Sua linha de telefone é usada como "chave" para acessar vários serviços: What
     <li><strong>Acesso físico ao seu chip:</strong> Se alguém pegar seu celular ou chip, pode colocá-lo em outro aparelho e acessar seus serviços.</li>
 </ul>
 
+
+
 <div class="title">🛠️ Como se proteger: Passo a Passo</div>
 <ul>
     <li><strong>Coloque senha no chip (PIN do SIM)</strong>
-        <ul>
-            <li><strong>Android:</strong> Ajustes > Segurança > Bloqueio do chip SIM > Ativar e definir um PIN.</li>
-            <li><strong>iPhone:</strong> Ajustes > Celular > PIN do SIM > Ativar.</li>
-            <li><em>Dica:</em> Use um PIN diferente de senhas óbvias como 1234 ou 0000.</li>
-        </ul>
-    </li>
     <li><strong>Desative redirecionamentos e desvios de chamadas</strong><br>
-    Digite no discador: <strong>##002#</strong> e pressione chamada.</li>
-
     <li><strong>Cadastre uma senha com sua operadora</strong>
-        <ul>
-            <li>Solicite o cadastro de uma senha de atendimento.</li>
-            <li>Peça que nenhuma alteração na linha seja feita sem essa senha.</li>
-        </ul>
-    </li>
-
+     
     <li><strong>Evite compartilhar dados pessoais na internet</strong>
         <ul>
             <li>Não exponha número de telefone, CPF ou data de nascimento publicamente.</li>
@@ -260,6 +287,7 @@ Sua linha de telefone é usada como "chave" para acessar vários serviços: What
     </li>
 </ul>
 
+
 <div class="title">🚫 Nunca faça isso:</div>
 <ul>
     <li>Não digite números durante ligações que você não tenha iniciado.</li>
@@ -278,43 +306,42 @@ Esse tipo de golpe está crescendo porque é simples e eficaz. A melhor defesa �
     </div>
 
 
-
-    <hr class="section-divider" />
-
-    <div class="highlight-title">✅ Checklist de Proteção do Chip e Linha Telefônica</div>
-    
-    <ul class="highlight-text" style="list-style-type: decimal; padding-left: 20px;">
-        <li><strong>Ative o PIN do chip (senha do SIM card)</strong>
-            <ul>
-                <li>Android: Ajustes &gt; Segurança &gt; Bloqueio do chip SIM</li>
-                <li>iPhone: Ajustes &gt; Celular &gt; PIN do SIM</li>
-                <li><em>Dica:</em> Altere o PIN padrão (0000 ou 1234) para algo seguro.</li>
-            </ul>
-        </li>
-    
-        <li><strong>Desative redirecionamentos de chamadas e SMS</strong>
-            <ul>
-                <li>No discador, digite: <strong>##002#</strong> e toque em chamada.</li>
-                <li>Isso cancela todos os desvios que podem ter sido ativados sem sua permissão.</li>
-            </ul>
-        </li>
-    
-        <li><strong>Cadastre uma senha de atendimento com a operadora</strong>
-            <ul>
-                <li>Ligue para sua operadora e peça para:</li>
-                <li>- Cadastrar uma senha de atendimento</li>
-                <li>- Bloquear alterações na linha sem essa senha</li>
-            </ul>
-        </li>
-    
-        <li><strong>Monitore sua linha no app da operadora</strong>
-            <ul>
-                <li>Baixe o aplicativo oficial (Meu Vivo, Claro, TIM, Oi, etc.)</li>
-                <li>Verifique tentativas de troca de chip ou alteração na linha.</li>
-            </ul>
-        </li>
-    </ul>
-    
+    <div class="checklist-container">
+        <div class="title">✅ Checklist de Proteção do Chip e Linha Telefônica</div>
+      
+        <ul class="checklist">
+            <li><strong>Ative o PIN do chip (senha do SIM card)</strong>
+                <ul>
+                    <li>Android: Ajustes &gt; Segurança &gt; Bloqueio do chip SIM</li>
+                    <li>iPhone: Ajustes &gt; Celular &gt; PIN do SIM</li>
+                    <li><em>Dica:</em> Altere o PIN padrão (0000 ou 1234) para algo seguro.</li>
+                </ul>
+            </li>
+      
+            <li><strong>Desative redirecionamentos de chamadas e SMS</strong>
+                <ul>
+                    <li>No discador, digite: <strong>##002#</strong> e toque em chamada.</li>
+                    <li>Isso cancela todos os desvios que podem ter sido ativados sem sua permissão.</li>
+                </ul>
+            </li>
+      
+            <li><strong>Cadastre uma senha de atendimento com a operadora</strong>
+                <ul>
+                    <li>Ligue para sua operadora e peça para:</li>
+                    <li>- Cadastrar uma senha de atendimento</li>
+                    <li>- Bloquear alterações na linha sem essa senha</li>
+                </ul>
+            </li>
+      
+            <li><strong>Monitore sua linha no app da operadora</strong>
+                <ul>
+                    <li>Baixe o aplicativo oficial (Meu Vivo, Claro, TIM, Oi, etc.)</li>
+                    <li>Verifique tentativas de troca de chip ou alteração na linha.</li>
+                </ul>
+            </li>
+        </ul>
+      </div>
+      
     <div class="highlight-text" style="margin-top: 20px;">
         <strong>Dica final:</strong><br />
         Realize essas ações hoje mesmo. São simples, rápidas e aumentam muito sua segurança digital.
