@@ -130,8 +130,8 @@
       <p class="frase">Comece sua jornada com equilíbrio e saúde!</p>
       <a href="principal.html" class="btn-acessar">Acessar</a>
       <img src="https://i.postimg.cc/qq25bKcC/Logo-tela-512.png" alt="Logo Vida Leve" class="logo-abaixo">
-      <!-- Frase de contador de dias -->
-      <p id="contador-dias" style="color: white; font-weight: bold; margin-top: 20px;"></p>
+      <!-- Contador de dias restantes -->
+      <p id="dias-restantes" style="color: white; margin-top: 15px;"></p>
     </div>
   </div>
 
@@ -147,7 +147,7 @@
 
   <script>
     (function() {
-      const diasTeste = 0;
+      const diasTeste = 1; // <-- altere aqui o período de teste (dias)
 
       const getDataInstalacao = () => {
         let data = localStorage.getItem('dataInstalacao');
@@ -163,12 +163,27 @@
         const hoje = new Date();
         const diffDias = Math.floor((hoje - dataInstalacao) / (1000 * 60 * 60 * 24));
         const codigo = localStorage.getItem('codigoDesbloqueio')?.trim().toUpperCase();
-        return diffDias <= diasTeste || codigo === 'SEUCODIGO123';
+        return diffDias < diasTeste || codigo === 'SEUCODIGO123';
       };
 
       const bloquearApp = () => {
         document.getElementById('app-content').style.display = 'none';
         document.getElementById('trial-overlay').style.display = 'flex';
+      };
+
+      const atualizarFrase = () => {
+        const dataInstalacao = getDataInstalacao();
+        const hoje = new Date();
+        const diffDias = Math.floor((hoje - dataInstalacao) / (1000 * 60 * 60 * 24));
+        const diasRestantes = diasTeste - diffDias;
+
+        const fraseEl = document.getElementById('dias-restantes');
+        if (diasRestantes > 0) {
+          fraseEl.textContent = `Faltam ${diasRestantes} dia${diasRestantes > 1 ? 's' : ''} para o fim do teste.`;
+          fraseEl.style.display = 'block';
+        } else {
+          fraseEl.style.display = 'none';
+        }
       };
 
       window.validarCodigo = () => {
@@ -185,25 +200,14 @@
         }
       };
 
-      // Mostrar contador de dias se ainda estiver dentro do período de teste
-      const dataInstalacao = getDataInstalacao();
-      const hoje = new Date();
-      const diffDias = Math.floor((hoje - dataInstalacao) / (1000 * 60 * 60 * 24));
-
-      if (diffDias <= diasTeste) {
-        const restante = diasTeste - diffDias;
-        const frase = restante === 1 
-          ? "Falta 1 dia do período de teste" 
-          : `Faltam ${restante} dias do período de teste`;
-        const el = document.getElementById("contador-dias");
-        if (el) el.textContent = frase;
-      }
-
       if (!isValido()) {
         bloquearApp();
+      } else {
+        atualizarFrase();
       }
     })();
   </script>
 
 </body>
 </html>
+
