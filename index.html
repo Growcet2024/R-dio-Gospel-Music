@@ -6,7 +6,6 @@
   <meta name="theme-color" content="#02779e" />
   <title>Vida Leve - Controle de Peso</title>
 
-  <!-- Fonte Inter -->
   <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet" />
 
   <style>
@@ -24,28 +23,11 @@
       text-align: center;
     }
 
-    /* FAIXA DE STATUS VISÍVEL */
-    #status-mensagem {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      background: #111;
-      color: #00ffcc;
-      padding: 14px;
-      font-size: 16px;
-      font-weight: bold;
-      text-align: center;
-      z-index: 10000;
-      border-bottom: 2px solid #00ffcc;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
-    }
-
     .conteudo {
       color: white;
       text-shadow: 1px 1px 4px #02779e;
       max-width: 95%;
-      margin-top: 80px; /* abaixo da faixa */
+      margin-top: 80px;
     }
 
     .titulo-app {
@@ -63,7 +45,15 @@
     .frase {
       font-size: 16px;
       font-weight: bold;
-      margin-bottom: 60px;
+      margin-bottom: 8px;
+    }
+
+    #status-mensagem {
+      color: white;
+      font-size: 14px;
+      text-align: center;
+      margin-bottom: 40px;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6);
     }
 
     .btn-acessar {
@@ -138,15 +128,13 @@
 </head>
 <body>
 
-  <!-- FAIXA DE STATUS -->
-  <div id="status-mensagem">Carregando status...</div>
-
   <!-- CONTEÚDO DO APP -->
   <div id="app-content">
     <div class="conteudo">
       <div class="titulo-app">Vida Leve</div>
       <h2>Controle de peso</h2>
       <p class="frase">Comece sua jornada com equilíbrio e saúde!</p>
+      <p id="status-mensagem">Carregando status...</p>
       <a href="principal.html" class="btn-acessar">Acessar</a>
       <img src="https://i.postimg.cc/qq25bKcC/Logo-tela-512.png" alt="Logo Vida Leve" class="logo-abaixo">
     </div>
@@ -164,30 +152,24 @@
 
   <script>
     (function() {
+      const diasTeste = 7;
 
+      const getDataInstalacao = () => {
+        let data = localStorage.getItem('dataInstalacao');
+        if (!data) {
+          data = Date.now();
+          localStorage.setItem('dataInstalacao', data);
+        }
+        return parseInt(data, 10);
+      };
 
-      const minutosTeste = 60; // tempo de teste em minutos (1 hora)
-
-const getDataInstalacao = () => {
-  let data = localStorage.getItem('dataInstalacao');
-  if (!data) {
-    data = Date.now(); // timestamp em milissegundos
-    localStorage.setItem('dataInstalacao', data);
-  }
-  return parseInt(data, 10);
-};
-
-const isValido = () => {
-  const dataInstalacao = getDataInstalacao();
-  const agora = Date.now();
-  const diffMinutos = Math.floor((agora - dataInstalacao) / (1000 * 60));
-  const codigo = localStorage.getItem('codigoDesbloqueio')?.trim().toUpperCase();
-  return diffMinutos <= minutosTeste || codigo === 'SEUCODIGO123';
-};
-
-
-
-
+      const isValido = () => {
+        const dataInstalacao = getDataInstalacao();
+        const agora = Date.now();
+        const diffDias = Math.floor((agora - dataInstalacao) / (1000 * 60 * 60 * 24));
+        const codigo = localStorage.getItem('codigoDesbloqueio')?.trim().toUpperCase();
+        return diffDias <= diasTeste || codigo === 'SEUCODIGO123';
+      };
 
       const bloquearApp = () => {
         document.getElementById('app-content').style.display = 'none';
@@ -196,22 +178,19 @@ const isValido = () => {
 
       const mostrarStatus = () => {
         const dataInstalacao = getDataInstalacao();
-        const hoje = new Date();
-        const diffDias = Math.floor((hoje - dataInstalacao) / (1000 * 60 * 60 * 24));
-        const codigo = localStorage.getItem('codigoDesbloqueio')?.trim().toUpperCase();
+        const agora = Date.now();
+        const diffDias = Math.floor((agora - dataInstalacao) / (1000 * 60 * 60 * 24));
+        const diasRestantes = diasTeste - diffDias;
         const statusDiv = document.getElementById('status-mensagem');
 
-        if (codigo === 'SEUCODIGO123') {
-          statusDiv.textContent = "🔓 App desbloqueado com código.";
-        } else if (diffDias <= diasTeste) {
-          const diasRestantes = diasTeste - diffDias;
-          statusDiv.textContent = `⏳ Modo de teste – Faltam ${diasRestantes} dia${diasRestantes === 1 ? '' : 's'}`;
+        if (!statusDiv) return;
+
+        if (diffDias <= diasTeste) {
+          statusDiv.textContent = `Faltam ${diasRestantes} dia${diasRestantes === 1 ? '' : 's'} – Período de teste`;
         } else {
-          statusDiv.textContent = "🔒 Período de teste expirado.";
+          statusDiv.textContent = `Período de teste expirado`;
         }
       };
-
-
 
       window.validarCodigo = () => {
         const codigoDigitado = document.getElementById('codigo-input').value.trim().toUpperCase();
@@ -237,5 +216,6 @@ const isValido = () => {
 
 </body>
 </html>
+
 
 
