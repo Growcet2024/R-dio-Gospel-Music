@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <meta name="theme-color" content="#02779e" />
   <title>Vida Leve - Controle de Peso</title>
-
+  
+  <!-- Fonte Inter -->
   <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet" />
 
   <style>
@@ -27,7 +28,7 @@
       color: white;
       text-shadow: 1px 1px 4px #02779e;
       max-width: 95%;
-      margin-top: 80px;
+      margin-top: 30vh;
     }
 
     .titulo-app {
@@ -45,15 +46,7 @@
     .frase {
       font-size: 16px;
       font-weight: bold;
-      margin-bottom: 8px;
-    }
-
-    #status-mensagem {
-      color: white;
-      font-size: 14px;
-      text-align: center;
-      margin-bottom: 40px;
-      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6);
+      margin-bottom: 60px;
     }
 
     .btn-acessar {
@@ -80,6 +73,7 @@
       margin-right: auto;
     }
 
+    /* BLOQUEIO */
     #trial-overlay {
       display: none;
       position: fixed;
@@ -90,7 +84,6 @@
       z-index: 9999;
       justify-content: center;
       align-items: center;
-      display: flex; /* flex para centralizar */
     }
 
     .overlay-box {
@@ -135,7 +128,6 @@
       <div class="titulo-app">Vida Leve</div>
       <h2>Controle de peso</h2>
       <p class="frase">Comece sua jornada com equilíbrio e saúde!</p>
-      <p id="status-mensagem">Carregando status...</p>
       <a href="principal.html" class="btn-acessar">Acessar</a>
       <img src="https://i.postimg.cc/qq25bKcC/Logo-tela-512.png" alt="Logo Vida Leve" class="logo-abaixo">
     </div>
@@ -158,44 +150,23 @@
       const getDataInstalacao = () => {
         let data = localStorage.getItem('dataInstalacao');
         if (!data) {
-          data = Date.now().toString();
+          data = new Date().toISOString();
           localStorage.setItem('dataInstalacao', data);
         }
-        return parseInt(data, 10);
+        return new Date(data);
       };
 
       const isValido = () => {
         const dataInstalacao = getDataInstalacao();
-        const agora = Date.now();
-        const diffDias = Math.floor((agora - dataInstalacao) / (1000 * 60 * 60 * 24));
+        const hoje = new Date();
+        const diffDias = Math.floor((hoje - dataInstalacao) / (1000 * 60 * 60 * 24));
         const codigo = localStorage.getItem('codigoDesbloqueio')?.trim().toUpperCase();
-
-        console.log('Dias desde instalação:', diffDias);
-        console.log('Código desbloqueio:', codigo);
-        console.log('isValido:', diffDias <= diasTeste || codigo === 'SEUCODIGO123');
-
         return diffDias <= diasTeste || codigo === 'SEUCODIGO123';
       };
 
       const bloquearApp = () => {
         document.getElementById('app-content').style.display = 'none';
         document.getElementById('trial-overlay').style.display = 'flex';
-      };
-
-      const mostrarStatus = () => {
-        const dataInstalacao = getDataInstalacao();
-        const agora = Date.now();
-        const diffDias = Math.floor((agora - dataInstalacao) / (1000 * 60 * 60 * 24));
-        const diasRestantes = diasTeste - diffDias;
-        const statusDiv = document.getElementById('status-mensagem');
-
-        if (!statusDiv) return;
-
-        if (diffDias <= diasTeste) {
-          statusDiv.textContent = `Faltam ${diasRestantes} dia${diasRestantes === 1 ? '' : 's'} – Período de teste`;
-        } else {
-          statusDiv.textContent = `Período de teste expirado`;
-        }
       };
 
       window.validarCodigo = () => {
@@ -215,13 +186,12 @@
       if (!isValido()) {
         bloquearApp();
       }
-
-      mostrarStatus();
     })();
   </script>
 
 </body>
 </html>
+
 
 
 
