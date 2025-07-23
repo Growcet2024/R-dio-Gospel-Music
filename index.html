@@ -1,360 +1,201 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>seproteger</title>
-    <style>
-        /* ============================ Estilo geral ============================ */
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #fdfbf9;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="theme-color" content="#02779e" />
+  <title>Vida Leve - Controle de Peso</title>
 
-        /* ============================ Estilo do cabeçalho ============================ */
-        header {
-            text-align: left;
-            background-color: #fdfaf6;  /* Cor topo barra  */
-            padding: 20px;
-            margin-bottom: 0;
-            border-bottom: 2px solid #e0e0e0;
-        }
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', sans-serif;
+      background-image: url('https://i.postimg.cc/xT6r84d3/Tela-inicial-limpa.png');
+      background-size: cover;
+      background-position: center;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      text-align: center;
+    }
 
-        header h1 {
-            margin: 0;
-            font-size: 30px;  /* Títuli topo barra  */
-            color: #52467e; /*cor do título barra superior*/
-        }
+    .conteudo {
+      color: white;
+      text-shadow: 1px 1px 4px #02779e;
+      max-width: 95%;
+      margin-top: 95%;
+    }
 
-        hr.separator {
-            margin: 0;
-            border: 0;
-            border-top: 3px solid #ffffff;
-            margin-top: 0;
-            margin-bottom: 20px;
-        }
+    .titulo-app {
+      font-size: 42px;
+      font-weight: bold;
+      margin-bottom: 0px;
+    }
 
-        /* ============================ Container de Conteúdo ============================ */
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #fdfaf6; /* Cor conteiner */
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
+    h2 {
+      font-size: 25px;
+      font-weight: bold;
+      margin-bottom: 0px;
+    }
 
-        .titulo-guia {
-    font-size: 25px; /* Títuli conteiner  */
-    color: #999;
-    margin-bottom: 5px;
-}
+    .frase {
+      font-size: 16px;
+      font-weight: bold;
+      margin-bottom: 60px;
+    }
 
+    .btn-acessar {
+      padding: 12px 24px;
+      background: #02779e;
+      border: 2px solid #5fa5b4;
+      color: white;
+      font-size: 18px;
+      text-decoration: none;
+      cursor: pointer;
+      border-radius: 20px;
+      transition: background 0.3s;
+    }
 
-        /* ============================ Estilo para os títulos das seções ============================ */
-        .title {
-            font-size: 16px; /* Subtitulo  */
-            font-weight: bold;
-            margin-bottom: 10px;
-            color: #333;
-            margin-top: 30px;
-        }
+    .btn-acessar:hover {
+      background: #0393bb;
+    }
 
-        /* ============================ Estilo para parágrafos ============================ */
-        .text-area {
-            background-color: #f8f9fa; /* Cor destaque dicas */
-            border-radius: 5px;
-            padding: 15px 20px;
-            font-size: 16px;
-            color: #333;
-            box-sizing: border-box;
-            margin-bottom: 15px;
-            white-space: pre-line;
-        }
+    .logo-abaixo {
+      margin-top: 30px;
+      width: 90px;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
 
-        /* ============================ Listas ============================ */
-        ul {
-            padding-left: 20px;
-            margin-bottom: 15px;
-            color: #333;
-        }
+    /* BLOQUEIO */
+    #trial-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: #00000066;
+      color: white;
+      z-index: 9999;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
 
+    .overlay-box {
+      background: #1a1a1a99;
+      padding: 30px;
+      border-radius: 16px;
+      text-align: center;
+      width: 90%;
+      max-width: 360px;
+    }
 
-        /* CSS texto conteudo */
-.section-divider {
-    border: 0;
-    border-top: 2px solid #ccc;
-    margin: 40px 0;
-}
-
-.highlight-title {
-    font-size: 20px; /* Checklist  */
-    font-weight: 700;
-    color: #3a3a66; /* tom parecido com seu título principal */
-    margin-top: 20px;
-    margin-bottom: 20px;
-    border-bottom: 1px solid #52467e; /* linha destacada abaixo do título */
-    padding-bottom: 8px;
-}
-
-.highlight-text {
-    font-size: 18px;
-    line-height: 1.6;
-    color: #444;
-    background-color: #e0f7fa66; /* Cor destaque Checklist */
-    padding: 20px 25px;
-    border-radius: 8px;
-    margin-bottom: 40px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-}
-
-.section-divider {
-    border: 0;  /* linhas  */
-    border-top: 1px solid #b0b0d0; /* linha separadora */
-    margin: 10px 0;
-}
-
-.highlight-text {
-    padding-left: 30px; /* espaço para os números ficarem dentro */
-    margin-left: 0;     /* evita recuo extra do container */
-    list-style-position: inside; /* mantém o número dentro da área do texto */
-}
-.highlight-text {
-    list-style-position: inside;
-    padding-left: 30px;
-}
-
-/* CSS Cheklist 3 passos */
-.checklist-container {
-  background-color: #f8f9fa; /* leve cinza de fundo Destaque */
-  padding: 20px;
+    .overlay-box input,
+.overlay-box button {
+  width: 100%;
+  padding: 12px;
   border-radius: 8px;
-  margin-top: 30px;
-  font-family: 'Segoe UI', Tahoma, sans-serif;
-  color: #222;
-}
-
-.checklist-container .title {
-  font-size: 1.4rem;
-  font-weight: bold;
-  margin-bottom: 15px;
-  color: #0d6efd; /* azul destaque */
-}
-
-.checklist {
-  list-style-type: decimal;
-  padding-left: 25px;
-  font-size: 1.05rem;
-  line-height: 1.6;
-}
-
-.checklist li {
+  border: none;
+  font-size: 16px;
+  box-sizing: border-box;
   margin-bottom: 12px;
 }
 
-.checklist ul {
-  list-style-type: disc;
-  padding-left: 20px;
-  margin-top: 5px;
-}
 
-.checklist li strong {
-  color: #0c4128; /* verde escuro para os títulos dos passos */
-}
+    .overlay-box button {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: none;
+      background: #02779e;
+      color: white;
+      cursor: pointer;
+    }
 
-.checklist li em {
-  color: #6c757d;
-}
-
-
-
-    </style>
+    .overlay-box a {
+      display: block;
+      margin-top: 14px;
+      color: #00bfff;
+      text-decoration: underline;
+    }
+  </style>
 </head>
 <body>
-    <!-- ============================ Cabeçalho ============================ -->
-    <header>
-        <h1>seproteger</h1>
-    </header>
 
-    <hr class="separator" />
-
-
-    <!-- ============================ Conteúdo principal ============================ -->
-<div class="container">
-    
-    <h1 class="titulo-guia">Guia Prático de Proteção Digital</h1>
-
-
-    <div class="title">📘 Guia Prático: Como se Proteger de Golpes de Sequestro de Linha e Invasão Remota de Dados do celular</div>
-
-    <div class="title">📲 Parte 1: O que é esse golpe?</div>
-    <div class="text-area">
-Golpistas estão ligando para pessoas se passando por operadoras, bancos ou empresas conhecidas. Eles pedem para você digitar um número (como "2") durante a chamada. Quando você faz isso, está autorizando sem saber o redirecionamento da sua linha para outro aparelho. Isso permite ao golpista:
+  <!-- CONTEÚDO DO APP -->
+  <div id="app-content">
+    <div class="conteudo">
+      <div class="titulo-app">Vida Leve</div>
+      <h2>Controle de peso</h2>
+      <p class="frase">Comece sua jornada com equilíbrio e saúde!</p>
+      <a href="principal.html" class="btn-acessar">Acessar</a>
+      <img src="https://i.postimg.cc/qq25bKcC/Logo-tela-512.png" alt="Logo Vida Leve" class="logo-abaixo">
     </div>
-    <ul>
-        <li>Receber seus códigos SMS (como WhatsApp, banco, e-mail);</li>
-        <li>Entrar nas suas contas e aplicativos;</li>
-        <li>Restaurar seus dados pessoais em outro celular;</li>
-        <li>Resetar o seu celular à distância;</li>
-        <li>Usar sua identidade para enganar seus contatos.</li>
-    </ul>
+  </div>
 
-    <div class="title">🚨 Parte 2: Sinais de Alerta</div>
-<ul>
-    <li>Você recebe uma ligação suspeita pedindo para <strong>"digitar um número para confirmar sua identidade"</strong>. Esse tipo de pedido é um sinal claro de golpe — nunca digite nada.</li>
-    
-    <li>Seu celular <strong>para de receber chamadas ou SMS de forma repentina</strong>, sem você ter feito nenhuma mudança. Isso pode indicar que sua linha foi clonada ou transferida sem autorização.</li>
-    
-    <li>Aplicativos como o <strong>WhatsApp pedem uma nova verificação</strong> do número, mesmo sem você ter feito nada. Isso pode significar que alguém está tentando acessar sua conta.</li>
-</ul>
-
-
-
-
-
-    <div class="title">🛡️ Parte 3: Como se Proteger</div>
-    <ul>
-        <li>Nunca digite nada durante chamadas automáticas que você não iniciou.</li>
-        <li>Desative o redirecionamento de chamada do ceu telefone.
-           
-          
-        
-        </li>
-        <li>Use senhas fortes e diferentes para cada serviço.</li>
-        <li>Evite usar apenas o SMS como forma de verificação. Prefira apps como Google Authenticator, Microsoft Authenticator, ou senhas de aplicativo.</li>
-        <li>Desconfie de qualquer pessoa pedindo acesso ao seu celular, mesmo "só por um minuto".</li>
-    </ul>
-
-    <div class="title">🆘 Parte 4: O que fazer se você caiu no golpe</div>
-    <ul>
-        <li>Entre em contato com sua operadora IMEDIATAMENTE. Peça para bloquear qualquer redirecionamento e recuperar sua linha.</li>
-        <li>Acesse suas contas e troque as senhas com urgência.</li>
-        <li>Ative a verificação em duas etapas, se ainda não tiver feito.</li>
-        <li>Verifique o histórico de acessos de contas importantes (Google, Apple, e-mails, bancos).</li>
-        <li>Avise amigos e familiares sobre o golpe. Os golpistas podem tentar enganar outros usando seu nome.</li>
-        <li>Registre um boletim de ocorrência na polícia civil (delegacia virtual se houver).</li>
-    </ul>
-
-    <!-- Linha divisória para separar visualmente a nova seção -->
-<hr class="section-divider" />
-
-
-<!-- Novo conteúdo -->
-<div class="title">🔐 Parte 5: Como Proteger o Chip e a Linha Telefônica do seu Celular</div>
-<div class="title">Lembre-se sua linha é a CHAVE digital que abre suas portas</div>
-
-<div class="text-area">
-Sua linha de telefone é usada como "chave" para acessar vários serviços: WhatsApp, contas bancárias, redes sociais, e-mails e muito mais. Se um golpista conseguir assumir o controle da sua linha (chip), ele pode roubar suas informações, aplicar golpes em seus contatos e causar prejuízos graves.
-</div>
-
-<div class="title">Entendendo o Risco: Como os criminosos agem</div>
-<ul>
-    <li><strong>Clonagem de chip (SIM swap):</strong> O golpista finge ser você e pede à operadora para transferir seu número para outro chip.</li>
-    <li><strong>Redirecionamento de chamadas/SMS:</strong> Através de códigos como <strong>**21*</strong>, eles desviam suas chamadas para outro telefone.</li>
-    <li><strong>Engenharia social por telefone:</strong> Pedem para você "confirmar identidade" digitando um número e ativam um redirecionamento remoto.</li>
-    <li><strong>Acesso físico ao seu chip:</strong> Se alguém pegar seu celular ou chip, pode colocá-lo em outro aparelho e acessar seus serviços.</li>
-</ul>
-
-
-
-<div class="title">🛠️ Como se proteger: Passo a Passo</div>
-<ul>
-    <li><strong>Coloque senha no chip (PIN do SIM)</strong>
-    <li><strong>Desative redirecionamentos e desvios de chamadas</strong><br>
-    <li><strong>Cadastre uma senha com sua operadora</strong>
-     
-    <li><strong>Evite compartilhar dados pessoais na internet</strong>
-        <ul>
-            <li>Não exponha número de telefone, CPF ou data de nascimento publicamente.</li>
-            <li>Essas informações são usadas em golpes de clonagem de chip.</li>
-        </ul>
-    </li>
-
-    <li><strong>Ative a verificação em duas etapas em todos os aplicativos</strong>
-        <ul>
-            <li>WhatsApp, Instagram, Facebook, Google, Apple, bancos, etc.</li>
-            <li>Sempre use um e-mail seguro e senha forte como segunda camada.</li>
-        </ul>
-    </li>
-
-    <li><strong>Acompanhe o uso da sua linha</strong>
-        <ul>
-            <li>Instale o app da sua operadora para monitorar sua linha.</li>
-            <li>Qualquer mudança ou notificação suspeita deve ser investigada.</li>
-        </ul>
-    </li>
-</ul>
-
-
-<div class="title">🚫 Nunca faça isso:</div>
-<ul>
-    <li>Não digite números durante ligações que você não tenha iniciado.</li>
-    <li>Não entregue seu celular destravado a terceiros.</li>
-    <li>Não ignore sinais como perda de sinal repentina ou apps pedindo nova verificação.</li>
-</ul>
-
-<div class="title">✅ Conclusão</div>
-<div class="text-area">
-Seu chip é mais do que um cartão de ligação: é uma chave mestra da sua vida digital. Com essas medidas simples, você aumenta muito sua segurança e dificulta a vida dos golpistas. Proteja-se e compartilhe este guia com quem você ama!
-</div>
-
-    <div class="title">💡 Dica final</div>
-    <div class="text-area">
-Esse tipo de golpe está crescendo porque é simples e eficaz. A melhor defesa é a informação. Compartilhe este guia com familiares e amigos, especialmente os que não são acostumados com tecnologia.
+  <!-- BLOQUEIO -->
+  <div id="trial-overlay">
+    <div class="overlay-box">
+      <p style="font-size: 1.2em;">Seu período de teste expirou.</p>
+      <input type="text" id="codigo-input" placeholder="Digite seu código" />
+      <button onclick="validarCodigo()">Desbloquear</button>
+      <a href="https://SEULINKDAHOTMART" target="_blank">Comprar código no Hotmart</a>
     </div>
+  </div>
+
+  <script>
+    (function() {
+      const diasTeste = 7;
+
+      const getDataInstalacao = () => {
+        let data = localStorage.getItem('dataInstalacao');
+        if (!data) {
+          data = new Date().toISOString();
+          localStorage.setItem('dataInstalacao', data);
+        }
+        return new Date(data);
+      };
+
+      const isValido = () => {
+        const dataInstalacao = getDataInstalacao();
+        const hoje = new Date();
+        const diffDias = Math.floor((hoje - dataInstalacao) / (1000 * 60 * 60 * 24));
+        const codigo = localStorage.getItem('codigoDesbloqueio');
+        return diffDias <= diasTeste || codigo === 'SEUCODIGO123';
+      };
+
+      const bloquearApp = () => {
+        document.getElementById('app-content').style.display = 'none';
+        document.getElementById('trial-overlay').style.display = 'flex';
+      };
+
+      window.validarCodigo = () => {
+  const codigoDigitado = document.getElementById('codigo-input').value.trim();
+  if (!codigoDigitado) {
+    alert("Por favor, digite o código de desbloqueio.");
+    return;
+  }
+  if (codigoDigitado === 'SEUCODIGO123') {
+    localStorage.setItem('codigoDesbloqueio', codigoDigitado);
+    location.reload();
+  } else {
+    alert("Código inválido.");
+  }
+};
 
 
-    <div class="checklist-container">
-        <div class="title">✅ Checklist de Proteção do Chip e Linha Telefônica</div>
-      
-        <ul class="checklist">
-            <li><strong>Ative o PIN do chip (senha do SIM card)</strong>
-                <ul>
-                    <li>Android: Ajustes &gt; Segurança &gt; Bloqueio do chip SIM</li>
-                    <li>iPhone: Ajustes &gt; Celular &gt; PIN do SIM</li>
-                    <li><em>Dica:</em> Altere o PIN padrão (0000 ou 1234) para algo seguro.</li>
-                </ul>
-            </li>
-      
-            <li><strong>Desative redirecionamentos de chamadas e SMS</strong>
-                <ul>
-                    <li>No discador, digite: <strong>##002#</strong> e toque em chamada.</li>
-                    <li>Isso cancela todos os desvios que podem ter sido ativados sem sua permissão.</li>
-                </ul>
-            </li>
-      
-            <li><strong>Cadastre uma senha de atendimento com a operadora</strong>
-                <ul>
-                    <li>Ligue para sua operadora e peça para:</li>
-                    <li>- Cadastrar uma senha de atendimento</li>
-                    <li>- Bloquear alterações na linha sem essa senha</li>
-                </ul>
-            </li>
-      
-            <li><strong>Monitore sua linha no app da operadora</strong>
-                <ul>
-                    <li>Baixe o aplicativo oficial (Meu Vivo, Claro, TIM, Oi, etc.)</li>
-                    <li>Verifique tentativas de troca de chip ou alteração na linha.</li>
-                </ul>
-            </li>
-        </ul>
-      </div>
-      
-    <div class="highlight-text" style="margin-top: 20px;">
-        <strong>Dica final:</strong><br />
-        Realize essas ações hoje mesmo. São simples, rápidas e aumentam muito sua segurança digital.
-    </div>
-    
 
-    <div class="title">🔁 E se eu quiser ativar redirecionamentos novamente?</div> <div class="text-area"> Caso você realmente precise ativar um redirecionamento de chamadas (por exemplo, para um número fixo ou secundário), basta usar os seguintes códigos no discador do celular: <ul> <li><strong>Encaminhar todas as chamadas:</strong> <code>**21*+5521XXXXXXX#</code> e pressione chamada</li> <li><strong>Quando não atender:</strong> <code>**61*+5521XXXXXXX#</code></li> <li><strong>Quando estiver fora de área/desligado:</strong> <code>**62*+5521XXXXXXX#</code></li> <li><strong>Quando estiver ocupado:</strong> <code>**67*+5521XXXXXXX#</code></li> </ul>
-        🔒 <strong>Atenção:</strong> Use esses códigos apenas quando tiver certeza de que está seguro. Sempre verifique se o número inserido é seu ou confiável.
-        
-        </div>
 
-</div>
-
+      if (!isValido()) {
+        bloquearApp();
+      }
+    })();
+  </script>
 
 </body>
 </html>
+
