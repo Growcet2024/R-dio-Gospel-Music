@@ -24,25 +24,28 @@
       text-align: center;
     }
 
-    /* MENSAGEM DE STATUS NO TOPO */
+    /* FAIXA DE STATUS VISÍVEL */
     #status-mensagem {
       position: fixed;
       top: 0;
       left: 0;
       right: 0;
-      background: rgba(2, 119, 158, 0.9);
-      color: white;
-      padding: 10px;
-      font-size: 14px;
+      background: #111;
+      color: #00ffcc;
+      padding: 14px;
+      font-size: 16px;
+      font-weight: bold;
       text-align: center;
       z-index: 10000;
+      border-bottom: 2px solid #00ffcc;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
     }
 
     .conteudo {
       color: white;
       text-shadow: 1px 1px 4px #02779e;
       max-width: 95%;
-      margin-top: 30vh;
+      margin-top: 80px; /* abaixo da faixa */
     }
 
     .titulo-app {
@@ -87,7 +90,6 @@
       margin-right: auto;
     }
 
-    /* BLOQUEIO */
     #trial-overlay {
       display: none;
       position: fixed;
@@ -136,10 +138,8 @@
 </head>
 <body>
 
-  <!-- MENSAGEM DE STATUS -->
-  <div id="status-mensagem">
-    <!-- Conteúdo preenchido via JavaScript -->
-  </div>
+  <!-- FAIXA DE STATUS -->
+  <div id="status-mensagem">Carregando status...</div>
 
   <!-- CONTEÚDO DO APP -->
   <div id="app-content">
@@ -164,24 +164,30 @@
 
   <script>
     (function() {
-      const diasTeste = 7;
 
-      const getDataInstalacao = () => {
-        let data = localStorage.getItem('dataInstalacao');
-        if (!data) {
-          data = new Date().toISOString();
-          localStorage.setItem('dataInstalacao', data);
-        }
-        return new Date(data);
-      };
 
-      const isValido = () => {
-        const dataInstalacao = getDataInstalacao();
-        const hoje = new Date();
-        const diffDias = Math.floor((hoje - dataInstalacao) / (1000 * 60 * 60 * 24));
-        const codigo = localStorage.getItem('codigoDesbloqueio')?.trim().toUpperCase();
-        return diffDias <= diasTeste || codigo === 'SEUCODIGO123';
-      };
+      const minutosTeste = 60; // tempo de teste em minutos (1 hora)
+
+const getDataInstalacao = () => {
+  let data = localStorage.getItem('dataInstalacao');
+  if (!data) {
+    data = Date.now(); // timestamp em milissegundos
+    localStorage.setItem('dataInstalacao', data);
+  }
+  return parseInt(data, 10);
+};
+
+const isValido = () => {
+  const dataInstalacao = getDataInstalacao();
+  const agora = Date.now();
+  const diffMinutos = Math.floor((agora - dataInstalacao) / (1000 * 60));
+  const codigo = localStorage.getItem('codigoDesbloqueio')?.trim().toUpperCase();
+  return diffMinutos <= minutosTeste || codigo === 'SEUCODIGO123';
+};
+
+
+
+
 
       const bloquearApp = () => {
         document.getElementById('app-content').style.display = 'none';
@@ -204,6 +210,8 @@
           statusDiv.textContent = "🔒 Período de teste expirado.";
         }
       };
+
+
 
       window.validarCodigo = () => {
         const codigoDigitado = document.getElementById('codigo-input').value.trim().toUpperCase();
