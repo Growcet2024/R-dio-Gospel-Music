@@ -6,6 +6,9 @@
   <meta name="theme-color" content="#02779e" />
   <title>Vida Leve - Controle de Peso</title>
 
+  <!-- Fonte Inter -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet" />
+
   <style>
     body {
       margin: 0;
@@ -21,11 +24,25 @@
       text-align: center;
     }
 
+    /* MENSAGEM DE STATUS NO TOPO */
+    #status-mensagem {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: rgba(2, 119, 158, 0.9);
+      color: white;
+      padding: 10px;
+      font-size: 14px;
+      text-align: center;
+      z-index: 10000;
+    }
+
     .conteudo {
       color: white;
       text-shadow: 1px 1px 4px #02779e;
       max-width: 95%;
-      margin-top: 95%;
+      margin-top: 30vh;
     }
 
     .titulo-app {
@@ -79,7 +96,6 @@
       background: #00000066;
       color: white;
       z-index: 9999;
-      display: flex;
       justify-content: center;
       align-items: center;
     }
@@ -94,23 +110,17 @@
     }
 
     .overlay-box input,
-.overlay-box button {
-  width: 100%;
-  padding: 12px;
-  border-radius: 8px;
-  border: none;
-  font-size: 16px;
-  box-sizing: border-box;
-  margin-bottom: 12px;
-}
-
-
     .overlay-box button {
       width: 100%;
       padding: 12px;
-      font-size: 16px;
       border-radius: 8px;
       border: none;
+      font-size: 16px;
+      box-sizing: border-box;
+      margin-bottom: 12px;
+    }
+
+    .overlay-box button {
       background: #02779e;
       color: white;
       cursor: pointer;
@@ -125,6 +135,11 @@
   </style>
 </head>
 <body>
+
+  <!-- MENSAGEM DE STATUS -->
+  <div id="status-mensagem">
+    <!-- Conteúdo preenchido via JavaScript -->
+  </div>
 
   <!-- CONTEÚDO DO APP -->
   <div id="app-content">
@@ -164,7 +179,7 @@
         const dataInstalacao = getDataInstalacao();
         const hoje = new Date();
         const diffDias = Math.floor((hoje - dataInstalacao) / (1000 * 60 * 60 * 24));
-        const codigo = localStorage.getItem('codigoDesbloqueio');
+        const codigo = localStorage.getItem('codigoDesbloqueio')?.trim().toUpperCase();
         return diffDias <= diasTeste || codigo === 'SEUCODIGO123';
       };
 
@@ -173,29 +188,46 @@
         document.getElementById('trial-overlay').style.display = 'flex';
       };
 
+      const mostrarStatus = () => {
+        const dataInstalacao = getDataInstalacao();
+        const hoje = new Date();
+        const diffDias = Math.floor((hoje - dataInstalacao) / (1000 * 60 * 60 * 24));
+        const codigo = localStorage.getItem('codigoDesbloqueio')?.trim().toUpperCase();
+        const statusDiv = document.getElementById('status-mensagem');
+
+        if (codigo === 'SEUCODIGO123') {
+          statusDiv.textContent = "🔓 App desbloqueado com código.";
+        } else if (diffDias <= diasTeste) {
+          const diasRestantes = diasTeste - diffDias;
+          statusDiv.textContent = `⏳ Modo de teste – Faltam ${diasRestantes} dia${diasRestantes === 1 ? '' : 's'}`;
+        } else {
+          statusDiv.textContent = "🔒 Período de teste expirado.";
+        }
+      };
+
       window.validarCodigo = () => {
-  const codigoDigitado = document.getElementById('codigo-input').value.trim();
-  if (!codigoDigitado) {
-    alert("Por favor, digite o código de desbloqueio.");
-    return;
-  }
-  if (codigoDigitado === 'SEUCODIGO123') {
-    localStorage.setItem('codigoDesbloqueio', codigoDigitado);
-    location.reload();
-  } else {
-    alert("Código inválido.");
-  }
-};
-
-
-
+        const codigoDigitado = document.getElementById('codigo-input').value.trim().toUpperCase();
+        if (!codigoDigitado) {
+          alert("Por favor, digite o código de desbloqueio.");
+          return;
+        }
+        if (codigoDigitado === 'SEUCODIGO123') {
+          localStorage.setItem('codigoDesbloqueio', codigoDigitado);
+          location.reload();
+        } else {
+          alert("Código inválido.");
+        }
+      };
 
       if (!isValido()) {
         bloquearApp();
       }
+
+      mostrarStatus();
     })();
   </script>
 
 </body>
 </html>
+
 
