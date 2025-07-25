@@ -146,6 +146,23 @@
   </div>
 
   <script>
+
+// === Proteção contra alteração manual da data do dispositivo ===
+const ultimaDataSalva = localStorage.getItem('ultimaDataVerificada');
+const dataAtual = new Date().toISOString().split('T')[0]; // formato YYYY-MM-DD
+
+if (ultimaDataSalva && dataAtual < ultimaDataSalva) {
+    // Data foi atrasada → bloqueia imediatamente
+    localStorage.setItem('bloqueado', 'true');
+} else {
+    // Atualiza a data para a mais recente
+    localStorage.setItem('ultimaDataVerificada', dataAtual);
+}
+// === Fim da proteção de data ===
+
+
+
+    
     (function() {
       const diasTeste = 3; // <-- altere aqui o período de teste (dias)
 
