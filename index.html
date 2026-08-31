@@ -1,232 +1,939 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <meta name="theme-color" content="#02779e" />
-  <title>Vida Leve - Controle de Peso</title>
-  
-  <!-- Fonte Inter -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meus Compromissos de Saúde</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;0,600;1,500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #F1F5F2;
+    --surface: #FFFFFF;
+    --ink: #1B2A26;
+    --ink-soft: #5C6E68;
+    --teal: #1E4A44;
+    --teal-soft: #DCE8E4;
+    --amber: #B8863B;
+    --amber-soft: #F3E7D2;
+    --clay: #8C5A3C;
+    --clay-soft: #EFE2D4;
+    --line: #DCE3DF;
+    --danger: #A2483A;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'IBM Plex Sans', sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{
+    max-width:640px;
+    margin:0 auto;
+    padding:20px 20px 90px;
+  }
 
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Inter', sans-serif;
-      background-image: url('https://i.postimg.cc/xT6r84d3/Tela-inicial-limpa.png');
-      background-size: cover;
-      background-position: center;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      text-align: center;
-    }
+  /* Perfil */
+  .profile-bar{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:12px 14px;
+    margin-bottom:20px;
+    cursor:pointer;
+  }
+  .avatar{
+    width:48px;
+    height:48px;
+    border-radius:50%;
+    background:var(--teal-soft);
+    color:var(--teal);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:600;
+    font-size:18px;
+    flex-shrink:0;
+    overflow:hidden;
+  }
+  .avatar img{ width:100%; height:100%; object-fit:cover; }
+  .profile-info{ min-width:0; }
+  .profile-name{
+    margin:0;
+    font-weight:600;
+    font-size:15px;
+    color:var(--ink);
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+  .profile-id{
+    margin:2px 0 0;
+    font-size:12px;
+    color:var(--ink-soft);
+  }
 
-    .conteudo {
-      color: white;
-      text-shadow: 1px 1px 4px #02779e;
-      max-width: 95%;
-      margin-top: 30vh;
-    }
+  header{ margin-bottom:22px; }
+  header h1{
+    font-family:'Lora', serif;
+    font-weight:600;
+    font-size:26px;
+    color:var(--teal);
+    margin:0 0 4px;
+  }
+  header p{
+    margin:0;
+    color:var(--ink-soft);
+    font-size:14px;
+  }
 
-    .titulo-app {
-      font-size: 42px;
-      font-weight: bold;
-      margin-bottom: 0px;
-    }
+  .tabs{
+    display:flex;
+    gap:4px;
+    margin-bottom:20px;
+    border-bottom:1px solid var(--line);
+  }
+  .tab{
+    border:none;
+    background:none;
+    font-family:'IBM Plex Sans', sans-serif;
+    font-size:14px;
+    color:var(--ink-soft);
+    padding:10px 4px;
+    margin-right:20px;
+    cursor:pointer;
+    border-bottom:2px solid transparent;
+    position:relative;
+    top:1px;
+  }
+  .tab.active{
+    color:var(--teal);
+    border-bottom:2px solid var(--teal);
+    font-weight:500;
+  }
 
-    h2 {
-      font-size: 25px;
-      font-weight: bold;
-      margin-bottom: 0px;
-    }
+  .card{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:16px 18px;
+    margin-bottom:12px;
+  }
+  .card.done{ opacity:0.55; }
+  .card-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:12px;
+  }
+  .card-title{
+    font-weight:600;
+    font-size:16px;
+    margin:0 0 2px;
+  }
+  .card-sub{
+    font-size:13px;
+    color:var(--ink-soft);
+    margin:0;
+  }
+  .badge{
+    font-size:11px;
+    padding:3px 9px;
+    border-radius:20px;
+    white-space:nowrap;
+    font-weight:500;
+  }
+  .badge.exame{ background:var(--teal-soft); color:var(--teal); }
+  .badge.consulta{ background:var(--amber-soft); color:var(--amber); }
+  .badge.outros{ background:var(--clay-soft); color:var(--clay); }
 
-    .frase {
-      font-size: 16px;
-      font-weight: bold;
-      margin-bottom: 60px;
-    }
+  .card-date{
+    margin-top:10px;
+    font-size:14px;
+    color:var(--ink);
+    display:flex;
+    align-items:baseline;
+    gap:6px;
+  }
+  .card-date strong{ font-family:'Lora', serif; }
+  .card-notes{
+    margin-top:8px;
+    font-size:13px;
+    color:var(--ink-soft);
+    line-height:1.4;
+  }
+  .card-actions{
+    display:flex;
+    gap:14px;
+    margin-top:12px;
+  }
+  .card-actions button{
+    border:none;
+    background:none;
+    font-family:'IBM Plex Sans', sans-serif;
+    font-size:13px;
+    cursor:pointer;
+    padding:0;
+    color:var(--ink-soft);
+    text-decoration:underline;
+    text-underline-offset:2px;
+  }
+  .card-actions button.primary{ color:var(--teal); }
+  .card-actions button.remove{ color:var(--danger); }
 
-    .btn-acessar {
-      padding: 12px 24px;
-      background: #02779e;
-      border: 2px solid #5fa5b4;
-      color: white;
-      font-size: 18px;
-      text-decoration: none;
-      cursor: pointer;
-      border-radius: 20px;
-      transition: background 0.3s;
-    }
+  .empty{
+    text-align:center;
+    padding:48px 20px;
+    color:var(--ink-soft);
+  }
+  .empty p{ margin:6px 0 0; font-size:14px; }
 
-    .btn-acessar:hover {
-      background: #0393bb;
-    }
+  .fab-group{
+    position:fixed;
+    bottom:24px;
+    right:24px;
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    align-items:center;
+  }
+  .fab, .fab-secondary{
+    border:none;
+    cursor:pointer;
+    box-shadow:0 4px 14px rgba(30,74,68,0.3);
+  }
+  .fab{
+    width:56px;
+    height:56px;
+    border-radius:50%;
+    background:var(--teal);
+    color:#fff;
+    font-size:28px;
+    line-height:56px;
+    text-align:center;
+  }
+  .fab-secondary{
+    width:44px;
+    height:44px;
+    border-radius:50%;
+    background:var(--surface);
+    color:var(--teal);
+    border:1px solid var(--line);
+    font-size:18px;
+    line-height:42px;
+    text-align:center;
+  }
 
-    .logo-abaixo {
-      margin-top: 30px;
-      width: 90px;
-      display: block;
-      margin-left: auto;
-      margin-right: auto;
-    }
+  .overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(27,42,38,0.4);
+    display:flex;
+    align-items:flex-end;
+    justify-content:center;
+    z-index:10;
+  }
+  .sheet{
+    background:var(--surface);
+    width:100%;
+    max-width:640px;
+    border-radius:16px 16px 0 0;
+    padding:24px 20px 28px;
+    max-height:88vh;
+    overflow-y:auto;
+  }
+  .sheet h2{
+    font-family:'Lora', serif;
+    font-size:20px;
+    color:var(--teal);
+    margin:0 0 18px;
+  }
+  .field{ margin-bottom:14px; }
+  .field label{
+    display:block;
+    font-size:12px;
+    color:var(--ink-soft);
+    margin-bottom:5px;
+  }
+  .field input, .field select, .field textarea{
+    width:100%;
+    border:1px solid var(--line);
+    border-radius:8px;
+    padding:10px 12px;
+    font-family:'IBM Plex Sans', sans-serif;
+    font-size:14px;
+    color:var(--ink);
+    background:var(--bg);
+  }
+  .field textarea{ resize:vertical; min-height:56px; }
+  .row2{ display:flex; gap:10px; }
+  .row2 .field{ flex:1; }
 
-    /* BLOQUEIO */
-    #trial-overlay {
-      display: none;
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: #00000066;
-      color: white;
-      z-index: 9999;
-      justify-content: center;
-      align-items: center;
-    }
+  .time-picker{
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .time-picker select{
+    flex:1;
+    text-align:center;
+  }
+  .time-picker span{ color:var(--ink-soft); font-weight:600; }
 
-    .overlay-box {
-      background: #1a1a1a99;
-      padding: 30px;
-      border-radius: 16px;
-      text-align: center;
-      width: 90%;
-      max-width: 360px;
-    }
+  .type-toggle{
+    display:flex;
+    gap:8px;
+    margin-bottom:16px;
+  }
+  .type-toggle button{
+    flex:1;
+    padding:10px 4px;
+    border-radius:8px;
+    border:1px solid var(--line);
+    background:var(--bg);
+    font-family:'IBM Plex Sans', sans-serif;
+    font-size:13px;
+    cursor:pointer;
+    color:var(--ink-soft);
+  }
+  .type-toggle button.active.exame{ background:var(--teal-soft); border-color:var(--teal); color:var(--teal); }
+  .type-toggle button.active.consulta{ background:var(--amber-soft); border-color:var(--amber); color:var(--amber); }
+  .type-toggle button.active.outros{ background:var(--clay-soft); border-color:var(--clay); color:var(--clay); }
 
-    .overlay-box input,
-    .overlay-box button {
-      width: 100%;
-      padding: 12px;
-      border-radius: 8px;
-      border: none;
-      font-size: 16px;
-      box-sizing: border-box;
-      margin-bottom: 12px;
-    }
+  .sheet-actions{
+    display:flex;
+    gap:10px;
+    margin-top:8px;
+  }
+  .sheet-actions button{
+    flex:1;
+    padding:12px;
+    border-radius:8px;
+    border:none;
+    font-family:'IBM Plex Sans', sans-serif;
+    font-size:14px;
+    font-weight:500;
+    cursor:pointer;
+  }
+  .btn-cancel{ background:var(--bg); color:var(--ink-soft); }
+  .btn-save{ background:var(--teal); color:#fff; }
 
-    .overlay-box button {
-      background: #02779e;
-      color: white;
-      cursor: pointer;
-    }
+  .toast{
+    position:fixed;
+    left:50%;
+    bottom:100px;
+    transform:translateX(-50%);
+    background:var(--ink);
+    color:#fff;
+    padding:10px 18px;
+    border-radius:8px;
+    font-size:13px;
+    z-index:20;
+    opacity:0;
+    pointer-events:none;
+    transition:opacity 0.25s ease;
+  }
+  .toast.show{ opacity:1; }
 
-    .overlay-box a {
-      display: block;
-      margin-top: 14px;
-      color: #00bfff;
-      text-decoration: underline;
-    }
-  </style>
+  /* Perfil - editor */
+  .avatar-edit{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:10px;
+    margin-bottom:20px;
+  }
+  .avatar-large{
+    width:88px;
+    height:88px;
+    border-radius:50%;
+    background:var(--teal-soft);
+    color:var(--teal);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:600;
+    font-size:30px;
+    overflow:hidden;
+  }
+  .avatar-large img{ width:100%; height:100%; object-fit:cover; }
+  .btn-photo{
+    font-size:13px;
+    color:var(--teal);
+    text-decoration:underline;
+    cursor:pointer;
+  }
+  .profile-id-preview{
+    text-align:center;
+    font-size:12px;
+    color:var(--ink-soft);
+    margin:-6px 0 16px;
+  }
+</style>
 </head>
 <body>
+<div class="wrap">
 
-  <!-- CONTEÚDO DO APP -->
-  <div id="app-content">
-    <div class="conteudo">
-      <div class="titulo-app">Vida Leve</div>
-      <h2>Controle de peso</h2>
-      <p class="frase">Comece sua jornada com equilíbrio e saúde!</p>
-      <a href="principal.html" class="btn-acessar">Acessar</a>
-      <img src="https://i.postimg.cc/qq25bKcC/Logo-tela-512.png" alt="Logo Vida Leve" class="logo-abaixo">
-      <!-- Contador de dias restantes -->
-      <p id="dias-restantes" style="color: white; margin-top: 15px;"></p>
+  <div class="profile-bar" id="profileBar">
+    <div class="avatar" id="avatarWrap">
+      <img id="avatarImg" style="display:none">
+      <span id="avatarInitial">?</span>
+    </div>
+    <div class="profile-info">
+      <p class="profile-name" id="profileNameText">Configurar perfil</p>
+      <p class="profile-id" id="profileIdText"></p>
     </div>
   </div>
 
-  <!-- BLOQUEIO -->
-  <div id="trial-overlay">
-    <div class="overlay-box">
-      <p style="font-size: 1.2em;">Seu período de teste expirou.</p>
-      <input type="text" id="codigo-input" placeholder="Digite seu código" />
-      <button onclick="validarCodigo()">Desbloquear</button>
-      <a href="https://SEULINKDAHOTMART" target="_blank">Comprar código no Hotmart</a>
-    </div>
+  <header>
+    <h1>Meus Compromissos</h1>
+    <p>Exames, consultas e outros, em um só lugar</p>
+  </header>
+
+  <div class="tabs">
+    <button class="tab active" data-tab="proximos">Próximos</button>
+    <button class="tab" data-tab="concluidos">Concluídos</button>
   </div>
 
-  <script>
+  <div id="list"></div>
+</div>
 
-// === Proteção contra alteração manual da data do dispositivo ===
-const ultimaDataSalva = localStorage.getItem('ultimaDataVerificada');
-const dataAtual = new Date().toISOString().split('T')[0]; // formato YYYY-MM-DD
+<div class="fab-group">
+  <button class="fab-secondary" id="fabShare" aria-label="Compartilhar como imagem">⇪</button>
+  <button class="fab" id="fabAdd" aria-label="Adicionar compromisso">+</button>
+</div>
 
-if (ultimaDataSalva && dataAtual < ultimaDataSalva) {
-    // Data foi atrasada → bloqueia imediatamente
-    localStorage.setItem('bloqueado', 'true');
-} else {
-    // Atualiza a data para a mais recente
-    localStorage.setItem('ultimaDataVerificada', dataAtual);
-}
-// === Fim da proteção de data ===
+<!-- Modal de compromisso -->
+<div class="overlay" id="overlay" style="display:none;">
+  <div class="sheet">
+    <h2 id="sheetTitle">Novo compromisso</h2>
+    <div class="type-toggle">
+      <button type="button" class="active exame" id="typeExame">Exame</button>
+      <button type="button" class="consulta" id="typeConsulta">Consulta</button>
+      <button type="button" class="outros" id="typeOutros">Outros</button>
+    </div>
+    <div class="field">
+      <label for="fTitulo">Título</label>
+      <input id="fTitulo" placeholder="Ex: Hemograma completo / Cardiologista">
+    </div>
+    <div class="field">
+      <label>Data</label>
+      <div class="time-picker">
+        <select id="fDia"></select>
+        <span>/</span>
+        <select id="fMes"></select>
+        <span>/</span>
+        <select id="fAno"></select>
+      </div>
+    </div>
+    <div class="field">
+      <label>Hora</label>
+      <div class="time-picker">
+        <select id="fHoraH"></select>
+        <span>:</span>
+        <select id="fHoraM"></select>
+      </div>
+    </div>
+    <div class="field">
+      <label for="fLocal">Local / Especialidade</label>
+      <input id="fLocal" placeholder="Ex: Laboratório Central, Dr. Souza">
+    </div>
+    <div class="field">
+      <label for="fNotas">Observações (opcional)</label>
+      <textarea id="fNotas" placeholder="Jejum de 8h, levar exames anteriores..."></textarea>
+    </div>
+    <div class="sheet-actions">
+      <button class="btn-cancel" id="btnCancel">Cancelar</button>
+      <button class="btn-save" id="btnSave">Salvar</button>
+    </div>
+  </div>
+</div>
 
+<!-- Modal de perfil -->
+<div class="overlay" id="profileOverlay" style="display:none;">
+  <div class="sheet">
+    <h2>Seu perfil</h2>
+    <div class="avatar-edit">
+      <div class="avatar-large" id="avatarLargeWrap">
+        <img id="avatarLargeImg" style="display:none">
+        <span id="avatarLargeInitial">?</span>
+      </div>
+      <label class="btn-photo" for="fFoto">Escolher foto</label>
+      <input type="file" id="fFoto" accept="image/*" style="display:none">
+    </div>
+    <div class="field">
+      <label for="fNome">Nome</label>
+      <input id="fNome" placeholder="Seu nome">
+    </div>
+    <p class="profile-id-preview" id="profileIdPreview"></p>
+    <div class="sheet-actions">
+      <button class="btn-cancel" id="btnProfileCancel">Cancelar</button>
+      <button class="btn-save" id="btnProfileSave">Salvar</button>
+    </div>
+  </div>
+</div>
 
+<canvas id="shareCanvas" style="display:none;"></canvas>
+<div class="toast" id="toast"></div>
 
-    
-    (function() {
-      const diasTeste = 3; // <-- altere aqui o período de teste (dias)
+<script>
+  /* ---------- IndexedDB ---------- */
+  const DB_NAME = 'compromissosDB';
+  const DB_VERSION = 1;
+  let dbInstance = null;
 
-      const getDataInstalacao = () => {
-        let data = localStorage.getItem('dataInstalacao');
-        if (!data) {
-          data = new Date().toISOString();
-          localStorage.setItem('dataInstalacao', data);
+  function openDB(){
+    return new Promise((resolve, reject) => {
+      const req = indexedDB.open(DB_NAME, DB_VERSION);
+      req.onupgradeneeded = (e) => {
+        const db = e.target.result;
+        if(!db.objectStoreNames.contains('compromissos')){
+          db.createObjectStore('compromissos', { keyPath: 'id' });
         }
-        return new Date(data);
-      };
-
-      const isValido = () => {
-        const dataInstalacao = getDataInstalacao();
-        const hoje = new Date();
-        const diffDias = Math.floor((hoje - dataInstalacao) / (1000 * 60 * 60 * 24));
-        const codigo = localStorage.getItem('codigoDesbloqueio')?.trim().toUpperCase();
-        return diffDias < diasTeste || codigo === 'SEUCODIGO123';
-      };
-
-      const bloquearApp = () => {
-        document.getElementById('app-content').style.display = 'none';
-        document.getElementById('trial-overlay').style.display = 'flex';
-      };
-
-      const atualizarFrase = () => {
-        const dataInstalacao = getDataInstalacao();
-        const hoje = new Date();
-        const diffDias = Math.floor((hoje - dataInstalacao) / (1000 * 60 * 60 * 24));
-        const diasRestantes = diasTeste - diffDias;
-
-        const fraseEl = document.getElementById('dias-restantes');
-        if (diasRestantes > 0) {
-          fraseEl.textContent = `Faltam ${diasRestantes} dia${diasRestantes > 1 ? 's' : ''} para o fim do teste.`;
-          fraseEl.style.display = 'block';
-        } else {
-          fraseEl.style.display = 'none';
+        if(!db.objectStoreNames.contains('perfil')){
+          db.createObjectStore('perfil', { keyPath: 'id' });
         }
       };
+      req.onsuccess = (e) => resolve(e.target.result);
+      req.onerror = (e) => reject(e.target.error);
+    });
+  }
 
-      window.validarCodigo = () => {
-        const codigoDigitado = document.getElementById('codigo-input').value.trim().toUpperCase();
-        if (!codigoDigitado) {
-          alert("Por favor, digite o código de desbloqueio.");
+  function dbGetAll(store){
+    return new Promise((resolve, reject) => {
+      const tx = dbInstance.transaction(store, 'readonly');
+      const req = tx.objectStore(store).getAll();
+      req.onsuccess = () => resolve(req.result);
+      req.onerror = () => reject(req.error);
+    });
+  }
+
+  function dbGet(store, key){
+    return new Promise((resolve, reject) => {
+      const tx = dbInstance.transaction(store, 'readonly');
+      const req = tx.objectStore(store).get(key);
+      req.onsuccess = () => resolve(req.result);
+      req.onerror = () => reject(req.error);
+    });
+  }
+
+  function dbPut(store, value){
+    return new Promise((resolve, reject) => {
+      const tx = dbInstance.transaction(store, 'readwrite');
+      tx.objectStore(store).put(value);
+      tx.oncomplete = () => resolve();
+      tx.onerror = () => reject(tx.error);
+    });
+  }
+
+  function dbDelete(store, key){
+    return new Promise((resolve, reject) => {
+      const tx = dbInstance.transaction(store, 'readwrite');
+      tx.objectStore(store).delete(key);
+      tx.oncomplete = () => resolve();
+      tx.onerror = () => reject(tx.error);
+    });
+  }
+
+  /* ---------- Estado ---------- */
+  let items = [];
+  let perfil = null;
+  let currentTab = 'proximos';
+  let currentType = 'exame';
+  let editingId = null;
+
+  const listEl = document.getElementById('list');
+  const overlay = document.getElementById('overlay');
+  const profileOverlay = document.getElementById('profileOverlay');
+
+  /* ---------- Utilitários ---------- */
+  function formatDate(dateStr){
+    if(!dateStr) return '';
+    const [y,m,d] = dateStr.split('-');
+    return `${d}/${m}/${y}`;
+  }
+  function escapeHtml(str){
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+  }
+  function tipoLabel(tipo){
+    return tipo === 'exame' ? 'Exame' : tipo === 'consulta' ? 'Consulta' : 'Outros';
+  }
+  function generateUserId(){
+    return 'US-' + Math.random().toString(36).slice(2, 8).toUpperCase();
+  }
+
+  /* ---------- Renderização de compromissos ---------- */
+  function render(){
+    let filtered = items.filter(it => currentTab === 'proximos' ? !it.done : it.done);
+
+    filtered.sort((a,b) => {
+      const da = new Date(a.data + 'T' + (a.hora || '00:00'));
+      const db_ = new Date(b.data + 'T' + (b.hora || '00:00'));
+      return currentTab === 'proximos' ? da - db_ : db_ - da;
+    });
+
+    if(filtered.length === 0){
+      listEl.innerHTML = `<div class="empty">
+        <p>${currentTab === 'proximos' ? 'Nenhum compromisso marcado ainda. Toque em + para adicionar.' : 'Nenhum compromisso concluído ainda.'}</p>
+      </div>`;
+      return;
+    }
+
+    listEl.innerHTML = filtered.map(it => `
+      <div class="card ${it.done ? 'done' : ''}">
+        <div class="card-top">
+          <div>
+            <p class="card-title">${escapeHtml(it.titulo)}</p>
+            <p class="card-sub">${escapeHtml(it.local || '')}</p>
+          </div>
+          <span class="badge ${it.tipo}">${tipoLabel(it.tipo)}</span>
+        </div>
+        <div class="card-date"><strong>${formatDate(it.data)}</strong>${it.hora ? ' às ' + it.hora : ''}</div>
+        ${it.notas ? `<div class="card-notes">${escapeHtml(it.notas)}</div>` : ''}
+        <div class="card-actions">
+          ${!it.done ? `<button class="primary" onclick="markDone('${it.id}')">Marcar concluído</button>` : `<button onclick="markPending('${it.id}')">Reabrir</button>`}
+          <button onclick="editItem('${it.id}')">Editar</button>
+          <button class="remove" onclick="removeItem('${it.id}')">Excluir</button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  window.markDone = async function(id){
+    const it = items.find(i => i.id === id);
+    if(it){ it.done = true; await dbPut('compromissos', it); render(); }
+  };
+  window.markPending = async function(id){
+    const it = items.find(i => i.id === id);
+    if(it){ it.done = false; await dbPut('compromissos', it); render(); }
+  };
+  window.removeItem = async function(id){
+    if(confirm('Excluir este compromisso?')){
+      items = items.filter(i => i.id !== id);
+      await dbDelete('compromissos', id);
+      render();
+    }
+  };
+  window.editItem = function(id){
+    const it = items.find(i => i.id === id);
+    if(!it) return;
+    editingId = id;
+    document.getElementById('sheetTitle').textContent = 'Editar compromisso';
+    setType(it.tipo);
+    document.getElementById('fTitulo').value = it.titulo;
+    setDataSelects(it.data);
+    const [h, m] = (it.hora || '08:00').split(':');
+    document.getElementById('fHoraH').value = h;
+    document.getElementById('fHoraM').value = m;
+    document.getElementById('fLocal').value = it.local || '';
+    document.getElementById('fNotas').value = it.notas || '';
+    overlay.style.display = 'flex';
+  };
+
+  document.querySelectorAll('.tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentTab = btn.dataset.tab;
+      render();
+    });
+  });
+
+  function setType(type){
+    currentType = type;
+    document.getElementById('typeExame').classList.toggle('active', type === 'exame');
+    document.getElementById('typeConsulta').classList.toggle('active', type === 'consulta');
+    document.getElementById('typeOutros').classList.toggle('active', type === 'outros');
+  }
+  document.getElementById('typeExame').addEventListener('click', () => setType('exame'));
+  document.getElementById('typeConsulta').addEventListener('click', () => setType('consulta'));
+  document.getElementById('typeOutros').addEventListener('click', () => setType('outros'));
+
+  /* ---------- Seletor de hora próprio ---------- */
+  function fillTimeSelects(){
+    const selH = document.getElementById('fHoraH');
+    const selM = document.getElementById('fHoraM');
+    selH.innerHTML = '';
+    selM.innerHTML = '';
+    for(let h = 0; h < 24; h++){
+      const v = String(h).padStart(2, '0');
+      selH.innerHTML += `<option value="${v}">${v}</option>`;
+    }
+    for(let m = 0; m < 60; m += 5){
+      const v = String(m).padStart(2, '0');
+      selM.innerHTML += `<option value="${v}">${v}</option>`;
+    }
+  }
+
+  function fillDateSelects(){
+    const selDia = document.getElementById('fDia');
+    const selMes = document.getElementById('fMes');
+    const selAno = document.getElementById('fAno');
+    selDia.innerHTML = '';
+    selMes.innerHTML = '';
+    selAno.innerHTML = '';
+    for(let d = 1; d <= 31; d++){
+      const v = String(d).padStart(2, '0');
+      selDia.innerHTML += `<option value="${v}">${v}</option>`;
+    }
+    const meses = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+    meses.forEach((nome, i) => {
+      const v = String(i + 1).padStart(2, '0');
+      selMes.innerHTML += `<option value="${v}">${nome}</option>`;
+    });
+    const anoAtual = new Date().getFullYear();
+    for(let a = anoAtual - 1; a <= anoAtual + 5; a++){
+      selAno.innerHTML += `<option value="${a}">${a}</option>`;
+    }
+  }
+
+  function getDataSelecionada(){
+    const dia = document.getElementById('fDia').value;
+    const mes = document.getElementById('fMes').value;
+    const ano = document.getElementById('fAno').value;
+    return `${ano}-${mes}-${dia}`;
+  }
+
+  function setDataSelects(dataStr){
+    const hoje = new Date();
+    const [ano, mes, dia] = (dataStr || '').split('-');
+    document.getElementById('fDia').value = dia || String(hoje.getDate()).padStart(2,'0');
+    document.getElementById('fMes').value = mes || String(hoje.getMonth()+1).padStart(2,'0');
+    document.getElementById('fAno').value = ano || String(hoje.getFullYear());
+  }
+
+  function openNewSheet(){
+    editingId = null;
+    document.getElementById('sheetTitle').textContent = 'Novo compromisso';
+    setType('exame');
+    document.getElementById('fTitulo').value = '';
+    setDataSelects(null);
+    document.getElementById('fHoraH').value = '08';
+    document.getElementById('fHoraM').value = '00';
+    document.getElementById('fLocal').value = '';
+    document.getElementById('fNotas').value = '';
+    overlay.style.display = 'flex';
+  }
+
+  document.getElementById('fabAdd').addEventListener('click', openNewSheet);
+  document.getElementById('btnCancel').addEventListener('click', () => { overlay.style.display = 'none'; });
+  overlay.addEventListener('click', (e) => { if(e.target === overlay) overlay.style.display = 'none'; });
+
+  document.getElementById('btnSave').addEventListener('click', async () => {
+    const titulo = document.getElementById('fTitulo').value.trim();
+    const data = getDataSelecionada();
+    if(!titulo || !data){
+      alert('Preencha ao menos o título e a data.');
+      return;
+    }
+    const hora = document.getElementById('fHoraH').value + ':' + document.getElementById('fHoraM').value;
+    const payload = {
+      titulo,
+      data,
+      hora,
+      local: document.getElementById('fLocal').value.trim(),
+      notas: document.getElementById('fNotas').value.trim(),
+      tipo: currentType,
+    };
+    if(editingId){
+      const it = items.find(i => i.id === editingId);
+      Object.assign(it, payload);
+      await dbPut('compromissos', it);
+    } else {
+      const novo = { id: Date.now().toString(36) + Math.random().toString(36).slice(2,6), done:false, ...payload };
+      items.push(novo);
+      await dbPut('compromissos', novo);
+    }
+    overlay.style.display = 'none';
+    render();
+  });
+
+  /* ---------- Perfil ---------- */
+  let novaFotoBase64 = null;
+
+  function renderProfileBar(){
+    const nameEl = document.getElementById('profileNameText');
+    const idEl = document.getElementById('profileIdText');
+    const avatarImg = document.getElementById('avatarImg');
+    const avatarInitial = document.getElementById('avatarInitial');
+
+    if(perfil && perfil.nome){
+      nameEl.textContent = perfil.nome;
+      idEl.textContent = perfil.userId || '';
+      avatarInitial.textContent = perfil.nome.trim().charAt(0).toUpperCase();
+    } else {
+      nameEl.textContent = 'Configurar perfil';
+      idEl.textContent = '';
+      avatarInitial.textContent = '?';
+    }
+
+    if(perfil && perfil.foto){
+      avatarImg.src = perfil.foto;
+      avatarImg.style.display = 'block';
+      avatarInitial.style.display = 'none';
+    } else {
+      avatarImg.style.display = 'none';
+      avatarInitial.style.display = 'block';
+    }
+  }
+
+  document.getElementById('profileBar').addEventListener('click', () => {
+    novaFotoBase64 = null;
+    const nomeAtual = perfil ? perfil.nome || '' : '';
+    document.getElementById('fNome').value = nomeAtual;
+
+    const previewImg = document.getElementById('avatarLargeImg');
+    const previewInitial = document.getElementById('avatarLargeInitial');
+    if(perfil && perfil.foto){
+      previewImg.src = perfil.foto;
+      previewImg.style.display = 'block';
+      previewInitial.style.display = 'none';
+    } else {
+      previewImg.style.display = 'none';
+      previewInitial.style.display = 'block';
+      previewInitial.textContent = nomeAtual ? nomeAtual.trim().charAt(0).toUpperCase() : '?';
+    }
+
+    document.getElementById('profileIdPreview').textContent = perfil && perfil.userId
+      ? 'ID: ' + perfil.userId
+      : 'Um ID único será gerado ao salvar';
+
+    profileOverlay.style.display = 'flex';
+  });
+
+  document.getElementById('btnProfileCancel').addEventListener('click', () => { profileOverlay.style.display = 'none'; });
+  profileOverlay.addEventListener('click', (e) => { if(e.target === profileOverlay) profileOverlay.style.display = 'none'; });
+
+  document.getElementById('fFoto').addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if(!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      novaFotoBase64 = reader.result;
+      const previewImg = document.getElementById('avatarLargeImg');
+      const previewInitial = document.getElementById('avatarLargeInitial');
+      previewImg.src = novaFotoBase64;
+      previewImg.style.display = 'block';
+      previewInitial.style.display = 'none';
+    };
+    reader.readAsDataURL(file);
+  });
+
+  document.getElementById('btnProfileSave').addEventListener('click', async () => {
+    const nome = document.getElementById('fNome').value.trim();
+    if(!nome){
+      alert('Informe um nome.');
+      return;
+    }
+    if(!perfil){
+      perfil = { id: 1, nome, foto: null, userId: generateUserId() };
+    } else {
+      perfil.nome = nome;
+      if(!perfil.userId) perfil.userId = generateUserId();
+    }
+    if(novaFotoBase64){
+      perfil.foto = novaFotoBase64;
+    }
+    await dbPut('perfil', perfil);
+    renderProfileBar();
+    profileOverlay.style.display = 'none';
+  });
+
+  /* ---------- Compartilhar como PNG ---------- */
+  function showToast(msg){
+    const toast = document.getElementById('toast');
+    toast.textContent = msg;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2500);
+  }
+
+  document.getElementById('fabShare').addEventListener('click', async () => {
+    const proximos = items.filter(i => !i.done).sort((a,b) => new Date(a.data+'T'+(a.hora||'00:00')) - new Date(b.data+'T'+(b.hora||'00:00')));
+    if(proximos.length === 0){
+      showToast('Não há compromissos para compartilhar.');
+      return;
+    }
+
+    const canvas = document.getElementById('shareCanvas');
+    const ctx = canvas.getContext('2d');
+    const width = 720;
+    const rowHeight = 92;
+    const headerHeight = perfil && perfil.nome ? 130 : 90;
+    const height = headerHeight + proximos.length * rowHeight + 40;
+    canvas.width = width;
+    canvas.height = height;
+
+    ctx.fillStyle = '#F1F5F2';
+    ctx.fillRect(0, 0, width, height);
+
+    ctx.fillStyle = '#1E4A44';
+    ctx.font = '600 30px Georgia, serif';
+    ctx.fillText('Meus Compromissos', 32, 52);
+
+    if(perfil && perfil.nome){
+      ctx.fillStyle = '#5C6E68';
+      ctx.font = '16px Arial';
+      ctx.fillText(perfil.nome + (perfil.userId ? '  ·  ' + perfil.userId : ''), 32, 80);
+    }
+
+    let y = headerHeight;
+    proximos.forEach(it => {
+      ctx.fillStyle = '#FFFFFF';
+      ctx.fillRect(24, y, width - 48, rowHeight - 12);
+      ctx.strokeStyle = '#DCE3DF';
+      ctx.strokeRect(24, y, width - 48, rowHeight - 12);
+
+      ctx.fillStyle = '#1B2A26';
+      ctx.font = '600 18px Arial';
+      ctx.fillText(it.titulo, 44, y + 30);
+
+      ctx.fillStyle = '#5C6E68';
+      ctx.font = '14px Arial';
+      ctx.fillText(it.local || '', 44, y + 52);
+
+      ctx.fillStyle = '#1E4A44';
+      ctx.font = '600 15px Arial';
+      const dataTxt = formatDate(it.data) + (it.hora ? ' às ' + it.hora : '');
+      ctx.fillText(dataTxt + '   [' + tipoLabel(it.tipo) + ']', 44, y + 70);
+
+      y += rowHeight;
+    });
+
+    canvas.toBlob(async (blob) => {
+      const file = new File([blob], 'meus-compromissos.png', { type: 'image/png' });
+      if(navigator.canShare && navigator.canShare({ files: [file] })){
+        try {
+          await navigator.share({ files: [file], title: 'Meus Compromissos' });
           return;
-        }
-        if (codigoDigitado === 'SEUCODIGO123') {
-          localStorage.setItem('codigoDesbloqueio', codigoDigitado);
-          location.reload();
-        } else {
-          alert("Código inválido.");
-        }
-      };
-
-      if (!isValido()) {
-        bloquearApp();
-      } else {
-        atualizarFrase();
+        } catch(e){ /* usuário cancelou ou falhou, cai no download */ }
       }
-    })();
-  </script>
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'meus-compromissos.png';
+      a.click();
+      URL.revokeObjectURL(url);
+    }, 'image/png');
+  });
 
+  /* ---------- Inicialização ---------- */
+  async function init(){
+    fillTimeSelects();
+    fillDateSelects();
+    dbInstance = await openDB();
+    items = await dbGetAll('compromissos');
+    perfil = await dbGet('perfil', 1) || null;
+    renderProfileBar();
+    render();
+  }
+  init();
+</script>
 </body>
 </html>
-
-
-
