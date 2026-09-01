@@ -536,24 +536,6 @@
 </div>
 
 <!-- Modal de compartilhamento individual -->
-<div class="overlay" id="shareOverlay" style="display:none;">
-  <div class="sheet">
-    <h2>Compartilhar compromisso</h2>
-    <button class="action-btn primary" id="shareImgBtn">Gerar e compartilhar imagem</button>
-
-    <div class="field" style="margin-top:20px;">
-      <label for="fWhatsNum">Enviar para número não salvo nos contatos (WhatsApp)</label>
-      <input id="fWhatsNum" type="tel" placeholder="Ex: 11999999999 (com DDD)">
-    </div>
-    <button class="action-btn" id="shareWhatsBtn">Abrir WhatsApp com esse número</button>
-    <p style="color:var(--ink-soft); font-size:12px; margin:10px 0 0;">A imagem é baixada junto — anexe manualmente na conversa.</p>
-
-    <div class="sheet-actions" style="margin-top:16px;">
-      <button class="btn-cancel" id="btnShareCancel">Fechar</button>
-    </div>
-  </div>
-</div>
-
 <div class="toast" id="toast"></div>
 
 <script>
@@ -763,7 +745,7 @@
   });
   document.getElementById('actBtnShare').addEventListener('click', () => {
     closeActionOverlay();
-    openShareOverlay(actionItemId);
+    shareItem(actionItemId);
   });
   document.getElementById('actBtnDelete').addEventListener('click', () => {
     actionMainView.style.display = 'none';
@@ -1161,36 +1143,6 @@
     const nomeArquivo = 'compromisso-' + it.titulo.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-');
     await shareCanvases(pages, nomeArquivo);
   };
-
-  /* ---------- Compartilhamento individual (com opção de WhatsApp por número) ---------- */
-  const shareOverlay = document.getElementById('shareOverlay');
-  let shareOverlayItemId = null;
-
-  window.openShareOverlay = function(id){
-    shareOverlayItemId = id;
-    document.getElementById('fWhatsNum').value = '';
-    shareOverlay.style.display = 'flex';
-  };
-
-  document.getElementById('btnShareCancel').addEventListener('click', () => { shareOverlay.style.display = 'none'; });
-  shareOverlay.addEventListener('click', (e) => { if(e.target === shareOverlay) shareOverlay.style.display = 'none'; });
-
-  document.getElementById('shareImgBtn').addEventListener('click', () => {
-    shareOverlay.style.display = 'none';
-    shareItem(shareOverlayItemId);
-  });
-
-  document.getElementById('shareWhatsBtn').addEventListener('click', async () => {
-    const numero = document.getElementById('fWhatsNum').value.replace(/\D/g, '');
-    if(!numero){
-      showToast('Digite um número para continuar.');
-      return;
-    }
-    shareOverlay.style.display = 'none';
-    await shareItem(shareOverlayItemId);
-    window.open('https://wa.me/' + numero, '_blank');
-    showToast('WhatsApp aberto — anexe a imagem baixada na conversa.');
-  });
 
   /* ---------- Inicialização ---------- */
   async function init(){
