@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Meus Compromissos de Saúde</title>
+<title>Agenda Médica</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;0,600;1,500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -12,7 +12,7 @@
     --surface: #FFFFFF;
     --ink: #1B2A26;
     --ink-soft: #5C6E68;
-    --teal: #1E4A44;
+    --teal: #2C6259;
     --teal-soft: #DCE8E4;
     --amber: #B8863B;
     --amber-soft: #F3E7D2;
@@ -22,6 +22,15 @@
     --danger: #A2483A;
   }
   *{box-sizing:border-box;}
+  body{
+    -webkit-user-select:none;
+    user-select:none;
+    -webkit-tap-highlight-color:transparent;
+  }
+  input, textarea, select{
+    -webkit-user-select:text;
+    user-select:text;
+  }
   body{
     margin:0;
     background:var(--bg);
@@ -78,11 +87,20 @@
     color:var(--ink-soft);
   }
 
+  .app-title{
+    font-family:'Lora', serif;
+    font-weight:700;
+    font-size:22px;
+    color:var(--teal);
+    text-align:left;
+    margin:0 0 16px;
+  }
+
   header{ margin-bottom:22px; }
-  header h1{
+  header h2.app-subtitle{
     font-family:'Lora', serif;
     font-weight:600;
-    font-size:26px;
+    font-size:17px;
     color:var(--teal);
     margin:0 0 4px;
   }
@@ -97,7 +115,12 @@
     gap:4px;
     margin-bottom:20px;
     border-bottom:1px solid var(--line);
+    overflow-x:auto;
+    white-space:nowrap;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
   }
+  .tabs::-webkit-scrollbar{ display:none; }
   .tab{
     border:none;
     background:none;
@@ -105,11 +128,12 @@
     font-size:14px;
     color:var(--ink-soft);
     padding:10px 4px;
-    margin-right:20px;
+    margin-right:14px;
     cursor:pointer;
     border-bottom:2px solid transparent;
     position:relative;
     top:1px;
+    flex-shrink:0;
   }
   .tab.active{
     color:var(--teal);
@@ -167,24 +191,26 @@
     color:var(--ink-soft);
     line-height:1.4;
   }
-  .card-actions{
+  .card{ cursor:pointer; }
+  .action-list{
     display:flex;
-    gap:14px;
-    margin-top:12px;
+    flex-direction:column;
+    gap:8px;
   }
-  .card-actions button{
-    border:none;
-    background:none;
+  .action-btn{
+    width:100%;
+    text-align:left;
+    padding:14px 16px;
+    border-radius:8px;
+    border:1px solid var(--line);
+    background:var(--bg);
     font-family:'IBM Plex Sans', sans-serif;
-    font-size:13px;
+    font-size:14px;
+    color:var(--ink);
     cursor:pointer;
-    padding:0;
-    color:var(--ink-soft);
-    text-decoration:underline;
-    text-underline-offset:2px;
   }
-  .card-actions button.primary{ color:var(--teal); }
-  .card-actions button.remove{ color:var(--danger); }
+  .action-btn.primary{ color:var(--teal); border-color:var(--teal); }
+  .action-btn.danger{ color:var(--danger); border-color:var(--danger); }
 
   .empty{
     text-align:center;
@@ -379,6 +405,8 @@
 <body>
 <div class="wrap">
 
+  <h1 class="app-title">Agenda Médica</h1>
+
   <div class="profile-bar" id="profileBar">
     <div class="avatar" id="avatarWrap">
       <img id="avatarImg" style="display:none">
@@ -391,13 +419,15 @@
   </div>
 
   <header>
-    <h1>Meus Compromissos</h1>
+    <h2 class="app-subtitle">Meus Compromissos</h2>
     <p>Exames, consultas e outros, em um só lugar</p>
   </header>
 
   <div class="tabs">
     <button class="tab active" data-tab="proximos">Próximos</button>
     <button class="tab" data-tab="concluidos">Concluídos</button>
+    <button class="tab" data-tab="pendentes">Pendentes</button>
+    <button class="tab" data-tab="especiais">Prioridades</button>
   </div>
 
   <div id="list"></div>
@@ -478,7 +508,52 @@
   </div>
 </div>
 
-<canvas id="shareCanvas" style="display:none;"></canvas>
+<!-- Modal de ações do card -->
+<div class="overlay" id="actionOverlay" style="display:none;">
+  <div class="sheet">
+    <div id="actionMainView">
+      <h2 id="actionSheetTitle">Compromisso</h2>
+      <div class="action-list">
+        <button class="action-btn primary" id="actBtnDone"></button>
+        <button class="action-btn" id="actBtnEspecial"></button>
+        <button class="action-btn" id="actBtnEdit">Editar</button>
+        <button class="action-btn" id="actBtnShare">Compartilhar</button>
+        <button class="action-btn danger" id="actBtnDelete">Excluir</button>
+      </div>
+      <div class="sheet-actions" style="margin-top:16px;">
+        <button class="btn-cancel" id="btnActionCancel">Fechar</button>
+      </div>
+    </div>
+    <div id="actionConfirmView" style="display:none;">
+      <h2>Excluir compromisso?</h2>
+      <p style="color:var(--ink-soft); font-size:14px; margin:0 0 20px;">Essa ação não pode ser desfeita.</p>
+      <div class="sheet-actions">
+        <button class="btn-cancel" id="btnDeleteCancel">Cancelar</button>
+        <button class="btn-save" style="background:var(--danger);" id="btnDeleteConfirm">Excluir</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de compartilhamento individual -->
+<div class="overlay" id="shareOverlay" style="display:none;">
+  <div class="sheet">
+    <h2>Compartilhar compromisso</h2>
+    <button class="action-btn primary" id="shareImgBtn">Gerar e compartilhar imagem</button>
+
+    <div class="field" style="margin-top:20px;">
+      <label for="fWhatsNum">Enviar para número não salvo nos contatos (WhatsApp)</label>
+      <input id="fWhatsNum" type="tel" placeholder="Ex: 11999999999 (com DDD)">
+    </div>
+    <button class="action-btn" id="shareWhatsBtn">Abrir WhatsApp com esse número</button>
+    <p style="color:var(--ink-soft); font-size:12px; margin:10px 0 0;">A imagem é baixada junto — anexe manualmente na conversa.</p>
+
+    <div class="sheet-actions" style="margin-top:16px;">
+      <button class="btn-cancel" id="btnShareCancel">Fechar</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
@@ -568,40 +643,59 @@
   function generateUserId(){
     return 'US-' + Math.random().toString(36).slice(2, 8).toUpperCase();
   }
+  function diaSemana(dateStr){
+    const dias = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+    const [y,m,d] = dateStr.split('-').map(Number);
+    return dias[new Date(y, m - 1, d).getDay()];
+  }
+  function isPastDate(dateStr){
+    const hoje = new Date();
+    hoje.setHours(0,0,0,0);
+    const [y,m,d] = dateStr.split('-').map(Number);
+    return new Date(y, m - 1, d) < hoje;
+  }
 
   /* ---------- Renderização de compromissos ---------- */
   function render(){
-    let filtered = items.filter(it => currentTab === 'proximos' ? !it.done : it.done);
+    let filtered;
+    let emptyMsg = '';
+
+    if(currentTab === 'proximos'){
+      filtered = items.filter(it => !it.done && !isPastDate(it.data));
+      emptyMsg = 'Nenhum compromisso marcado ainda. Toque em + para adicionar.';
+    } else if(currentTab === 'concluidos'){
+      filtered = items.filter(it => it.done);
+      emptyMsg = 'Nenhum compromisso concluído ainda.';
+    } else if(currentTab === 'pendentes'){
+      filtered = items.filter(it => !it.done && isPastDate(it.data));
+      emptyMsg = 'Nenhuma pendência. Tudo em dia!';
+    } else if(currentTab === 'especiais'){
+      filtered = items.filter(it => it.especial);
+      emptyMsg = 'Nenhum compromisso marcado como prioridade ainda.';
+    }
 
     filtered.sort((a,b) => {
       const da = new Date(a.data + 'T' + (a.hora || '00:00'));
       const db_ = new Date(b.data + 'T' + (b.hora || '00:00'));
-      return currentTab === 'proximos' ? da - db_ : db_ - da;
+      return currentTab === 'concluidos' ? db_ - da : da - db_;
     });
 
     if(filtered.length === 0){
-      listEl.innerHTML = `<div class="empty">
-        <p>${currentTab === 'proximos' ? 'Nenhum compromisso marcado ainda. Toque em + para adicionar.' : 'Nenhum compromisso concluído ainda.'}</p>
-      </div>`;
+      listEl.innerHTML = `<div class="empty"><p>${emptyMsg}</p></div>`;
       return;
     }
 
     listEl.innerHTML = filtered.map(it => `
-      <div class="card ${it.done ? 'done' : ''}">
+      <div class="card ${it.done ? 'done' : ''}" onclick="openActionSheet('${it.id}')">
         <div class="card-top">
           <div>
-            <p class="card-title">${escapeHtml(it.titulo)}</p>
+            <p class="card-title">${it.especial ? '★ ' : ''}${escapeHtml(it.titulo)}</p>
             <p class="card-sub">${escapeHtml(it.local || '')}</p>
           </div>
           <span class="badge ${it.tipo}">${tipoLabel(it.tipo)}</span>
         </div>
-        <div class="card-date"><strong>${formatDate(it.data)}</strong>${it.hora ? ' às ' + it.hora : ''}</div>
+        <div class="card-date"><strong>${diaSemana(it.data)}, ${formatDate(it.data)}</strong>${it.hora ? ' às ' + it.hora : ''}</div>
         ${it.notas ? `<div class="card-notes">${escapeHtml(it.notas)}</div>` : ''}
-        <div class="card-actions">
-          ${!it.done ? `<button class="primary" onclick="markDone('${it.id}')">Marcar concluído</button>` : `<button onclick="markPending('${it.id}')">Reabrir</button>`}
-          <button onclick="editItem('${it.id}')">Editar</button>
-          <button class="remove" onclick="removeItem('${it.id}')">Excluir</button>
-        </div>
       </div>
     `).join('');
   }
@@ -615,12 +709,74 @@
     if(it){ it.done = false; await dbPut('compromissos', it); render(); }
   };
   window.removeItem = async function(id){
-    if(confirm('Excluir este compromisso?')){
-      items = items.filter(i => i.id !== id);
-      await dbDelete('compromissos', id);
-      render();
-    }
+    items = items.filter(i => i.id !== id);
+    await dbDelete('compromissos', id);
+    render();
   };
+  window.toggleEspecial = async function(id){
+    const it = items.find(i => i.id === id);
+    if(it){ it.especial = !it.especial; await dbPut('compromissos', it); render(); }
+  };
+
+  /* ---------- Menu de ações do card ---------- */
+  const actionOverlay = document.getElementById('actionOverlay');
+  const actionMainView = document.getElementById('actionMainView');
+  const actionConfirmView = document.getElementById('actionConfirmView');
+  let actionItemId = null;
+
+  function closeActionOverlay(){
+    actionOverlay.style.display = 'none';
+    actionMainView.style.display = 'block';
+    actionConfirmView.style.display = 'none';
+  }
+
+  window.openActionSheet = function(id){
+    const it = items.find(i => i.id === id);
+    if(!it) return;
+    actionItemId = id;
+    document.getElementById('actionSheetTitle').textContent = it.titulo;
+    document.getElementById('actBtnDone').textContent = it.done ? 'Reabrir' : 'Marcar concluído';
+    document.getElementById('actBtnEspecial').textContent = it.especial ? 'Remover prioridade' : 'Marcar prioridade';
+    actionMainView.style.display = 'block';
+    actionConfirmView.style.display = 'none';
+    actionOverlay.style.display = 'flex';
+  };
+
+  document.getElementById('btnActionCancel').addEventListener('click', closeActionOverlay);
+  actionOverlay.addEventListener('click', (e) => { if(e.target === actionOverlay) closeActionOverlay(); });
+
+  document.getElementById('actBtnDone').addEventListener('click', async () => {
+    const it = items.find(i => i.id === actionItemId);
+    if(it){ it.done = !it.done; await dbPut('compromissos', it); }
+    closeActionOverlay();
+    render();
+  });
+  document.getElementById('actBtnEspecial').addEventListener('click', async () => {
+    const it = items.find(i => i.id === actionItemId);
+    if(it){ it.especial = !it.especial; await dbPut('compromissos', it); }
+    closeActionOverlay();
+    render();
+  });
+  document.getElementById('actBtnEdit').addEventListener('click', () => {
+    closeActionOverlay();
+    editItem(actionItemId);
+  });
+  document.getElementById('actBtnShare').addEventListener('click', () => {
+    closeActionOverlay();
+    openShareOverlay(actionItemId);
+  });
+  document.getElementById('actBtnDelete').addEventListener('click', () => {
+    actionMainView.style.display = 'none';
+    actionConfirmView.style.display = 'block';
+  });
+  document.getElementById('btnDeleteCancel').addEventListener('click', () => {
+    actionMainView.style.display = 'block';
+    actionConfirmView.style.display = 'none';
+  });
+  document.getElementById('btnDeleteConfirm').addEventListener('click', () => {
+    closeActionOverlay();
+    removeItem(actionItemId);
+  });
   window.editItem = function(id){
     const it = items.find(i => i.id === id);
     if(!it) return;
@@ -846,12 +1002,146 @@
     profileOverlay.style.display = 'none';
   });
 
-  /* ---------- Compartilhar como PNG ---------- */
+  /* ---------- Compartilhar como PNG (formato A4, com paginação) ---------- */
   function showToast(msg){
     const toast = document.getElementById('toast');
     toast.textContent = msg;
     toast.classList.add('show');
     setTimeout(() => toast.classList.remove('show'), 2500);
+  }
+
+  const PAGE_W = 794;   // A4 a 96dpi
+  const PAGE_H = 1123;
+  const MARGIN = 40;
+  const ROW_H = 100;
+
+  // Logo: se existir o arquivo imagens/logo.png, ele é usado.
+  // Se não existir, desenharLogo() desenha um ícone provisório no lugar.
+  // Quando a logo oficial estiver pronta, basta colocar o arquivo em imagens/logo.png — nada aqui precisa mudar.
+  let logoImg = null;
+  function carregarLogo(){
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.onload = () => { logoImg = img; resolve(); };
+      img.onerror = () => { logoImg = null; resolve(); };
+      img.src = 'imagens/logo.png';
+    });
+  }
+
+  function desenharLogo(ctx){
+    const tam = 56;
+    const x = PAGE_W - MARGIN - tam;
+    const y = MARGIN - 20;
+
+    if(logoImg){
+      ctx.drawImage(logoImg, x, y, tam, tam);
+      return;
+    }
+
+    // Ícone provisório: cruz médica em círculo
+    const cx = x + tam / 2;
+    const cy = y + tam / 2;
+    ctx.fillStyle = '#DCE8E4';
+    ctx.beginPath();
+    ctx.arc(cx, cy, tam / 2, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = '#2C6259';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+    ctx.fillStyle = '#2C6259';
+    const braco = tam * 0.16;
+    const comp = tam * 0.5;
+    ctx.fillRect(cx - braco / 2, cy - comp / 2, braco, comp);
+    ctx.fillRect(cx - comp / 2, cy - braco / 2, comp, braco);
+  }
+
+  function drawItemRow(ctx, it, x, y, width){
+    const h = ROW_H - 14;
+    ctx.fillStyle = '#FFFFFF';
+    ctx.fillRect(x, y, width, h);
+    ctx.strokeStyle = '#DCE3DF';
+    ctx.strokeRect(x, y, width, h);
+
+    ctx.fillStyle = '#1B2A26';
+    ctx.font = '600 18px Arial';
+    ctx.fillText((it.especial ? '★ ' : '') + it.titulo, x + 16, y + 28);
+
+    ctx.fillStyle = '#5C6E68';
+    ctx.font = '14px Arial';
+    ctx.fillText(it.local || '', x + 16, y + 50);
+
+    ctx.fillStyle = '#2C6259';
+    ctx.font = '600 15px Arial';
+    const dataTxt = diaSemana(it.data) + ', ' + formatDate(it.data) + (it.hora ? ' às ' + it.hora : '');
+    ctx.fillText(dataTxt + '   [' + tipoLabel(it.tipo) + ']', x + 16, y + 72);
+  }
+
+  function buildPages(itemsList, titulo){
+    const pages = [];
+    let idx = 0;
+    do {
+      const canvas = document.createElement('canvas');
+      canvas.width = PAGE_W;
+      canvas.height = PAGE_H;
+      const ctx = canvas.getContext('2d');
+      ctx.fillStyle = '#FFFFFF';
+      ctx.fillRect(0, 0, PAGE_W, PAGE_H);
+
+      let y = MARGIN;
+      desenharLogo(ctx);
+      ctx.fillStyle = '#2C6259';
+      ctx.font = '600 26px Georgia, serif';
+      ctx.fillText('Agenda Médica', MARGIN, y);
+      y += 30;
+
+      if(perfil && perfil.nome){
+        ctx.fillStyle = '#1B2A26';
+        ctx.font = '600 16px Arial';
+        ctx.fillText(perfil.nome + (perfil.userId ? '  ·  ' + perfil.userId : ''), MARGIN, y);
+        y += 22;
+      }
+
+      ctx.fillStyle = '#5C6E68';
+      ctx.font = '13px Arial';
+      ctx.fillText(titulo, MARGIN, y);
+      y += 26;
+
+      const limiteY = PAGE_H - MARGIN - 30;
+      while(idx < itemsList.length && (y + ROW_H) <= limiteY){
+        drawItemRow(ctx, itemsList[idx], MARGIN, y, PAGE_W - MARGIN * 2);
+        y += ROW_H;
+        idx++;
+      }
+
+      ctx.fillStyle = '#5C6E68';
+      ctx.font = '12px Arial';
+      ctx.fillText('Página ' + (pages.length + 1), PAGE_W - MARGIN - 70, PAGE_H - 20);
+
+      pages.push(canvas);
+    } while(idx < itemsList.length);
+    return pages;
+  }
+
+  async function shareCanvases(canvasList, baseName){
+    const blobs = await Promise.all(canvasList.map(c => new Promise(res => c.toBlob(res, 'image/png'))));
+    const files = blobs.map((b, i) => new File([b], `${baseName}-pagina-${i + 1}.png`, { type: 'image/png' }));
+
+    if(navigator.canShare && navigator.canShare({ files })){
+      try {
+        await navigator.share({ files, title: baseName });
+        return;
+      } catch(e){ /* usuário cancelou, cai no download */ }
+    }
+    files.forEach((f, i) => {
+      setTimeout(() => {
+        const url = URL.createObjectURL(f);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = f.name;
+        a.click();
+        URL.revokeObjectURL(url);
+      }, i * 300);
+    });
   }
 
   document.getElementById('fabShare').addEventListener('click', async () => {
@@ -860,73 +1150,53 @@
       showToast('Não há compromissos para compartilhar.');
       return;
     }
+    const pages = buildPages(proximos, 'Meus Compromissos');
+    await shareCanvases(pages, 'meus-compromissos');
+  });
 
-    const canvas = document.getElementById('shareCanvas');
-    const ctx = canvas.getContext('2d');
-    const width = 720;
-    const rowHeight = 92;
-    const headerHeight = perfil && perfil.nome ? 130 : 90;
-    const height = headerHeight + proximos.length * rowHeight + 40;
-    canvas.width = width;
-    canvas.height = height;
+  window.shareItem = async function(id){
+    const it = items.find(i => i.id === id);
+    if(!it) return;
+    const pages = buildPages([it], 'Compromisso');
+    const nomeArquivo = 'compromisso-' + it.titulo.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-');
+    await shareCanvases(pages, nomeArquivo);
+  };
 
-    ctx.fillStyle = '#F1F5F2';
-    ctx.fillRect(0, 0, width, height);
+  /* ---------- Compartilhamento individual (com opção de WhatsApp por número) ---------- */
+  const shareOverlay = document.getElementById('shareOverlay');
+  let shareOverlayItemId = null;
 
-    ctx.fillStyle = '#1E4A44';
-    ctx.font = '600 30px Georgia, serif';
-    ctx.fillText('Meus Compromissos', 32, 52);
+  window.openShareOverlay = function(id){
+    shareOverlayItemId = id;
+    document.getElementById('fWhatsNum').value = '';
+    shareOverlay.style.display = 'flex';
+  };
 
-    if(perfil && perfil.nome){
-      ctx.fillStyle = '#5C6E68';
-      ctx.font = '16px Arial';
-      ctx.fillText(perfil.nome + (perfil.userId ? '  ·  ' + perfil.userId : ''), 32, 80);
+  document.getElementById('btnShareCancel').addEventListener('click', () => { shareOverlay.style.display = 'none'; });
+  shareOverlay.addEventListener('click', (e) => { if(e.target === shareOverlay) shareOverlay.style.display = 'none'; });
+
+  document.getElementById('shareImgBtn').addEventListener('click', () => {
+    shareOverlay.style.display = 'none';
+    shareItem(shareOverlayItemId);
+  });
+
+  document.getElementById('shareWhatsBtn').addEventListener('click', async () => {
+    const numero = document.getElementById('fWhatsNum').value.replace(/\D/g, '');
+    if(!numero){
+      showToast('Digite um número para continuar.');
+      return;
     }
-
-    let y = headerHeight;
-    proximos.forEach(it => {
-      ctx.fillStyle = '#FFFFFF';
-      ctx.fillRect(24, y, width - 48, rowHeight - 12);
-      ctx.strokeStyle = '#DCE3DF';
-      ctx.strokeRect(24, y, width - 48, rowHeight - 12);
-
-      ctx.fillStyle = '#1B2A26';
-      ctx.font = '600 18px Arial';
-      ctx.fillText(it.titulo, 44, y + 30);
-
-      ctx.fillStyle = '#5C6E68';
-      ctx.font = '14px Arial';
-      ctx.fillText(it.local || '', 44, y + 52);
-
-      ctx.fillStyle = '#1E4A44';
-      ctx.font = '600 15px Arial';
-      const dataTxt = formatDate(it.data) + (it.hora ? ' às ' + it.hora : '');
-      ctx.fillText(dataTxt + '   [' + tipoLabel(it.tipo) + ']', 44, y + 70);
-
-      y += rowHeight;
-    });
-
-    canvas.toBlob(async (blob) => {
-      const file = new File([blob], 'meus-compromissos.png', { type: 'image/png' });
-      if(navigator.canShare && navigator.canShare({ files: [file] })){
-        try {
-          await navigator.share({ files: [file], title: 'Meus Compromissos' });
-          return;
-        } catch(e){ /* usuário cancelou ou falhou, cai no download */ }
-      }
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'meus-compromissos.png';
-      a.click();
-      URL.revokeObjectURL(url);
-    }, 'image/png');
+    shareOverlay.style.display = 'none';
+    await shareItem(shareOverlayItemId);
+    window.open('https://wa.me/' + numero, '_blank');
+    showToast('WhatsApp aberto — anexe a imagem baixada na conversa.');
   });
 
   /* ---------- Inicialização ---------- */
   async function init(){
     fillTimeSelects();
     fillDateSelects();
+    carregarLogo();
     dbInstance = await openDB();
     items = await dbGetAll('compromissos');
     perfil = await dbGet('perfil', 1) || null;
