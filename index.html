@@ -443,8 +443,8 @@
   <div class="sheet">
     <h2 id="sheetTitle">Novo compromisso</h2>
     <div class="type-toggle">
-      <button type="button" class="active exame" id="typeExame">Exame</button>
-      <button type="button" class="consulta" id="typeConsulta">Consulta</button>
+      <button type="button" class="active consulta" id="typeConsulta">Consulta</button>
+      <button type="button" class="exame" id="typeExame">Exame</button>
       <button type="button" class="outros" id="typeOutros">Outros</button>
     </div>
     <div class="field">
@@ -850,7 +850,7 @@
   function openNewSheet(){
     editingId = null;
     document.getElementById('sheetTitle').textContent = 'Novo compromisso';
-    setType('exame');
+    setType('consulta');
     document.getElementById('fTitulo').value = '';
     setDataSelects(null);
     document.getElementById('fHoraH').value = '08';
