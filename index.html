@@ -175,6 +175,11 @@
   .badge.exame{ background:var(--teal-soft); color:var(--teal); }
   .badge.consulta{ background:var(--amber-soft); color:var(--amber); }
   .badge.outros{ background:var(--clay-soft); color:var(--clay); }
+  .card-num{
+    margin:5px 0 0;
+    font-size:11px;
+    color:var(--ink-soft);
+  }
 
   .card-date{
     margin-top:10px;
@@ -526,7 +531,7 @@
     </div>
     <div id="actionConfirmView" style="display:none;">
       <h2>Excluir compromisso?</h2>
-      <p style="color:var(--ink-soft); font-size:14px; margin:0 0 20px;">Essa ação não pode ser desfeita.</p>
+      <p style="color:var(--ink-soft); font-size:14px; margin:0 0 20px;">Deseja excluir agendamento?</p>
       <div class="sheet-actions">
         <button class="btn-cancel" id="btnDeleteCancel">Cancelar</button>
         <button class="btn-save" style="background:var(--danger);" id="btnDeleteConfirm">Excluir</button>
@@ -541,7 +546,7 @@
 <script>
   /* ---------- IndexedDB ---------- */
   const DB_NAME = 'compromissosDB';
-  const DB_VERSION = 1;
+  const DB_VERSION = 2;
   let dbInstance = null;
 
   function openDB(){
@@ -667,14 +672,17 @@
       return;
     }
 
-    listEl.innerHTML = filtered.map(it => `
+    listEl.innerHTML = filtered.map((it, idx) => `
       <div class="card ${it.done ? 'done' : ''}" onclick="openActionSheet('${it.id}')">
         <div class="card-top">
           <div>
             <p class="card-title">${it.especial ? '★ ' : ''}${escapeHtml(it.titulo)}</p>
             <p class="card-sub">${escapeHtml(it.local || '')}</p>
           </div>
-          <span class="badge ${it.tipo}">${tipoLabel(it.tipo)}</span>
+          <div style="text-align:right;">
+            <span class="badge ${it.tipo}">${tipoLabel(it.tipo)}</span>
+            <p class="card-num">${filtered.length - idx}</p>
+          </div>
         </div>
         <div class="card-date"><strong>${diaSemana(it.data)}, ${formatDate(it.data)}</strong>${it.hora ? ' às ' + it.hora : ''}</div>
         ${it.notas ? `<div class="card-notes">${escapeHtml(it.notas)}</div>` : ''}
@@ -693,6 +701,7 @@
   window.removeItem = async function(id){
     items = items.filter(i => i.id !== id);
     await dbDelete('compromissos', id);
+    cancelarNotificacao(id);
     render();
   };
   window.toggleEspecial = async function(id){
@@ -868,7 +877,7 @@
     const titulo = document.getElementById('fTitulo').value.trim();
     const data = getDataSelecionada();
     if(!titulo || !data){
-      alert('Preencha ao menos o título e a data.');
+      showToast('Preencha ao menos o título e a data.');
       return;
     }
     const hora = document.getElementById('fHoraH').value + ':' + document.getElementById('fHoraM').value;
@@ -884,10 +893,12 @@
       const it = items.find(i => i.id === editingId);
       Object.assign(it, payload);
       await dbPut('compromissos', it);
+      agendarNotificacao(it);
     } else {
       const novo = { id: Date.now().toString(36) + Math.random().toString(36).slice(2,6), done:false, ...payload };
       items.push(novo);
       await dbPut('compromissos', novo);
+      agendarNotificacao(novo);
     }
     overlay.style.display = 'none';
     render();
@@ -997,16 +1008,16 @@
   const MARGIN = 40;
   const ROW_H = 100;
 
-  // Logo: se existir o arquivo imagens/logo.png, ele é usado.
+  // Logo: se existir o arquivo imagem/logo.png, ele é usado.
   // Se não existir, desenharLogo() desenha um ícone provisório no lugar.
-  // Quando a logo oficial estiver pronta, basta colocar o arquivo em imagens/logo.png — nada aqui precisa mudar.
+  // Quando a logo oficial estiver pronta, basta colocar o arquivo em imagem/logo.png — nada aqui precisa mudar.
   let logoImg = null;
   function carregarLogo(){
     return new Promise((resolve) => {
       const img = new Image();
       img.onload = () => { logoImg = img; resolve(); };
       img.onerror = () => { logoImg = null; resolve(); };
-      img.src = 'imagens/logo.png';
+      img.src = 'imagem/logo.png';
     });
   }
 
@@ -1143,6 +1154,47 @@
     const nomeArquivo = 'compromisso-' + it.titulo.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-');
     await shareCanvases(pages, nomeArquivo);
   };
+
+  /* ==================================================================
+     ===== INÍCIO — BLOCO DE NOTIFICAÇÕES (só ativa em app Android nativo) =====
+     ==================================================================
+     Este bloco NÃO faz nada rodando no navegador ou como PWA — nesse caso
+     window.AndroidNotificacoes não existe, e as funções abaixo simplesmente
+     não fazem nada (sem erro, sem interferir no resto do app).
+
+     Ele só "acorda" quando o app estiver empacotado como app Android nativo
+     (via Android Studio), com uma ponte de código Java/Kotlin que exponha
+     window.AndroidNotificacoes com os métodos:
+       - agendarNotificacao(id, titulo, corpo, timestampEmMilissegundos)
+       - cancelarNotificacao(id)
+     Essa ponte usa o AlarmManager do Android para disparar a notificação
+     no horário certo, mesmo com o app fechado.
+
+     Nada nesse bloco precisa ser alterado no restante do código — ele é
+     chamado automaticamente ao salvar e ao excluir um compromisso. */
+
+  function agendarNotificacao(it){
+    if(typeof window.AndroidNotificacoes === 'undefined') return;
+    try {
+      const dataHora = new Date(it.data + 'T' + (it.hora || '08:00') + ':00');
+      const umDiaAntes = new Date(dataHora.getTime() - 24 * 60 * 60 * 1000);
+      if(umDiaAntes.getTime() <= Date.now()) return; // já passou, não agenda
+
+      const titulo = 'Agenda Médica';
+      const corpo = it.titulo + (it.hora ? ' às ' + it.hora : '') + (it.local ? ' — ' + it.local : '');
+      window.AndroidNotificacoes.agendarNotificacao(it.id, titulo, corpo, umDiaAntes.getTime());
+    } catch(e){
+      console.warn('Não foi possível agendar notificação:', e);
+    }
+  }
+
+  function cancelarNotificacao(id){
+    if(typeof window.AndroidNotificacoes === 'undefined') return;
+    try {
+      window.AndroidNotificacoes.cancelarNotificacao(id);
+    } catch(e){ /* silencioso */ }
+  }
+  /* ===== FIM — BLOCO DE NOTIFICAÇÕES ===== */
 
   /* ---------- Inicialização ---------- */
   async function init(){
