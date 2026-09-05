@@ -32,6 +32,10 @@
     -webkit-user-select:text;
     user-select:text;
   }
+
+  /* ===== FEEDBACK DE TOQUE (escurece levemente ao tocar em qualquer botão/card) ===== */
+  button:active{ filter:brightness(0.9); }
+  .card:active{ filter:brightness(0.96); }
   body{
     margin:0;
     background:var(--bg);
@@ -664,7 +668,7 @@
     <div class="action-list">
       <button class="action-btn primary" id="btnExportar">Exportar backup</button>
       <button class="action-btn" id="btnImportar">Importar backup</button>
-      <input type="file" id="fImportarArquivo" accept="application/json" style="display:none;">
+      <input type="file" id="fImportarArquivo" accept=".json,application/json,*/*" style="display:none;">
     </div>
     <div class="sheet-actions" style="margin-top:16px;">
       <button class="btn-cancel" id="btnBackupClose">Fechar</button>
