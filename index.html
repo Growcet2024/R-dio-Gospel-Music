@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;0,600;1,500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
+  /* ===== CORES DO APP (mude aqui para afetar tudo que usa essas variáveis) ===== */
   :root{
     --bg: #F1F5F2;
     --surface: #FFFFFF;
@@ -87,6 +88,7 @@
     color:var(--ink-soft);
   }
 
+  /* ===== TÍTULO "AGENDA MÉDICA" (topo da tela) ===== */
   .app-title{
     font-family:'Lora', serif;
     font-weight:700;
@@ -94,6 +96,83 @@
     color:var(--teal);
     text-align:left;
     margin:0 0 16px;
+  }
+
+  /* ===== BOTÃO "← VOLTAR" (aparece só dentro da tela de um familiar) ===== */
+  .back-btn{
+    background:none;
+    border:none;
+    color:var(--teal);
+    font-size:14px;
+    font-family:'IBM Plex Sans', sans-serif;
+    cursor:pointer;
+    padding:0;
+    margin-bottom:14px;
+  }
+
+  /* ===== RÓTULO "FAMÍLIA:" (linha acima dos chips de familiares) ===== */
+  .family-label{
+    font-size:16px;
+    color:var(--ink-soft);
+    font-weight:600;
+    margin:0;
+  }
+  .family-label-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:8px;
+  }
+
+  /* ===== BOTÃO "COMO USAR" (mesma linha do rótulo "Família:") ===== */
+  .how-to-btn{
+    background:none;
+    border:none;
+    font-size:16px;
+    font-weight:600;
+    color:var(--teal);
+    font-family:'IBM Plex Sans', sans-serif;
+    cursor:pointer;
+    padding:0;
+  }
+
+  /* ===== FILEIRA DE CHIPS DE FAMILIARES (rolável horizontalmente) ===== */
+  .people-row{
+    display:flex;
+    gap:8px;
+    overflow-x:auto;
+    white-space:nowrap;
+    margin-bottom:20px;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+  }
+  .people-row::-webkit-scrollbar{ display:none; }
+
+  /* Estilo base de cada chip (nome do familiar) */
+  .person-chip{
+    flex-shrink:0;
+    padding:8px 16px;
+    border-radius:20px;
+    border:1px solid var(--line);
+    background:var(--surface);
+    font-size:13px;
+    color:var(--ink-soft);
+    cursor:pointer;
+    font-family:'IBM Plex Sans', sans-serif;
+  }
+  /* Chip do familiar/titular selecionado no momento */
+  .person-chip.active{
+    background:var(--teal-soft);
+    border-color:var(--teal);
+    color:var(--teal);
+    font-weight:600;
+  }
+  /* Só o sinal "+" de adicionar familiar (tamanho independente dos nomes) */
+  .person-chip.add{
+    color:var(--teal);
+    font-weight:700;
+    font-size:20px;
+    border-style:dashed;
   }
 
   header{ margin-bottom:22px; }
@@ -110,6 +189,7 @@
     font-size:14px;
   }
 
+  /* ===== ABAS (Próximos / Concluídos / Pendentes / Prioridades) ===== */
   .tabs{
     display:flex;
     gap:4px;
@@ -141,6 +221,7 @@
     font-weight:500;
   }
 
+  /* ===== CARD DE CADA COMPROMISSO NA LISTA ===== */
   .card{
     background:var(--surface);
     border:1px solid var(--line);
@@ -165,6 +246,7 @@
     color:var(--ink-soft);
     margin:0;
   }
+  /* Etiqueta colorida do tipo (Consulta/Exame/Outros) dentro do card */
   .badge{
     font-size:11px;
     padding:3px 9px;
@@ -196,6 +278,7 @@
     color:var(--ink-soft);
     line-height:1.4;
   }
+  /* ===== MENU DE AÇÕES (abre ao tocar num compromisso) ===== */
   .card{ cursor:pointer; }
   .action-list{
     display:flex;
@@ -260,6 +343,7 @@
     text-align:center;
   }
 
+  /* ===== ESTRUTURA GERAL DE TODOS OS MODAIS (fundo escuro + painel branco) ===== */
   .overlay{
     position:fixed;
     inset:0;
@@ -305,6 +389,7 @@
   .row2{ display:flex; gap:10px; }
   .row2 .field{ flex:1; }
 
+  /* ===== SELETOR DE HORA (dropdowns hora/minuto, dentro do formulário) ===== */
   .time-picker{
     display:flex;
     align-items:center;
@@ -316,6 +401,7 @@
   }
   .time-picker span{ color:var(--ink-soft); font-weight:600; }
 
+  /* ===== BOTÕES DE TIPO (Consulta/Exame/Outros) NO FORMULÁRIO ===== */
   .type-toggle{
     display:flex;
     gap:8px;
@@ -354,6 +440,21 @@
   .btn-cancel{ background:var(--bg); color:var(--ink-soft); }
   .btn-save{ background:var(--teal); color:#fff; }
 
+  /* ===== TEXTO DA TELA "COMO USAR" ===== */
+  .how-to-content{
+    max-height:60vh;
+    overflow-y:auto;
+    margin-bottom:16px;
+  }
+  .how-to-content p{
+    font-size:14px;
+    color:var(--ink);
+    line-height:1.5;
+    margin:0 0 16px;
+  }
+  .how-to-content strong{ color:var(--teal); }
+
+  /* ===== TOAST (mensagem rápida que aparece e some sozinha) ===== */
   .toast{
     position:fixed;
     left:50%;
@@ -371,7 +472,7 @@
   }
   .toast.show{ opacity:1; }
 
-  /* Perfil - editor */
+  /* ===== EDITOR DE FOTO DE PERFIL (usado no titular e nos familiares) ===== */
   .avatar-edit{
     display:flex;
     flex-direction:column;
@@ -412,6 +513,8 @@
 
   <h1 class="app-title">Agenda Médica</h1>
 
+  <button class="back-btn" id="btnVoltar" style="display:none;">← Voltar</button>
+
   <div class="profile-bar" id="profileBar">
     <div class="avatar" id="avatarWrap">
       <img id="avatarImg" style="display:none">
@@ -425,8 +528,18 @@
 
   <header>
     <h2 class="app-subtitle">Meus Compromissos</h2>
-    <p>Exames, consultas e outros, em um só lugar</p>
+    <p>Consultas, exames e outros, em um só lugar</p>
   </header>
+
+  <div class="family-section" id="familySection">
+    <div class="family-label-row">
+      <p class="family-label">Família:</p>
+      <button class="how-to-btn" id="btnGear" title="Menu">⚙️</button>
+    </div>
+    <div class="people-row" id="peopleRow">
+      <button class="person-chip add" id="addPersonBtn">+</button>
+    </div>
+  </div>
 
   <div class="tabs">
     <button class="tab active" data-tab="proximos">Próximos</button>
@@ -492,23 +605,115 @@
 <!-- Modal de perfil -->
 <div class="overlay" id="profileOverlay" style="display:none;">
   <div class="sheet">
-    <h2>Seu perfil</h2>
-    <div class="avatar-edit">
-      <div class="avatar-large" id="avatarLargeWrap">
-        <img id="avatarLargeImg" style="display:none">
-        <span id="avatarLargeInitial">?</span>
+    <div id="profileMainView">
+      <h2>Seu perfil</h2>
+      <div class="avatar-edit">
+        <div class="avatar-large" id="avatarLargeWrap">
+          <img id="avatarLargeImg" style="display:none">
+          <span id="avatarLargeInitial">?</span>
+        </div>
+        <label class="btn-photo" for="fFoto">Escolher foto</label>
+        <input type="file" id="fFoto" accept="image/*" style="display:none">
       </div>
-      <label class="btn-photo" for="fFoto">Escolher foto</label>
-      <input type="file" id="fFoto" accept="image/*" style="display:none">
+      <div class="field">
+        <label for="fNome">Nome</label>
+        <input id="fNome" placeholder="Seu nome">
+      </div>
+      <p class="profile-id-preview" id="profileIdPreview"></p>
+      <button class="action-btn danger" id="btnDeleteFamiliar" style="display:none; margin-bottom:16px;">Excluir familiar</button>
+      <div class="sheet-actions">
+        <button class="btn-cancel" id="btnProfileCancel">Cancelar</button>
+        <button class="btn-save" id="btnProfileSave">Salvar</button>
+      </div>
+    </div>
+    <div id="profileDeleteConfirmView" style="display:none;">
+      <h2 id="profileDeleteTitle">Excluir familiar?</h2>
+      <p style="color:var(--ink-soft); font-size:14px; margin:0 0 20px;">Isso vai excluir o cadastro e todos os agendamentos dessa pessoa. Deseja continuar?</p>
+      <div class="sheet-actions">
+        <button class="btn-cancel" id="btnDeleteFamiliarCancel">Cancelar</button>
+        <button class="btn-save" style="background:var(--danger);" id="btnDeleteFamiliarConfirm">Excluir</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Menu da engrenagem -->
+<div class="overlay" id="gearMenuOverlay" style="display:none;">
+  <div class="sheet">
+    <h2>Menu</h2>
+    <div class="action-list">
+      <button class="action-btn" id="gearComoUsar">Como usar</button>
+      <button class="action-btn" id="gearBackup">Backup</button>
+    </div>
+    <div class="sheet-actions" style="margin-top:16px;">
+      <button class="btn-cancel" id="btnGearCancel">Fechar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Tela de Backup -->
+<div class="overlay" id="backupOverlay" style="display:none;">
+  <div class="sheet">
+    <h2>Backup</h2>
+    <div class="how-to-content">
+      <p><strong>Por que fazer backup?</strong><br>Seus dados ficam guardados só neste celular. Se você trocar de aparelho, formatar, ou desinstalar o app, tudo pode se perder — o backup evita isso.</p>
+      <p><strong>Como exportar</strong><br>Toque em "Exportar". Um arquivo será gerado com todos os seus compromissos, perfil e familiares cadastrados. Escolha para onde enviá-lo (Google Drive, e-mail para você mesmo, ou qualquer serviço de nuvem).</p>
+      <p><strong>Como restaurar</strong><br>No celular novo (ou depois de reinstalar o app), toque em "Importar" e selecione o arquivo de backup salvo. Todos os seus dados voltam exatamente como estavam.</p>
+      <p><strong>Quando fazer</strong><br>Sempre que fizer alterações importantes, e principalmente antes de trocar ou formatar o celular.</p>
+    </div>
+    <div class="action-list">
+      <button class="action-btn primary" id="btnExportar">Exportar backup</button>
+      <button class="action-btn" id="btnImportar">Importar backup</button>
+      <input type="file" id="fImportarArquivo" accept="application/json" style="display:none;">
+    </div>
+    <div class="sheet-actions" style="margin-top:16px;">
+      <button class="btn-cancel" id="btnBackupClose">Fechar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Como usar -->
+<div class="overlay" id="howToOverlay" style="display:none;">
+  <div class="sheet">
+    <h2>Como usar o Agenda Médica</h2>
+    <div class="how-to-content">
+      <p><strong>Adicionar um compromisso</strong><br>Toque no botão "+" e preencha título, tipo (Consulta, Exame ou Outros), data, hora e local. Salve e pronto.</p>
+      <p><strong>Organizando com as abas</strong><br>
+      • Próximos: o que ainda está por vir<br>
+      • Pendentes: passou da data e ainda não foi concluído<br>
+      • Prioridades: os que você marcou como importantes<br>
+      • Concluídos: o que já foi resolvido</p>
+      <p><strong>Ações rápidas</strong><br>Toque em qualquer compromisso para marcar como concluído, dar prioridade, editar, compartilhar ou excluir.</p>
+      <p><strong>Compartilhar</strong><br>Gere uma imagem pronta para enviar ou imprimir — de um compromisso só ou de todos de uma vez.</p>
+      <p><strong>Perfil</strong><br>Toque na sua foto/nome no topo para editar seus dados.</p>
+      <p><strong>Família</strong><br>Toque no "+" ao lado de "Família" para cadastrar parentes. Cada um tem sua própria lista de compromissos, separada da sua.</p>
+      <p><strong>Backup</strong><br>Na engrenagem (⚙️), toque em "Backup" para exportar ou restaurar seus dados.</p>
+    </div>
+    <div class="sheet-actions">
+      <button class="btn-cancel" id="btnHowToClose" style="flex:none; width:100%;">Fechar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de novo familiar -->
+<div class="overlay" id="familyOverlay" style="display:none;">
+  <div class="sheet">
+    <h2>Novo familiar</h2>
+    <div class="avatar-edit">
+      <div class="avatar-large" id="famAvatarLargeWrap">
+        <img id="famAvatarLargeImg" style="display:none">
+        <span id="famAvatarLargeInitial">?</span>
+      </div>
+      <label class="btn-photo" for="fFamFoto">Escolher foto</label>
+      <input type="file" id="fFamFoto" accept="image/*" style="display:none">
     </div>
     <div class="field">
-      <label for="fNome">Nome</label>
-      <input id="fNome" placeholder="Seu nome">
+      <label for="fFamNome">Nome</label>
+      <input id="fFamNome" placeholder="Nome do familiar">
     </div>
-    <p class="profile-id-preview" id="profileIdPreview"></p>
     <div class="sheet-actions">
-      <button class="btn-cancel" id="btnProfileCancel">Cancelar</button>
-      <button class="btn-save" id="btnProfileSave">Salvar</button>
+      <button class="btn-cancel" id="btnFamCancel">Cancelar</button>
+      <button class="btn-save" id="btnFamSave">Salvar</button>
     </div>
   </div>
 </div>
@@ -546,7 +751,7 @@
 <script>
   /* ---------- IndexedDB ---------- */
   const DB_NAME = 'compromissosDB';
-  const DB_VERSION = 2;
+  const DB_VERSION = 3;
   let dbInstance = null;
 
   function openDB(){
@@ -559,6 +764,9 @@
         }
         if(!db.objectStoreNames.contains('perfil')){
           db.createObjectStore('perfil', { keyPath: 'id' });
+        }
+        if(!db.objectStoreNames.contains('familiares')){
+          db.createObjectStore('familiares', { keyPath: 'id' });
         }
       };
       req.onsuccess = (e) => resolve(e.target.result);
@@ -605,6 +813,8 @@
   /* ---------- Estado ---------- */
   let items = [];
   let perfil = null;
+  let familiares = [];
+  let currentPersonId = 'titular';
   let currentTab = 'proximos';
   let currentType = 'exame';
   let editingId = null;
@@ -646,18 +856,19 @@
   function render(){
     let filtered;
     let emptyMsg = '';
+    const doPessoa = items.filter(it => (it.pessoaId || 'titular') === currentPersonId);
 
     if(currentTab === 'proximos'){
-      filtered = items.filter(it => !it.done && !isPastDate(it.data));
+      filtered = doPessoa.filter(it => !it.done && !isPastDate(it.data));
       emptyMsg = 'Nenhum compromisso marcado ainda. Toque em + para adicionar.';
     } else if(currentTab === 'concluidos'){
-      filtered = items.filter(it => it.done);
+      filtered = doPessoa.filter(it => it.done);
       emptyMsg = 'Nenhum compromisso concluído ainda.';
     } else if(currentTab === 'pendentes'){
-      filtered = items.filter(it => !it.done && isPastDate(it.data));
+      filtered = doPessoa.filter(it => !it.done && isPastDate(it.data));
       emptyMsg = 'Nenhuma pendência. Tudo em dia!';
     } else if(currentTab === 'especiais'){
-      filtered = items.filter(it => it.especial);
+      filtered = doPessoa.filter(it => it.especial);
       emptyMsg = 'Nenhum compromisso marcado como prioridade ainda.';
     }
 
@@ -895,7 +1106,7 @@
       await dbPut('compromissos', it);
       agendarNotificacao(it);
     } else {
-      const novo = { id: Date.now().toString(36) + Math.random().toString(36).slice(2,6), done:false, ...payload };
+      const novo = { id: Date.now().toString(36) + Math.random().toString(36).slice(2,6), done:false, pessoaId: currentPersonId, ...payload };
       items.push(novo);
       await dbPut('compromissos', novo);
       agendarNotificacao(novo);
@@ -904,27 +1115,32 @@
     render();
   });
 
-  /* ---------- Perfil ---------- */
+  /* ---------- Perfil (sensível ao contexto: titular ou familiar) ---------- */
   let novaFotoBase64 = null;
+
+  function getPerfilAtual(){
+    return currentPersonId === 'titular' ? perfil : familiares.find(f => f.id === currentPersonId);
+  }
 
   function renderProfileBar(){
     const nameEl = document.getElementById('profileNameText');
     const idEl = document.getElementById('profileIdText');
     const avatarImg = document.getElementById('avatarImg');
     const avatarInitial = document.getElementById('avatarInitial');
+    const p = getPerfilAtual();
 
-    if(perfil && perfil.nome){
-      nameEl.textContent = perfil.nome;
-      idEl.textContent = perfil.userId || '';
-      avatarInitial.textContent = perfil.nome.trim().charAt(0).toUpperCase();
+    if(p && p.nome){
+      nameEl.textContent = p.nome;
+      idEl.textContent = p.userId || '';
+      avatarInitial.textContent = p.nome.trim().charAt(0).toUpperCase();
     } else {
       nameEl.textContent = 'Configurar perfil';
       idEl.textContent = '';
       avatarInitial.textContent = '?';
     }
 
-    if(perfil && perfil.foto){
-      avatarImg.src = perfil.foto;
+    if(p && p.foto){
+      avatarImg.src = p.foto;
       avatarImg.style.display = 'block';
       avatarInitial.style.display = 'none';
     } else {
@@ -935,13 +1151,14 @@
 
   document.getElementById('profileBar').addEventListener('click', () => {
     novaFotoBase64 = null;
-    const nomeAtual = perfil ? perfil.nome || '' : '';
+    const p = getPerfilAtual();
+    const nomeAtual = p ? p.nome || '' : '';
     document.getElementById('fNome').value = nomeAtual;
 
     const previewImg = document.getElementById('avatarLargeImg');
     const previewInitial = document.getElementById('avatarLargeInitial');
-    if(perfil && perfil.foto){
-      previewImg.src = perfil.foto;
+    if(p && p.foto){
+      previewImg.src = p.foto;
       previewImg.style.display = 'block';
       previewInitial.style.display = 'none';
     } else {
@@ -950,15 +1167,42 @@
       previewInitial.textContent = nomeAtual ? nomeAtual.trim().charAt(0).toUpperCase() : '?';
     }
 
-    document.getElementById('profileIdPreview').textContent = perfil && perfil.userId
-      ? 'ID: ' + perfil.userId
+    document.getElementById('profileIdPreview').textContent = p && p.userId
+      ? 'ID: ' + p.userId
       : 'Um ID único será gerado ao salvar';
 
+    document.getElementById('btnDeleteFamiliar').style.display = currentPersonId === 'titular' ? 'none' : 'block';
+    document.getElementById('profileMainView').style.display = 'block';
+    document.getElementById('profileDeleteConfirmView').style.display = 'none';
     profileOverlay.style.display = 'flex';
   });
 
   document.getElementById('btnProfileCancel').addEventListener('click', () => { profileOverlay.style.display = 'none'; });
   profileOverlay.addEventListener('click', (e) => { if(e.target === profileOverlay) profileOverlay.style.display = 'none'; });
+
+  document.getElementById('btnDeleteFamiliar').addEventListener('click', () => {
+    const p = getPerfilAtual();
+    document.getElementById('profileDeleteTitle').textContent = 'Excluir ' + (p ? p.nome : 'familiar') + '?';
+    document.getElementById('profileMainView').style.display = 'none';
+    document.getElementById('profileDeleteConfirmView').style.display = 'block';
+  });
+  document.getElementById('btnDeleteFamiliarCancel').addEventListener('click', () => {
+    document.getElementById('profileMainView').style.display = 'block';
+    document.getElementById('profileDeleteConfirmView').style.display = 'none';
+  });
+  document.getElementById('btnDeleteFamiliarConfirm').addEventListener('click', async () => {
+    const idParaExcluir = currentPersonId;
+    familiares = familiares.filter(f => f.id !== idParaExcluir);
+    await dbDelete('familiares', idParaExcluir);
+    const compromissosDoFamiliar = items.filter(it => it.pessoaId === idParaExcluir);
+    for(const it of compromissosDoFamiliar){
+      await dbDelete('compromissos', it.id);
+    }
+    items = items.filter(it => it.pessoaId !== idParaExcluir);
+    profileOverlay.style.display = 'none';
+    renderPeopleRow();
+    switchPerson('titular');
+  });
 
   document.getElementById('fFoto').addEventListener('change', (e) => {
     const file = e.target.files[0];
@@ -978,21 +1222,211 @@
   document.getElementById('btnProfileSave').addEventListener('click', async () => {
     const nome = document.getElementById('fNome').value.trim();
     if(!nome){
-      alert('Informe um nome.');
+      showToast('Informe um nome.');
       return;
     }
-    if(!perfil){
-      perfil = { id: 1, nome, foto: null, userId: generateUserId() };
+    if(currentPersonId === 'titular'){
+      if(!perfil){
+        perfil = { id: 1, nome, foto: null, userId: generateUserId() };
+      } else {
+        perfil.nome = nome;
+        if(!perfil.userId) perfil.userId = generateUserId();
+      }
+      if(novaFotoBase64) perfil.foto = novaFotoBase64;
+      await dbPut('perfil', perfil);
     } else {
-      perfil.nome = nome;
-      if(!perfil.userId) perfil.userId = generateUserId();
+      const fam = familiares.find(f => f.id === currentPersonId);
+      if(fam){
+        fam.nome = nome;
+        if(novaFotoBase64) fam.foto = novaFotoBase64;
+        await dbPut('familiares', fam);
+        renderPeopleRow();
+      }
     }
-    if(novaFotoBase64){
-      perfil.foto = novaFotoBase64;
-    }
-    await dbPut('perfil', perfil);
     renderProfileBar();
     profileOverlay.style.display = 'none';
+  });
+
+  /* ---------- Menu da engrenagem, Como usar e Backup ---------- */
+  const howToOverlay = document.getElementById('howToOverlay');
+  const gearMenuOverlay = document.getElementById('gearMenuOverlay');
+  const backupOverlay = document.getElementById('backupOverlay');
+
+  document.getElementById('btnGear').addEventListener('click', () => { gearMenuOverlay.style.display = 'flex'; });
+  document.getElementById('btnGearCancel').addEventListener('click', () => { gearMenuOverlay.style.display = 'none'; });
+  gearMenuOverlay.addEventListener('click', (e) => { if(e.target === gearMenuOverlay) gearMenuOverlay.style.display = 'none'; });
+
+  document.getElementById('gearComoUsar').addEventListener('click', () => {
+    gearMenuOverlay.style.display = 'none';
+    howToOverlay.style.display = 'flex';
+  });
+  document.getElementById('btnHowToClose').addEventListener('click', () => { howToOverlay.style.display = 'none'; });
+  howToOverlay.addEventListener('click', (e) => { if(e.target === howToOverlay) howToOverlay.style.display = 'none'; });
+
+  document.getElementById('gearBackup').addEventListener('click', () => {
+    gearMenuOverlay.style.display = 'none';
+    backupOverlay.style.display = 'flex';
+  });
+  document.getElementById('btnBackupClose').addEventListener('click', () => { backupOverlay.style.display = 'none'; });
+  backupOverlay.addEventListener('click', (e) => { if(e.target === backupOverlay) backupOverlay.style.display = 'none'; });
+
+  function nomeArquivoBackup(){
+    const d = new Date();
+    const dia = String(d.getDate()).padStart(2, '0');
+    const mes = String(d.getMonth() + 1).padStart(2, '0');
+    const ano = d.getFullYear();
+    return `${dia}-${mes}-${ano}-agenda-medica-backup.json`;
+  }
+
+  document.getElementById('btnExportar').addEventListener('click', async () => {
+    const dadosBackup = {
+      versaoBackup: 1,
+      exportadoEm: new Date().toISOString(),
+      compromissos: items,
+      perfil: perfil,
+      familiares: familiares,
+    };
+    const conteudo = JSON.stringify(dadosBackup, null, 2);
+    const nomeArquivo = nomeArquivoBackup();
+    const blob = new Blob([conteudo], { type: 'application/json' });
+    const arquivo = new File([blob], nomeArquivo, { type: 'application/json' });
+
+    if(navigator.canShare && navigator.canShare({ files: [arquivo] })){
+      try {
+        await navigator.share({ files: [arquivo], title: 'Backup Agenda Médica' });
+        return;
+      } catch(e){ /* usuário cancelou, cai no download */ }
+    }
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = nomeArquivo;
+    a.click();
+    URL.revokeObjectURL(url);
+  });
+
+  document.getElementById('btnImportar').addEventListener('click', () => {
+    document.getElementById('fImportarArquivo').click();
+  });
+
+  document.getElementById('fImportarArquivo').addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if(!file) return;
+    const reader = new FileReader();
+    reader.onload = async () => {
+      try {
+        const dados = JSON.parse(reader.result);
+        if(!dados || !Array.isArray(dados.compromissos)){
+          showToast('Arquivo de backup inválido.');
+          return;
+        }
+
+        for(const it of items){ await dbDelete('compromissos', it.id); }
+        for(const f of familiares){ await dbDelete('familiares', f.id); }
+
+        for(const it of dados.compromissos){ await dbPut('compromissos', it); }
+        for(const f of (dados.familiares || [])){ await dbPut('familiares', f); }
+        if(dados.perfil){ await dbPut('perfil', dados.perfil); }
+
+        items = dados.compromissos;
+        familiares = dados.familiares || [];
+        perfil = dados.perfil || null;
+        currentPersonId = 'titular';
+        familySection.style.display = 'block';
+        btnVoltar.style.display = 'none';
+
+        renderPeopleRow();
+        renderProfileBar();
+        render();
+        backupOverlay.style.display = 'none';
+        showToast('Backup restaurado com sucesso.');
+      } catch(err){
+        showToast('Não foi possível ler esse arquivo.');
+      }
+      e.target.value = '';
+    };
+    reader.readAsText(file);
+  });
+
+  /* ---------- Família (chips + cadastro + troca de contexto) ---------- */
+  const familyOverlay = document.getElementById('familyOverlay');
+  const familySection = document.getElementById('familySection');
+  const peopleRow = document.getElementById('peopleRow');
+  const btnVoltar = document.getElementById('btnVoltar');
+  let novaFotoFamiliarBase64 = null;
+
+  function renderPeopleRow(){
+    peopleRow.innerHTML = '<button class="person-chip add" id="addPersonBtn">+</button>';
+    familiares.forEach(f => {
+      const btn = document.createElement('button');
+      btn.className = 'person-chip' + (currentPersonId === f.id ? ' active' : '');
+      btn.textContent = f.nome;
+      btn.addEventListener('click', () => switchPerson(f.id));
+      peopleRow.appendChild(btn);
+    });
+    document.getElementById('addPersonBtn').addEventListener('click', openFamilyOverlay);
+  }
+
+  function switchPerson(id){
+    currentPersonId = id;
+    if(id === 'titular'){
+      familySection.style.display = 'block';
+      btnVoltar.style.display = 'none';
+    } else {
+      familySection.style.display = 'none';
+      btnVoltar.style.display = 'block';
+    }
+    currentTab = 'proximos';
+    document.querySelectorAll('.tab').forEach(b => b.classList.toggle('active', b.dataset.tab === 'proximos'));
+    renderProfileBar();
+    render();
+  }
+
+  btnVoltar.addEventListener('click', () => switchPerson('titular'));
+
+  function openFamilyOverlay(){
+    novaFotoFamiliarBase64 = null;
+    document.getElementById('fFamNome').value = '';
+    document.getElementById('famAvatarLargeImg').style.display = 'none';
+    document.getElementById('famAvatarLargeInitial').style.display = 'block';
+    document.getElementById('famAvatarLargeInitial').textContent = '?';
+    familyOverlay.style.display = 'flex';
+  }
+
+  document.getElementById('btnFamCancel').addEventListener('click', () => { familyOverlay.style.display = 'none'; });
+  familyOverlay.addEventListener('click', (e) => { if(e.target === familyOverlay) familyOverlay.style.display = 'none'; });
+
+  document.getElementById('fFamFoto').addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if(!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      novaFotoFamiliarBase64 = reader.result;
+      const previewImg = document.getElementById('famAvatarLargeImg');
+      const previewInitial = document.getElementById('famAvatarLargeInitial');
+      previewImg.src = novaFotoFamiliarBase64;
+      previewImg.style.display = 'block';
+      previewInitial.style.display = 'none';
+    };
+    reader.readAsDataURL(file);
+  });
+
+  document.getElementById('btnFamSave').addEventListener('click', async () => {
+    const nome = document.getElementById('fFamNome').value.trim();
+    if(!nome){
+      showToast('Informe um nome.');
+      return;
+    }
+    const novoFamiliar = {
+      id: 'fam-' + Date.now().toString(36) + Math.random().toString(36).slice(2,6),
+      nome,
+      foto: novaFotoFamiliarBase64 || null,
+      userId: generateUserId(),
+    };
+    familiares.push(novoFamiliar);
+    await dbPut('familiares', novoFamiliar);
+    renderPeopleRow();
+    familyOverlay.style.display = 'none';
   });
 
   /* ---------- Compartilhar como PNG (formato A4, com paginação) ---------- */
@@ -1087,10 +1521,11 @@
       ctx.fillText('Agenda Médica', MARGIN, y);
       y += 30;
 
-      if(perfil && perfil.nome){
+      const pAtual = getPerfilAtual();
+      if(pAtual && pAtual.nome){
         ctx.fillStyle = '#1B2A26';
         ctx.font = '600 16px Arial';
-        ctx.fillText(perfil.nome + (perfil.userId ? '  ·  ' + perfil.userId : ''), MARGIN, y);
+        ctx.fillText(pAtual.nome + (pAtual.userId ? '  ·  ' + pAtual.userId : ''), MARGIN, y);
         y += 22;
       }
 
@@ -1204,6 +1639,8 @@
     dbInstance = await openDB();
     items = await dbGetAll('compromissos');
     perfil = await dbGet('perfil', 1) || null;
+    familiares = await dbGetAll('familiares');
+    renderPeopleRow();
     renderProfileBar();
     render();
   }
