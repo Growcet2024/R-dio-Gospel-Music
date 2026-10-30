@@ -2,268 +2,412 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Moldura</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Álcool ou Gasolina</title>
 <style>
-  /* ===== VARIÁVEIS DE COR ===== */
-  :root{
-    --teal-soft: #cfe8e6; /* cor inicial do degradê de fundo da página (computador) */
-    --amber-soft: #f3e3c3; /* cor final do degradê de fundo da página (computador) */
-    --ink: #1B1B1F; /* cor do texto informativo estático (computador) */
-  }
+/* ===== CORES (tudo em hexadecimal) ===== */
+:root{
+  --verde:#2e9e5b;          /* destaque principal: botões e resultado álcool */
+  --verde-escuro:#1f7a43;   /* texto do resultado álcool e botão pressionado */
+  --verde-claro:#e6f4ea;    /* fundo do resultado álcool e parte "álcool" do medidor */
+  --laranja:#d98a1b;        /* ponto do medidor quando compensa gasolina */
+  --laranja-escuro:#9a5d0a; /* texto do resultado gasolina */
+  --laranja-claro:#fdf1de;  /* fundo do resultado gasolina e parte "gasolina" do medidor */
+  --card:#ffffffeb;         /* fundo dos blocos sobre a imagem (branco quase opaco) */
+  --borda:#d5e6da;          /* bordas de blocos e campos */
+  --texto:#1c2b21;          /* texto principal */
+  --suave:#5d7165;          /* texto secundário */
+  --erro:#c0392b;           /* mensagens de erro */
+}
 
-  /* ===== PÁGINA (padrão = celular) ===== */
-  body{
-    margin:0;
-    height:100vh;
-    font-family:'IBM Plex Sans', Arial, sans-serif;
-  }
+/* ===== BASE ===== */
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{min-height:100%}
+body{
+  font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--texto);
+  padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
+:focus-visible{outline:2px solid var(--verde);outline-offset:2px}
+.oculto{display:none!important}
 
-  /* ===== PÁGINA (computador, 900px+) =====
-     Centraliza a moldura na tela e aplica o fundo degradê */
-  @media (min-width: 900px){
-    body{
-      min-height:100vh;
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      justify-content:center;
-      padding:40px 20px;          /* respiro nas bordas da janela */
-      gap:20px;                   /* espaço entre a moldura e o texto informativo */
-      background:linear-gradient(160deg, #cfe8e6 0%, #f3e3c3 100%);  /* ===== cor fundo gradient ===== */
-    }
-  }
+/* ===== IMAGEM DE FUNDO (fixa atrás de tudo) ===== */
+#fundo{position:fixed;inset:0;z-index:-1;background:center/cover no-repeat}
+/* fundo provisório em verde suave, usado enquanto não houver imagem */
+#fundo.verde,.previa.verde{background:linear-gradient(160deg,#e3f4e9,#bfe3cb 55%,#e9f6ee)}
 
-  /* ===== ESCONDER A MOLDURA NO CELULAR =====
-     No celular o app abre em tela cheia, sem casca de iPhone em volta */
-  .phone-frame-scaler{ display:contents; }
-  .phone-frame{ display:contents; }
-  .phone-screen{ display:contents; }
-  .phone-notch, .phone-statusbar, .phone-home-indicator{ display:none; }
+/* ===== TELA INICIAL ===== */
+.conteudo{max-width:440px;margin:0 auto;padding:16px;display:flex;flex-direction:column;gap:14px}
+.bloco{background:var(--card);border:1px solid var(--borda);border-radius:16px;padding:16px;box-shadow:0 2px 10px #0000000f}
+h1{font-size:24px;font-weight:700}
+.sem-internet{color:var(--suave);font-size:14px;margin-top:10px}
 
-  /* ===== MOLDURA COMPLETA (computador, 900px+) ===== */
-  @media (min-width: 900px){
+/* linha do perfil + engrenagem */
+.linha{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:10px}
+.perfil-btn{display:flex;align-items:center;gap:10px;text-align:left;min-width:0;flex:1;padding:4px 0}
+.perfil-btn .frase{color:var(--suave);font-size:16px}
+.perfil-btn .dados{display:flex;flex-direction:column;min-width:0}
+.perfil-btn .dados b{font-size:16px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.perfil-btn .dados small{color:var(--suave);font-size:13px}
+.engrenagem{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--suave)}
+.engrenagem:active{background:var(--verde-claro)}
 
-    .phone-frame-scaler{
-      display:inline-block;      /* encolhido/ampliado via JS (ajustarEscalaMoldura) */
-    }
+/* avatar: foto ou inicial */
+.avatar{border-radius:50%;background:var(--verde-claro) center/cover no-repeat;color:var(--verde-escuro);
+  display:flex;align-items:center;justify-content:center;font-weight:700;border:1px solid var(--borda);flex-shrink:0}
+.avatar.peq{width:40px;height:40px;font-size:18px}
+.avatar.grande{width:96px;height:96px;font-size:40px;margin:4px auto 0}
 
-    /* Carcaça do celular */
-    .phone-frame{
-      display:block;
-      position:relative;
-      width:430px;                /* largura "natural" do celular */
-      height:844px;                /* altura "natural" do celular */
-      background:#1B1B1F;          /* cor da carcaça */
-      border-radius:52px;          /* arredondamento das bordas */
-      padding:14px;                 /* espessura da borda ao redor da tela */
-      box-shadow:0 30px 60px rgba(0,0,0,0.35); /* sombra do celular */
-      transform-origin:top left;    /* ponto de referência ao encolher (escala) */
-    }
+/* campos de preço */
+label{display:block;font-size:14px;color:var(--suave);margin:14px 0 6px}
+label:first-child{margin-top:0}
+.campo{display:flex;align-items:center;gap:8px;border:1px solid var(--borda);border-radius:10px;padding:0 14px;background:#ffffff}
+.campo span{color:var(--suave);font-size:18px}
+.campo input{flex:1;min-width:0;border:0;outline:0;background:transparent;font:inherit;font-size:28px;font-weight:600;padding:10px 0;color:var(--texto)}
+.campo:focus-within{border-color:var(--verde)}
+.campo.km input{font-size:22px}
 
-    /* Notch (entalhe preto no topo) */
-    .phone-notch{
-      display:block;
-      position:absolute;
-      top:14px;
-      left:50%;
-      transform:translateX(-50%);
-      width:120px;
-      height:28px;
-      background:#1B1B1F;          /* cor do notch */
-      border-radius:0 0 18px 18px;
-      z-index:5;
-    }
+/* resultado */
+.res{border-radius:12px;padding:14px;margin-top:18px;text-align:center}
+.res.vazio{background:#f3f8f4;color:var(--suave)}
+.res.alcool{background:var(--verde-claro);color:var(--verde-escuro)}
+.res.gasolina{background:var(--laranja-claro);color:var(--laranja-escuro)}
+#resT{font-size:24px;font-weight:700}
+#resP{font-size:40px;font-weight:700;line-height:1.1;margin-top:2px}
+#resS{font-size:14px;margin-top:4px}
 
-    /* Tela do celular (onde o app/iframe entra) */
-    .phone-screen{
-      display:flex;
-      flex-direction:column;
-      position:relative;
-      width:100%;
-      height:100%;
-      background:#ffffff;          /* cor de fundo da tela, antes do app carregar */
-      border-radius:38px;
-      overflow:hidden;
-    }
+/* medidor com a marca do limite (70%) */
+.medidor{position:relative;height:10px;border-radius:5px;margin:18px 4px 30px;border:1px solid var(--borda);
+  background:linear-gradient(90deg,var(--verde-claro) var(--lim,70%),var(--laranja-claro) var(--lim,70%))}
+.medidor .marca{position:absolute;left:var(--lim,70%);top:-4px;bottom:-4px;width:2px;background:var(--suave)}
+.medidor .marca b{position:absolute;top:18px;left:50%;transform:translateX(-50%);font-size:12px;font-weight:500;color:var(--suave)}
+.medidor .ponto{position:absolute;top:50%;width:18px;height:18px;border-radius:50%;background:var(--verde);
+  border:3px solid #ffffff;box-shadow:0 1px 4px #00000040;transform:translate(-50%,-50%);transition:left .25s}
+.medidor.gas .ponto{background:var(--laranja)}
+.frase-provisoria{text-align:center;color:var(--suave);font-size:14px;margin-top:6px}
 
-    /* Barra de status (relógio + bateria) no topo da tela */
-    .phone-statusbar{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      padding:16px 26px 4px;
-      font-size:13px;
-      font-weight:600;
-      color:#1B1B1F;                /* cor do texto do relógio/bateria */
-      font-family:'IBM Plex Sans', Arial, sans-serif;
-      flex-shrink:0;
-    }
+/* ===== BOTÕES ===== */
+.btn{width:100%;background:var(--verde);color:#ffffff;border-radius:10px;padding:14px;font-size:17px;font-weight:600;margin-top:14px}
+.btn:active{background:var(--verde-escuro)}
+.btn-sec{width:100%;background:#ffffff;color:var(--verde-escuro);border:1px solid var(--borda);border-radius:10px;padding:12px;font-size:16px;margin-top:10px}
+.btn-sec:active{background:var(--verde-claro)}
+.erro{color:var(--erro);font-size:13px;min-height:18px;margin-top:8px}
 
-    /* Barrinha home na base da tela */
-    .phone-home-indicator{
-      display:block;
-      position:absolute;
-      bottom:8px;
-      left:50%;
-      transform:translateX(-50%);
-      width:120px;
-      height:4px;
-      border-radius:4px;
-      background:rgba(0,0,0,0.15);  /* cor da barrinha home */
-    }
-  }
+/* ===== MENU: painel que sobe de baixo ===== */
+.overlay{position:fixed;inset:0;background:#00000066;z-index:10;opacity:0;visibility:hidden;transition:opacity .2s,visibility .2s}
+.overlay.aberto{opacity:1;visibility:visible}
+.painel{position:absolute;left:0;right:0;bottom:0;margin:0 auto;max-width:460px;max-height:86%;display:flex;flex-direction:column;
+  background:#ffffff;border-radius:20px 20px 0 0;transform:translateY(100%);transition:transform .25s}
+.overlay.aberto .painel{transform:translateY(0)}
+.arraste{padding:10px 0 4px;touch-action:none;cursor:grab}
+.arraste i{display:block;width:40px;height:4px;border-radius:2px;background:var(--borda);margin:0 auto}
+.painel-topo{display:flex;align-items:center;gap:8px;padding:4px 12px 8px;min-height:44px}
+.painel-topo h2{font-size:18px;font-weight:700;flex:1}
+.voltar{color:var(--verde-escuro);font-size:16px;padding:8px}
+.painel-corpo{overflow-y:auto;padding:0 20px calc(20px + env(safe-area-inset-bottom,0px))}
 
-  /* ===== IFRAME (onde o app real carrega) =====
-     Padrão (celular): ocupa a tela inteira do navegador */
-  .phone-screen iframe{
-    width:100%;
-    height:100vh;
-    border:none;
-    display:block;
-  }
+/* lista do menu */
+.item{width:100%;display:flex;align-items:center;justify-content:space-between;padding:16px 4px;border-bottom:1px solid var(--borda);font-size:17px;text-align:left}
+.item:last-child{border-bottom:0}
+.item span{color:var(--suave);font-size:22px}
+.item:active{background:var(--verde-claro)}
 
-  /* No computador, o iframe ocupa só o espaço restante dentro da tela do celular */
-  @media (min-width: 900px){
-    .phone-screen iframe{
-      height:auto;
-      flex:1;
-    }
-  }
-
-  /* ===== TEXTO INFORMATIVO =====
-     Celular: faixa fixa embaixo, com o texto rolando.
-     Computador (900px+): texto estático abaixo da moldura, parado. */
-  .texto-informativo{
-    display:block;
-    position:fixed;
-    bottom:0;
-    left:0;
-    width:100%;
-    overflow:hidden;
-    white-space:nowrap;
-    background:#00000099;    /* ===== cor de fundo da faixa (celular) ===== */
-    color:#ffffff;            /* ===== cor do texto rolando (celular) ===== */
-    font-size:13px;
-    padding:6px 0;
-    z-index:9999;
-  }
-
-  /* O texto em si, dentro da faixa — é ele que se move */
-  .texto-informativo span{
-    display:inline-block;
-    padding-left:100%;         /* começa fora da tela, à direita */
-    animation: rolar-texto-informativo 12s linear infinite; /* velocidade da rolagem (12s) */
-  }
-
-  /* Animação: desliza o texto da direita pra esquerda */
-  @keyframes rolar-texto-informativo{
-    from{ transform:translateX(0); }
-    to{ transform:translateX(-100%); }
-  }
-
-  /* No computador, o texto fica parado e estático abaixo da moldura */
-  @media (min-width: 900px){
-    .texto-informativo{
-      position:static;
-      width:auto;
-      overflow:visible;
-      white-space:normal;
-      background:none;
-      color:var(--ink);         /* cor do texto estático (computador) */
-      opacity:0.8;
-      font-size:14px;
-      max-width:430px;
-      text-align:center;
-      padding:0;
-    }
-
-    .texto-informativo span{
-      display:inline;
-      padding-left:0;
-      animation:none;           /* sem rolagem no computador */
-    }
-  }
+/* abas internas */
+.texto{width:100%;border:1px solid var(--borda);border-radius:10px;padding:12px 14px;font:inherit;font-size:17px;color:var(--texto);background:#ffffff}
+.texto:focus{border-color:var(--verde);outline:0}
+.id{color:var(--suave);font-size:14px;margin-top:14px}
+.id b{color:var(--texto);font-weight:600;letter-spacing:.5px}
+.previa{height:150px;border-radius:12px;border:1px solid var(--borda);background:center/cover no-repeat;margin-top:4px}
+.uso h3{font-size:16px;margin:18px 0 6px}
+.uso h3:first-child{margin-top:4px}
+.uso p{font-size:15px;line-height:1.5;color:var(--texto)}
+.uso p+p{margin-top:8px}
 </style>
 </head>
 <body>
 
-<div class="phone-frame-scaler" id="phoneFrameScaler">
-  <div class="phone-frame">
-    <div class="phone-notch"></div>
-    <div class="phone-screen">
-      <div class="phone-statusbar">
-        <span id="phoneClock">00:00</span>
-        <span class="phone-status-icons">••• 🔋</span>
-      </div>
-      <!-- 📌 TROQUE A URL ABAIXO PELA PÁGINA DO APP QUE QUER MOSTRAR -->
-    <iframe src="https://vida-leve-beta.web.app/"></iframe>
+<div id="fundo" class="verde"></div>
+
+<!-- ===== TELA INICIAL ===== -->
+<main class="conteudo">
+
+  <!-- 1 a 3: título, linha do perfil + engrenagem, frase -->
+  <section class="bloco">
+    <h1>Álcool ou Gasolina</h1>
+    <div class="linha">
+      <button id="btnLinhaPerfil" class="perfil-btn" aria-label="Abrir perfil">
+        <span id="avTopo" class="avatar peq oculto"></span>
+        <span id="dadosTopo" class="dados oculto"><b id="nomeTopo"></b><small id="idTopo"></small></span>
+        <span id="fraseTopo" class="frase">Preencha seu perfil</span>
+      </button>
+      <button id="btnMenu" class="engrenagem" aria-label="Abrir menu">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
+      </button>
     </div>
-    <div class="phone-home-indicator"></div>
+    <p class="sem-internet">App funciona sem internet</p>
+  </section>
+
+  <!-- 4 a 8: preços, resultado, medidor e frase provisória -->
+  <section class="bloco">
+    <label for="alc">Preço do álcool (litro)</label>
+    <div class="campo"><span>R$</span><input id="alc" inputmode="decimal" placeholder="0,00" autocomplete="off"></div>
+    <label for="gas">Preço da gasolina (litro)</label>
+    <div class="campo"><span>R$</span><input id="gas" inputmode="decimal" placeholder="0,00" autocomplete="off"></div>
+
+    <div id="res" class="res vazio">
+      <div id="resT">Digite os dois preços</div>
+      <div id="resP"></div>
+      <div id="resS"></div>
+    </div>
+
+    <div id="medidor" class="medidor oculto">
+      <div class="marca"><b id="marcaTxt">70%</b></div>
+      <div class="ponto" id="ponto"></div>
+    </div>
+
+    <!-- ===== FRASE PROVISÓRIA (abaixo do medidor): troque o texto da linha abaixo ===== -->
+    <p class="frase-provisoria">Abasteça certo e economize a cada parada no posto.</p>
+    <!-- ===== FIM DA FRASE PROVISÓRIA ===== -->
+  </section>
+</main>
+
+<!-- ===== MENU (painel que sobe de baixo) ===== -->
+<div id="overlay" class="overlay">
+  <div id="painel" class="painel" role="dialog" aria-modal="true">
+    <div id="arraste" class="arraste"><i></i></div>
+    <div class="painel-topo">
+      <button id="btnVoltar" class="voltar oculto">‹ Voltar</button>
+      <h2 id="painelTitulo">Menu</h2>
+    </div>
+    <div class="painel-corpo">
+
+      <!-- lista -->
+      <div id="vLista" class="vista">
+        <button class="item" data-ir="perfil">Perfil <span>›</span></button>
+        <button class="item" data-ir="carro">Meu carro <span>›</span></button>
+        <button class="item" data-ir="fundo">Imagem de fundo <span>›</span></button>
+        <button class="item" data-ir="uso">Como usar <span>›</span></button>
+      </div>
+
+      <!-- Perfil -->
+      <div id="vPerfil" class="vista oculto">
+        <div id="avPerfil" class="avatar grande"></div>
+        <button id="btnFoto" class="btn-sec">Alterar foto</button>
+        <button id="btnRemover" class="btn-sec oculto">Remover foto</button>
+        <label for="pNome">Nome</label>
+        <input id="pNome" class="texto" type="text" maxlength="30" placeholder="Seu nome" autocomplete="off">
+        <p class="id">ID: <b id="pId"></b></p>
+        <p id="erroPerfil" class="erro"></p>
+        <button id="btnSalvarPerfil" class="btn" style="margin-top:0">Salvar</button>
+      </div>
+
+      <!-- Meu carro -->
+      <div id="vCarro" class="vista oculto">
+        <label for="kmA">Álcool: quantos km o carro faz com 1 litro?</label>
+        <div class="campo km"><input id="kmA" inputmode="decimal" placeholder="Ex.: 8,5" autocomplete="off"><span>km/l</span></div>
+        <label for="kmG">Gasolina: quantos km o carro faz com 1 litro?</label>
+        <div class="campo km"><input id="kmG" inputmode="decimal" placeholder="Ex.: 12" autocomplete="off"><span>km/l</span></div>
+        <p id="erroCarro" class="erro"></p>
+        <button id="btnSalvarCarro" class="btn" style="margin-top:0">Salvar</button>
+      </div>
+
+      <!-- Imagem de fundo -->
+      <div id="vFundo" class="vista oculto">
+        <div id="previa" class="previa verde"></div>
+        <button id="btnImagem" class="btn-sec">Alterar imagem</button>
+        <button id="btnPadrao" class="btn-sec">Restaurar padrão</button>
+        <p id="erroFundo" class="erro"></p>
+      </div>
+
+      <!-- Como usar -->
+      <div id="vUso" class="vista uso oculto">
+        <h3>Como calcular</h3>
+        <p>Digite o preço do litro do álcool e da gasolina. O app mostra na hora qual compensa mais.</p>
+        <h3>Por que confiar na regra dos 70%?</h3>
+        <p>O álcool rende cerca de 30% menos que a gasolina. Por isso ele só compensa se for bem mais barato.</p>
+        <p><b>Exemplo:</b> gasolina a R$ 6,00. O limite do álcool é R$ 4,20.</p>
+        <p>Álcool a R$ 4,00: compensa o álcool ✅<br>Álcool a R$ 4,50: compensa a gasolina ⛽</p>
+        <p>Mesmo que o álcool pareça mais barato, acima do limite você paga mais por quilômetro rodado.</p>
+        <h3>Mais exato para o seu carro (opcional)</h3>
+        <p>Em <b>Meu carro</b>, informe quantos km seu carro faz com 1 litro de cada combustível. O app passa a calcular pelo consumo real.</p>
+      </div>
+
+    </div>
   </div>
 </div>
 
-<div class="texto-informativo" id="textoInformativo">
-  <span id="textoInformativoConteudo"></span>
-</div>
+<!-- Seletor de imagem do Android (câmera ou galeria): sem o atributo capture, o sistema pergunta qual usar -->
+<input id="inFoto" type="file" accept="image/*" hidden>
 
 <script>
-  /* ===== TEXTO INFORMATIVO — guardado no localStorage da PRÓPRIA
-     página da moldura (não interfere em nada do app de dentro do
-     iframe, que continua salvando do jeito que já salva hoje) ===== */
+/* ===== IMAGEM DE FUNDO PADRÃO =====
+   Cole entre as aspas o código base64 da imagem padrão.
+   Exemplo: var FUNDO_PADRAO = 'data:image/jpeg;base64,/9j/4AAQ...';
+   Enquanto estiver vazio, o app usa um fundo verde suave. */
+var FUNDO_PADRAO = '';
 
-  const CHAVE_TEXTO = "moldura-texto-informativo";
-  const TEXTO_PADRAO = "Escaneie ou abra pelo celular para a melhor experiência.";
+/* ===== DADOS (localStorage, funciona sem internet) ===== */
+var K_PERFIL = 'ag_perfil', K_CARRO = 'ag_carro', K_FUNDO = 'ag_fundo';
+function ler(k){ try{ return JSON.parse(localStorage.getItem(k)); }catch(e){ return null; } }
+function gravar(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); return true; }catch(e){ return false; } }
+function apagar(k){ try{ localStorage.removeItem(k); }catch(e){} }
 
-  function lerTextoInformativo(){
-    return localStorage.getItem(CHAVE_TEXTO) || TEXTO_PADRAO;
+var $ = function(id){ return document.getElementById(id); };
+var perfil = ler(K_PERFIL) || { nome:'', id:'', foto:'' };
+var carro = ler(K_CARRO) || { a:0, g:0 };
+var fundoUser = ler(K_FUNDO) || '';
+var alvo = 'perfil', draftFoto = '';
+
+/* ID único: data (AAAAMMDD) + 4 caracteres aleatórios. Ex.: 20261029d4FM */
+function gerarId(){
+  var d = new Date();
+  var data = d.getFullYear() + String(d.getMonth()+1).padStart(2,'0') + String(d.getDate()).padStart(2,'0');
+  var letras = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789', s = '';
+  for(var i=0;i<4;i++) s += letras.charAt(Math.floor(Math.random()*letras.length));
+  return data + s;
+}
+
+/* ===== AVATAR: foto ou inicial do nome ===== */
+function pintar(el, nome, foto){
+  if(foto){ el.style.backgroundImage = 'url("' + foto + '")'; el.textContent = ''; }
+  else{ el.style.backgroundImage = ''; var n = (nome || '').trim(); el.textContent = n ? n.charAt(0).toUpperCase() : '+'; }
+}
+
+/* ===== LINHA DO PERFIL NA TELA INICIAL ===== */
+function renderTopo(){
+  var ok = !!perfil.nome;
+  $('fraseTopo').classList.toggle('oculto', ok);
+  $('avTopo').classList.toggle('oculto', !ok);
+  $('dadosTopo').classList.toggle('oculto', !ok);
+  if(ok){ pintar($('avTopo'), perfil.nome, perfil.foto); $('nomeTopo').textContent = perfil.nome; $('idTopo').textContent = 'ID: ' + perfil.id; }
+}
+
+/* ===== IMAGEM DE FUNDO ===== */
+function aplicarFundo(){
+  var url = fundoUser || FUNDO_PADRAO;
+  [$('fundo'), $('previa')].forEach(function(el){
+    el.style.backgroundImage = url ? 'url("' + url + '")' : '';
+    el.classList.toggle('verde', !url);
+  });
+}
+
+/* ===== CALCULADORA ===== */
+function num(v){ return parseFloat(String(v).replace(',', '.')); }
+function fmt(n){ return n.toFixed(1).replace('.', ','); }
+/* limite: 70% (regra) ou o ponto de equilíbrio do carro, se os km/l estiverem preenchidos */
+function limite(){ return (carro.a > 0 && carro.g > 0) ? carro.a / carro.g * 100 : 70; }
+function calcular(){
+  var a = num($('alc').value), g = num($('gas').value), res = $('res'), med = $('medidor');
+  if(!(a > 0 && g > 0)){
+    res.className = 'res vazio'; $('resT').textContent = 'Digite os dois preços';
+    $('resP').textContent = ''; $('resS').textContent = ''; med.classList.add('oculto'); return;
   }
+  var p = a / g * 100, lim = limite(), alcool = p <= lim;
+  var pos = Math.min(95, Math.max(5, lim));
+  res.className = 'res ' + (alcool ? 'alcool' : 'gasolina');
+  $('resT').textContent = alcool ? 'Compensa álcool' : 'Compensa gasolina';
+  $('resP').textContent = fmt(p) + '%';
+  $('resS').textContent = 'O álcool custa ' + fmt(p) + '% do preço da gasolina';
+  med.classList.remove('oculto'); med.classList.toggle('gas', !alcool);
+  med.style.setProperty('--lim', pos + '%');
+  $('marcaTxt').textContent = Math.round(lim) + '%';
+  $('ponto').style.left = Math.min(p, 100) + '%';
+}
+$('alc').oninput = calcular;
+$('gas').oninput = calcular;
 
-  function salvarTextoInformativo(novoTexto){
-    localStorage.setItem(CHAVE_TEXTO, novoTexto);
+/* ===== MENU: abrir, fechar e navegar ===== */
+var TITULOS = { lista:'Menu', perfil:'Perfil', carro:'Meu carro', fundo:'Imagem de fundo', uso:'Como usar' };
+var VISTAS = { lista:'vLista', perfil:'vPerfil', carro:'vCarro', fundo:'vFundo', uso:'vUso' };
+function mostrar(v){
+  Object.keys(VISTAS).forEach(function(k){ $(VISTAS[k]).classList.toggle('oculto', k !== v); });
+  $('painelTitulo').textContent = TITULOS[v];
+  $('btnVoltar').classList.toggle('oculto', v === 'lista');
+  $('erroPerfil').textContent = $('erroCarro').textContent = $('erroFundo').textContent = '';
+  if(v === 'perfil'){ draftFoto = perfil.foto; $('pNome').value = perfil.nome; atualizarPerfilTab(); }
+  if(v === 'carro'){ $('kmA').value = carro.a ? String(carro.a).replace('.', ',') : ''; $('kmG').value = carro.g ? String(carro.g).replace('.', ',') : ''; }
+}
+function abrirMenu(v){ mostrar(v || 'lista'); $('overlay').classList.add('aberto'); }
+function fecharMenu(){ $('overlay').classList.remove('aberto'); }
+$('btnMenu').onclick = function(){ abrirMenu('lista'); };
+$('btnLinhaPerfil').onclick = function(){ abrirMenu('perfil'); };
+$('btnVoltar').onclick = function(){ mostrar('lista'); };
+$('overlay').onclick = function(e){ if(e.target === this) fecharMenu(); };
+document.querySelectorAll('[data-ir]').forEach(function(b){ b.onclick = function(){ mostrar(b.dataset.ir); }; });
+
+/* arrastar o painel para baixo fecha o menu */
+(function(){
+  var y0 = null, painel = $('painel');
+  $('arraste').onpointerdown = function(e){ y0 = e.clientY; painel.style.transition = 'none'; this.setPointerCapture(e.pointerId); };
+  $('arraste').onpointermove = function(e){ if(y0 === null) return; var d = Math.max(0, e.clientY - y0); painel.style.transform = 'translateY(' + d + 'px)'; };
+  $('arraste').onpointerup = function(e){
+    if(y0 === null) return;
+    var d = e.clientY - y0; y0 = null;
+    painel.style.transition = ''; painel.style.transform = '';
+    if(d > 90) fecharMenu();
+  };
+})();
+
+/* ===== FOTO / IMAGEM (um seletor só, usado por Perfil e Fundo) ===== */
+function redimensionar(arq, max, quadrada, ok){
+  var r = new FileReader();
+  r.onload = function(){
+    var img = new Image();
+    img.onload = function(){
+      var c = document.createElement('canvas'), x = c.getContext('2d');
+      if(quadrada){ var s = Math.min(img.width, img.height); c.width = c.height = max; x.drawImage(img, (img.width-s)/2, (img.height-s)/2, s, s, 0, 0, max, max); }
+      else{ var e = Math.min(1, max / Math.max(img.width, img.height)); c.width = Math.round(img.width*e); c.height = Math.round(img.height*e); x.drawImage(img, 0, 0, c.width, c.height); }
+      ok(c.toDataURL('image/jpeg', 0.8));
+    };
+    img.src = r.result;
+  };
+  r.readAsDataURL(arq);
+}
+$('btnFoto').onclick = function(){ alvo = 'perfil'; $('inFoto').click(); };
+$('btnImagem').onclick = function(){ alvo = 'fundo'; $('inFoto').click(); };
+$('inFoto').onchange = function(e){
+  var f = e.target.files[0]; e.target.value = '';
+  if(!f) return;
+  if(alvo === 'perfil'){ redimensionar(f, 256, true, function(d){ draftFoto = d; atualizarPerfilTab(); }); }
+  else{
+    redimensionar(f, 1280, false, function(d){
+      if(gravar(K_FUNDO, d)){ fundoUser = d; aplicarFundo(); $('erroFundo').textContent = ''; }
+      else{ $('erroFundo').textContent = 'Não foi possível guardar essa imagem. Tente uma menor.'; }
+    });
   }
+};
 
-  document.getElementById("textoInformativoConteudo").textContent = lerTextoInformativo();
+/* ===== ABA PERFIL ===== */
+function atualizarPerfilTab(){
+  pintar($('avPerfil'), $('pNome').value, draftFoto);
+  $('btnRemover').classList.toggle('oculto', !draftFoto);
+  $('pId').textContent = perfil.id || 'gerado ao salvar';
+}
+$('pNome').oninput = atualizarPerfilTab;
+$('btnRemover').onclick = function(){ draftFoto = ''; atualizarPerfilTab(); };
+$('btnSalvarPerfil').onclick = function(){
+  var n = $('pNome').value.trim();
+  if(!n){ $('erroPerfil').textContent = 'Digite seu nome para salvar.'; return; }
+  var novo = { nome:n, id: perfil.id || gerarId(), foto: draftFoto };
+  if(!gravar(K_PERFIL, novo)){ $('erroPerfil').textContent = 'Não foi possível salvar o perfil.'; return; }
+  perfil = novo; renderTopo(); mostrar('lista');
+};
+
+/* ===== ABA MEU CARRO ===== */
+$('btnSalvarCarro').onclick = function(){
+  var tA = $('kmA').value.trim(), tG = $('kmG').value.trim(), a = num(tA), g = num(tG), novo;
+  if(!tA && !tG){ novo = { a:0, g:0 }; }
+  else if(a > 0 && g > 0){ novo = { a:a, g:g }; }
+  else{ $('erroCarro').textContent = 'Preencha os dois campos com números maiores que zero, ou deixe os dois vazios.'; return; }
+  if(!gravar(K_CARRO, novo)){ $('erroCarro').textContent = 'Não foi possível salvar.'; return; }
+  carro = novo; calcular(); mostrar('lista');
+};
+
+/* ===== ABA IMAGEM DE FUNDO: restaurar padrão ===== */
+$('btnPadrao').onclick = function(){ apagar(K_FUNDO); fundoUser = ''; aplicarFundo(); $('erroFundo').textContent = ''; };
+
+/* ===== INÍCIO ===== */
+aplicarFundo(); renderTopo(); calcular();
 </script>
-
-<script>
-  /* ===== ENCOLHER A MOLDURA PROPORCIONALMENTE ===== */
-  function ajustarEscalaMoldura(){
-    const frame = document.querySelector('.phone-frame');
-    const scaler = document.getElementById('phoneFrameScaler');
-    if(!frame || !scaler) return;
-
-    const larguraNatural = 430;
-    const alturaNatural = 844;
-    const margem = 80; // respiro nas bordas da tela
-
-    const alturaDisponivel = window.innerHeight - margem - 60; // 60px reservados pro texto abaixo
-    const larguraDisponivel = window.innerWidth - margem;
-
-    let escala = Math.min(alturaDisponivel / alturaNatural, larguraDisponivel / larguraNatural, 1);
-    if(escala < 0.4) escala = 0.4;
-
-    frame.style.transform = 'scale(' + escala + ')';
-    scaler.style.width = (larguraNatural * escala) + 'px';
-    scaler.style.height = (alturaNatural * escala) + 'px';
-  }
-  ajustarEscalaMoldura();
-  window.addEventListener('resize', ajustarEscalaMoldura);
-</script>
-
-<script>
-  function atualizarRelogioMoldura(){
-    const el = document.getElementById('phoneClock');
-    if(!el) return;
-    const agora = new Date();
-    const h = String(agora.getHours()).padStart(2, '0');
-    const m = String(agora.getMinutes()).padStart(2, '0');
-    el.textContent = h + ':' + m;
-  }
-  atualizarRelogioMoldura();
-  setInterval(atualizarRelogioMoldura, 15000);
-</script>
-
 </body>
 </html>
