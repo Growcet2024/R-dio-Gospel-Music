@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- MEU CONSUMO (Álcool ou Gasolina) | VERSÃO 8 -->
+<!-- MEU CONSUMO (Álcool ou Gasolina) | VERSÃO 9 -->
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
@@ -8,8 +8,8 @@
 <style>
 /* ===== CORES (tudo em hexadecimal) ===== */
 :root{
-  --verde:#2e9e5b;          /* destaque principal: botões do menu e ponto do medidor */
-  --verde-escuro:#1f7a43;   /* botão pressionado e textos verdes no menu */
+  --verde:#2A6B45;          /* destaque principal: botões do menu e ponto do medidor */
+  --verde-escuro:#1d4d32;   /* botão pressionado e textos verdes no menu */
   --verde-claro:#e6f4ea;    /* fundos claros no menu */
   --laranja:#d98a1b;        /* ponto do medidor quando compensa gasolina */
   --borda:#d5e6da;          /* bordas dos campos e itens do menu */
@@ -259,11 +259,12 @@ label:first-child{margin-top:0}
       <!-- lista -->
       <div id="vLista" class="vista">
         <button class="item" data-ir="consumo">Consumo mensal <span>›</span></button>
+        <button class="item" data-ir="uso">Como usar <span>›</span></button>
         <button class="item" data-ir="perfil">Perfil <span>›</span></button>
         <button class="item" data-ir="carro">Meu carro <span>›</span></button>
         <button class="item" data-ir="fundo">Imagem de fundo <span>›</span></button>
         <button class="item" data-ir="backup">Backup <span>›</span></button>
-        <button class="item" data-ir="uso">Como usar <span>›</span></button>
+        <button class="item" data-ir="enviar">Enviar app <span>›</span></button>
       </div>
 
       <!-- Consumo mensal -->
@@ -290,6 +291,17 @@ label:first-child{margin-top:0}
         <button id="btnImportar" class="btn-sec">Importar backup</button>
         <h3>Importante</h3>
         <p>O app só encontra o arquivo se ele estiver na pasta Downloads ou no Google Drive. Se você recebeu o arquivo pelo WhatsApp (de outro celular, por exemplo), mova-o para Downloads ou, de preferência, para o Google Drive antes de importar.</p>
+      </div>
+
+      <!-- Enviar app -->
+      <div id="vEnviar" class="vista uso oculto">
+        <h3>Gratidão e partilha</h3>
+        <p>Se o App Meu consumo tem ajudado você a organizar os gastos com combustível, mês a mês, que tal dar essa mesma chance a quem você gosta?</p>
+        <p>Quem controla o que gasta, dorme mais tranquilo.</p>
+        <p>E no posto, o app ainda calcula na hora se compensa abastecer com álcool ou gasolina, ajudando você a economizar a cada abastecimento.</p>
+        <p>Envie o banner abaixo.</p>
+        <img id="bannerImg" alt="Banner do app Meu consumo" style="width:100%;border-radius:12px;margin-top:12px;border:1px solid var(--borda)">
+        <button id="btnBanner" class="btn">Enviar banner</button>
       </div>
 
       <!-- Perfil -->
@@ -364,7 +376,7 @@ label:first-child{margin-top:0}
 <div id="toast" class="toast"></div>
 
 <script>
-/* MEU CONSUMO | VERSÃO 8 */
+/* MEU CONSUMO | VERSÃO 9 */
 
 /* ===== IMAGEM DE FUNDO PADRÃO =====
    Cole entre as aspas o código base64 da imagem padrão.
@@ -446,8 +458,8 @@ $('alc').oninput = calcular;
 $('gas').oninput = calcular;
 
 /* ===== MENU: abrir, fechar e navegar ===== */
-var TITULOS = { lista:'Menu', perfil:'Perfil', carro:'Meu carro', fundo:'Imagem de fundo', uso:'Como usar', consumo:'Consumo mensal', backup:'Backup' };
-var VISTAS = { lista:'vLista', perfil:'vPerfil', carro:'vCarro', fundo:'vFundo', uso:'vUso', consumo:'vConsumo', backup:'vBackup' };
+var TITULOS = { lista:'Menu', perfil:'Perfil', carro:'Meu carro', fundo:'Imagem de fundo', uso:'Como usar', consumo:'Consumo mensal', backup:'Backup', enviar:'Enviar app' };
+var VISTAS = { lista:'vLista', perfil:'vPerfil', carro:'vCarro', fundo:'vFundo', uso:'vUso', consumo:'vConsumo', backup:'vBackup', enviar:'vEnviar' };
 function mostrar(v){
   Object.keys(VISTAS).forEach(function(k){ $(VISTAS[k]).classList.toggle('oculto', k !== v); });
   $('painelTitulo').textContent = TITULOS[v];
@@ -458,6 +470,7 @@ function mostrar(v){
   if(v === 'perfil'){ draftFoto = perfil.foto; $('pNome').value = perfil.nome; atualizarPerfilTab(); }
   if(v === 'carro'){ $('kmA').value = carro.a ? km(carro.a) : ''; $('kmG').value = carro.g ? km(carro.g) : ''; statusCarro(); }
   if(v === 'consumo') renderConsumo();
+  if(v === 'enviar') bannerUrl(function(u){ $('bannerImg').src = u; });
 }
 function abrirMenu(v){ mostrar(v || 'lista'); $('overlay').classList.add('aberto'); }
 function fecharMenu(){ $('overlay').classList.remove('aberto'); }
@@ -690,6 +703,28 @@ $('inBackup').onchange=function(e){
     tx.oncomplete=function(){ renderTopo(); calcular(); msg('Backup importado'); fecharMenu(); };
   }).catch(function(){ msg('Arquivo inválido'); });
 };
+
+/* ===== BANNER DO APP (aba Enviar app) =====
+   Cole entre as aspas o base64 do banner real: 'data:image/png;base64,...'
+   Vazio = o app usa um banner provisório verde. */
+var BANNER_BASE64 = '';
+function bannerUrl(cb){
+  if(BANNER_BASE64){ cb(BANNER_BASE64); return; }
+  var c=document.createElement('canvas'); c.width=c.height=1080; var x=c.getContext('2d');
+  var g=x.createLinearGradient(0,0,1080,1080); g.addColorStop(0,'#2A6B45'); g.addColorStop(1,'#1d4d32');
+  x.fillStyle=g; x.fillRect(0,0,1080,1080);
+  x.fillStyle='#fff'; x.textAlign='center';
+  x.font='700 120px system-ui,sans-serif'; x.fillText('Meu consumo',540,420);
+  x.font='500 48px system-ui,sans-serif'; x.fillText('Organize seus gastos com combustível',540,520); x.fillText('mês a mês',540,585);
+  x.font='600 44px system-ui,sans-serif'; x.fillText('Procure na loja: Meu consumo',540,940);
+  cb(c.toDataURL('image/png'));
+}
+function dataParaBlob(u){ var p=u.split(','), m=p[0].match(/:(.*?);/)[1], b=atob(p[1]), n=b.length, a=new Uint8Array(n); while(n--) a[n]=b.charCodeAt(n); return new Blob([a],{type:m}); }
+$('btnBanner').onclick=function(){ bannerUrl(async function(u){
+  var f=new File([dataParaBlob(u)],'meu-consumo-banner.png',{type:'image/png'});
+  if(navigator.canShare&&navigator.canShare({files:[f]})){ try{ await navigator.share({files:[f],title:'Meu consumo'}); return; }catch(e){ if(e.name==='AbortError') return; } }
+  baixar(f); msg('Banner salvo');
+}); };
 
 /* ===== INÍCIO ===== */
 aplicarFundo(); renderTopo(); calcular();
