@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<!-- ÁLCOOL OU GASOLINA | VERSÃO 6 -->
+<!-- MEU CONSUMO (Álcool ou Gasolina) | VERSÃO 8 -->
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Álcool ou Gasolina</title>
+<title>Meu consumo</title>
 <style>
 /* ===== CORES (tudo em hexadecimal) ===== */
 :root{
@@ -104,9 +104,9 @@ label:first-child{margin-top:0}
   border:3px solid #ffffff;box-shadow:0 1px 4px #00000066;transform:translate(-50%,-50%);transition:left .25s}
 .medidor.gas .ponto{background:var(--laranja)}
 .espaco-medidor{margin-bottom:18px}
-/* base do cálculo (entre o resultado e o medidor) frase - Não tem propaganda - alinada a esquerda*/
+/* base do cálculo (entre o resultado e o medidor) */
 .base{font-size:13px;text-align:center;opacity:.95;margin-bottom:16px}
-.frase-final{text-align:left;font-size:16px;font-weight:600}
+.frase-final{text-align:center;font-size:16px;font-weight:600}
 
 /* ===== BOTÕES (menu) ===== */
 .btn{width:100%;background:var(--verde);color:#ffffff;border-radius:10px;padding:14px;font-size:17px;font-weight:600;margin-top:14px}
@@ -151,6 +151,32 @@ label:first-child{margin-top:0}
 .uso h3:first-child{margin-top:4px}
 .uso p{font-size:15px;line-height:1.5;color:var(--texto)}
 .uso p+p{margin-top:8px}
+.subtitulo{font-size:18px;font-weight:600;margin-top:12px}
+.sem-internet{margin-top:6px}
+/* ===== CONSUMO MENSAL ===== */
+.mes-nav{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:10px}
+.mes-nav button{font-size:24px;color:var(--suave);width:44px;height:44px;border-radius:50%}
+.mes-nav button:active{background:var(--verde-claro)}
+.mes-nav b{min-width:150px;text-align:center;font-size:17px}
+.abas{display:flex;gap:8px;margin-bottom:12px}
+.aba{flex:1;padding:10px;border-radius:10px;border:1px solid var(--borda);font-weight:600;color:var(--suave)}
+.aba.on{background:var(--verde);border-color:var(--verde);color:#fff}
+.resumo{display:flex;gap:10px;margin-bottom:4px}
+.resumo div{flex:1;background:var(--verde-claro);border-radius:10px;padding:10px;text-align:center}
+.resumo small{display:block;font-size:12px;color:var(--suave)}
+.resumo b{font-size:17px;color:var(--verde-escuro)}
+.lin{display:flex;width:100%;padding:12px 4px;border-bottom:1px solid var(--borda);font-size:15px;text-align:left}
+.lin span{flex:1}.lin span+span{text-align:right}
+.lin.cab{font-size:12px;font-weight:600;color:var(--suave);padding:6px 4px;margin-top:10px}
+.vaz{text-align:center;color:var(--suave);font-size:14px;padding:22px 0}
+.apagar{display:block;margin:18px auto 0;font-size:13px;color:var(--suave);text-decoration:underline}
+.modal{position:fixed;inset:0;background:#00000080;z-index:20;display:none;align-items:center;justify-content:center;padding:20px}
+.modal.aberto{display:flex}
+.caixa{background:#fff;border-radius:16px;padding:20px;width:100%;max-width:380px;color:var(--texto);text-shadow:none}
+.caixa h3{font-size:18px;margin-bottom:10px}
+.caixa p{font-size:14px;line-height:1.5;color:var(--suave)}
+.toast{position:fixed;left:50%;bottom:30px;transform:translateX(-50%);background:var(--verde-escuro);color:#fff;padding:10px 18px;border-radius:10px;font-size:14px;z-index:30;opacity:0;pointer-events:none;transition:opacity .2s}
+.toast.on{opacity:1}
 </style>
 </head>
 <body>
@@ -165,7 +191,7 @@ label:first-child{margin-top:0}
   <section>
     <h1>
       <svg class="icone-bomba" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 21V5a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v16"/><path d="M3 21h12"/><path d="M4 9.5h10"/><path d="M14 13h2a2 2 0 0 1 2 2v2a2 2 0 0 0 4 0V9.8a2 2 0 0 0-.6-1.4L18.5 5"/></svg>
-      Álcool ou Gasolina
+      Meu consumo
     </h1>
     <div class="linha">
       <button id="btnLinhaPerfil" class="perfil-btn" aria-label="Abrir perfil">
@@ -177,6 +203,7 @@ label:first-child{margin-top:0}
         <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
       </button>
     </div>
+    <p class="subtitulo">Álcool ou Gasolina</p>
     <!-- ===== FRASE DO TOPO (abaixo do perfil): troque o texto da linha abaixo ===== -->
     <p class="sem-internet">App funciona sem internet</p>
     <!-- ===== FIM DA FRASE DO TOPO ===== -->
@@ -231,10 +258,38 @@ label:first-child{margin-top:0}
 
       <!-- lista -->
       <div id="vLista" class="vista">
+        <button class="item" data-ir="consumo">Consumo mensal <span>›</span></button>
         <button class="item" data-ir="perfil">Perfil <span>›</span></button>
         <button class="item" data-ir="carro">Meu carro <span>›</span></button>
         <button class="item" data-ir="fundo">Imagem de fundo <span>›</span></button>
+        <button class="item" data-ir="backup">Backup <span>›</span></button>
         <button class="item" data-ir="uso">Como usar <span>›</span></button>
+      </div>
+
+      <!-- Consumo mensal -->
+      <div id="vConsumo" class="vista oculto">
+        <div class="mes-nav"><button id="mPrev" aria-label="Mês anterior">‹</button><b id="mLabel"></b><button id="mNext" aria-label="Próximo mês">›</button></div>
+        <div class="abas"><button id="aAlc" class="aba on">Álcool</button><button id="aGas" class="aba">Gasolina</button></div>
+        <div class="resumo"><div><small>Consumo litros</small><b id="rL">0 L</b></div><div><small>Valor total</small><b id="rV">R$ 0,00</b></div></div>
+        <button id="bAdd" class="btn">+ Adicionar consumo</button>
+        <button id="bShare" class="btn-sec">Compartilhar</button>
+        <div class="lin cab"><span>Data</span><span>Litros</span><span>Valor</span></div>
+        <div id="lista"></div>
+        <button id="bApagar" class="apagar">Apagar meses antigos</button>
+      </div>
+
+      <!-- Backup -->
+      <div id="vBackup" class="vista uso oculto">
+        <h3>Para que serve</h3>
+        <p>Guarda uma cópia dos seus dados: nome, avatar, Meu carro e todos os registros de consumo. Trocou de celular ou limpou os dados do app? Importe o arquivo e tudo volta.</p>
+        <h3>Exportar</h3>
+        <p>Gera um arquivo .json com a cópia. Guarde em lugar seguro, de preferência no Google Drive.</p>
+        <button id="btnExportar" class="btn-sec">Exportar backup</button>
+        <h3>Importar</h3>
+        <p>Escolha o arquivo .json salvo antes. Atenção: isso substitui os dados atuais do app.</p>
+        <button id="btnImportar" class="btn-sec">Importar backup</button>
+        <h3>Importante</h3>
+        <p>O app só encontra o arquivo se ele estiver na pasta Downloads ou no Google Drive. Se você recebeu o arquivo pelo WhatsApp (de outro celular, por exemplo), mova-o para Downloads ou, de preferência, para o Google Drive antes de importar.</p>
       </div>
 
       <!-- Perfil -->
@@ -276,27 +331,26 @@ label:first-child{margin-top:0}
 
       <!-- Como usar -->
       <div id="vUso" class="vista uso oculto">
-        <h3>Como calcular</h3>
-        <p>Digite o preço do litro do álcool e o da gasolina. O app mostra na hora qual compensa mais, com a porcentagem e um medidor.</p>
-
-        <h3>Por que confiar na regra dos 70%?</h3>
-        <p>O álcool rende cerca de 30% menos que a gasolina. Por isso ele só compensa se for bem mais barato.</p>
-        <p><b>Exemplo:</b> gasolina a R$ 6,00. O limite do álcool é R$ 4,20.</p>
+        <h3>Abasteça sempre pela opção mais barata</h3>
+        <p>Digite o preço do álcool e o da gasolina, e o app mostra na hora qual compensa. A regra: o álcool só vale a pena quando custa até 70% do preço da gasolina, porque rende cerca de 30% menos por litro.</p>
+        <p><b>Exemplo:</b> gasolina a R$ 6,00, limite do álcool R$ 4,20.</p>
         <p>Álcool a R$ 4,00: compensa o álcool ✅<br>Álcool a R$ 4,50: compensa a gasolina ⛽</p>
-        <p>Mesmo que o álcool pareça mais barato, acima do limite você paga mais por quilômetro rodado.</p>
+        <p>Escolher certo a cada abastecimento economiza ao longo do ano, sem fazer conta. Quer mais precisão? Em <b>Meu carro</b> (opcional), informe quantos km seu carro faz com 1 litro de cada combustível, e o app calcula com os números do seu carro.</p>
 
-        <h3>Mais exato para o seu carro (opcional)</h3>
-        <p>Em <b>Meu carro</b>, informe quantos km seu carro faz com 1 litro de cada combustível. O app passa a calcular pelo consumo real do seu carro, e mostra isso na linha “Base” do resultado.</p>
+        <h3>Consumo mensal: seus gastos com combustível organizados</h3>
+        <p>Registre cada abastecimento (litros e valor pago) e o app guarda a data sozinho. Álcool e Gasolina ficam em listas separadas, mês a mês, com o total de litros e o valor total no topo. Você vê quanto gastou, compara os meses e controla o orçamento do carro. Precisa mostrar para alguém? Toque em <b>Compartilhar</b> e o app gera uma imagem em A4, pronta para enviar ou imprimir.</p>
 
-        <h3>Deixe com a sua cara</h3>
-        <p>Em <b>Imagem de fundo</b>, troque o fundo por uma foto sua, tirada na hora ou da galeria. Você pode voltar ao fundo original quando quiser.</p>
-        <p>Em <b>Perfil</b>, coloque seu nome e sua foto.</p>
+        <h3>Deixe o app com a sua cara</h3>
+        <p>Em <b>Imagem de fundo</b>, troque o fundo por uma foto sua, da câmera ou da galeria, e volte ao original quando quiser. Em <b>Perfil</b>, coloque seu nome e avatar.</p>
+
+        <h3>Backup: seus registros protegidos</h3>
+        <p>Exporte um arquivo com seu nome, avatar, dados de Meu carro e todos os registros. Trocou de celular ou limpou os dados? Importe o arquivo e tudo volta. Se receber o arquivo pelo WhatsApp, mova para Downloads ou Google Drive antes de importar.</p>
 
         <h3>Funciona sem internet</h3>
-        <p>Use em qualquer lugar, até no posto sem sinal. Tudo fica guardado no seu aparelho.</p>
+        <p>Tudo fica no seu aparelho. Pode abastecer em posto sem sinal ou na estrada, e o app funciona igual, sem gastar seu pacote de dados. Como nada vai para a internet, seus registros ficam só com você.</p>
 
-        <h3>Sem propaganda</h3>
-        <p>Nenhum vídeo, anúncio ou interrupção no meio do cálculo. Só você e o resultado.</p>
+        <h3>Não tem propaganda</h3>
+        <p>Sem anúncios, sem vídeos, sem pop-ups. Você abre, vê o resultado e abastece. Tela limpa e rápida.</p>
       </div>
 
     </div>
@@ -305,9 +359,12 @@ label:first-child{margin-top:0}
 
 <!-- Seletor de imagem do Android (câmera ou galeria): sem o atributo capture, o sistema pergunta qual usar -->
 <input id="inFoto" type="file" accept="image/*" hidden>
+<input id="inBackup" type="file" accept="application/json,.json" hidden>
+<div id="modal" class="modal"><div id="caixa" class="caixa"></div></div>
+<div id="toast" class="toast"></div>
 
 <script>
-/* ÁLCOOL OU GASOLINA | VERSÃO 6 */
+/* MEU CONSUMO | VERSÃO 8 */
 
 /* ===== IMAGEM DE FUNDO PADRÃO =====
    Cole entre as aspas o código base64 da imagem padrão.
@@ -315,16 +372,15 @@ label:first-child{margin-top:0}
    Enquanto estiver vazio, o app usa um fundo verde suave. */
 var FUNDO_PADRAO = '';
 
-/* ===== DADOS (localStorage, funciona sem internet) ===== */
-var K_PERFIL = 'ag_perfil', K_CARRO = 'ag_carro', K_FUNDO = 'ag_fundo';
-function ler(k){ try{ return JSON.parse(localStorage.getItem(k)); }catch(e){ return null; } }
-function gravar(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); return true; }catch(e){ return false; } }
-function apagar(k){ try{ localStorage.removeItem(k); }catch(e){} }
+/* ===== DADOS (IndexedDB do aparelho, funciona sem internet) ===== */
+var K_PERFIL = 'perfil', K_CARRO = 'carro', K_FUNDO = 'fundo';
+var db, cache = {};
+function ler(k){ return cache[k] || null; }
+function gravar(k, v){ cache[k] = v; try{ db.transaction('kv','readwrite').objectStore('kv').put(v, k); return true; }catch(e){ return false; } }
+function apagar(k){ delete cache[k]; try{ db.transaction('kv','readwrite').objectStore('kv').delete(k); }catch(e){} }
 
 var $ = function(id){ return document.getElementById(id); };
-var perfil = ler(K_PERFIL) || { nome:'', id:'', foto:'' };
-var carro = ler(K_CARRO) || { a:0, g:0 };
-var fundoUser = ler(K_FUNDO) || '';
+var perfil = { nome:'', id:'', foto:'' }, carro = { a:0, g:0 }, fundoUser = '';
 var alvo = 'perfil', draftFoto = '';
 
 /* ID único: data (AAAAMMDD) + 4 caracteres aleatórios. Ex.: 20261029d4FM */
@@ -390,8 +446,8 @@ $('alc').oninput = calcular;
 $('gas').oninput = calcular;
 
 /* ===== MENU: abrir, fechar e navegar ===== */
-var TITULOS = { lista:'Menu', perfil:'Perfil', carro:'Meu carro', fundo:'Imagem de fundo', uso:'Como usar' };
-var VISTAS = { lista:'vLista', perfil:'vPerfil', carro:'vCarro', fundo:'vFundo', uso:'vUso' };
+var TITULOS = { lista:'Menu', perfil:'Perfil', carro:'Meu carro', fundo:'Imagem de fundo', uso:'Como usar', consumo:'Consumo mensal', backup:'Backup' };
+var VISTAS = { lista:'vLista', perfil:'vPerfil', carro:'vCarro', fundo:'vFundo', uso:'vUso', consumo:'vConsumo', backup:'vBackup' };
 function mostrar(v){
   Object.keys(VISTAS).forEach(function(k){ $(VISTAS[k]).classList.toggle('oculto', k !== v); });
   $('painelTitulo').textContent = TITULOS[v];
@@ -401,6 +457,7 @@ function mostrar(v){
   $('okCarro').classList.add('oculto');
   if(v === 'perfil'){ draftFoto = perfil.foto; $('pNome').value = perfil.nome; atualizarPerfilTab(); }
   if(v === 'carro'){ $('kmA').value = carro.a ? km(carro.a) : ''; $('kmG').value = carro.g ? km(carro.g) : ''; statusCarro(); }
+  if(v === 'consumo') renderConsumo();
 }
 function abrirMenu(v){ mostrar(v || 'lista'); $('overlay').classList.add('aberto'); }
 function fecharMenu(){ $('overlay').classList.remove('aberto'); }
@@ -491,8 +548,162 @@ $('btnSalvarCarro').onclick = function(){
 /* ===== ABA IMAGEM DE FUNDO: restaurar padrão ===== */
 $('btnPadrao').onclick = function(){ apagar(K_FUNDO); fundoUser = ''; aplicarFundo(); $('erroFundo').textContent = ''; };
 
+/* ===== LOGO DO COMPARTILHAMENTO (opcional) =====
+   Cole entre as aspas o base64 da logo: 'data:image/png;base64,...'
+   Vazio = símbolo padrão "MC". */
+var LOGO_BASE64 = '';
+
+/* ===== CONSUMO MENSAL ===== */
+var MESES=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+var hoje=new Date(), abaC='alcool', mesC=hoje.getMonth(), anoC=hoje.getFullYear(), consumos=[], itemSel=null;
+function brl(n){ return n.toLocaleString('pt-BR',{style:'currency',currency:'BRL'}); }
+function lt(n){ return n.toLocaleString('pt-BR',{maximumFractionDigits:2}); }
+function dm(t){ return new Date(t).toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'}); }
+function nomeAba(){ return abaC==='alcool'?'Álcool':'Gasolina'; }
+function msg(t){ var e=$('toast'); e.textContent=t; e.classList.add('on'); setTimeout(function(){ e.classList.remove('on'); },2200); }
+function modal(h){ $('caixa').innerHTML=h; $('modal').classList.add('aberto'); }
+function fechaModal(){ $('modal').classList.remove('aberto'); }
+function carregar(cb){ var r=db.transaction('consumos').objectStore('consumos').getAll(); r.onsuccess=function(){ consumos=r.result||[]; cb(); }; }
+function doMes(){ return consumos.filter(function(c){ return c.tipo===abaC&&c.mes===mesC&&c.ano===anoC; }).sort(function(a,b){ return b.t-a.t; }); }
+function renderConsumo(){
+  carregar(function(){
+    $('mLabel').textContent=MESES[mesC]+' '+anoC;
+    $('aAlc').classList.toggle('on',abaC==='alcool'); $('aGas').classList.toggle('on',abaC==='gasolina');
+    var L=doMes(), tl=0, tv=0, h='';
+    L.forEach(function(c,i){ tl+=c.litros; tv+=c.valor; h+='<button class="lin" data-i="'+i+'"><span>'+dm(c.t)+'</span><span>'+lt(c.litros)+' L</span><span>'+brl(c.valor)+'</span></button>'; });
+    $('rL').textContent=lt(tl)+' L'; $('rV').textContent=brl(tv);
+    $('lista').innerHTML=h||'<p class="vaz">Nenhum registro neste mês.</p>';
+    document.querySelectorAll('#lista .lin').forEach(function(b){ b.onclick=function(){ acoes(L[b.dataset.i]); }; });
+  });
+}
+$('aAlc').onclick=function(){ abaC='alcool'; renderConsumo(); };
+$('aGas').onclick=function(){ abaC='gasolina'; renderConsumo(); };
+$('mPrev').onclick=function(){ mesC--; if(mesC<0){ mesC=11; anoC--; } renderConsumo(); };
+$('mNext').onclick=function(){ mesC++; if(mesC>11){ mesC=0; anoC++; } renderConsumo(); };
+$('modal').onclick=function(e){ if(e.target===this) fechaModal(); };
+
+function acoes(c){
+  itemSel=c;
+  modal('<h3>'+dm(c.t)+' · '+lt(c.litros)+' L · '+brl(c.valor)+'</h3><button class="btn-sec" id="xE">Editar</button><button class="btn-sec" id="xX" style="color:var(--erro)">Excluir</button><button class="btn-sec" id="xC">Cancelar</button>');
+  $('xC').onclick=fechaModal; $('xE').onclick=function(){ form(c); }; $('xX').onclick=confirmaExcluir;
+}
+function confirmaExcluir(){
+  modal('<h3>Excluir registro?</h3><p>Essa ação não pode ser desfeita.</p><button class="btn" id="yOk">Excluir</button><button class="btn-sec" id="yC">Cancelar</button>');
+  $('yC').onclick=fechaModal;
+  $('yOk').onclick=function(){ var tx=db.transaction('consumos','readwrite'); tx.objectStore('consumos').delete(itemSel.id); tx.oncomplete=function(){ fechaModal(); msg('Registro excluído'); renderConsumo(); }; };
+}
+function form(c){
+  modal('<h3>'+(c?'Editar consumo':'Novo consumo · '+nomeAba())+'</h3><label for="fL">Litros</label><div class="campo"><input id="fL" inputmode="decimal" placeholder="Ex: 30" autocomplete="off" value="'+(c?String(c.litros).replace('.',','):'')+'"><span>L</span></div><label for="fV">Valor pago</label><div class="campo"><span>R$</span><input id="fV" inputmode="decimal" placeholder="0,00" autocomplete="off" value="'+(c?String(c.valor).replace('.',','):'')+'"></div><p id="fE" class="erro"></p><button class="btn" id="fOk" style="margin-top:0">Salvar</button><button class="btn-sec" id="fC">Cancelar</button>');
+  $('fC').onclick=fechaModal;
+  $('fOk').onclick=function(){
+    var l=num($('fL').value), v=num($('fV').value);
+    if(!(l>0&&v>0)){ $('fE').textContent='Preencha litros e valor com números maiores que zero.'; return; }
+    var tx=db.transaction('consumos','readwrite'), st=tx.objectStore('consumos');
+    if(c){ c.litros=l; c.valor=v; st.put(c); }
+    else{ var d=new Date(); st.add({tipo:abaC,litros:l,valor:v,t:d.getTime(),mes:d.getMonth(),ano:d.getFullYear()}); mesC=d.getMonth(); anoC=d.getFullYear(); }
+    tx.oncomplete=function(){ fechaModal(); msg('Salvo'); renderConsumo(); };
+  };
+  setTimeout(function(){ $('fL').focus(); },100);
+}
+$('bAdd').onclick=function(){ form(null); };
+
+/* apagar meses antigos (Álcool e Gasolina juntos) */
+$('bApagar').onclick=function(){ carregar(function(){
+  var ks={}; consumos.forEach(function(c){ ks[c.ano*12+c.mes]=1; });
+  var ord=Object.keys(ks).map(Number).sort(function(a,b){ return a-b; });
+  if(ord.length<2){ msg('Não há meses antigos para apagar'); return; }
+  var op=''; ord.slice(1).forEach(function(k){ op+='<option value="'+k+'">'+MESES[k%12]+' '+Math.floor(k/12)+'</option>'; });
+  modal('<h3>Apagar meses antigos</h3><label for="sM">Apagar tudo antes de:</label><select id="sM" class="texto">'+op+'</select><p style="margin-top:10px">Apaga Álcool e Gasolina de todos os meses anteriores ao escolhido. Não dá para desfazer. Faça um backup antes (menu → Backup).</p><button class="btn" id="zOk">Apagar</button><button class="btn-sec" id="zC">Cancelar</button>');
+  $('zC').onclick=fechaModal;
+  $('zOk').onclick=function(){
+    var lim=Number($('sM').value), tx=db.transaction('consumos','readwrite'), st=tx.objectStore('consumos');
+    consumos.forEach(function(c){ if(c.ano*12+c.mes<lim) st.delete(c.id); });
+    tx.oncomplete=function(){ fechaModal(); msg('Meses antigos apagados'); renderConsumo(); };
+  };
+}); };
+
+/* ===== COMPARTILHAR: imagens A4 (várias páginas se a lista for grande) ===== */
+function dataHora(){ var d=new Date(); return d.toLocaleDateString('pt-BR')+' '+d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}); }
+function logo(x,cx,cy,r){ return new Promise(function(ok){
+  function pad(){ x.fillStyle='#1f7a43'; x.beginPath(); x.arc(cx,cy,r,0,7); x.fill(); x.fillStyle='#fff'; x.font='700 '+Math.round(r*.8)+'px Georgia,serif'; x.textAlign='center'; x.textBaseline='middle'; x.fillText('MC',cx,cy+1); x.textAlign='left'; x.textBaseline='alphabetic'; ok(); }
+  if(!LOGO_BASE64){ pad(); return; }
+  var im=new Image(); im.onload=function(){ x.save(); x.beginPath(); x.arc(cx,cy,r,0,7); x.clip(); x.drawImage(im,cx-r,cy-r,2*r,2*r); x.restore(); ok(); }; im.onerror=pad; im.src=LOGO_BASE64;
+}); }
+function pagina(itens,o){ return new Promise(function(ok){
+  var W=794,H=1123,M=40,cv=document.createElement('canvas'); cv.width=W; cv.height=H; var x=cv.getContext('2d');
+  x.fillStyle='#fff'; x.fillRect(0,0,W,H);
+  x.fillStyle='#1f7a43'; x.font='700 28px system-ui,sans-serif'; x.fillText('Meu consumo',M,56);
+  x.fillStyle='#5d7165'; x.font='14px system-ui,sans-serif';
+  x.fillText((perfil.nome?perfil.nome+' · ID '+perfil.id+' · ':'')+dataHora(),M,80);
+  x.fillStyle='#1c2b21'; x.font='600 18px system-ui,sans-serif';
+  x.fillText(nomeAba()+' — '+MESES[mesC]+' '+anoC+(o.n>1?' (página '+o.p+' de '+o.n+')':''),M,118);
+  var y=160, cL=W/2+80;
+  x.font='600 12px system-ui,sans-serif'; x.fillStyle='#5d7165'; x.fillText('Data',M,y);
+  x.textAlign='right'; x.fillText('Litros',cL,y); x.fillText('Valor',W-M,y); x.textAlign='left';
+  x.strokeStyle='#d5e6da'; x.lineWidth=1; x.beginPath(); x.moveTo(M,y+10); x.lineTo(W-M,y+10); x.stroke(); y+=10;
+  itens.forEach(function(c){
+    y+=34; x.fillStyle='#1c2b21'; x.font='14px system-ui,sans-serif'; x.fillText(dm(c.t),M,y-12);
+    x.textAlign='right'; x.fillText(lt(c.litros)+' L',cL,y-12); x.fillText(brl(c.valor),W-M,y-12); x.textAlign='left';
+    x.beginPath(); x.moveTo(M,y); x.lineTo(W-M,y); x.stroke();
+  });
+  if(o.ult){
+    y+=44; x.strokeStyle='#1f7a43'; x.lineWidth=2; x.beginPath(); x.moveTo(M,y-30); x.lineTo(W-M,y-30); x.stroke();
+    x.fillStyle='#1c2b21'; x.font='600 16px system-ui,sans-serif'; x.fillText('Consumo litros',M,y); x.fillText('Valor total',W/2+20,y);
+    x.fillStyle='#1f7a43'; x.font='700 20px system-ui,sans-serif'; x.fillText(lt(o.tl)+' L',M,y+28); x.fillText(brl(o.tv),W/2+20,y+28);
+  }
+  var fim=function(){ cv.toBlob(ok,'image/png'); };
+  if(o.p===1) logo(x,W-M-28,52,28).then(fim); else fim();
+}); }
+function baixar(f){ var u=URL.createObjectURL(f), a=document.createElement('a'); a.href=u; a.download=f.name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(function(){ URL.revokeObjectURL(u); },1000); }
+$('bShare').onclick=async function(){
+  await new Promise(function(r){ carregar(r); });
+  var L=doMes().reverse(), tl=0, tv=0; L.forEach(function(c){ tl+=c.litros; tv+=c.valor; });
+  var por=25, ult=22, pgs=[], r=L.slice();
+  while(r.length>ult) pgs.push(r.splice(0,por));
+  pgs.push(r);
+  var arqs=[], base='meu-consumo-'+abaC+'-'+MESES[mesC].toLowerCase()+'-'+anoC;
+  for(var i=0;i<pgs.length;i++){
+    var b=await pagina(pgs[i],{p:i+1,n:pgs.length,ult:i===pgs.length-1,tl:tl,tv:tv});
+    arqs.push(new File([b],base+(pgs.length>1?'-pagina-'+(i+1):'')+'.png',{type:'image/png'}));
+  }
+  if(navigator.canShare&&navigator.canShare({files:arqs})){ try{ await navigator.share({files:arqs,title:'Meu consumo'}); return; }catch(e){ if(e.name==='AbortError') return; } }
+  arqs.forEach(baixar); msg(arqs.length>1?'Imagens salvas':'Imagem salva');
+};
+
+/* ===== BACKUP: exportar e importar (.json) ===== */
+$('btnExportar').onclick=async function(){
+  await new Promise(function(r){ carregar(r); });
+  var d=new Date(), dd=String(d.getDate()).padStart(2,'0')+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+d.getFullYear();
+  var f=new File([JSON.stringify({app:'meu-consumo',versao:1,perfil:perfil,carro:carro,consumos:consumos})],dd+'-meu-consumo-backup.json',{type:'application/json'});
+  if(navigator.canShare&&navigator.canShare({files:[f]})){ try{ await navigator.share({files:[f]}); return; }catch(e){ if(e.name==='AbortError') return; } }
+  baixar(f); msg('Backup exportado');
+};
+$('btnImportar').onclick=function(){ $('inBackup').click(); };
+$('inBackup').onchange=function(e){
+  var f=e.target.files[0]; e.target.value=''; if(!f) return;
+  f.text().then(function(t){
+    var d=JSON.parse(t); if(d.app!=='meu-consumo') throw 0;
+    if(d.perfil&&d.perfil.nome){ perfil=d.perfil; gravar(K_PERFIL,perfil); }
+    if(d.carro){ carro=d.carro; gravar(K_CARRO,carro); }
+    var tx=db.transaction('consumos','readwrite'), st=tx.objectStore('consumos'); st.clear();
+    (d.consumos||[]).forEach(function(c){ delete c.id; st.add(c); });
+    tx.oncomplete=function(){ renderTopo(); calcular(); msg('Backup importado'); fecharMenu(); };
+  }).catch(function(){ msg('Arquivo inválido'); });
+};
+
 /* ===== INÍCIO ===== */
 aplicarFundo(); renderTopo(); calcular();
+
+/* abre o IndexedDB e carrega perfil, carro e fundo antes de mostrar os dados */
+var abre = indexedDB.open('meu-consumo-db', 1);
+abre.onupgradeneeded = function(e){ var d = e.target.result; d.createObjectStore('kv'); d.createObjectStore('consumos', { keyPath:'id', autoIncrement:true }); };
+abre.onsuccess = function(e){
+  db = e.target.result;
+  var tx = db.transaction('kv'), cur = tx.objectStore('kv').openCursor();
+  cur.onsuccess = function(ev){ var c = ev.target.result; if(c){ cache[c.key] = c.value; c.continue(); } };
+  tx.oncomplete = function(){ perfil = ler(K_PERFIL) || perfil; carro = ler(K_CARRO) || carro; fundoUser = ler(K_FUNDO) || ''; aplicarFundo(); renderTopo(); calcular(); };
+};
+abre.onerror = function(){ msg('Não foi possível abrir o armazenamento do aparelho'); };
 </script>
 </body>
 </html>
