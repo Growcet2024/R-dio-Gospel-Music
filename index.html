@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- MEU CONSUMO (Álcool ou Gasolina) | VERSÃO 9 -->
+<!-- MEU CONSUMO (Álcool ou Gasolina) | VERSÃO 11 -->
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
@@ -106,7 +106,7 @@ label:first-child{margin-top:0}
 .espaco-medidor{margin-bottom:18px}
 /* base do cálculo (entre o resultado e o medidor) */
 .base{font-size:13px;text-align:center;opacity:.95;margin-bottom:16px}
-.frase-final{text-align:center;font-size:16px;font-weight:600}
+.frase-final{text-align:left;font-size:16px;font-weight:600}
 
 /* ===== BOTÕES (menu) ===== */
 .btn{width:100%;background:var(--verde);color:#ffffff;border-radius:10px;padding:14px;font-size:17px;font-weight:600;margin-top:14px}
@@ -177,6 +177,11 @@ label:first-child{margin-top:0}
 .caixa p{font-size:14px;line-height:1.5;color:var(--suave)}
 .toast{position:fixed;left:50%;bottom:30px;transform:translateX(-50%);background:var(--verde-escuro);color:#fff;padding:10px 18px;border-radius:10px;font-size:14px;z-index:30;opacity:0;pointer-events:none;transition:opacity .2s}
 .toast.on{opacity:1}
+.lin.man span:nth-child(1){flex:0 0 34px;text-align:left}
+.lin.man span:nth-child(2){flex:0 0 96px;text-align:left}
+.lin.man span:nth-child(3){flex:1;text-align:left;padding-right:6px;word-break:break-word}
+.lin.man span:nth-child(4){flex:0 0 88px;text-align:right}
+.lin.man{font-size:14px}
 </style>
 </head>
 <body>
@@ -238,7 +243,7 @@ label:first-child{margin-top:0}
     <div class="espaco-medidor"></div>
 
     <!-- ===== FRASE DO FINAL (abaixo do medidor): troque o texto da linha abaixo ===== -->
-    <p class="frase-final">Não tem propaganda</p>
+    <p class="frase-final">App não tem anúncios pagos</p>
     <!-- ===== FIM DA FRASE DO FINAL ===== -->
   </section>
 </main>
@@ -264,6 +269,7 @@ label:first-child{margin-top:0}
         <button class="item" data-ir="carro">Meu carro <span>›</span></button>
         <button class="item" data-ir="fundo">Imagem de fundo <span>›</span></button>
         <button class="item" data-ir="backup">Backup <span>›</span></button>
+        <button class="item" data-ir="manutencao">Manutenção <span>›</span></button>
         <button class="item" data-ir="enviar">Enviar app <span>›</span></button>
       </div>
 
@@ -291,6 +297,15 @@ label:first-child{margin-top:0}
         <button id="btnImportar" class="btn-sec">Importar backup</button>
         <h3>Importante</h3>
         <p>O app só encontra o arquivo se ele estiver na pasta Downloads ou no Google Drive. Se você recebeu o arquivo pelo WhatsApp (de outro celular, por exemplo), mova-o para Downloads ou, de preferência, para o Google Drive antes de importar.</p>
+      </div>
+
+      <!-- Manutenção -->
+      <div id="vManut" class="vista oculto">
+        <div class="resumo"><div><small>Total gasto em manutenção</small><b id="mTot">R$ 0,00</b></div></div>
+        <button id="mAdd" class="btn">+ Adicionar serviço</button>
+        <button id="mShare" class="btn-sec">Compartilhar</button>
+        <div class="lin cab man"><span>Nº</span><span>Data</span><span>Serviço</span><span>Valor</span></div>
+        <div id="mLista"></div>
       </div>
 
       <!-- Enviar app -->
@@ -376,7 +391,7 @@ label:first-child{margin-top:0}
 <div id="toast" class="toast"></div>
 
 <script>
-/* MEU CONSUMO | VERSÃO 9 */
+/* MEU CONSUMO | VERSÃO 11 */
 
 /* ===== IMAGEM DE FUNDO PADRÃO =====
    Cole entre as aspas o código base64 da imagem padrão.
@@ -458,8 +473,8 @@ $('alc').oninput = calcular;
 $('gas').oninput = calcular;
 
 /* ===== MENU: abrir, fechar e navegar ===== */
-var TITULOS = { lista:'Menu', perfil:'Perfil', carro:'Meu carro', fundo:'Imagem de fundo', uso:'Como usar', consumo:'Consumo mensal', backup:'Backup', enviar:'Enviar app' };
-var VISTAS = { lista:'vLista', perfil:'vPerfil', carro:'vCarro', fundo:'vFundo', uso:'vUso', consumo:'vConsumo', backup:'vBackup', enviar:'vEnviar' };
+var TITULOS = { lista:'Menu', perfil:'Perfil', carro:'Meu carro', fundo:'Imagem de fundo', uso:'Como usar', consumo:'Consumo mensal', backup:'Backup', enviar:'Enviar app', manutencao:'Manutenção' };
+var VISTAS = { lista:'vLista', perfil:'vPerfil', carro:'vCarro', fundo:'vFundo', uso:'vUso', consumo:'vConsumo', backup:'vBackup', enviar:'vEnviar', manutencao:'vManut' };
 function mostrar(v){
   Object.keys(VISTAS).forEach(function(k){ $(VISTAS[k]).classList.toggle('oculto', k !== v); });
   $('painelTitulo').textContent = TITULOS[v];
@@ -470,6 +485,7 @@ function mostrar(v){
   if(v === 'perfil'){ draftFoto = perfil.foto; $('pNome').value = perfil.nome; atualizarPerfilTab(); }
   if(v === 'carro'){ $('kmA').value = carro.a ? km(carro.a) : ''; $('kmG').value = carro.g ? km(carro.g) : ''; statusCarro(); }
   if(v === 'consumo') renderConsumo();
+  if(v === 'manutencao') renderManut();
   if(v === 'enviar') bannerUrl(function(u){ $('bannerImg').src = u; });
 }
 function abrirMenu(v){ mostrar(v || 'lista'); $('overlay').classList.add('aberto'); }
@@ -661,8 +677,10 @@ function pagina(itens,o){ return new Promise(function(ok){
   });
   if(o.ult){
     y+=44; x.strokeStyle='#1f7a43'; x.lineWidth=2; x.beginPath(); x.moveTo(M,y-30); x.lineTo(W-M,y-30); x.stroke();
-    x.fillStyle='#1c2b21'; x.font='600 16px system-ui,sans-serif'; x.fillText('Consumo litros',M,y); x.fillText('Valor total',W/2+20,y);
-    x.fillStyle='#1f7a43'; x.font='700 20px system-ui,sans-serif'; x.fillText(lt(o.tl)+' L',M,y+28); x.fillText(brl(o.tv),W/2+20,y+28);
+    x.fillStyle='#1c2b21'; x.font='600 16px system-ui,sans-serif'; x.fillText('Abastecimentos',M,y);
+    x.textAlign='right'; x.fillText('Consumo litros',cL,y); x.fillText('Valor total',W-M,y);
+    x.fillStyle='#1f7a43'; x.font='700 20px system-ui,sans-serif'; x.textAlign='left'; x.fillText(String(o.q),M,y+28);
+    x.textAlign='right'; x.fillText(lt(o.tl)+' L',cL,y+28); x.fillText(brl(o.tv),W-M,y+28); x.textAlign='left';
   }
   var fim=function(){ cv.toBlob(ok,'image/png'); };
   if(o.p===1) logo(x,W-M-28,52,28).then(fim); else fim();
@@ -676,7 +694,7 @@ $('bShare').onclick=async function(){
   pgs.push(r);
   var arqs=[], base='meu-consumo-'+abaC+'-'+MESES[mesC].toLowerCase()+'-'+anoC;
   for(var i=0;i<pgs.length;i++){
-    var b=await pagina(pgs[i],{p:i+1,n:pgs.length,ult:i===pgs.length-1,tl:tl,tv:tv});
+    var b=await pagina(pgs[i],{p:i+1,n:pgs.length,ult:i===pgs.length-1,tl:tl,tv:tv,q:L.length});
     arqs.push(new File([b],base+(pgs.length>1?'-pagina-'+(i+1):'')+'.png',{type:'image/png'}));
   }
   if(navigator.canShare&&navigator.canShare({files:arqs})){ try{ await navigator.share({files:arqs,title:'Meu consumo'}); return; }catch(e){ if(e.name==='AbortError') return; } }
@@ -685,9 +703,9 @@ $('bShare').onclick=async function(){
 
 /* ===== BACKUP: exportar e importar (.json) ===== */
 $('btnExportar').onclick=async function(){
-  await new Promise(function(r){ carregar(r); });
+  await new Promise(function(r){ carregar(r); }); await new Promise(function(r){ carregarM(r); });
   var d=new Date(), dd=String(d.getDate()).padStart(2,'0')+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+d.getFullYear();
-  var f=new File([JSON.stringify({app:'meu-consumo',versao:1,perfil:perfil,carro:carro,consumos:consumos})],dd+'-meu-consumo-backup.json',{type:'application/json'});
+  var f=new File([JSON.stringify({app:'meu-consumo',versao:2,perfil:perfil,carro:carro,consumos:consumos,manutencao:manut})],dd+'-meu-consumo-backup.json',{type:'application/json'});
   if(navigator.canShare&&navigator.canShare({files:[f]})){ try{ await navigator.share({files:[f]}); return; }catch(e){ if(e.name==='AbortError') return; } }
   baixar(f); msg('Backup exportado');
 };
@@ -698,10 +716,84 @@ $('inBackup').onchange=function(e){
     var d=JSON.parse(t); if(d.app!=='meu-consumo') throw 0;
     if(d.perfil&&d.perfil.nome){ perfil=d.perfil; gravar(K_PERFIL,perfil); }
     if(d.carro){ carro=d.carro; gravar(K_CARRO,carro); }
-    var tx=db.transaction('consumos','readwrite'), st=tx.objectStore('consumos'); st.clear();
+    var tx=db.transaction(['consumos','manutencao'],'readwrite'), st=tx.objectStore('consumos'), sm=tx.objectStore('manutencao'); st.clear(); sm.clear();
     (d.consumos||[]).forEach(function(c){ delete c.id; st.add(c); });
+    (d.manutencao||[]).forEach(function(c){ delete c.id; sm.add(c); });
     tx.oncomplete=function(){ renderTopo(); calcular(); msg('Backup importado'); fecharMenu(); };
   }).catch(function(){ msg('Arquivo inválido'); });
+};
+
+/* ===== MANUTENÇÃO ===== */
+var manut=[], mSel=null;
+function carregarM(cb){ var r=db.transaction('manutencao').objectStore('manutencao').getAll(); r.onsuccess=function(){ manut=(r.result||[]).sort(function(a,b){ return a.data<b.data?1:a.data>b.data?-1:b.id-a.id; }); cb(); }; }
+function dd(t){ var p=t.split('-'); return p[2]+'/'+p[1]+'/'+p[0]; }
+function hojeISO(){ var d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+function renderManut(){ carregarM(function(){
+  var tot=0, h='';
+  manut.forEach(function(c,i){ if(c.valor) tot+=c.valor; h+='<button class="lin man" data-i="'+i+'"><span>'+(manut.length-i)+'</span><span>'+dd(c.data)+'</span><span>'+c.servico.replace(/&/g,'&amp;').replace(/</g,'&lt;')+'</span><span>'+(c.valor?brl(c.valor):'')+'</span></button>'; });
+  $('mTot').textContent=brl(tot);
+  $('mLista').innerHTML=h||'<p class="vaz">Nenhum serviço registrado.</p>';
+  document.querySelectorAll('#mLista .lin').forEach(function(b){ b.onclick=function(){ mAcoes(manut[b.dataset.i]); }; });
+}); }
+function mAcoes(c){
+  mSel=c;
+  modal('<h3 id="xT"></h3><button class="btn-sec" id="xE">Editar</button><button class="btn-sec" id="xX" style="color:var(--erro)">Excluir</button><button class="btn-sec" id="xC">Cancelar</button>');
+  $('xT').textContent=dd(c.data)+' · '+c.servico;
+  $('xC').onclick=fechaModal; $('xE').onclick=function(){ mForm(c); };
+  $('xX').onclick=function(){
+    modal('<h3>Excluir serviço?</h3><p>Essa ação não pode ser desfeita.</p><button class="btn" id="yOk">Excluir</button><button class="btn-sec" id="yC">Cancelar</button>');
+    $('yC').onclick=fechaModal;
+    $('yOk').onclick=function(){ var tx=db.transaction('manutencao','readwrite'); tx.objectStore('manutencao').delete(mSel.id); tx.oncomplete=function(){ fechaModal(); msg('Serviço excluído'); renderManut(); }; };
+  };
+}
+function mForm(c){
+  modal('<h3>'+(c?'Editar serviço':'Novo serviço')+'</h3><label for="gD">Data</label><div class="campo"><input id="gD" type="date" style="font-size:20px"></div><label for="gS">Serviço</label><div class="campo"><input id="gS" maxlength="60" placeholder="Ex: Troca de óleo" autocomplete="off" style="font-size:20px"></div><label for="gV">Valor (opcional)</label><div class="campo"><span>R$</span><input id="gV" inputmode="decimal" placeholder="0,00" autocomplete="off"></div><p id="gE" class="erro"></p><button class="btn" id="gOk" style="margin-top:0">Salvar</button><button class="btn-sec" id="gC">Cancelar</button>');
+  $('gD').value=c?c.data:hojeISO(); $('gS').value=c?c.servico:''; $('gV').value=c&&c.valor?String(c.valor).replace('.',','):'';
+  $('gC').onclick=fechaModal;
+  $('gOk').onclick=function(){
+    var d=$('gD').value, s=$('gS').value.trim(), v=$('gV').value.trim()?num($('gV').value):null;
+    if(!d||!s){ $('gE').textContent='Preencha a data e o serviço.'; return; }
+    if(v!==null&&!(v>=0)){ $('gE').textContent='Valor inválido.'; return; }
+    var tx=db.transaction('manutencao','readwrite'), st=tx.objectStore('manutencao');
+    if(c){ c.data=d; c.servico=s; c.valor=v; st.put(c); } else st.add({data:d,servico:s,valor:v});
+    tx.oncomplete=function(){ fechaModal(); msg('Salvo'); renderManut(); };
+  };
+}
+$('mAdd').onclick=function(){ mForm(null); };
+function paginaM(itens,o){ return new Promise(function(ok){
+  var W=794,H=1123,M=40,cv=document.createElement('canvas'); cv.width=W; cv.height=H; var x=cv.getContext('2d');
+  x.fillStyle='#fff'; x.fillRect(0,0,W,H);
+  x.fillStyle='#1f7a43'; x.font='700 28px system-ui,sans-serif'; x.fillText('Meu consumo',M,56);
+  x.fillStyle='#5d7165'; x.font='14px system-ui,sans-serif'; x.fillText((perfil.nome?perfil.nome+' · ID '+perfil.id+' · ':'')+dataHora(),M,80);
+  x.fillStyle='#1c2b21'; x.font='600 18px system-ui,sans-serif'; x.fillText('Manutenção'+(o.n>1?' (página '+o.p+' de '+o.n+')':''),M,118);
+  var y=160, cD=M+44, cS=M+150, cV=W-M;
+  x.font='600 12px system-ui,sans-serif'; x.fillStyle='#5d7165'; x.fillText('Nº',M,y); x.fillText('Data',cD,y); x.fillText('Serviço',cS,y); x.textAlign='right'; x.fillText('Valor',cV,y); x.textAlign='left';
+  x.strokeStyle='#d5e6da'; x.lineWidth=1; x.beginPath(); x.moveTo(M,y+10); x.lineTo(W-M,y+10); x.stroke(); y+=10;
+  itens.forEach(function(c){
+    y+=34; x.fillStyle='#1c2b21'; x.font='14px system-ui,sans-serif'; x.fillText(String(c.n),M,y-12); x.fillText(dd(c.data),cD,y-12); x.fillText(c.servico.slice(0,34),cS,y-12);
+    x.textAlign='right'; x.fillText(c.valor?brl(c.valor):'',cV,y-12); x.textAlign='left'; x.beginPath(); x.moveTo(M,y); x.lineTo(W-M,y); x.stroke();
+  });
+  if(o.ult){
+    y+=44; x.strokeStyle='#1f7a43'; x.lineWidth=2; x.beginPath(); x.moveTo(M,y-30); x.lineTo(W-M,y-30); x.stroke();
+    x.fillStyle='#1c2b21'; x.font='600 16px system-ui,sans-serif'; x.fillText('Serviços',cD,y); x.textAlign='right'; x.fillText('Total gasto',cV,y);
+    x.fillStyle='#1f7a43'; x.font='700 20px system-ui,sans-serif'; x.textAlign='left'; x.fillText(String(o.q),cD,y+28); x.textAlign='right'; x.fillText(brl(o.tot),cV,y+28); x.textAlign='left';
+  }
+  var fim=function(){ cv.toBlob(ok,'image/png'); };
+  if(o.p===1) logo(x,W-M-28,52,28).then(fim); else fim();
+}); }
+$('mShare').onclick=async function(){
+  await new Promise(function(r){ carregarM(r); });
+  var tot=0, L=manut.map(function(c,i){ if(c.valor) tot+=c.valor; return {n:manut.length-i,data:c.data,servico:c.servico,valor:c.valor}; });
+  var por=25, ult=22, pgs=[], r=L.slice();
+  while(r.length>ult) pgs.push(r.splice(0,por));
+  pgs.push(r);
+  var arqs=[];
+  for(var i=0;i<pgs.length;i++){
+    var b=await paginaM(pgs[i],{p:i+1,n:pgs.length,ult:i===pgs.length-1,tot:tot,q:L.length});
+    arqs.push(new File([b],'meu-consumo-manutencao'+(pgs.length>1?'-pagina-'+(i+1):'')+'.png',{type:'image/png'}));
+  }
+  if(navigator.canShare&&navigator.canShare({files:arqs})){ try{ await navigator.share({files:arqs,title:'Meu consumo'}); return; }catch(e){ if(e.name==='AbortError') return; } }
+  arqs.forEach(baixar); msg(arqs.length>1?'Imagens salvas':'Imagem salva');
 };
 
 /* ===== BANNER DO APP (aba Enviar app) =====
@@ -730,8 +822,8 @@ $('btnBanner').onclick=function(){ bannerUrl(async function(u){
 aplicarFundo(); renderTopo(); calcular();
 
 /* abre o IndexedDB e carrega perfil, carro e fundo antes de mostrar os dados */
-var abre = indexedDB.open('meu-consumo-db', 1);
-abre.onupgradeneeded = function(e){ var d = e.target.result; d.createObjectStore('kv'); d.createObjectStore('consumos', { keyPath:'id', autoIncrement:true }); };
+var abre = indexedDB.open('meu-consumo-db', 2);
+abre.onupgradeneeded = function(e){ var d = e.target.result; if(!d.objectStoreNames.contains('kv')) d.createObjectStore('kv'); if(!d.objectStoreNames.contains('consumos')) d.createObjectStore('consumos', { keyPath:'id', autoIncrement:true }); if(!d.objectStoreNames.contains('manutencao')) d.createObjectStore('manutencao', { keyPath:'id', autoIncrement:true }); };
 abre.onsuccess = function(e){
   db = e.target.result;
   var tx = db.transaction('kv'), cur = tx.objectStore('kv').openCursor();
