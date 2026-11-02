@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- MEU CONSUMO (Álcool ou Gasolina) | VERSÃO 11 -->
+<!-- MEU CONSUMO (Álcool ou Gasolina) | VERSÃO 13 -->
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
@@ -182,6 +182,7 @@ label:first-child{margin-top:0}
 .lin.man span:nth-child(3){flex:1;text-align:left;padding-right:6px;word-break:break-word}
 .lin.man span:nth-child(4){flex:0 0 88px;text-align:right}
 .lin.man{font-size:14px}
+.item.dest{box-shadow:inset 4px 0 0 var(--verde);padding-left:16px}
 </style>
 </head>
 <body>
@@ -243,7 +244,7 @@ label:first-child{margin-top:0}
     <div class="espaco-medidor"></div>
 
     <!-- ===== FRASE DO FINAL (abaixo do medidor): troque o texto da linha abaixo ===== -->
-    <p class="frase-final">App não tem anúncios pagos</p>
+    <p class="frase-final">Mais que cálculo: o App Meu Consumo organiza seus abastecimentos e a manutenção do carro, tudo no seu celular.</p>
     <!-- ===== FIM DA FRASE DO FINAL ===== -->
   </section>
 </main>
@@ -263,13 +264,13 @@ label:first-child{margin-top:0}
 
       <!-- lista -->
       <div id="vLista" class="vista">
-        <button class="item" data-ir="consumo">Consumo mensal <span>›</span></button>
+        <button class="item dest" data-ir="consumo">Consumo mensal <span>›</span></button>
+        <button class="item dest" data-ir="manutencao">Manutenção <span>›</span></button>
         <button class="item" data-ir="uso">Como usar <span>›</span></button>
         <button class="item" data-ir="perfil">Perfil <span>›</span></button>
         <button class="item" data-ir="carro">Meu carro <span>›</span></button>
         <button class="item" data-ir="fundo">Imagem de fundo <span>›</span></button>
         <button class="item" data-ir="backup">Backup <span>›</span></button>
-        <button class="item" data-ir="manutencao">Manutenção <span>›</span></button>
         <button class="item" data-ir="enviar">Enviar app <span>›</span></button>
       </div>
 
@@ -366,12 +367,18 @@ label:first-child{margin-top:0}
 
         <h3>Consumo mensal: seus gastos com combustível organizados</h3>
         <p>Registre cada abastecimento (litros e valor pago) e o app guarda a data sozinho. Álcool e Gasolina ficam em listas separadas, mês a mês, com o total de litros e o valor total no topo. Você vê quanto gastou, compara os meses e controla o orçamento do carro. Precisa mostrar para alguém? Toque em <b>Compartilhar</b> e o app gera uma imagem em A4, pronta para enviar ou imprimir.</p>
+        <p>Para corrigir ou apagar um registro, é só tocar nele: aparecem as opções <b>Editar</b> e <b>Excluir</b>.</p>
+        <p>No final da lista há a opção <b>Apagar meses antigos</b>, mas ela é totalmente opcional. Os registros ocupam muito pouco espaço, então você pode usar o app por anos sem se preocupar com armazenamento.</p>
+
+        <h3>Manutenção: o histórico do seu carro</h3>
+        <p>Anote cada serviço feito no carro, como troca de óleo, pneus e revisões, com a data, o nome do serviço e, se quiser, o valor. A lista mostra o mais recente no topo e soma o total gasto em manutenção. Toque num serviço para <b>Editar</b> ou <b>Excluir</b>, e use <b>Compartilhar</b> para gerar a imagem em A4.</p>
 
         <h3>Deixe o app com a sua cara</h3>
         <p>Em <b>Imagem de fundo</b>, troque o fundo por uma foto sua, da câmera ou da galeria, e volte ao original quando quiser. Em <b>Perfil</b>, coloque seu nome e avatar.</p>
 
         <h3>Backup: seus registros protegidos</h3>
         <p>Exporte um arquivo com seu nome, avatar, dados de Meu carro e todos os registros. Trocou de celular ou limpou os dados? Importe o arquivo e tudo volta. Se receber o arquivo pelo WhatsApp, mova para Downloads ou Google Drive antes de importar.</p>
+        <p><b>Dica:</b> faça um backup uma vez por mês. Assim seus registros ficam sempre protegidos.</p>
 
         <h3>Funciona sem internet</h3>
         <p>Tudo fica no seu aparelho. Pode abastecer em posto sem sinal ou na estrada, e o app funciona igual, sem gastar seu pacote de dados. Como nada vai para a internet, seus registros ficam só com você.</p>
@@ -391,7 +398,7 @@ label:first-child{margin-top:0}
 <div id="toast" class="toast"></div>
 
 <script>
-/* MEU CONSUMO | VERSÃO 11 */
+/* MEU CONSUMO | VERSÃO 13 */
 
 /* ===== IMAGEM DE FUNDO PADRÃO =====
    Cole entre as aspas o código base64 da imagem padrão.
