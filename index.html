@@ -6,7 +6,7 @@
 <title>Rádio Love Gospel</title>
 
 <!-- ================================================================
-     RÁDIO LOVE GOSPEL — VERSÃO 8
+     RÁDIO LOVE GOSPEL — VERSÃO 10
 
      Este arquivo tem 5 partes, nesta ordem:
 
@@ -146,7 +146,11 @@
   /* Anéis vermelhos que pulsam enquanto a rádio toca */
   .anel {
     position: absolute;
-    inset: -14px;
+    /* top/right/bottom/left funcionam em celulares antigos (o "inset" não) */
+    top: -14px;
+    right: -14px;
+    bottom: -14px;
+    left: -14px;
     border-radius: 50%;
     border: 2px solid var(--vermelho);
     opacity: 0;
@@ -205,7 +209,7 @@
     color: var(--texto-suave);
   }
 
-  /* Linha de status (Toque para ouvir / Ao vivo ...) */
+  /* Linha de status (Toque para ouvir / No ar ...) */
   .status {
     margin-top: 14px;
     font-size: 14px;
@@ -227,6 +231,25 @@
   .tocando .ponto {
     background: var(--vermelho);
     box-shadow: 0 0 10px var(--vermelho);
+  }
+
+  /* Plaquinha "NO AR": quadradinho vermelho com texto branco,
+     como nas emissoras. Aparece só quando a rádio está tocando.
+     (O texto vem do Script, em MSG_NO_AR, e é mostrado em maiúsculas aqui.) */
+  .status.no-ar .ponto {
+    display: none;
+  }
+
+  .status.no-ar #statusTexto {
+    background: var(--vermelho);
+    color: var(--branco);
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 4px;
+    box-shadow: 0 0 14px rgba(229, 50, 45, .55);
   }
 
 
@@ -414,7 +437,10 @@
   /* Fundo escurecido atrás da aba (tocar nele fecha a aba) */
   .fundo-share {
     position: fixed;
-    inset: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
     background: rgba(3, 8, 30, .55);
     opacity: 0;
     pointer-events: none;
@@ -488,14 +514,19 @@
 
   /* Banner quadrado */
   .banner-share {
+    position: relative;
     width: 100%;
-    aspect-ratio: 1 / 1;
+    height: 0;
+    padding-top: 100%;   /* altura = largura (quadrado), compatível com celulares antigos */
     border-radius: 8px;
     overflow: hidden;
     box-shadow: 0 10px 28px rgba(0, 0, 0, .35);
   }
 
   .banner-share img {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
     display: block;
@@ -572,8 +603,8 @@
     <h1>Rádio Love Gospel</h1>
     <p class="slogan">A rádio que toca seu coração</p>
 
-    <!-- Status: o texto muda sozinho (Toque para ouvir / Ao vivo ...) -->
-    <div class="status">
+    <!-- Status: o texto muda sozinho (Toque para ouvir / No ar ...) -->
+    <div class="status" id="status">
       <span class="ponto"></span>
       <span id="statusTexto">Toque para ouvir</span>
     </div>
@@ -660,6 +691,7 @@
   var barra = document.getElementById("barraVolume");
   var volumeBox = document.getElementById("volume");
   var statusTexto = document.getElementById("statusTexto");
+  var statusBox = document.getElementById("status");
   var capaImg = document.getElementById("iconeImg");
 
   var abrirShare = document.getElementById("abrirShare");
@@ -678,7 +710,7 @@
   var MSG_PARADO = "Toque para ouvir";                        // rádio parada
   var MSG_CONECTANDO = "Conectando...";                       // acabou de tocar no play
   var MSG_CARREGANDO = "Carregando...";                       // sinal oscilando
-  var MSG_AO_VIVO = "Ao vivo";                                // tocando
+  var MSG_NO_AR = "No ar";                                    // tocando (aparece no quadradinho vermelho)
   var MSG_SEM_URL = "Adicione a URL do streaming no código";  // faltou colar a URL
   var MSG_ERRO = "Não foi possível conectar. Tente de novo."; // erro ao dar play
   var MSG_SEM_SINAL = "Sem conexão com a rádio";              // caiu a conexão
@@ -718,7 +750,7 @@
   // base64 do ícone nas configurações, usa o seu no lugar.
   // ==============================================================
   var iconeSrc = "";
-  // ==============================================================
+
   function iniciarIcone() {
     // Ícone padrão (guardado no final do arquivo)
     var padrao = document.getElementById("iconePadrao").textContent.replace(/\s/g, "");
@@ -747,8 +779,10 @@
   // ==============================================================
 
   // Escreve uma mensagem no status
-  function mostrar(texto) {
+  // (destaque = true mostra no quadradinho vermelho "NO AR")
+  function mostrar(texto, destaque) {
     statusTexto.textContent = texto;
+    statusBox.classList.toggle("no-ar", destaque === true);
   }
 
   // Começa a tocar
@@ -799,7 +833,7 @@
   audio.addEventListener("playing", function () {
     player.classList.remove("carregando");
     player.classList.add("tocando");
-    mostrar(MSG_AO_VIVO);
+    mostrar(MSG_NO_AR, true);
   });
 
   // Quando o sinal oscila
@@ -1067,7 +1101,7 @@
   // ==============================================================
   if ("mediaSession" in navigator) {
     navigator.mediaSession.metadata = new MediaMetadata({
-      title: "Ao vivo",
+      title: "No ar",
       artist: "Rádio Love Gospel"
     });
     navigator.mediaSession.setActionHandler("play", tocar);
